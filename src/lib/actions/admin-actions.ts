@@ -1,0 +1,315 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { db } from "@/lib/db";
+import { getSessionUser, isAdmin } from "@/lib/auth";
+import { audit } from "@/lib/audit";
+import {
+  sendAccountApprovedEmail,
+  sendAccountRejectedEmail,
+  sendAccountBlockedEmail,
+  sendAccountUnblockedEmail,
+  sendDepositPostedEmail,
+  sendDepositRejectedEmail,
+  sendProofRequestEmail,
+  sendAdjustmentEmail,
+} from "@/lib/email";
+import { balanceCents, ensureAccount, formatMoney, newReference } from "@/lib/bank";
+
+async function requireAdmin() {
+  const admin = await getSessionUser();
+  if (!admin || !isAdmin(admin.role) || admin.status !== "ACTIVE") {
+    throw new Error("Not authorized");
+  }
+  return admin;
+}
+
+export async function approveAccountAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId"));
+
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    include: { kycDocuments: true },
+  });
+  // Approval requires a verified email and at least one identity document.
+  if (!user || user.status !== "PENDING" || !user.emailVerified || user.kycDocuments.length === 0)
+    return;
+
+  await db.user.update({
+    where: { id: userId },
+    data: { status: "ACTIVE", statusReason: null },
+  });
+  await ensureAccount(user.id);
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "ACCOUNT_APPROVED",
+    targetType: "USER",
+    targetId: user.id,
+    details: `Approved ${user.firstName} ${user.lastName} <${user.email}>`,
+  });
+  await sendAccountApprovedEmail(user.email, user.firstName, user.locale);
+  revalidatePath("/admin");
+}
+
+// ---------- deposit verification ----------
+
+export async function verifyDepositAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const txId = String(formData.get("txId"));
+
+  const tx = await db.transaction.findUnique({
+    where: { id: txId },
+    include: { account: { include: { user: true } } },
+  });
+  if (!tx || tx.status !== "PENDING" || tx.type !== "DEPOSIT") return;
+
+  await db.transaction.update({
+    where: { id: txId },
+    data: { status: "POSTED", postedAt: new Date(), reviewedBy: admin.email },
+  });
+
+  const client = tx.account.user;
+  const newBalance = await balanceCents(tx.accountId);
+
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "DEPOSIT_POSTED",
+    targetType: "TRANSACTION",
+    targetId: tx.reference,
+    details: `Credited ${formatMoney(tx.amountCents)} to ${client.email} (${tx.reference}); new balance ${formatMoney(newBalance)}`,
+  });
+
+  await sendDepositPostedEmail(
+    client.email,
+    client.firstName,
+    client.locale,
+    formatMoney(tx.amountCents, client.locale),
+    tx.reference,
+    formatMoney(newBalance, client.locale)
+  );
+
+  revalidatePath("/admin/deposits");
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+export async function requestProofAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const txId = String(formData.get("txId"));
+
+  const tx = await db.transaction.findUnique({
+    where: { id: txId },
+    include: { account: { include: { user: true } } },
+  });
+  if (!tx || tx.status !== "PENDING" || tx.type !== "DEPOSIT") return;
+
+  await db.transaction.update({
+    where: { id: txId },
+    data: { proofRequestedAt: new Date() },
+  });
+
+  const client = tx.account.user;
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "DEPOSIT_PROOF_REQUESTED",
+    targetType: "TRANSACTION",
+    targetId: tx.reference,
+    details: `Requested proof from ${client.email} for ${formatMoney(tx.amountCents)} (${tx.reference})`,
+  });
+
+  await sendProofRequestEmail(
+    client.email,
+    client.firstName,
+    client.locale,
+    formatMoney(tx.amountCents, client.locale),
+    tx.reference
+  );
+
+  revalidatePath("/admin/deposits");
+}
+
+// ---------- manual credit / debit (interest, bonus, withdrawals, fees) ----------
+
+const MAX_ADJUST_CENTS = 100_000_000; // $1,000,000
+
+export async function adjustBalanceAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId"));
+  const direction = String(formData.get("direction")) === "DEBIT" ? "DEBIT" : "CREDIT";
+  const reason = String(formData.get("reason") || "").trim().slice(0, 200);
+  const raw = String(formData.get("amount") ?? "").trim().replace(",", ".");
+  const amountCents = Math.round(Number(raw) * 100);
+
+  if (!reason) return; // a reason is mandatory for every manual adjustment
+  if (!Number.isFinite(amountCents) || amountCents <= 0 || amountCents > MAX_ADJUST_CENTS) return;
+
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || user.role !== "CLIENT" || user.status !== "ACTIVE") return;
+
+  const account = await ensureAccount(user.id);
+  const signedCents = direction === "DEBIT" ? -amountCents : amountCents;
+
+  // Never let a manual debit take the balance below zero.
+  if (direction === "DEBIT") {
+    const current = await balanceCents(account.id);
+    if (current < amountCents) return;
+  }
+
+  const reference = newReference("A");
+  await db.transaction.create({
+    data: {
+      accountId: account.id,
+      type: direction === "DEBIT" ? "WITHDRAWAL" : "ADJUSTMENT",
+      status: "POSTED",
+      amountCents: signedCents,
+      reference,
+      note: reason,
+      reviewedBy: admin.email,
+      postedAt: new Date(),
+    },
+  });
+
+  const newBalance = await balanceCents(account.id);
+
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: direction === "DEBIT" ? "ACCOUNT_DEBITED" : "ACCOUNT_CREDITED",
+    targetType: "TRANSACTION",
+    targetId: reference,
+    details: `${direction === "DEBIT" ? "Debited" : "Credited"} ${formatMoney(amountCents)} ${direction === "DEBIT" ? "from" : "to"} ${user.email} (${reason}); new balance ${formatMoney(newBalance)}`,
+  });
+
+  await sendAdjustmentEmail(
+    user.email,
+    user.firstName,
+    user.locale,
+    direction,
+    formatMoney(amountCents, user.locale),
+    reference,
+    reason,
+    formatMoney(newBalance, user.locale)
+  );
+
+  revalidatePath("/admin/clients");
+  revalidatePath("/dashboard");
+}
+
+export async function rejectDepositAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const txId = String(formData.get("txId"));
+  const reason =
+    String(formData.get("reason") || "").trim() || "The deposit could not be matched to a payment.";
+
+  const tx = await db.transaction.findUnique({
+    where: { id: txId },
+    include: { account: { include: { user: true } } },
+  });
+  if (!tx || tx.status !== "PENDING" || tx.type !== "DEPOSIT") return;
+
+  await db.transaction.update({
+    where: { id: txId },
+    data: { status: "REJECTED", rejectReason: reason, reviewedBy: admin.email },
+  });
+
+  const client = tx.account.user;
+
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "DEPOSIT_REJECTED",
+    targetType: "TRANSACTION",
+    targetId: tx.reference,
+    details: `Rejected deposit of ${formatMoney(tx.amountCents)} from ${client.email} (${tx.reference}): ${reason}`,
+  });
+
+  await sendDepositRejectedEmail(
+    client.email,
+    client.firstName,
+    client.locale,
+    formatMoney(tx.amountCents, client.locale),
+    tx.reference,
+    reason
+  );
+
+  revalidatePath("/admin/deposits");
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+export async function rejectAccountAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId"));
+  const reason = String(formData.get("reason") || "").trim() || "Application did not meet our requirements.";
+
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || user.status !== "PENDING") return;
+
+  await db.user.update({
+    where: { id: userId },
+    data: { status: "REJECTED", statusReason: reason },
+  });
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "ACCOUNT_REJECTED",
+    targetType: "USER",
+    targetId: user.id,
+    details: `Rejected ${user.email}: ${reason}`,
+  });
+  await sendAccountRejectedEmail(user.email, user.firstName, reason, user.locale);
+  revalidatePath("/admin");
+}
+
+export async function blockAccountAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId"));
+  const reason = String(formData.get("reason") || "").trim() || "Suspicious activity review.";
+
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || isAdmin(user.role)) return; // admins cannot block admins from this screen
+
+  await db.user.update({
+    where: { id: userId },
+    data: { status: "BLOCKED", statusReason: reason },
+  });
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "ACCOUNT_BLOCKED",
+    targetType: "USER",
+    targetId: user.id,
+    details: `Blocked ${user.email}: ${reason}`,
+  });
+  await sendAccountBlockedEmail(user.email, user.firstName, user.locale);
+  revalidatePath("/admin/clients");
+  revalidatePath("/admin");
+}
+
+export async function unblockAccountAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId"));
+
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || user.status !== "BLOCKED") return;
+
+  await db.user.update({
+    where: { id: userId },
+    data: { status: "ACTIVE", statusReason: null },
+  });
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "ACCOUNT_UNBLOCKED",
+    targetType: "USER",
+    targetId: user.id,
+    details: `Unblocked ${user.email}`,
+  });
+  await sendAccountUnblockedEmail(user.email, user.firstName, user.locale);
+  revalidatePath("/admin/clients");
+  revalidatePath("/admin");
+}

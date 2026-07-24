@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand navy — deep, desaturated, premium */
+  --color-navy-50: #f2f5fa;
+  --color-navy-100: #e2e8f2;
+  --color-navy-200: #c3cfe3;
+  --color-navy-300: #94a8c9;
+  --color-navy-400: #5f7aa8;
+  --color-navy-500: #3d5885;
+  --color-navy-600: #244066;
+  --color-navy-700: #152e4f;
+  --color-navy-800: #0a1f3d;
+  --color-navy-900: #061530;
+  --color-navy-950: #030c1f;
+
+  /* Action blue — buttons, links, focus states */
+  --color-accent-50: #eef4ff;
+  --color-accent-100: #dce7fd;
+  --color-accent-500: #2f6fed;
+  --color-accent-600: #1d5bdc;
+  --color-accent-700: #1748b4;
+
+  --font-sans: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #101828;
+  font-feature-settings: "cv02", "cv03", "cv04";
+  -webkit-font-smoothing: antialiased;
+}

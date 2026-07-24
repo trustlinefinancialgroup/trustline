@@ -1,0 +1,208 @@
+import type { Dict } from "./index";
+
+export const es: Dict = {
+  common: {
+    brand: "TRUSTLINE",
+    brandLight: "Financial Group",
+    signIn: "Iniciar sesión",
+    signOut: "Cerrar sesión",
+    openAccount: "Abrir una cuenta",
+    chooseFile: "Elegir archivo",
+    noFileChosen: "Ningún archivo seleccionado",
+    language: "Idioma",
+  },
+  nav: {
+    personal: "Particulares",
+    commercial: "Empresas",
+    why: "Por qué Trustline",
+    contact: "Contacto",
+  },
+  landing: {
+    badge: "Banca personal",
+    heroTitle1: "Su dinero,",
+    heroTitle2: "en buenas manos.",
+    heroBody:
+      "Cuentas, préstamos y crédito de un equipo que revisa cada solicitud personalmente. Banca moderna, sin perder el trato humano.",
+    personal: {
+      kicker: "Banca personal",
+      title: "Una banca pensada para su vida.",
+      body: "Desde los gastos del día a día hasta la casa de sus sueños — una sola relación, en cada etapa.",
+      items: [
+        { title: "Tarjeta de crédito", body: "Poder de compra diario con condiciones claras y límites revisados por personas." },
+        { title: "Cuenta de ahorro", body: "Haga crecer su dinero con total visibilidad y extractos semanales." },
+        { title: "Préstamos personales", body: "Calendarios fijos y condiciones transparentes, decididos por una persona — no por una máquina." },
+        { title: "Hipotecas", body: "Financiación para el hogar que encaja con su vida, con acompañamiento paso a paso." },
+        { title: "Seguros personales", body: "Protección para lo que más importa, gestionada por personas a las que puede llamar." },
+      ],
+    },
+    commercial: {
+      kicker: "Banca de empresas",
+      title: "Una banca que trabaja tanto como su negocio.",
+      body: "Herramientas para la tesorería, el crecimiento y el día a día — con un equipo que conoce su empresa por su nombre.",
+      items: [
+        { title: "Tarjetas de crédito de empresa", body: "Separe los gastos del negocio con controles fiables." },
+        { title: "Depósitos", body: "Depósitos empresariales seguros, verificados y con recibo en cada transacción." },
+        { title: "Giros al extranjero", body: "Pague a sus socios internacionales en la divisa que necesiten." },
+        { title: "Cuenta corriente remunerada", body: "Una cuenta operativa que genera intereses mientras su dinero se mueve." },
+        { title: "Banca telefónica", body: "Opere por teléfono con una persona real cuando no pueda acercarse." },
+        { title: "Cuenta del mercado monetario", body: "Reservas con mayor rendimiento que siguen al alcance de su empresa." },
+        { title: "Pequeñas empresas", body: "Apoyo y financiación dedicados a los negocios que sostienen nuestra comunidad." },
+      ],
+    },
+    getStarted: "Empezar",
+    whyKicker: "Por qué Trustline",
+    whyTitle: "Un banco que le conoce por su nombre.",
+    pillars: [
+      {
+        title: "Revisión humana, siempre",
+        body: "Cada solicitud, depósito y petición es verificada por nuestro equipo. Decisiones sobre las que puede llamar y preguntar.",
+      },
+      {
+        title: "Seguridad de nivel bancario",
+        body: "Cifrado de extremo a extremo, verificación de identidad al registrarse y un registro de auditoría permanente de cada acción.",
+      },
+      {
+        title: "Respuestas de personas reales",
+        body: "Contacte con nuestro equipo en support@trustlinefinancialgroup.com — una persona lee y responde cada mensaje.",
+      },
+    ],
+    ctaTitle1: "Abra su cuenta en minutos.",
+    ctaTitle2: "Aprobada por una persona, no por un bot.",
+    footerTagline:
+      "Banca personal, préstamos y crédito — construidos sobre la confianza y cerca de usted.",
+    footerContact: "Contacto",
+    footerClients: "Clientes",
+    footerRights: "Todos los derechos reservados.",
+  },
+  auth: {
+    signupTitle: "Abra su cuenta",
+    signupSubtitle:
+      "Cuéntenos sobre usted — la verificación de identidad viene justo después.",
+    signupPanelTitle1: "Una banca que empieza",
+    signupPanelTitle2: "con una conversación.",
+    signupPanelBody:
+      "Cada solicitud es revisada personalmente por nuestro equipo, normalmente en un día laborable.",
+    accountTypeLabel: "Tipo de cuenta",
+    typePersonal: "Personal",
+    typeCommercial: "Empresa",
+    firstName: "Nombre",
+    lastName: "Apellidos",
+    email: "Correo electrónico",
+    phone: "Número de teléfono",
+    password: "Contraseña",
+    passwordHint: "Al menos 10 caracteres, con una letra y un número.",
+    submit: "Crear mi cuenta",
+    submitting: "Creando la cuenta…",
+    alreadyClient: "¿Ya es cliente?",
+    loginTitle: "Iniciar sesión",
+    loginSubtitle: "Introduzca su correo y contraseña para acceder a su cuenta.",
+    loginPanelTitle: "Bienvenido de nuevo.",
+    loginPanelBody: "Sus cuentas, solicitudes y extractos — todo en un solo lugar.",
+    signingIn: "Iniciando sesión…",
+    newTo: "¿Nuevo en Trustline?",
+  },
+  onboarding: {
+    steps: ["Verificar correo", "Identidad", "Revisión"],
+    verifyTitle: "Verifique su correo electrónico",
+    verifyBody:
+      "Hemos enviado un enlace de verificación a {email}. Haga clic en él y vuelva aquí — esta página pasará al siguiente paso.",
+    verifyChecked: "Ya lo verifiqué — actualizar",
+    resend: "Reenviar correo",
+    resent: "Un nuevo correo de verificación está en camino.",
+    resendWait: "Espere un minuto antes de solicitar otro correo.",
+    kycTitle: "Verifique su identidad",
+    kycBody:
+      "Suba un documento oficial. Nuestro equipo lo revisa personalmente — nunca se comparte.",
+    docTypeLabel: "Tipo de documento",
+    docTypes: {
+      GOVERNMENT_ID: "Documento nacional de identidad",
+      DRIVERS_LICENSE: "Permiso de conducir",
+      PASSPORT: "Pasaporte",
+    },
+    uploadLabel: "Foto o escaneo del documento",
+    uploadHint: "JPG, PNG o PDF — hasta 8 MB. Se usa solo para verificar su identidad.",
+    submitKyc: "Enviar para revisión",
+    submittingKyc: "Subiendo…",
+    reviewTitle: "Su solicitud está en revisión",
+    reviewBody:
+      "Gracias, {name}. Nuestro equipo está revisando sus datos y su documento — normalmente tarda menos de un día laborable. Le escribiremos a {email} en cuanto su cuenta sea aprobada.",
+  },
+  verifyPage: {
+    successTitle: "Correo verificado",
+    successBody:
+      "Gracias — su correo electrónico está confirmado. Continúe con el siguiente paso para verificar su identidad.",
+    alreadyTitle: "Correo ya verificado",
+    alreadyBody: "Su correo electrónico ya estaba confirmado. Todo listo.",
+    expiredTitle: "Enlace caducado",
+    expiredBody:
+      "Este enlace de verificación ha caducado. Inicie sesión y solicite uno nuevo desde el paso de verificación.",
+    invalidTitle: "Enlace de verificación no válido",
+    invalidBody:
+      "Este enlace falta o está mal formado. Utilice el botón de su correo de bienvenida.",
+    continue: "Continuar",
+  },
+  dashboard: {
+    welcome: "Bienvenido, {name}",
+    subtitle:
+      "Su cuenta está activa. Saldos, depósitos y solicitudes llegan en la próxima fase.",
+    balance: "Saldo de la cuenta",
+    loans: "Préstamos",
+    credit: "Línea de crédito",
+    phase2: "Disponible en la fase 2",
+    phase3: "Disponible en la fase 3",
+  },
+  bank: {
+    availableBalance: "Saldo disponible",
+    accountNo: "Cuenta",
+    pendingNote: "{amount} en depósitos pendientes de verificación",
+    makeDeposit: "Hacer un depósito",
+    recent: "Actividad reciente",
+    none: "Aún no hay transacciones. Su primer depósito aparecerá aquí.",
+    types: {
+      DEPOSIT: "Depósito",
+      WITHDRAWAL: "Retiro",
+      ADJUSTMENT: "Ajuste",
+    },
+    statuses: {
+      PENDING: "Pendiente de verificación",
+      POSTED: "Completado",
+      REJECTED: "Rechazado",
+    },
+    loansCard: "Préstamos",
+    creditCard: "Línea de crédito",
+    comingSoon: "Próximamente",
+    reference: "Referencia",
+    depositTitle: "Hacer un depósito",
+    depositBody:
+      "Indique el importe depositado y adjunte el justificante (confirmación de transferencia o recibo). Nuestro equipo lo verifica y abona su saldo — recibirá un recibo por correo.",
+    amount: "Importe (USD)",
+    note: "Nota (opcional)",
+    proof: "Justificante del depósito (opcional)",
+    proofHint:
+      "Opcional — nuestro equipo suele verificar sin él y le escribirá si hace falta. JPG, PNG o PDF, hasta 8 MB.",
+    submitDeposit: "Enviar depósito",
+    submittingDeposit: "Enviando…",
+    submittedBanner:
+      "Depósito enviado — le escribiremos en cuanto esté verificado y abonado.",
+    back: "Volver al panel",
+    amountInvalid: "Introduzca un importe válido entre 0,01 $ y 1.000.000 $.",
+  },
+  errors: {
+    emailExists: "Ya existe una cuenta con este correo. Pruebe a iniciar sesión.",
+    invalidCreds: "Correo o contraseña incorrectos.",
+    blocked:
+      "Esta cuenta está actualmente restringida. Contacte con support@trustlinefinancialgroup.com.",
+    rejected:
+      "Esta solicitud no fue aprobada. Contacte con support@trustlinefinancialgroup.com para más detalles.",
+    needFile: "Suba su documento, por favor.",
+    fileTooBig: "El documento debe pesar menos de 8 MB.",
+    fileType: "El documento debe ser un archivo JPG, PNG, WEBP o PDF.",
+    firstNameRequired: "El nombre es obligatorio",
+    lastNameRequired: "Los apellidos son obligatorios",
+    emailInvalid: "Introduzca un correo electrónico válido",
+    phoneInvalid: "Introduzca un número de teléfono válido",
+    passwordWeak:
+      "La contraseña debe tener al menos 10 caracteres, con una letra y un número",
+    generic: "Algo salió mal. Inténtelo de nuevo.",
+  },
+};

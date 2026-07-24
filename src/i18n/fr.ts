@@ -1,0 +1,208 @@
+import type { Dict } from "./index";
+
+export const fr: Dict = {
+  common: {
+    brand: "TRUSTLINE",
+    brandLight: "Financial Group",
+    signIn: "Se connecter",
+    signOut: "Se déconnecter",
+    openAccount: "Ouvrir un compte",
+    chooseFile: "Choisir un fichier",
+    noFileChosen: "Aucun fichier sélectionné",
+    language: "Langue",
+  },
+  nav: {
+    personal: "Particuliers",
+    commercial: "Entreprises",
+    why: "Pourquoi Trustline",
+    contact: "Contact",
+  },
+  landing: {
+    badge: "Banque personnelle",
+    heroTitle1: "Votre argent,",
+    heroTitle2: "entre de bonnes mains.",
+    heroBody:
+      "Comptes, prêts et crédit, gérés par une équipe qui examine chaque demande personnellement. Une banque moderne, sans perdre le contact humain.",
+    personal: {
+      kicker: "Banque des particuliers",
+      title: "Une banque pensée pour votre vie.",
+      body: "Des dépenses du quotidien à la maison de vos rêves — une seule relation, à chaque étape.",
+      items: [
+        { title: "Carte de crédit", body: "Un pouvoir d'achat au quotidien, avec des conditions claires et des plafonds validés par une personne." },
+        { title: "Compte d'épargne", body: "Faites fructifier votre argent sereinement, avec une visibilité totale et des relevés hebdomadaires." },
+        { title: "Prêts personnels", body: "Échéanciers fixes et conditions transparentes, décidés par une personne — pas par une machine." },
+        { title: "Prêts immobiliers", body: "Un financement pour la maison qui correspond à votre vie, accompagné pas à pas." },
+        { title: "Assurance personnelle", body: "Une protection pour ce qui compte le plus, organisée par des personnes que vous pouvez appeler." },
+      ],
+    },
+    commercial: {
+      kicker: "Banque des entreprises",
+      title: "Une banque qui travaille autant que votre entreprise.",
+      body: "Des outils pour la trésorerie, la croissance et le quotidien — avec une équipe qui connaît votre société par son nom.",
+      items: [
+        { title: "Cartes de crédit professionnelles", body: "Séparez les dépenses professionnelles avec des contrôles fiables." },
+        { title: "Dépôts", body: "Des dépôts professionnels sécurisés, vérifiés et avec reçu à chaque transaction." },
+        { title: "Traites étrangères", body: "Payez vos partenaires internationaux dans la devise dont ils ont besoin." },
+        { title: "Compte courant rémunéré", body: "Un compte de travail qui rapporte pendant que votre argent circule." },
+        { title: "Banque par téléphone", body: "Vos opérations par téléphone avec une vraie personne, quand vous ne pouvez pas venir." },
+        { title: "Compte du marché monétaire", body: "Des réserves à meilleur rendement qui restent à portée de main." },
+        { title: "Petites entreprises", body: "Un accompagnement et des financements dédiés aux entreprises qui font vivre notre communauté." },
+      ],
+    },
+    getStarted: "Commencer",
+    whyKicker: "Pourquoi Trustline",
+    whyTitle: "Une banque qui vous connaît par votre nom.",
+    pillars: [
+      {
+        title: "Une vérification humaine, à chaque fois",
+        body: "Chaque demande, dépôt et requête est vérifié par notre équipe. Des décisions que vous pouvez comprendre en nous appelant.",
+      },
+      {
+        title: "Une sécurité de niveau bancaire",
+        body: "Chiffrement de bout en bout, vérification d'identité à l'inscription et registre d'audit permanent de chaque action.",
+      },
+      {
+        title: "Des réponses de vraies personnes",
+        body: "Contactez notre équipe à support@trustlinefinancialgroup.com — une personne lit et répond à chaque message.",
+      },
+    ],
+    ctaTitle1: "Ouvrez votre compte en quelques minutes.",
+    ctaTitle2: "Approuvé par une personne, pas par un robot.",
+    footerTagline:
+      "Banque personnelle, prêts et crédit — fondés sur la confiance, près de chez vous.",
+    footerContact: "Contact",
+    footerClients: "Clients",
+    footerRights: "Tous droits réservés.",
+  },
+  auth: {
+    signupTitle: "Ouvrez votre compte",
+    signupSubtitle:
+      "Parlez-nous de vous — la vérification d'identité suit juste après.",
+    signupPanelTitle1: "Une banque qui commence",
+    signupPanelTitle2: "par une conversation.",
+    signupPanelBody:
+      "Chaque demande est examinée personnellement par notre équipe — généralement sous un jour ouvré.",
+    accountTypeLabel: "Type de compte",
+    typePersonal: "Particulier",
+    typeCommercial: "Entreprise",
+    firstName: "Prénom",
+    lastName: "Nom",
+    email: "Adresse e-mail",
+    phone: "Numéro de téléphone",
+    password: "Mot de passe",
+    passwordHint: "Au moins 10 caractères, avec une lettre et un chiffre.",
+    submit: "Créer mon compte",
+    submitting: "Création du compte…",
+    alreadyClient: "Déjà client ?",
+    loginTitle: "Se connecter",
+    loginSubtitle: "Saisissez votre e-mail et votre mot de passe pour accéder à votre compte.",
+    loginPanelTitle: "Bon retour parmi nous.",
+    loginPanelBody: "Vos comptes, demandes et relevés — au même endroit.",
+    signingIn: "Connexion…",
+    newTo: "Nouveau chez Trustline ?",
+  },
+  onboarding: {
+    steps: ["Vérifier l'e-mail", "Identité", "Examen"],
+    verifyTitle: "Vérifiez votre adresse e-mail",
+    verifyBody:
+      "Nous avons envoyé un lien de vérification à {email}. Cliquez dessus, puis revenez ici — cette page passera à l'étape suivante.",
+    verifyChecked: "C'est vérifié — actualiser",
+    resend: "Renvoyer l'e-mail",
+    resent: "Un nouvel e-mail de vérification est en route.",
+    resendWait: "Veuillez patienter une minute avant de demander un nouvel e-mail.",
+    kycTitle: "Vérifiez votre identité",
+    kycBody:
+      "Téléversez un document officiel. Notre équipe l'examine personnellement — il n'est jamais partagé.",
+    docTypeLabel: "Type de document",
+    docTypes: {
+      GOVERNMENT_ID: "Carte nationale d'identité",
+      DRIVERS_LICENSE: "Permis de conduire",
+      PASSPORT: "Passeport",
+    },
+    uploadLabel: "Photo ou scan du document",
+    uploadHint: "JPG, PNG ou PDF — jusqu'à 8 Mo. Utilisé uniquement pour vérifier votre identité.",
+    submitKyc: "Soumettre pour examen",
+    submittingKyc: "Envoi en cours…",
+    reviewTitle: "Votre demande est en cours d'examen",
+    reviewBody:
+      "Merci, {name}. Notre équipe examine vos informations et votre document — cela prend généralement moins d'un jour ouvré. Nous vous écrirons à {email} dès que votre compte sera approuvé.",
+  },
+  verifyPage: {
+    successTitle: "E-mail vérifié",
+    successBody:
+      "Merci — votre adresse e-mail est confirmée. Passez à l'étape suivante pour vérifier votre identité.",
+    alreadyTitle: "E-mail déjà vérifié",
+    alreadyBody: "Votre adresse e-mail était déjà confirmée. Tout est en ordre.",
+    expiredTitle: "Lien expiré",
+    expiredBody:
+      "Ce lien de vérification a expiré. Connectez-vous et demandez-en un nouveau depuis l'étape de vérification.",
+    invalidTitle: "Lien de vérification invalide",
+    invalidBody:
+      "Ce lien est manquant ou mal formé. Veuillez utiliser le bouton de votre e-mail de bienvenue.",
+    continue: "Continuer",
+  },
+  dashboard: {
+    welcome: "Bienvenue, {name}",
+    subtitle:
+      "Votre compte est actif. Soldes, dépôts et demandes arrivent dans la prochaine phase.",
+    balance: "Solde du compte",
+    loans: "Prêts",
+    credit: "Ligne de crédit",
+    phase2: "Disponible en phase 2",
+    phase3: "Disponible en phase 3",
+  },
+  bank: {
+    availableBalance: "Solde disponible",
+    accountNo: "Compte",
+    pendingNote: "{amount} de dépôts en attente de vérification",
+    makeDeposit: "Effectuer un dépôt",
+    recent: "Activité récente",
+    none: "Aucune transaction pour l'instant. Votre premier dépôt apparaîtra ici.",
+    types: {
+      DEPOSIT: "Dépôt",
+      WITHDRAWAL: "Retrait",
+      ADJUSTMENT: "Ajustement",
+    },
+    statuses: {
+      PENDING: "En attente de vérification",
+      POSTED: "Effectué",
+      REJECTED: "Refusé",
+    },
+    loansCard: "Prêts",
+    creditCard: "Ligne de crédit",
+    comingSoon: "Bientôt disponible",
+    reference: "Référence",
+    depositTitle: "Effectuer un dépôt",
+    depositBody:
+      "Indiquez le montant déposé et joignez un justificatif (confirmation de virement ou reçu). Notre équipe le vérifie et crédite votre solde — vous recevrez un reçu par e-mail.",
+    amount: "Montant (USD)",
+    note: "Note (facultatif)",
+    proof: "Justificatif de dépôt (facultatif)",
+    proofHint:
+      "Facultatif — notre équipe vérifie généralement sans justificatif et vous écrira si besoin. JPG, PNG ou PDF, jusqu'à 8 Mo.",
+    submitDeposit: "Soumettre le dépôt",
+    submittingDeposit: "Envoi en cours…",
+    submittedBanner:
+      "Dépôt soumis — nous vous écrirons dès qu'il sera vérifié et crédité.",
+    back: "Retour au tableau de bord",
+    amountInvalid: "Saisissez un montant valide entre 0,01 $ et 1 000 000 $.",
+  },
+  errors: {
+    emailExists: "Un compte existe déjà avec cet e-mail. Essayez de vous connecter.",
+    invalidCreds: "E-mail ou mot de passe incorrect.",
+    blocked:
+      "Ce compte est actuellement restreint. Veuillez contacter support@trustlinefinancialgroup.com.",
+    rejected:
+      "Cette demande n'a pas été approuvée. Contactez support@trustlinefinancialgroup.com pour plus de détails.",
+    needFile: "Veuillez téléverser votre document.",
+    fileTooBig: "Le document doit faire moins de 8 Mo.",
+    fileType: "Le document doit être un fichier JPG, PNG, WEBP ou PDF.",
+    firstNameRequired: "Le prénom est requis",
+    lastNameRequired: "Le nom est requis",
+    emailInvalid: "Saisissez une adresse e-mail valide",
+    phoneInvalid: "Saisissez un numéro de téléphone valide",
+    passwordWeak:
+      "Le mot de passe doit contenir au moins 10 caractères, avec une lettre et un chiffre",
+    generic: "Une erreur s'est produite. Veuillez réessayer.",
+  },
+};
