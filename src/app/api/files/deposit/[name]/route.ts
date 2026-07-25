@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { readFile } from "fs/promises";
-import path from "path";
 import { db } from "@/lib/db";
 import { getSession, isAdmin } from "@/lib/auth";
+import { downloadFile, DEPOSIT_BUCKET } from "@/lib/storage";
 
-// Serves deposit proof uploads. Only admins and the deposit's owner may view.
+// Serves deposit proof uploads from private Supabase Storage. Only admins and
+// the deposit's owner may view.
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ name: string }> }
@@ -27,17 +27,14 @@ export async function GET(
     return new NextResponse("Forbidden", { status: 403 });
   }
 
-  try {
-    const filePath = path.join(process.cwd(), "uploads", "deposits", name);
-    const data = await readFile(filePath);
-    return new NextResponse(new Uint8Array(data), {
-      headers: {
-        "Content-Type": tx.proofMimeType ?? "application/octet-stream",
-        "Content-Disposition": `inline; filename="${(tx.proofFileName ?? name).replace(/[^\w.\- ]/g, "_")}"`,
-        "Cache-Control": "private, no-store",
-      },
-    });
-  } catch {
-    return new NextResponse("Not found", { status: 404 });
-  }
+  const data = await downloadFile(DEPOSIT_BUCKET, name);
+  if (!data) return new NextResponse("Not found", { status: 404 });
+
+  return new NextResponse(new Uint8Array(data), {
+    headers: {
+      "Content-Type": tx.proofMimeType ?? "application/octet-stream",
+      "Content-Disposition": `inline; filename="${(tx.proofFileName ?? name).replace(/[^\w.\- ]/g, "_")}"`,
+      "Cache-Control": "private, no-store",
+    },
+  });
 }

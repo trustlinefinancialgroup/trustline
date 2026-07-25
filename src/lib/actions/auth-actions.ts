@@ -3,7 +3,6 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { randomBytes } from "crypto";
-import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -17,11 +16,11 @@ import {
 } from "@/lib/auth";
 import { audit } from "@/lib/audit";
 import { sendWelcomeEmail, sendKycReceivedEmail } from "@/lib/email";
+import { uploadFile, KYC_BUCKET } from "@/lib/storage";
 import { getDict, getLocale } from "@/i18n/server";
 
 export type FormState = { error?: string; ok?: string } | null;
 
-const UPLOAD_DIR = path.join(process.cwd(), "uploads", "kyc");
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8 MB
 const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 const DOC_TYPES = ["GOVERNMENT_ID", "DRIVERS_LICENSE", "PASSPORT"] as const;
@@ -159,8 +158,7 @@ export async function submitKycAction(_prev: FormState, formData: FormData): Pro
 
   const ext = path.extname(file.name).toLowerCase() || ".bin";
   const storedName = `${randomBytes(16).toString("hex")}${ext}`;
-  await mkdir(UPLOAD_DIR, { recursive: true });
-  await writeFile(path.join(UPLOAD_DIR, storedName), Buffer.from(await file.arrayBuffer()));
+  await uploadFile(KYC_BUCKET, storedName, Buffer.from(await file.arrayBuffer()), file.type);
 
   await db.kycDocument.create({
     data: {

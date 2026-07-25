@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { readFile } from "fs/promises";
-import path from "path";
 import { db } from "@/lib/db";
 import { getSession, isAdmin } from "@/lib/auth";
+import { downloadFile, KYC_BUCKET } from "@/lib/storage";
 
-// Serves KYC uploads from the private uploads/ folder. Only admins and the
+// Serves KYC uploads from private Supabase Storage. Only admins and the
 // document's owner may view a file.
 export async function GET(
   _req: Request,
@@ -27,17 +26,14 @@ export async function GET(
     return new NextResponse("Forbidden", { status: 403 });
   }
 
-  try {
-    const filePath = path.join(process.cwd(), "uploads", "kyc", name);
-    const data = await readFile(filePath);
-    return new NextResponse(new Uint8Array(data), {
-      headers: {
-        "Content-Type": doc.mimeType,
-        "Content-Disposition": `inline; filename="${doc.fileName.replace(/[^\w.\- ]/g, "_")}"`,
-        "Cache-Control": "private, no-store",
-      },
-    });
-  } catch {
-    return new NextResponse("Not found", { status: 404 });
-  }
+  const data = await downloadFile(KYC_BUCKET, name);
+  if (!data) return new NextResponse("Not found", { status: 404 });
+
+  return new NextResponse(new Uint8Array(data), {
+    headers: {
+      "Content-Type": doc.mimeType,
+      "Content-Disposition": `inline; filename="${doc.fileName.replace(/[^\w.\- ]/g, "_")}"`,
+      "Cache-Control": "private, no-store",
+    },
+  });
 }

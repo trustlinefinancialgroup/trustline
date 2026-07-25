@@ -2,17 +2,16 @@
 
 import { redirect } from "next/navigation";
 import { randomBytes } from "crypto";
-import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { getSessionUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import { ensureAccount, formatMoney, newReference } from "@/lib/bank";
 import { sendDepositReceivedEmail } from "@/lib/email";
+import { uploadFile, DEPOSIT_BUCKET } from "@/lib/storage";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
 
-const UPLOAD_DIR = path.join(process.cwd(), "uploads", "deposits");
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 const MAX_AMOUNT_CENTS = 100_000_000; // $1,000,000
@@ -49,8 +48,7 @@ export async function submitDepositAction(
     }
     const ext = path.extname(file.name).toLowerCase() || ".bin";
     const storedName = `${randomBytes(16).toString("hex")}${ext}`;
-    await mkdir(UPLOAD_DIR, { recursive: true });
-    await writeFile(path.join(UPLOAD_DIR, storedName), Buffer.from(await file.arrayBuffer()));
+    await uploadFile(DEPOSIT_BUCKET, storedName, Buffer.from(await file.arrayBuffer()), file.type);
     proof = { fileName: file.name, storedName, mimeType: file.type };
   }
 
