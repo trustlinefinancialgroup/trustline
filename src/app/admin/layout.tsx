@@ -26,6 +26,7 @@ export default async function AdminLayout({
     { href: "/admin", label: "Review queue", badge: pendingCount },
     { href: "/admin/deposits", label: "Deposits", badge: depositCount },
     { href: "/admin/clients", label: "Clients" },
+    { href: "/admin/messages", label: "Messages" },
     { href: "/admin/audit", label: "Audit log" },
   ];
 

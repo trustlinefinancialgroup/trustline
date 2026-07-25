@@ -95,8 +95,10 @@ export const es: Dict = {
       { title: "Crédito claro", body: "Condiciones claras, calendarios transparentes y una decisión humana — sin trampas ocultas." },
     ],
     bonusBadge: "Oferta para nuevos clientes",
-    bonusTitle: "Reciba un bono de bienvenida de 175 $",
-    bonusBody: "Abra y financie una cuenta nueva con 2.500 $ o más, manténgala 90 días, y abonaremos su bono directamente en su saldo.",
+    bonusTitle: "Bono de bienvenida de 175 $",
+    bonusBody: "Los nuevos clientes reciben 175 $ solo por abrir una cuenta — sin depósito mínimo.",
+    bonusRateTitle: "Hasta 5 % durante sus primeros 3 meses",
+    bonusRateBody: "Financie su cuenta nueva con 2.500 $ o más y obtenga una tasa introductoria mejorada durante sus primeros 90 días.",
     bonusTerms: "Solo nuevos clientes. Se aplican términos y condiciones.",
   },
   auth: {
@@ -211,6 +213,11 @@ export const es: Dict = {
       "Depósito enviado — le escribiremos en cuanto esté verificado y abonado.",
     back: "Volver al panel",
     amountInvalid: "Introduzca un importe válido entre 0,01 $ y 1.000.000 $.",
+  },
+  notif: {
+    title: "Notificaciones",
+    empty: "Está al día.",
+    dismiss: "Cerrar",
   },
   errors: {
     emailExists: "Ya existe una cuenta con este correo. Pruebe a iniciar sesión.",

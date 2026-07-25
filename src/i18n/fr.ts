@@ -95,8 +95,10 @@ export const fr: Dict = {
       { title: "Un crédit clair", body: "Conditions claires, échéanciers transparents et une décision humaine — sans pièges cachés." },
     ],
     bonusBadge: "Offre nouveaux clients",
-    bonusTitle: "Recevez une prime de bienvenue de 175 $",
-    bonusBody: "Ouvrez et alimentez un nouveau compte avec 2 500 $ ou plus, conservez-le pendant 90 jours, et nous créditons votre prime directement sur votre solde.",
+    bonusTitle: "Prime de bienvenue de 175 $",
+    bonusBody: "Les nouveaux clients reçoivent 175 $ rien qu'à l'ouverture d'un compte — sans dépôt minimum.",
+    bonusRateTitle: "Jusqu'à 5 % pendant vos 3 premiers mois",
+    bonusRateBody: "Alimentez votre nouveau compte avec 2 500 $ ou plus et profitez d'un taux d'introduction majoré pendant vos 90 premiers jours.",
     bonusTerms: "Réservé aux nouveaux clients. Conditions générales applicables.",
   },
   auth: {
@@ -211,6 +213,11 @@ export const fr: Dict = {
       "Dépôt soumis — nous vous écrirons dès qu'il sera vérifié et crédité.",
     back: "Retour au tableau de bord",
     amountInvalid: "Saisissez un montant valide entre 0,01 $ et 1 000 000 $.",
+  },
+  notif: {
+    title: "Notifications",
+    empty: "Vous êtes à jour.",
+    dismiss: "Fermer",
   },
   errors: {
     emailExists: "Un compte existe déjà avec cet e-mail. Essayez de vous connecter.",

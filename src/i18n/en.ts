@@ -93,8 +93,10 @@ export const en = {
       { title: "Straightforward lending", body: "Clear terms, transparent schedules, and a human decision — no hidden traps." },
     ],
     bonusBadge: "New client offer",
-    bonusTitle: "Get a $175 welcome bonus",
-    bonusBody: "Open and fund a new account with $2,500 or more, keep it for 90 days, and we'll credit your bonus straight to your balance.",
+    bonusTitle: "$175 welcome bonus",
+    bonusBody: "New clients get $175 just for opening an account — no minimum deposit required.",
+    bonusRateTitle: "Up to 5% for your first 3 months",
+    bonusRateBody: "Fund your new account with $2,500 or more and earn a boosted introductory rate for your first 90 days.",
     bonusTerms: "New clients only. Terms and conditions apply.",
   },
   auth: {
@@ -208,6 +210,11 @@ export const en = {
       "Deposit submitted — we'll email you as soon as it's verified and credited.",
     back: "Back to dashboard",
     amountInvalid: "Enter a valid amount between $0.01 and $1,000,000.",
+  },
+  notif: {
+    title: "Notifications",
+    empty: "You're all caught up.",
+    dismiss: "Dismiss",
   },
   errors: {
     emailExists: "An account with this email already exists. Try signing in.",

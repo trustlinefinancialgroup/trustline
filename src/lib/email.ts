@@ -502,6 +502,36 @@ export async function sendEmail({ to, subject, html, from, replyTo }: SendArgs) 
   }
 }
 
+// ---------- admin broadcasts (plain text → branded HTML) ----------
+
+function escapeHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/** Turns an admin's plain-text message into paragraphs inside the brand shell. */
+function plainToHtml(text: string) {
+  return text
+    .split(/\n{2,}/)
+    .map((p) => `<p>${escapeHtml(p).replace(/\n/g, "<br/>")}</p>`)
+    .join("");
+}
+
+export async function sendBroadcastEmail(
+  to: string,
+  subject: string,
+  bodyText: string,
+  opts?: { from?: string; replyTo?: string; locale?: string }
+) {
+  const s = STRINGS[toLocale(opts?.locale)];
+  return sendEmail({
+    to,
+    subject,
+    from: opts?.from,
+    replyTo: opts?.replyTo,
+    html: layout(s, escapeHtml(subject), plainToHtml(bodyText)),
+  });
+}
+
 // ---------- templates ----------
 
 export async function sendWelcomeEmail(

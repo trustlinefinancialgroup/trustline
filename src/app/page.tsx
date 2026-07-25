@@ -182,39 +182,60 @@ export default async function HomePage() {
             {t.landing.benefitsTitle}
           </h2>
         </div>
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {t.landing.benefits.map((f, i) => {
-            const Icon = benefitIcons[i];
-            return (
-              <div key={f.title} className="flex gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-50 text-accent-600">
-                  <Icon className="h-6 w-6" />
-                </span>
-                <div>
-                  <h3 className="font-semibold text-navy-900">{f.title}</h3>
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-gray-600">{f.body}</p>
+        <div className="mt-12 grid gap-10 lg:grid-cols-5 lg:items-stretch">
+          <div className="relative order-last min-h-[320px] overflow-hidden rounded-3xl lg:order-first lg:col-span-2">
+            <Image
+              src="/images/advisor-meeting.jpg"
+              alt="A Trustline advisor meeting with a client"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-950/40 to-transparent" />
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:col-span-3">
+            {t.landing.benefits.map((f, i) => {
+              const Icon = benefitIcons[i];
+              return (
+                <div key={f.title} className="flex gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-50 text-accent-600">
+                    <Icon className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <h3 className="font-semibold text-navy-900">{f.title}</h3>
+                    <p className="mt-1.5 text-[15px] leading-relaxed text-gray-600">{f.body}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* Welcome bonus */}
       <section className="mx-auto max-w-7xl px-6 pb-8">
         <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-accent-600 to-navy-800 px-8 py-12 sm:px-12">
-          <div className="flex flex-wrap items-center justify-between gap-8">
-            <div className="max-w-xl">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">
-                <Icons.gift className="h-4 w-4" />
-                {t.landing.bonusBadge}
-              </span>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">
+            <Icons.gift className="h-4 w-4" />
+            {t.landing.bonusBadge}
+          </span>
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
+            <div className="rounded-2xl bg-white/10 p-6">
+              <Icons.gift className="h-7 w-7 text-white" />
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-white">
                 {t.landing.bonusTitle}
               </h2>
-              <p className="mt-3 text-[15px] leading-relaxed text-white/85">{t.landing.bonusBody}</p>
-              <p className="mt-3 text-xs text-white/70">{t.landing.bonusTerms}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-white/85">{t.landing.bonusBody}</p>
             </div>
+            <div className="rounded-2xl bg-white/10 p-6">
+              <Icons.checking className="h-7 w-7 text-white" />
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-white">
+                {t.landing.bonusRateTitle}
+              </h2>
+              <p className="mt-2 text-[15px] leading-relaxed text-white/85">{t.landing.bonusRateBody}</p>
+            </div>
+          </div>
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs text-white/70">{t.landing.bonusTerms}</p>
             <Link
               href="/signup"
               className="rounded-full bg-white px-8 py-4 text-sm font-semibold text-navy-900 shadow-lg transition hover:bg-navy-50"

@@ -95,8 +95,10 @@ export const de: Dict = {
       { title: "Klares Kreditgeschäft", body: "Klare Konditionen, transparente Tilgungspläne und eine menschliche Entscheidung — ohne versteckte Fallen." },
     ],
     bonusBadge: "Angebot für Neukunden",
-    bonusTitle: "Sichern Sie sich 175 $ Willkommensbonus",
-    bonusBody: "Eröffnen Sie ein neues Konto, zahlen Sie 2.500 $ oder mehr ein, behalten Sie das Guthaben 90 Tage lang, und wir schreiben Ihren Bonus direkt Ihrem Saldo gut.",
+    bonusTitle: "175 $ Willkommensbonus",
+    bonusBody: "Neukunden erhalten 175 $ allein für die Kontoeröffnung — ohne Mindesteinzahlung.",
+    bonusRateTitle: "Bis zu 5 % in Ihren ersten 3 Monaten",
+    bonusRateBody: "Zahlen Sie 2.500 $ oder mehr auf Ihr neues Konto ein und sichern Sie sich in den ersten 90 Tagen einen erhöhten Einführungszins.",
     bonusTerms: "Nur für Neukunden. Es gelten die Geschäftsbedingungen.",
   },
   auth: {
@@ -211,6 +213,11 @@ export const de: Dict = {
       "Einzahlung eingereicht — wir schreiben Ihnen, sobald sie geprüft und gutgeschrieben ist.",
     back: "Zurück zum Dashboard",
     amountInvalid: "Geben Sie einen gültigen Betrag zwischen 0,01 $ und 1.000.000 $ ein.",
+  },
+  notif: {
+    title: "Mitteilungen",
+    empty: "Alles erledigt.",
+    dismiss: "Schließen",
   },
   errors: {
     emailExists: "Mit dieser E-Mail existiert bereits ein Konto. Versuchen Sie, sich anzumelden.",
