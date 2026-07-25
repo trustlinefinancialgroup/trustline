@@ -54,6 +54,11 @@ model ProductApplication {
   adminNote          String?
   decidedBy          String?
   decidedAt          DateTime?
+  // Post-approval details, maintained manually by admin:
+  interestRate       String? // e.g. "19.99% APR"
+  dueDate            DateTime? // next payment due
+  outstandingCents   Int? // current balance / accrued interest
+  frozen             Boolean   @default(false) // cards: client or admin freeze
   createdAt          DateTime  @default(now())
 
   @@index([userId, status])

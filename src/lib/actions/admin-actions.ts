@@ -302,6 +302,44 @@ export async function declineApplicationAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+// Update an approved product's ongoing terms (interest, due date, balance, freeze).
+export async function updateProductAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const appId = String(formData.get("appId"));
+  const app = await db.productApplication.findUnique({ where: { id: appId } });
+  if (!app || app.status !== "APPROVED") return;
+
+  const interestRate = String(formData.get("interestRate") ?? "").trim() || null;
+  const dueDateRaw = String(formData.get("dueDate") ?? "").trim();
+  const dueDate = dueDateRaw ? new Date(dueDateRaw) : null;
+  const outstandingRaw = String(formData.get("outstanding") ?? "").trim().replace(",", ".");
+  const outstandingCents = outstandingRaw ? Math.round(Number(outstandingRaw) * 100) : null;
+  const frozen = formData.get("frozen") === "on";
+
+  await db.productApplication.update({
+    where: { id: appId },
+    data: {
+      interestRate,
+      dueDate: dueDate && !isNaN(dueDate.getTime()) ? dueDate : null,
+      outstandingCents: outstandingCents && Number.isFinite(outstandingCents) ? outstandingCents : null,
+      frozen,
+    },
+  });
+
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "PRODUCT_UPDATED",
+    targetType: "APPLICATION",
+    targetId: appId,
+    details: `Updated ${app.productKey} terms`,
+  });
+
+  revalidatePath("/admin/applications");
+  revalidatePath(`/product/${appId}`);
+  revalidatePath("/dashboard");
+}
+
 // ---------- withdrawal approval ----------
 
 export async function approveWithdrawalAction(formData: FormData) {

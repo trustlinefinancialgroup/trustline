@@ -114,3 +114,30 @@ export async function submitApplicationAction(
 
   redirect("/dashboard?applied=1");
 }
+
+// Client freezes/unfreezes their own approved card.
+export async function toggleFreezeAction(formData: FormData) {
+  const user = await requireClient();
+  const appId = String(formData.get("appId"));
+
+  const app = await db.productApplication.findFirst({
+    where: { id: appId, userId: user.id, status: "APPROVED" },
+  });
+  if (!app) return;
+
+  await db.productApplication.update({
+    where: { id: app.id },
+    data: { frozen: !app.frozen },
+  });
+  await audit({
+    actorId: user.id,
+    actorLabel: user.email,
+    action: app.frozen ? "CARD_UNFROZEN" : "CARD_FROZEN",
+    targetType: "APPLICATION",
+    targetId: app.id,
+    details: `${app.frozen ? "Unfroze" : "Froze"} ${app.productKey}`,
+  });
+
+  revalidatePath(`/product/${app.id}`);
+  revalidatePath("/dashboard");
+}

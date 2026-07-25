@@ -13,6 +13,10 @@
 # testing
 /coverage
 
+# original source images (converted versions live in public/images)
+/group photo.png
+/uploads
+
 # next.js
 /.next/
 /out/

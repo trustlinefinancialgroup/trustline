@@ -185,10 +185,10 @@ export default async function HomePage() {
         <div className="mt-12 grid gap-10 lg:grid-cols-5 lg:items-stretch">
           <div className="relative order-last min-h-[320px] overflow-hidden rounded-3xl lg:order-first lg:col-span-2">
             <Image
-              src="/images/advisor-meeting.jpg"
-              alt="A Trustline advisor meeting with a client"
+              src="/images/team.jpg"
+              alt="The Trustline Financial Group team"
               fill
-              className="object-cover"
+              className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy-950/40 to-transparent" />
           </div>
@@ -309,8 +309,16 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="border-t border-white/10">
-          <div className="mx-auto max-w-7xl px-6 py-6 text-xs text-navy-400">
-            &copy; {new Date().getFullYear()} Trustline Financial Group. {t.landing.footerRights}
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-xs text-navy-400 sm:flex-row sm:items-center sm:justify-between">
+            <span>
+              &copy; {new Date().getFullYear()} Trustline Financial Group. {t.landing.footerRights}
+            </span>
+            <span className="flex items-center gap-2 text-navy-300">
+              <span className="flex h-5 w-9 items-center justify-center rounded border border-navy-500 text-[9px] font-bold tracking-wide text-navy-200">
+                FDIC
+              </span>
+              {t.bank.fdic}
+            </span>
           </div>
         </div>
       </footer>

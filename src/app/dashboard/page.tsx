@@ -222,13 +222,16 @@ export default async function DashboardPage({
                 stateClass = "font-semibold text-amber-600";
                 barClass = "bg-amber-400";
               } else if (app.status === "APPROVED") {
-                stateLabel = app.approvedAmountCents
-                  ? fill(t.products.approvedFor, {
-                      amount: formatMoney(app.approvedAmountCents, locale),
-                    })
-                  : t.products.active;
-                stateClass = "font-semibold text-green-600";
-                barClass = "bg-green-500";
+                href = `/product/${app.id}`;
+                stateLabel = app.frozen
+                  ? t.products.frozenBadge
+                  : app.approvedAmountCents
+                    ? fill(t.products.approvedFor, {
+                        amount: formatMoney(app.approvedAmountCents, locale),
+                      })
+                    : t.products.active;
+                stateClass = app.frozen ? "font-semibold text-red-600" : "font-semibold text-green-600";
+                barClass = app.frozen ? "bg-red-400" : "bg-green-500";
               }
             }
 

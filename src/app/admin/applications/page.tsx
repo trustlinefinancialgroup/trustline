@@ -3,7 +3,13 @@ import { formatMoney } from "@/lib/bank";
 import {
   approveApplicationAction,
   declineApplicationAction,
+  updateProductAction,
 } from "@/lib/actions/admin-actions";
+
+function toDateInput(d: Date | null) {
+  if (!d) return "";
+  return d.toISOString().slice(0, 10);
+}
 
 function humanize(key: string) {
   return key
@@ -16,11 +22,18 @@ function humanize(key: string) {
 const isCard = (key: string) => key.includes("CARD");
 
 export default async function ApplicationsPage() {
-  const pending = await db.productApplication.findMany({
-    where: { status: "SUBMITTED" },
-    include: { user: true },
-    orderBy: { createdAt: "asc" },
-  });
+  const [pending, approved] = await Promise.all([
+    db.productApplication.findMany({
+      where: { status: "SUBMITTED" },
+      include: { user: true },
+      orderBy: { createdAt: "asc" },
+    }),
+    db.productApplication.findMany({
+      where: { status: "APPROVED" },
+      include: { user: true },
+      orderBy: { decidedAt: "desc" },
+    }),
+  ]);
 
   return (
     <div>
@@ -111,6 +124,82 @@ export default async function ApplicationsPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {approved.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-gray-500">
+            Approved products ({approved.length})
+          </h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Maintain each client&apos;s terms — interest, next due date, current
+            balance, and card freeze. Clients see these on the product&apos;s
+            detail page.
+          </p>
+          <div className="mt-4 space-y-4">
+            {approved.map((app) => (
+              <form
+                key={app.id}
+                action={updateProductAction}
+                className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+              >
+                <input type="hidden" name="appId" value={app.id} />
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-bold text-navy-800">
+                    {humanize(app.productKey)}
+                    <span className="ml-2 font-normal text-gray-500">
+                      {app.user.firstName} {app.user.lastName} · {app.user.email}
+                    </span>
+                  </p>
+                  {app.frozen && (
+                    <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-[11px] font-bold text-red-700">
+                      Frozen
+                    </span>
+                  )}
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-4">
+                  <label className="text-xs font-semibold text-gray-600">
+                    Interest rate
+                    <input
+                      name="interestRate"
+                      defaultValue={app.interestRate ?? ""}
+                      placeholder="19.99% APR"
+                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    />
+                  </label>
+                  <label className="text-xs font-semibold text-gray-600">
+                    Next due date
+                    <input
+                      name="dueDate"
+                      type="date"
+                      defaultValue={toDateInput(app.dueDate)}
+                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    />
+                  </label>
+                  <label className="text-xs font-semibold text-gray-600">
+                    Current balance (USD)
+                    <input
+                      name="outstanding"
+                      type="number"
+                      step="0.01"
+                      defaultValue={app.outstandingCents != null ? (app.outstandingCents / 100).toFixed(2) : ""}
+                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    />
+                  </label>
+                  <label className="flex items-end gap-2 text-xs font-semibold text-gray-600">
+                    <input type="checkbox" name="frozen" defaultChecked={app.frozen} className="mb-2.5 h-4 w-4" />
+                    <span className="mb-2">Frozen</span>
+                  </label>
+                </div>
+                <div className="mt-3 flex justify-end">
+                  <button className="rounded-full bg-navy-800 px-5 py-2 text-sm font-bold text-white transition hover:bg-navy-700">
+                    Save terms
+                  </button>
+                </div>
+              </form>
+            ))}
+          </div>
         </div>
       )}
     </div>

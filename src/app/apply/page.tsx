@@ -54,6 +54,9 @@ export default async function ApplyPage({
             {fill(t.products.applyTitle, { product: label?.title ?? type! })}
           </h1>
           {label?.body && <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{label.body}</p>}
+          <p className="mt-4 rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
+            {t.products.verifyNote}
+          </p>
           <ApplyForm
             productKey={type!}
             showAmount={!!def.amount}
