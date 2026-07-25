@@ -33,8 +33,30 @@ model User {
   kycDocuments  KycDocument[]
   tokens        VerificationToken[]
   auditActions  AuditLog[]          @relation("actor")
-  account       Account?
+  accounts      Account[]
   notifications Notification[]
+  applications  ProductApplication[]
+}
+
+// Applying for a product (card, loan, mortgage, insurance, business products).
+// Approval records the terms and marks it active for the client.
+model ProductApplication {
+  id                 String    @id @default(cuid())
+  userId             String
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productKey         String // CREDIT_CARD, PERSONAL_LOAN, MORTGAGE, ...
+  status             String    @default("SUBMITTED") // SUBMITTED | APPROVED | DECLINED
+  amountCents        Int? // requested amount (loans/credit/mortgage)
+  termMonths         Int?
+  purpose            String?
+  approvedAmountCents Int? // approved limit/amount
+  cardTier           String? // GOLD | PLATINUM | BLACK (cards)
+  adminNote          String?
+  decidedBy          String?
+  decidedAt          DateTime?
+  createdAt          DateTime  @default(now())
+
+  @@index([userId, status])
 }
 
 // Admin-configured ways to move money in and out. Each carries a route (where
@@ -70,13 +92,16 @@ model Notification {
 
 model Account {
   id        String   @id @default(cuid())
-  userId    String   @unique
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   number    String   @unique // e.g. TL-48291023
+  kind      String   @default("CHECKING") // CHECKING | SAVINGS
   currency  String   @default("USD")
   createdAt DateTime @default(now())
 
   transactions Transaction[]
+
+  @@index([userId, kind])
 }
 
 // Append-only ledger. A row is never edited after it is POSTED or REJECTED;

@@ -13,6 +13,7 @@ import {
   sendDepositRejectedEmail,
   sendProofRequestEmail,
   sendAdjustmentEmail,
+  sendBroadcastEmail,
 } from "@/lib/email";
 import { balanceCents, ensureAccount, formatMoney, newReference } from "@/lib/bank";
 import { methodDef } from "@/lib/methods";
@@ -197,6 +198,107 @@ export async function adjustBalanceAction(formData: FormData) {
   );
 
   revalidatePath("/admin/clients");
+  revalidatePath("/dashboard");
+}
+
+// ---------- product applications ----------
+
+function humanizeProduct(key: string) {
+  return key
+    .toLowerCase()
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+export async function approveApplicationAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const appId = String(formData.get("appId"));
+  const note = String(formData.get("note") || "").trim() || null;
+  const cardTier = String(formData.get("cardTier") || "").trim() || null;
+  const approvedRaw = String(formData.get("approvedAmount") ?? "").trim().replace(",", ".");
+  const approvedAmountCents = approvedRaw ? Math.round(Number(approvedRaw) * 100) : null;
+
+  const app = await db.productApplication.findUnique({ where: { id: appId }, include: { user: true } });
+  if (!app || app.status !== "SUBMITTED") return;
+
+  await db.productApplication.update({
+    where: { id: appId },
+    data: {
+      status: "APPROVED",
+      approvedAmountCents:
+        approvedAmountCents && Number.isFinite(approvedAmountCents) ? approvedAmountCents : null,
+      cardTier,
+      adminNote: note,
+      decidedBy: admin.email,
+      decidedAt: new Date(),
+    },
+  });
+
+  const client = app.user;
+  const name = humanizeProduct(app.productKey);
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "PRODUCT_APPROVED",
+    targetType: "APPLICATION",
+    targetId: app.id,
+    details: `Approved ${name} for ${client.email}${approvedAmountCents ? ` (${formatMoney(approvedAmountCents)})` : ""}`,
+  });
+
+  await db.notification.create({
+    data: {
+      userId: client.id,
+      title: `Your ${name} application was approved`,
+      body: `Good news — your ${name} application has been approved${approvedAmountCents ? ` for ${formatMoney(approvedAmountCents)}` : ""}. You can see it on your dashboard.`,
+    },
+  });
+  await sendBroadcastEmail(
+    client.email,
+    `Your ${name} application was approved`,
+    `Hello ${client.firstName},\n\nYour ${name} application has been approved${approvedAmountCents ? ` for ${formatMoney(approvedAmountCents)}` : ""}. Sign in to your dashboard to see the details.\n\n— Trustline Financial Group`,
+    { locale: client.locale }
+  );
+
+  revalidatePath("/admin/applications");
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+export async function declineApplicationAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const appId = String(formData.get("appId"));
+  const note = String(formData.get("note") || "").trim() || "Your application did not meet our current requirements.";
+
+  const app = await db.productApplication.findUnique({ where: { id: appId }, include: { user: true } });
+  if (!app || app.status !== "SUBMITTED") return;
+
+  await db.productApplication.update({
+    where: { id: appId },
+    data: { status: "DECLINED", adminNote: note, decidedBy: admin.email, decidedAt: new Date() },
+  });
+
+  const client = app.user;
+  const name = humanizeProduct(app.productKey);
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "PRODUCT_DECLINED",
+    targetType: "APPLICATION",
+    targetId: app.id,
+    details: `Declined ${name} for ${client.email}: ${note}`,
+  });
+
+  await db.notification.create({
+    data: {
+      userId: client.id,
+      title: `Update on your ${name} application`,
+      body: `We're unable to approve your ${name} application at this time. Reason: ${note}. Contact support@trustlinefinancialgroup.com with any questions.`,
+    },
+  });
+
+  revalidatePath("/admin/applications");
+  revalidatePath("/admin");
   revalidatePath("/dashboard");
 }
 

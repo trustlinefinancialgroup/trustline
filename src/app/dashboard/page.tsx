@@ -3,9 +3,11 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth-actions";
-import { balanceCents, ensureAccount, formatMoney, pendingDepositCents } from "@/lib/bank";
+import { balanceCents, ensureAccount, formatMoney, getSavings, pendingDepositCents } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
+import { productsFor } from "@/lib/products";
+import { openSavingsAction } from "@/lib/actions/product-actions";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { NotificationCenter } from "@/components/notification-center";
@@ -21,7 +23,12 @@ const statusStyles: Record<string, string> = {
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ submitted?: string; withdrawSubmitted?: string }>;
+  searchParams: Promise<{
+    submitted?: string;
+    withdrawSubmitted?: string;
+    transferred?: string;
+    applied?: string;
+  }>;
 }) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
@@ -31,23 +38,37 @@ export default async function DashboardPage({
 
   const t = await getDict();
   const locale = await getLocale();
-  const { submitted, withdrawSubmitted } = await searchParams;
+  const { submitted, withdrawSubmitted, transferred, applied } = await searchParams;
 
   const account = await ensureAccount(user.id);
-  const [balance, pending, transactions, notifications] = await Promise.all([
-    balanceCents(account.id),
-    pendingDepositCents(account.id),
-    db.transaction.findMany({
-      where: { accountId: account.id },
-      orderBy: { createdAt: "desc" },
-      take: 10,
-    }),
-    db.notification.findMany({
-      where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-    }),
-  ]);
+  const savings = await getSavings(user.id);
+  const [balance, pending, savingsBal, transactions, notifications, applications] =
+    await Promise.all([
+      balanceCents(account.id),
+      pendingDepositCents(account.id),
+      savings ? balanceCents(savings.id) : Promise.resolve(0),
+      db.transaction.findMany({
+        where: { accountId: account.id },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      }),
+      db.notification.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+        take: 20,
+      }),
+      db.productApplication.findMany({ where: { userId: user.id } }),
+    ]);
+
+  // Latest application per product key.
+  const appByKey = new Map<string, (typeof applications)[number]>();
+  for (const a of applications) {
+    const prev = appByKey.get(a.productKey);
+    if (!prev || a.createdAt > prev.createdAt) appByKey.set(a.productKey, a);
+  }
+  const products = productsFor(user.accountType);
+  const productItems =
+    user.accountType === "COMMERCIAL" ? t.landing.commercial.items : t.landing.personal.items;
 
   const dateFmt = new Intl.DateTimeFormat(
     { en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES" }[locale],
@@ -93,6 +114,16 @@ export default async function DashboardPage({
             {t.bank.withdrawSubmittedBanner}
           </p>
         )}
+        {transferred && (
+          <p className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+            {t.bank.transferredBanner}
+          </p>
+        )}
+        {applied && (
+          <p className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+            {t.bank.appliedBanner}
+          </p>
+        )}
 
         <h1 className="text-2xl font-semibold tracking-tight text-navy-900">
           {fill(t.dashboard.welcome, { name: user.firstName })}
@@ -136,34 +167,94 @@ export default async function DashboardPage({
           </div>
         </div>
 
+        {/* Savings account card */}
+        {savings && (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div>
+              <p className="text-[13px] font-semibold uppercase tracking-wide text-gray-500">
+                {t.bank.savings}
+              </p>
+              <p className="mt-1 text-2xl font-semibold tracking-tight text-navy-900">
+                {formatMoney(savingsBal, locale, savings.currency)}
+              </p>
+              <p className="mt-1 text-xs text-gray-500">{savings.number}</p>
+            </div>
+            <Link
+              href="/transfer"
+              className="rounded-full bg-navy-800 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            >
+              {t.bank.transfer}
+            </Link>
+          </div>
+        )}
+
         {/* Product suite for the client's account type */}
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {(user.accountType === "COMMERCIAL"
-            ? t.landing.commercial.items
-            : t.landing.personal.items
-          ).map((p, i) => {
-            const isDeposits = user.accountType === "COMMERCIAL" && i === 1;
-            const card = (
-              <div
-                className={`h-full rounded-2xl border bg-white p-5 shadow-sm transition ${
-                  isDeposits
-                    ? "border-accent-500/40 hover:border-accent-500 hover:shadow-md"
-                    : "border-gray-200"
-                }`}
-              >
-                <div className={`h-1 w-6 rounded-full ${isDeposits ? "bg-accent-500" : "bg-gray-200"}`} />
-                <p className="mt-3 text-sm font-semibold text-navy-900">{p.title}</p>
-                <p className={`mt-1 text-xs ${isDeposits ? "font-semibold text-accent-600" : "text-gray-500"}`}>
-                  {isDeposits ? t.bank.makeDeposit : t.bank.comingSoon}
-                </p>
+          {products.map((def, i) => {
+            const item = productItems[i];
+            const app = appByKey.get(def.key);
+
+            // Determine the tile's call-to-action and state label.
+            let href: string | null = null;
+            let stateLabel = "";
+            let stateClass = "text-gray-500";
+            let barClass = "bg-gray-200";
+
+            if (def.kind === "deposit") {
+              href = "/deposit";
+              stateLabel = t.bank.makeDeposit;
+              stateClass = "font-semibold text-accent-600";
+              barClass = "bg-accent-500";
+            } else if (def.kind === "savings") {
+              href = savings ? "/transfer" : null;
+              stateLabel = savings ? t.products.active : t.products.open;
+              stateClass = "font-semibold text-accent-600";
+              barClass = "bg-accent-500";
+            } else {
+              // applyable product
+              if (!app || app.status === "DECLINED") {
+                href = `/apply?type=${def.key}`;
+                stateLabel = app?.status === "DECLINED" ? t.products.reapply : t.products.apply;
+                stateClass = "font-semibold text-accent-600";
+                barClass = app?.status === "DECLINED" ? "bg-red-300" : "bg-accent-500";
+              } else if (app.status === "SUBMITTED") {
+                stateLabel = t.products.underReview;
+                stateClass = "font-semibold text-amber-600";
+                barClass = "bg-amber-400";
+              } else if (app.status === "APPROVED") {
+                stateLabel = app.approvedAmountCents
+                  ? fill(t.products.approvedFor, {
+                      amount: formatMoney(app.approvedAmountCents, locale),
+                    })
+                  : t.products.active;
+                stateClass = "font-semibold text-green-600";
+                barClass = "bg-green-500";
+              }
+            }
+
+            const inner = (
+              <div className="h-full rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-accent-500/40 hover:shadow-md">
+                <div className={`h-1 w-6 rounded-full ${barClass}`} />
+                <p className="mt-3 text-sm font-semibold text-navy-900">{item.title}</p>
+                <p className={`mt-1 text-xs ${stateClass}`}>{stateLabel}</p>
               </div>
             );
-            return isDeposits ? (
-              <Link key={p.title} href="/deposit">
-                {card}
+
+            if (def.kind === "savings" && !savings) {
+              return (
+                <form key={def.key} action={openSavingsAction} className="h-full">
+                  <button type="submit" className="block h-full w-full text-left">
+                    {inner}
+                  </button>
+                </form>
+              );
+            }
+            return href ? (
+              <Link key={def.key} href={href}>
+                {inner}
               </Link>
             ) : (
-              <div key={p.title}>{card}</div>
+              <div key={def.key}>{inner}</div>
             );
           })}
         </div>

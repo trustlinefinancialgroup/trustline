@@ -16,7 +16,7 @@ const statusStyles: Record<string, string> = {
 export default async function ClientsPage() {
   const clients = await db.user.findMany({
     where: { role: "CLIENT" },
-    include: { account: true },
+    include: { accounts: true },
     orderBy: { createdAt: "desc" },
   });
 
@@ -44,7 +44,8 @@ export default async function ClientsPage() {
           </div>
         )}
         {clients.map((u) => {
-          const balance = u.account ? (balanceByAccount.get(u.account.id) ?? 0) : 0;
+          const checking = u.accounts.find((a) => a.kind === "CHECKING");
+          const balance = u.accounts.reduce((sum, a) => sum + (balanceByAccount.get(a.id) ?? 0), 0);
           return (
             <div key={u.id} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -68,7 +69,8 @@ export default async function ClientsPage() {
                   </p>
                   <p className="text-sm text-gray-600">
                     {u.email} · {u.phone}
-                    {u.account ? ` · ${u.account.number}` : ""}
+                    {checking ? ` · ${checking.number}` : ""}
+                    {u.accounts.some((a) => a.kind === "SAVINGS") ? " · +Savings" : ""}
                   </p>
                   {u.statusReason && (
                     <p className="mt-1 text-xs text-gray-500">{u.statusReason}</p>
@@ -79,7 +81,7 @@ export default async function ClientsPage() {
                     Balance
                   </p>
                   <p className="text-xl font-semibold tracking-tight text-navy-900">
-                    {u.account ? formatMoney(balance) : "—"}
+                    {u.accounts.length ? formatMoney(balance) : "—"}
                   </p>
                 </div>
               </div>

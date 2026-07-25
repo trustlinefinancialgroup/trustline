@@ -16,20 +16,30 @@ export function formatMoney(cents: number, locale: string = "en", currency = "US
   return new Intl.NumberFormat(intl, { style: "currency", currency }).format(cents / 100);
 }
 
-/** Returns the user's account, creating it (with a unique number) if needed. */
-export async function ensureAccount(userId: string) {
-  const existing = await db.account.findUnique({ where: { userId } });
+/** Returns the user's account of a kind, creating it with a unique number if needed. */
+export async function ensureAccountOfKind(userId: string, kind: "CHECKING" | "SAVINGS") {
+  const existing = await db.account.findFirst({ where: { userId, kind } });
   if (existing) return existing;
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const number = `TL-${randomInt(10_000_000, 100_000_000)}`;
     try {
-      return await db.account.create({ data: { userId, number } });
+      return await db.account.create({ data: { userId, number, kind } });
     } catch {
       // number collision — retry with a new one
     }
   }
   throw new Error("Could not allocate an account number");
+}
+
+/** The primary checking account (auto-created). */
+export function ensureAccount(userId: string) {
+  return ensureAccountOfKind(userId, "CHECKING");
+}
+
+/** The client's savings account, or null if they haven't opened one. */
+export function getSavings(userId: string) {
+  return db.account.findFirst({ where: { userId, kind: "SAVINGS" } });
 }
 
 /** Balance = sum of POSTED ledger amounts. Never stored, always derived. */
@@ -61,4 +71,39 @@ export async function pendingWithdrawalCents(accountId: string) {
 /** Receipt reference like TL-D-8F3A21C4. */
 export function newReference(prefix = "D") {
   return `TL-${prefix}-${randomBytes(4).toString("hex").toUpperCase()}`;
+}
+
+/** Moves money between two of the user's accounts as two POSTED ledger entries. */
+export async function transferBetween(
+  fromAccountId: string,
+  toAccountId: string,
+  amountCents: number,
+  note: string
+) {
+  const ref = newReference("T");
+  await db.$transaction([
+    db.transaction.create({
+      data: {
+        accountId: fromAccountId,
+        type: "TRANSFER",
+        status: "POSTED",
+        amountCents: -amountCents,
+        reference: `${ref}-O`,
+        note,
+        postedAt: new Date(),
+      },
+    }),
+    db.transaction.create({
+      data: {
+        accountId: toAccountId,
+        type: "TRANSFER",
+        status: "POSTED",
+        amountCents: amountCents,
+        reference: `${ref}-I`,
+        note,
+        postedAt: new Date(),
+      },
+    }),
+  ]);
+  return ref;
 }
