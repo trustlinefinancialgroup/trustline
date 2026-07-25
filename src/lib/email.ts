@@ -1,7 +1,29 @@
 import "server-only";
+import nodemailer, { type Transporter } from "nodemailer";
 import { Resend } from "resend";
 import { db } from "./db";
 import { isLocale, type Locale } from "@/i18n";
+
+// One reusable SMTP connection pool, created on first send.
+let smtpTransport: Transporter | null = null;
+function getSmtpTransport(): Transporter | null {
+  const host = process.env.SMTP_HOST;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASSWORD;
+  if (!host || !user || !pass) return null;
+
+  if (!smtpTransport) {
+    const port = Number(process.env.SMTP_PORT ?? 587);
+    smtpTransport = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465, // 465 = implicit TLS; 587 = STARTTLS
+      auth: { user, pass },
+      pool: true,
+    });
+  }
+  return smtpTransport;
+}
 
 const BRAND = "Trustline Financial Group";
 const NAVY = "#0A1F3D";
@@ -426,12 +448,15 @@ type SendArgs = {
 export async function sendEmail({ to, subject, html, from, replyTo }: SendArgs) {
   const fromAddress = from ?? process.env.EMAIL_FROM ?? `noreply@trustlinefinancialgroup.com`;
   const replyToAddress = replyTo ?? process.env.EMAIL_REPLY_TO;
+
+  const transport = getSmtpTransport();
   const apiKey = process.env.RESEND_API_KEY;
 
-  if (!apiKey) {
+  // No transport configured — log to console/DB so dev never breaks.
+  if (!transport && !apiKey) {
     console.log(
       `\n[DEV EMAIL] to: ${to}\n[DEV EMAIL] from: ${fromAddress}\n[DEV EMAIL] subject: ${subject}\n` +
-        `[DEV EMAIL] (set RESEND_API_KEY in .env to send for real)\n`
+        `[DEV EMAIL] (configure SMTP_* or RESEND_API_KEY in .env to send for real)\n`
     );
     await db.emailLog.create({
       data: { toAddress: to, fromAddress, subject, status: "DEV_LOGGED" },
@@ -440,15 +465,26 @@ export async function sendEmail({ to, subject, html, from, replyTo }: SendArgs) 
   }
 
   try {
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from: fromAddress,
-      to,
-      subject,
-      html,
-      replyTo: replyToAddress,
-    });
-    if (error) throw new Error(error.message);
+    // Preferred: send through the company's own SMTP server.
+    if (transport) {
+      await transport.sendMail({
+        from: fromAddress,
+        to,
+        subject,
+        html,
+        replyTo: replyToAddress,
+      });
+    } else {
+      const resend = new Resend(apiKey!);
+      const { error } = await resend.emails.send({
+        from: fromAddress,
+        to,
+        subject,
+        html,
+        replyTo: replyToAddress,
+      });
+      if (error) throw new Error(error.message);
+    }
     await db.emailLog.create({
       data: { toAddress: to, fromAddress, subject, status: "SENT" },
     });
