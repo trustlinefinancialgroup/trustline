@@ -5,24 +5,27 @@ export type ProductDef = {
   kind: "apply" | "savings" | "deposit";
   amount?: boolean; // whether the application asks for a requested amount
   card?: boolean; // credit-card style (approval sets a tier + limit)
+  // installment: principal disbursed to checking on approval, repaid over time.
+  // revolving: a credit line the client draws from directly.
+  credit?: "installment" | "revolving";
 };
 
 export const PERSONAL_PRODUCTS: ProductDef[] = [
-  { key: "CREDIT_CARD", kind: "apply", amount: true, card: true },
+  { key: "CREDIT_CARD", kind: "apply", amount: true, card: true, credit: "revolving" },
   { key: "SAVINGS", kind: "savings" },
-  { key: "PERSONAL_LOAN", kind: "apply", amount: true },
-  { key: "MORTGAGE", kind: "apply", amount: true },
+  { key: "PERSONAL_LOAN", kind: "apply", amount: true, credit: "installment" },
+  { key: "MORTGAGE", kind: "apply", amount: true, credit: "installment" },
   { key: "PERSONAL_INSURANCE", kind: "apply" },
 ];
 
 export const COMMERCIAL_PRODUCTS: ProductDef[] = [
-  { key: "BUSINESS_CARD", kind: "apply", amount: true, card: true },
+  { key: "BUSINESS_CARD", kind: "apply", amount: true, card: true, credit: "revolving" },
   { key: "DEPOSITS", kind: "deposit" },
   { key: "FOREIGN_DRAFTS", kind: "apply", amount: true },
   { key: "INTEREST_CHECKING", kind: "apply" },
   { key: "TELE_BANKING", kind: "apply" },
   { key: "MONEY_MARKET", kind: "apply", amount: true },
-  { key: "SMALL_BUSINESS", kind: "apply", amount: true },
+  { key: "SMALL_BUSINESS", kind: "apply", amount: true, credit: "installment" },
 ];
 
 export function productsFor(accountType: string): ProductDef[] {

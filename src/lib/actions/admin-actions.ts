@@ -17,6 +17,7 @@ import {
 } from "@/lib/email";
 import { balanceCents, ensureAccount, formatMoney, newReference } from "@/lib/bank";
 import { methodDef } from "@/lib/methods";
+import { productDef } from "@/lib/products";
 
 async function requireAdmin() {
   const admin = await getSessionUser();
@@ -237,26 +238,55 @@ export async function approveApplicationAction(formData: FormData) {
 
   const client = app.user;
   const name = humanizeProduct(app.productKey);
+  const def = productDef(client.accountType, app.productKey);
+
+  // Installment loans/mortgages: disburse the principal into checking and
+  // record the outstanding balance owed. Revolving credit: just set the limit;
+  // the client draws from it later. Service products: nothing to disburse.
+  let disbursed = false;
+  if (def?.credit === "installment" && approvedAmountCents && Number.isFinite(approvedAmountCents)) {
+    const checking = await ensureAccount(client.id);
+    await db.transaction.create({
+      data: {
+        accountId: checking.id,
+        type: "LOAN",
+        status: "POSTED",
+        amountCents: approvedAmountCents,
+        reference: newReference("L"),
+        note: `Loan disbursed: ${name}`,
+        postedAt: new Date(),
+      },
+    });
+    await db.productApplication.update({
+      where: { id: app.id },
+      data: { outstandingCents: approvedAmountCents },
+    });
+    disbursed = true;
+  }
+
   await audit({
     actorId: admin.id,
     actorLabel: admin.email,
     action: "PRODUCT_APPROVED",
     targetType: "APPLICATION",
     targetId: app.id,
-    details: `Approved ${name} for ${client.email}${approvedAmountCents ? ` (${formatMoney(approvedAmountCents)})` : ""}`,
+    details: `Approved ${name} for ${client.email}${approvedAmountCents ? ` (${formatMoney(approvedAmountCents)})` : ""}${disbursed ? " — disbursed to checking" : ""}`,
   });
 
+  const disbursedLine = disbursed
+    ? ` The funds have been disbursed to your checking account.`
+    : "";
   await db.notification.create({
     data: {
       userId: client.id,
       title: `Your ${name} application was approved`,
-      body: `Good news — your ${name} application has been approved${approvedAmountCents ? ` for ${formatMoney(approvedAmountCents)}` : ""}. You can see it on your dashboard.`,
+      body: `Good news — your ${name} application has been approved${approvedAmountCents ? ` for ${formatMoney(approvedAmountCents)}` : ""}.${disbursedLine} You can see it on your dashboard.`,
     },
   });
   await sendBroadcastEmail(
     client.email,
     `Your ${name} application was approved`,
-    `Hello ${client.firstName},\n\nYour ${name} application has been approved${approvedAmountCents ? ` for ${formatMoney(approvedAmountCents)}` : ""}. Sign in to your dashboard to see the details.\n\n— Trustline Financial Group`,
+    `Hello ${client.firstName},\n\nYour ${name} application has been approved${approvedAmountCents ? ` for ${formatMoney(approvedAmountCents)}` : ""}.${disbursedLine}\n\nSign in to your dashboard to see the details.\n\n— Trustline Financial Group`,
     { locale: client.locale }
   );
 

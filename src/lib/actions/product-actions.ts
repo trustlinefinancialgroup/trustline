@@ -5,7 +5,16 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
 import { audit } from "@/lib/audit";
-import { ensureAccount, ensureAccountOfKind, getSavings, balanceCents, transferBetween, formatMoney } from "@/lib/bank";
+import {
+  ensureAccount,
+  ensureAccountOfKind,
+  getSavings,
+  balanceCents,
+  transferBetween,
+  formatMoney,
+  newReference,
+  pendingWithdrawalCents,
+} from "@/lib/bank";
 import { productsFor, productDef } from "@/lib/products";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
@@ -113,6 +122,85 @@ export async function submitApplicationAction(
   });
 
   redirect("/dashboard?applied=1");
+}
+
+// Draw from a revolving credit line into checking (increases what's owed).
+export async function drawCreditAction(_prev: FormState, formData: FormData): Promise<FormState> {
+  const t = await getDict();
+  const user = await requireClient();
+  const appId = String(formData.get("appId"));
+  const raw = String(formData.get("amount") ?? "").trim().replace(",", ".");
+  const cents = Math.round(Number(raw) * 100);
+  if (!raw || !Number.isFinite(cents) || cents <= 0) return { error: t.bank.amountInvalid };
+
+  const app = await db.productApplication.findFirst({
+    where: { id: appId, userId: user.id, status: "APPROVED" },
+  });
+  const def = app ? productDef(user.accountType, app.productKey) : undefined;
+  if (!app || def?.credit !== "revolving") return null;
+  if (app.frozen) return { error: t.products.frozenNote };
+
+  const limit = app.approvedAmountCents ?? 0;
+  const owed = app.outstandingCents ?? 0;
+  if (cents > limit - owed) return { error: t.products.overAvailable };
+
+  const checking = await ensureAccount(user.id);
+  await db.$transaction([
+    db.transaction.create({
+      data: {
+        accountId: checking.id,
+        type: "CREDIT",
+        status: "POSTED",
+        amountCents: cents,
+        reference: newReference("C"),
+        note: `Credit line draw`,
+        postedAt: new Date(),
+      },
+    }),
+    db.productApplication.update({ where: { id: app.id }, data: { outstandingCents: owed + cents } }),
+  ]);
+  redirect(`/product/${app.id}?drawn=1`);
+}
+
+// Repay a loan or credit line from checking (reduces what's owed).
+export async function payProductAction(_prev: FormState, formData: FormData): Promise<FormState> {
+  const t = await getDict();
+  const user = await requireClient();
+  const appId = String(formData.get("appId"));
+  const raw = String(formData.get("amount") ?? "").trim().replace(",", ".");
+  const cents = Math.round(Number(raw) * 100);
+  if (!raw || !Number.isFinite(cents) || cents <= 0) return { error: t.bank.amountInvalid };
+
+  const app = await db.productApplication.findFirst({
+    where: { id: appId, userId: user.id, status: "APPROVED" },
+  });
+  if (!app) return null;
+  const owed = app.outstandingCents ?? 0;
+  if (owed <= 0) return { error: t.products.overOwed };
+  if (cents > owed) return { error: t.products.overOwed };
+
+  const checking = await ensureAccount(user.id);
+  const [posted, pendingOut] = await Promise.all([
+    balanceCents(checking.id),
+    pendingWithdrawalCents(checking.id),
+  ]);
+  if (cents > posted - pendingOut) return { error: t.bank.insufficientFunds };
+
+  await db.$transaction([
+    db.transaction.create({
+      data: {
+        accountId: checking.id,
+        type: "PAYMENT",
+        status: "POSTED",
+        amountCents: -cents,
+        reference: newReference("P"),
+        note: `Payment`,
+        postedAt: new Date(),
+      },
+    }),
+    db.productApplication.update({ where: { id: app.id }, data: { outstandingCents: owed - cents } }),
+  ]);
+  redirect(`/product/${app.id}?paid=1`);
 }
 
 // Client freezes/unfreezes their own approved card.

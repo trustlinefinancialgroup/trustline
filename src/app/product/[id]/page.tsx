@@ -9,16 +9,24 @@ import { getDict, getLocale } from "@/i18n/server";
 import { productDef, productLabel } from "@/lib/products";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
+import { ProductMoneyForms } from "./product-money-forms";
 
 export const metadata = { title: "Product — Trustline Financial Group" };
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ drawn?: string; paid?: string }>;
+}) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   if (isAdmin(user.role)) redirect("/admin");
   if (user.status !== "ACTIVE") redirect("/login");
 
   const { id } = await params;
+  const { drawn, paid } = await searchParams;
   const app = await db.productApplication.findFirst({
     where: { id, userId: user.id, status: "APPROVED" },
   });
@@ -33,11 +41,22 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     { dateStyle: "long" }
   );
 
+  const isRevolving = def?.credit === "revolving";
+  const isInstallment = def?.credit === "installment";
+  const limit = app.approvedAmountCents ?? 0;
+  const owed = app.outstandingCents ?? 0;
+  const available = Math.max(0, limit - owed);
+
   const rows: { label: string; value: string }[] = [
     {
       label: t.products.limitLabel,
       value: app.approvedAmountCents ? formatMoney(app.approvedAmountCents, locale) : t.products.notSet,
     },
+  ];
+  if (isRevolving) {
+    rows.push({ label: t.products.availableCredit, value: formatMoney(available, locale) });
+  }
+  rows.push(
     {
       label: t.products.outstandingLabel,
       value: app.outstandingCents != null ? formatMoney(app.outstandingCents, locale) : t.products.notSet,
@@ -46,8 +65,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     {
       label: t.products.dueDateLabel,
       value: app.dueDate ? dateFmt.format(app.dueDate) : t.products.notSet,
-    },
-  ];
+    }
+  );
   if (def?.card) {
     rows.push({ label: t.products.cardTierLabel, value: app.cardTier || t.products.notSet });
   }
@@ -72,6 +91,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         <Link href="/dashboard" className="text-sm font-semibold text-accent-600 hover:text-accent-700">
           ← {t.bank.back}
         </Link>
+        {(drawn || paid) && (
+          <p className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+            {drawn ? t.products.drewBanner : t.products.paidBanner}
+          </p>
+        )}
         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold tracking-tight text-navy-900">
@@ -86,6 +110,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             </span>
           </div>
 
+          {isInstallment && owed > 0 && (
+            <p className="mt-4 rounded-lg bg-navy-50/70 px-3.5 py-2.5 text-sm text-navy-700">
+              {t.products.disbursedNote}
+            </p>
+          )}
+
           <dl className="mt-6 divide-y divide-gray-100">
             {rows.map((r) => (
               <div key={r.label} className="flex items-center justify-between py-3">
@@ -94,6 +124,18 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               </div>
             ))}
           </dl>
+
+          <ProductMoneyForms
+            appId={app.id}
+            showDraw={isRevolving && available > 0 && !app.frozen}
+            showPay={owed > 0}
+            labels={{
+              draw: t.products.draw,
+              drawAmount: t.products.drawAmount,
+              pay: t.products.pay,
+              payAmount: t.products.payAmount,
+            }}
+          />
 
           {def?.card && (
             <div className="mt-6 border-t border-gray-100 pt-6">
