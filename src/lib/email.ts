@@ -19,7 +19,11 @@ function getSmtpTransport(): Transporter | null {
       port,
       secure: port === 465, // 465 = implicit TLS; 587 = STARTTLS
       auth: { user, pass },
-      pool: true,
+      // No connection pooling: each serverless invocation is isolated, and a
+      // lingering pool can hang the function. Fail fast instead of hanging.
+      pool: false,
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
     });
   }
   return smtpTransport;
