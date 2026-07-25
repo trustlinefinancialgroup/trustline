@@ -40,6 +40,35 @@ model User {
   savingsGoals  SavingsGoal[]
 }
 
+// Live chat: one conversation per visitor, with a thread of messages.
+model ChatConversation {
+  id             String   @id @default(cuid())
+  visitorToken   String   @unique // ties an anonymous browser to its thread
+  name           String
+  phone          String?
+  email          String?
+  cardLast4      String?
+  status         String   @default("OPEN") // OPEN | CLOSED
+  unreadForAdmin Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  lastMessageAt  DateTime @default(now())
+
+  messages ChatMessage[]
+
+  @@index([status, lastMessageAt])
+}
+
+model ChatMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         String // VISITOR | ADMIN
+  body           String
+  createdAt      DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
 // A named savings bucket ("Save for a trip"). Money is set aside from checking.
 model SavingsGoal {
   id           String   @id @default(cuid())

@@ -17,11 +17,12 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  const [pendingCount, depositCount, withdrawalCount, applicationCount] = await Promise.all([
+  const [pendingCount, depositCount, withdrawalCount, applicationCount, chatCount] = await Promise.all([
     db.user.count({ where: { status: "PENDING", role: "CLIENT" } }),
     db.transaction.count({ where: { status: "PENDING", type: "DEPOSIT" } }),
     db.transaction.count({ where: { status: "PENDING", type: "WITHDRAWAL" } }),
     db.productApplication.count({ where: { status: "SUBMITTED" } }),
+    db.chatConversation.count({ where: { unreadForAdmin: true } }),
   ]);
 
   const nav = [
@@ -29,6 +30,7 @@ export default async function AdminLayout({
     { href: "/admin/applications", label: "Applications", badge: applicationCount },
     { href: "/admin/deposits", label: "Deposits", badge: depositCount },
     { href: "/admin/withdrawals", label: "Withdrawals", badge: withdrawalCount },
+    { href: "/admin/chat", label: "Live chat", badge: chatCount },
     { href: "/admin/clients", label: "Clients" },
     { href: "/admin/inbox", label: "Inbox" },
     { href: "/admin/messages", label: "Messages" },

@@ -11,6 +11,7 @@ import { openSavingsAction } from "@/lib/actions/product-actions";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { NotificationCenter } from "@/components/notification-center";
+import { ChatLauncher } from "@/components/chat-launcher";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
 
@@ -344,6 +345,7 @@ export default async function DashboardPage({
           {t.bank.fdic}
         </p>
       </div>
+      <ChatLauncher prefill={{ name: `${user.firstName} ${user.lastName}`, email: user.email }} />
     </main>
   );
 }

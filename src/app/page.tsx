@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { CardStack } from "@/components/card-stack";
 import { Icons } from "@/components/icons";
+import { ChatLauncher } from "@/components/chat-launcher";
 
 const personalIcons = [Icons.card, Icons.savings, Icons.lending, Icons.mortgage, Icons.insurance];
 const commercialIcons = [
@@ -329,6 +330,7 @@ export default async function HomePage() {
             </ul>
           </div>
         </div>
+        <ChatLauncher />
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-xs text-navy-400 sm:flex-row sm:items-center sm:justify-between">
             <span>
