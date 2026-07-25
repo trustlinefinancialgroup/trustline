@@ -8,7 +8,11 @@ const inputClass =
   "mt-1.5 w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20";
 const labelClass = "block text-[13px] font-semibold text-navy-800";
 
-export function ComposeForm() {
+export function ComposeForm({
+  clients,
+}: {
+  clients: { email: string; name: string }[];
+}) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(
     sendBroadcastAction,
     null
@@ -66,7 +70,20 @@ export function ComposeForm() {
       {audience === "SINGLE" && (
         <label className={labelClass}>
           Client email address
-          <input name="singleEmail" type="email" placeholder="client@example.com" className={inputClass} />
+          <input
+            name="singleEmail"
+            type="email"
+            list="client-emails"
+            placeholder="Pick from the list or type an email"
+            className={inputClass}
+          />
+          <datalist id="client-emails">
+            {clients.map((c) => (
+              <option key={c.email} value={c.email}>
+                {c.name}
+              </option>
+            ))}
+          </datalist>
         </label>
       )}
 

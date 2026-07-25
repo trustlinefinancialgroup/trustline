@@ -6,9 +6,16 @@ import path from "path";
 import { getSessionUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
-import { ensureAccount, formatMoney, newReference } from "@/lib/bank";
+import {
+  balanceCents,
+  ensureAccount,
+  formatMoney,
+  newReference,
+  pendingWithdrawalCents,
+} from "@/lib/bank";
 import { sendDepositReceivedEmail } from "@/lib/email";
 import { uploadFile, DEPOSIT_BUCKET } from "@/lib/storage";
+import { methodDef } from "@/lib/methods";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
 
@@ -34,6 +41,7 @@ export async function submitDepositAction(
   }
 
   const note = String(formData.get("note") ?? "").trim().slice(0, 200) || null;
+  const methodKey = String(formData.get("methodKey") ?? "BANK").trim().toUpperCase();
 
   // Proof is optional at submission — admins can credit without it and only
   // request proof when they can't match the payment (keeps storage lean).
@@ -63,6 +71,7 @@ export async function submitDepositAction(
       amountCents,
       reference,
       note,
+      methodKey,
       proofFileName: proof?.fileName,
       proofStoredName: proof?.storedName,
       proofMimeType: proof?.mimeType,
@@ -75,7 +84,7 @@ export async function submitDepositAction(
     action: "DEPOSIT_SUBMITTED",
     targetType: "TRANSACTION",
     targetId: reference,
-    details: `${user.email} submitted a deposit of ${formatMoney(amountCents)} (${reference})`,
+    details: `${user.email} submitted a ${methodDef(methodKey).label} deposit of ${formatMoney(amountCents)} (${reference})`,
   });
 
   await sendDepositReceivedEmail(
@@ -87,4 +96,59 @@ export async function submitDepositAction(
   );
 
   redirect("/dashboard?submitted=1");
+}
+
+export async function submitWithdrawalAction(
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const t = await getDict();
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  if (user.status !== "ACTIVE" || user.role !== "CLIENT") redirect("/login");
+
+  const raw = String(formData.get("amount") ?? "").trim().replace(",", ".");
+  const amount = Number(raw);
+  const amountCents = Math.round(amount * 100);
+  if (!raw || !Number.isFinite(amount) || amountCents <= 0 || amountCents > MAX_AMOUNT_CENTS) {
+    return { error: t.bank.amountInvalid };
+  }
+
+  const methodKey = String(formData.get("methodKey") ?? "BANK").trim().toUpperCase();
+  const details = String(formData.get("details") ?? "").trim().slice(0, 400);
+  if (!details) return { error: t.bank.withdrawDetailsRequired };
+
+  const account = await ensureAccount(user.id);
+  const [posted, pendingOut] = await Promise.all([
+    balanceCents(account.id),
+    pendingWithdrawalCents(account.id),
+  ]);
+  const available = posted - pendingOut;
+  if (amountCents > available) {
+    return { error: t.bank.insufficientFunds };
+  }
+
+  const reference = newReference("W");
+  await db.transaction.create({
+    data: {
+      accountId: account.id,
+      type: "WITHDRAWAL",
+      status: "PENDING",
+      amountCents: -amountCents, // stored as a debit; only counts once POSTED
+      reference,
+      methodKey,
+      counterparty: details,
+    },
+  });
+
+  await audit({
+    actorId: user.id,
+    actorLabel: user.email,
+    action: "WITHDRAWAL_REQUESTED",
+    targetType: "TRANSACTION",
+    targetId: reference,
+    details: `${user.email} requested a ${methodDef(methodKey).label} withdrawal of ${formatMoney(amountCents)} (${reference})`,
+  });
+
+  redirect("/dashboard?withdrawSubmitted=1");
 }

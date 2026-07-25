@@ -21,7 +21,7 @@ const statusStyles: Record<string, string> = {
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ submitted?: string }>;
+  searchParams: Promise<{ submitted?: string; withdrawSubmitted?: string }>;
 }) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
@@ -31,7 +31,7 @@ export default async function DashboardPage({
 
   const t = await getDict();
   const locale = await getLocale();
-  const { submitted } = await searchParams;
+  const { submitted, withdrawSubmitted } = await searchParams;
 
   const account = await ensureAccount(user.id);
   const [balance, pending, transactions, notifications] = await Promise.all([
@@ -88,6 +88,11 @@ export default async function DashboardPage({
             {t.bank.submittedBanner}
           </p>
         )}
+        {withdrawSubmitted && (
+          <p className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+            {t.bank.withdrawSubmittedBanner}
+          </p>
+        )}
 
         <h1 className="text-2xl font-semibold tracking-tight text-navy-900">
           {fill(t.dashboard.welcome, { name: user.firstName })}
@@ -114,12 +119,20 @@ export default async function DashboardPage({
                 </p>
               )}
             </div>
-            <Link
-              href="/deposit"
-              className="rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-600"
-            >
-              {t.bank.makeDeposit}
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/deposit"
+                className="rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-600"
+              >
+                {t.bank.makeDeposit}
+              </Link>
+              <Link
+                href="/withdraw"
+                className="rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                {t.bank.withdraw}
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -201,6 +214,13 @@ export default async function DashboardPage({
             </table>
           )}
         </div>
+
+        <p className="mt-8 flex items-center justify-end gap-2 text-right text-xs text-gray-400">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 text-[9px] font-bold text-gray-500">
+            FDIC
+          </span>
+          {t.bank.fdic}
+        </p>
       </div>
     </main>
   );

@@ -37,6 +37,24 @@ model User {
   notifications Notification[]
 }
 
+// Admin-configured ways to move money in and out. Each carries a route (where
+// clients send deposits) and per-account-type visibility.
+model DepositMethod {
+  id                String   @id @default(cuid())
+  key               String   @unique // BANK, ZELLE, CASHAPP, PAYPAL, ...
+  label             String
+  enabled           Boolean  @default(true)
+  accountTypes      String   @default("ALL") // ALL | PERSONAL | COMMERCIAL
+  forDeposit        Boolean  @default(true)
+  forWithdrawal     Boolean  @default(true)
+  routeName         String? // deposit destination shown to clients (our details)
+  routeIdentifier   String? // account number / tag / wallet address
+  routeInstitution  String?
+  routeInstructions String?
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+}
+
 // In-app notification, one row per recipient. Admin broadcasts create many.
 model Notification {
   id        String    @id @default(cuid())
@@ -73,6 +91,8 @@ model Transaction {
   amountCents Int // credits positive, debits negative
   reference   String  @unique // receipt number shown to the client
   note        String?
+  methodKey    String? // which deposit/withdrawal method was used
+  counterparty String? // withdrawals: client's payout details (name/number/etc.)
 
   // proof uploaded by the client (transfer confirmation / receipt)
   proofFileName   String?

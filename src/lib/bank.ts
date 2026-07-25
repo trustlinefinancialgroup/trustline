@@ -49,6 +49,15 @@ export async function pendingDepositCents(accountId: string) {
   return agg._sum.amountCents ?? 0;
 }
 
+/** Total of not-yet-approved withdrawals (returned as a positive number). */
+export async function pendingWithdrawalCents(accountId: string) {
+  const agg = await db.transaction.aggregate({
+    where: { accountId, status: "PENDING", type: "WITHDRAWAL" },
+    _sum: { amountCents: true },
+  });
+  return Math.abs(agg._sum.amountCents ?? 0);
+}
+
 /** Receipt reference like TL-D-8F3A21C4. */
 export function newReference(prefix = "D") {
   return `TL-${prefix}-${randomBytes(4).toString("hex").toUpperCase()}`;

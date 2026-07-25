@@ -15,6 +15,7 @@ import {
   sendAdjustmentEmail,
 } from "@/lib/email";
 import { balanceCents, ensureAccount, formatMoney, newReference } from "@/lib/bank";
+import { methodDef } from "@/lib/methods";
 
 async function requireAdmin() {
   const admin = await getSessionUser();
@@ -196,6 +197,92 @@ export async function adjustBalanceAction(formData: FormData) {
   );
 
   revalidatePath("/admin/clients");
+  revalidatePath("/dashboard");
+}
+
+// ---------- withdrawal approval ----------
+
+export async function approveWithdrawalAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const txId = String(formData.get("txId"));
+
+  const tx = await db.transaction.findUnique({
+    where: { id: txId },
+    include: { account: { include: { user: true } } },
+  });
+  if (!tx || tx.status !== "PENDING" || tx.type !== "WITHDRAWAL") return;
+
+  await db.transaction.update({
+    where: { id: txId },
+    data: { status: "POSTED", postedAt: new Date(), reviewedBy: admin.email },
+  });
+
+  const client = tx.account.user;
+  const newBalance = await balanceCents(tx.accountId);
+  const label = methodDef(tx.methodKey ?? "BANK").label;
+
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "WITHDRAWAL_APPROVED",
+    targetType: "TRANSACTION",
+    targetId: tx.reference,
+    details: `Approved ${formatMoney(Math.abs(tx.amountCents))} withdrawal for ${client.email} via ${label} (${tx.reference}); new balance ${formatMoney(newBalance)}`,
+  });
+
+  // A withdrawal is a debit — reuse the localized debit email.
+  await sendAdjustmentEmail(
+    client.email,
+    client.firstName,
+    client.locale,
+    "DEBIT",
+    formatMoney(Math.abs(tx.amountCents), client.locale),
+    tx.reference,
+    `Withdrawal via ${label}`,
+    formatMoney(newBalance, client.locale)
+  );
+
+  revalidatePath("/admin/withdrawals");
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+export async function rejectWithdrawalAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const txId = String(formData.get("txId"));
+  const reason = String(formData.get("reason") || "").trim() || "The withdrawal request could not be processed.";
+
+  const tx = await db.transaction.findUnique({
+    where: { id: txId },
+    include: { account: { include: { user: true } } },
+  });
+  if (!tx || tx.status !== "PENDING" || tx.type !== "WITHDRAWAL") return;
+
+  await db.transaction.update({
+    where: { id: txId },
+    data: { status: "REJECTED", rejectReason: reason, reviewedBy: admin.email },
+  });
+
+  const client = tx.account.user;
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "WITHDRAWAL_REJECTED",
+    targetType: "TRANSACTION",
+    targetId: tx.reference,
+    details: `Rejected withdrawal of ${formatMoney(Math.abs(tx.amountCents))} for ${client.email} (${tx.reference}): ${reason}`,
+  });
+
+  await db.notification.create({
+    data: {
+      userId: client.id,
+      title: "Withdrawal request declined",
+      body: `Your withdrawal of ${formatMoney(Math.abs(tx.amountCents))} (${tx.reference}) was declined. Reason: ${reason}. Contact support@trustlinefinancialgroup.com with any questions.`,
+    },
+  });
+
+  revalidatePath("/admin/withdrawals");
+  revalidatePath("/admin");
   revalidatePath("/dashboard");
 }
 

@@ -2,11 +2,18 @@ import { db } from "@/lib/db";
 import { ComposeForm } from "./compose-form";
 
 export default async function MessagesPage() {
-  const recent = await db.auditLog.findMany({
-    where: { action: "BROADCAST_SENT" },
-    orderBy: { createdAt: "desc" },
-    take: 15,
-  });
+  const [recent, clients] = await Promise.all([
+    db.auditLog.findMany({
+      where: { action: "BROADCAST_SENT" },
+      orderBy: { createdAt: "desc" },
+      take: 15,
+    }),
+    db.user.findMany({
+      where: { role: "CLIENT" },
+      select: { email: true, firstName: true, lastName: true },
+      orderBy: { firstName: "asc" },
+    }),
+  ]);
 
   return (
     <div>
@@ -17,7 +24,12 @@ export default async function MessagesPage() {
         template automatically.
       </p>
 
-      <ComposeForm />
+      <ComposeForm
+        clients={clients.map((c) => ({
+          email: c.email,
+          name: `${c.firstName} ${c.lastName}`,
+        }))}
+      />
 
       <h2 className="mt-12 text-sm font-bold uppercase tracking-wide text-gray-500">
         Recently sent

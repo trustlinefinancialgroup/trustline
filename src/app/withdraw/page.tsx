@@ -3,17 +3,17 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth-actions";
+import { balanceCents, ensureAccount, formatMoney, pendingWithdrawalCents } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { methodDef, methodVisibleFor } from "@/lib/methods";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { PaymentIcon } from "@/components/payment-icons";
-import { DepositForm } from "./deposit-form";
-import { RequestMethod } from "./request-method";
+import { WithdrawForm } from "./withdraw-form";
 
-export const metadata = { title: "Make a deposit — Trustline Financial Group" };
+export const metadata = { title: "Withdraw — Trustline Financial Group" };
 
-export default async function DepositPage({
+export default async function WithdrawPage({
   searchParams,
 }: {
   searchParams: Promise<{ method?: string }>;
@@ -28,8 +28,15 @@ export default async function DepositPage({
   const locale = await getLocale();
   const { method: methodParam } = await searchParams;
 
+  const account = await ensureAccount(user.id);
+  const [posted, pendingOut] = await Promise.all([
+    balanceCents(account.id),
+    pendingWithdrawalCents(account.id),
+  ]);
+  const available = posted - pendingOut;
+
   const allMethods = await db.depositMethod.findMany({
-    where: { enabled: true, forDeposit: true },
+    where: { enabled: true, forWithdrawal: true },
     orderBy: { sortOrder: "asc" },
   });
   const methods = allMethods.filter((m) => methodVisibleFor(m.accountTypes, user.accountType));
@@ -57,20 +64,19 @@ export default async function DepositPage({
         </Link>
 
         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-9 shadow-sm">
-          <h1 className="text-xl font-semibold tracking-tight text-navy-900">
-            {t.bank.depositTitle}
-          </h1>
+          <h1 className="text-xl font-semibold tracking-tight text-navy-900">{t.bank.withdrawTitle}</h1>
+          <p className="mt-2 text-sm text-gray-500">
+            {t.bank.available}: <strong className="text-navy-800">{formatMoney(available, locale)}</strong>
+          </p>
 
           {!selected ? (
             <>
-              <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
-                {t.bank.chooseMethod}
-              </p>
+              <p className="mt-3 text-[15px] leading-relaxed text-gray-600">{t.bank.chooseMethod}</p>
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {methods.map((m) => (
                   <Link
                     key={m.key}
-                    href={`/deposit?method=${m.key}`}
+                    href={`/withdraw?method=${m.key}`}
                     className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 p-4 text-center transition hover:border-accent-500/50 hover:bg-navy-50/50"
                   >
                     <span className="text-navy-700">
@@ -80,14 +86,6 @@ export default async function DepositPage({
                   </Link>
                 ))}
               </div>
-              <RequestMethod
-                labels={{
-                  prompt: t.bank.methodRequestPrompt,
-                  placeholder: t.bank.methodRequestPlaceholder,
-                  send: t.bank.methodRequestSend,
-                  sent: t.bank.methodRequestSent,
-                }}
-              />
             </>
           ) : (
             <>
@@ -96,57 +94,19 @@ export default async function DepositPage({
                   <PaymentIcon icon={methodDef(selected.key).icon} className="h-7 w-7" />
                 </span>
                 <span className="font-semibold text-navy-900">{selected.label}</span>
-                <Link
-                  href="/deposit"
-                  className="ml-auto text-xs font-semibold text-accent-600 hover:text-accent-700"
-                >
+                <Link href="/withdraw" className="ml-auto text-xs font-semibold text-accent-600 hover:text-accent-700">
                   {t.bank.chooseMethod}
                 </Link>
               </div>
-
-              {/* Deposit route (where to send the money) */}
-              {(selected.routeName || selected.routeIdentifier || selected.routeInstitution || selected.routeInstructions) && (
-                <div className="mt-4 rounded-xl border border-accent-100 bg-accent-50/60 p-4 text-sm">
-                  <p className="font-semibold text-navy-900">{t.bank.depositRoute}</p>
-                  <p className="mt-1 text-gray-600">{t.bank.depositRouteHint}</p>
-                  <dl className="mt-3 space-y-1.5 text-navy-800">
-                    {selected.routeName && (
-                      <div className="flex justify-between gap-4">
-                        <dt className="text-gray-500">{t.bank.routeName}</dt>
-                        <dd className="font-semibold">{selected.routeName}</dd>
-                      </div>
-                    )}
-                    {selected.routeIdentifier && (
-                      <div className="flex justify-between gap-4">
-                        <dt className="text-gray-500">{t.bank.routeIdentifier}</dt>
-                        <dd className="font-semibold">{selected.routeIdentifier}</dd>
-                      </div>
-                    )}
-                    {selected.routeInstitution && (
-                      <div className="flex justify-between gap-4">
-                        <dt className="text-gray-500">{t.bank.routeInstitution}</dt>
-                        <dd className="font-semibold">{selected.routeInstitution}</dd>
-                      </div>
-                    )}
-                  </dl>
-                  {selected.routeInstructions && (
-                    <p className="mt-3 whitespace-pre-line text-gray-600">{selected.routeInstructions}</p>
-                  )}
-                </div>
-              )}
-
-              <p className="mt-6 text-[15px] leading-relaxed text-gray-600">{t.bank.depositBody}</p>
-              <DepositForm
+              <p className="mt-6 text-[15px] leading-relaxed text-gray-600">{t.bank.withdrawBody}</p>
+              <WithdrawForm
                 methodKey={selected.key}
                 labels={{
                   amount: t.bank.amount,
-                  note: t.bank.note,
-                  proof: t.bank.proof,
-                  proofHint: t.bank.proofHint,
-                  submit: t.bank.submitDeposit,
-                  submitting: t.bank.submittingDeposit,
-                  chooseFile: t.common.chooseFile,
-                  noFile: t.common.noFileChosen,
+                  details: t.bank.withdrawDetailsLabel,
+                  detailsHint: t.bank.withdrawDetailsHint,
+                  submit: t.bank.submitWithdraw,
+                  submitting: t.bank.submittingWithdraw,
                 }}
               />
             </>
