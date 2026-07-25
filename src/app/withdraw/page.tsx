@@ -99,16 +99,29 @@ export default async function WithdrawPage({
                 </Link>
               </div>
               <p className="mt-6 text-[15px] leading-relaxed text-gray-600">{t.bank.withdrawBody}</p>
-              <WithdrawForm
-                methodKey={selected.key}
-                labels={{
-                  amount: t.bank.amount,
-                  details: t.bank.withdrawDetailsLabel,
-                  detailsHint: t.bank.withdrawDetailsHint,
-                  submit: t.bank.submitWithdraw,
-                  submitting: t.bank.submittingWithdraw,
-                }}
-              />
+              {!user.securityWordHash ? (
+                <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
+                  {t.bank.securityWordMissing}
+                  <Link
+                    href="/account"
+                    className="mt-3 inline-block rounded-full bg-navy-800 px-5 py-2 text-xs font-bold text-white transition hover:bg-navy-700"
+                  >
+                    {t.bank.goToAccount}
+                  </Link>
+                </div>
+              ) : (
+                <WithdrawForm
+                  methodKey={selected.key}
+                  labels={{
+                    amount: t.bank.amount,
+                    details: t.bank.withdrawDetailsLabel,
+                    detailsHint: t.bank.withdrawDetailsHint,
+                    securityWord: t.bank.securityWordField,
+                    submit: t.bank.submitWithdraw,
+                    submitting: t.bank.submittingWithdraw,
+                  }}
+                />
+              )}
             </>
           )}
         </div>

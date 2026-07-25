@@ -28,6 +28,7 @@ export default async function DashboardPage({
     withdrawSubmitted?: string;
     transferred?: string;
     applied?: string;
+    sent?: string;
   }>;
 }) {
   const user = await getSessionUser();
@@ -38,7 +39,7 @@ export default async function DashboardPage({
 
   const t = await getDict();
   const locale = await getLocale();
-  const { submitted, withdrawSubmitted, transferred, applied } = await searchParams;
+  const { submitted, withdrawSubmitted, transferred, applied, sent } = await searchParams;
 
   const account = await ensureAccount(user.id);
   const savings = await getSavings(user.id);
@@ -124,6 +125,11 @@ export default async function DashboardPage({
             {t.bank.appliedBanner}
           </p>
         )}
+        {sent && (
+          <p className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+            {sent === "instant" ? t.bank.sentInstantBanner : t.bank.sentPendingBanner}
+          </p>
+        )}
 
         <h1 className="text-2xl font-semibold tracking-tight text-navy-900">
           {fill(t.dashboard.welcome, { name: user.firstName })}
@@ -163,8 +169,30 @@ export default async function DashboardPage({
               >
                 {t.bank.withdraw}
               </Link>
+              <Link
+                href="/send"
+                className="rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                {t.bank.sendMoney}
+              </Link>
             </div>
           </div>
+        </div>
+
+        {/* Quick links */}
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            href="/goals"
+            className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
+          >
+            {t.bank.goalsLink}
+          </Link>
+          <Link
+            href="/account"
+            className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
+          >
+            {t.bank.accountSettings}
+          </Link>
         </div>
 
         {/* Savings account card */}

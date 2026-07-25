@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { randomBytes } from "crypto";
 import path from "path";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, verifyPassword } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
 import {
@@ -117,6 +117,13 @@ export async function submitWithdrawalAction(
   const methodKey = String(formData.get("methodKey") ?? "BANK").trim().toUpperCase();
   const details = String(formData.get("details") ?? "").trim().slice(0, 400);
   if (!details) return { error: t.bank.withdrawDetailsRequired };
+
+  // Security word gate on this sensitive action.
+  const word = String(formData.get("securityWord") ?? "").trim().toLowerCase();
+  if (!user.securityWordHash) return { error: t.bank.securityWordMissing };
+  if (!(await verifyPassword(word, user.securityWordHash))) {
+    return { error: t.bank.securityWordWrong };
+  }
 
   const account = await ensureAccount(user.id);
   const [posted, pendingOut] = await Promise.all([

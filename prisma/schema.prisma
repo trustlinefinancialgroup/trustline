@@ -26,6 +26,7 @@ model User {
   statusReason String? // shown to admins; set on reject/block
   emailVerified Boolean @default(false)
   locale       String  @default("en") // en | fr | de | es — used for emails too
+  securityWordHash String? // hashed; required to confirm sensitive actions
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,6 +37,20 @@ model User {
   accounts      Account[]
   notifications Notification[]
   applications  ProductApplication[]
+  savingsGoals  SavingsGoal[]
+}
+
+// A named savings bucket ("Save for a trip"). Money is set aside from checking.
+model SavingsGoal {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  targetCents  Int? // optional goal target
+  currentCents Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
 }
 
 // Applying for a product (card, loan, mortgage, insurance, business products).
