@@ -185,10 +185,10 @@ export default async function HomePage() {
         <div className="mt-12 grid gap-10 lg:grid-cols-5 lg:items-stretch">
           <div className="relative order-last min-h-[320px] overflow-hidden rounded-3xl lg:order-first lg:col-span-2">
             <Image
-              src="/images/team.jpg"
-              alt="The Trustline Financial Group team"
+              src="/images/advisor-meeting.jpg"
+              alt="A Trustline advisor meeting with a client"
               fill
-              className="object-cover object-center"
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy-950/40 to-transparent" />
           </div>
@@ -242,6 +242,27 @@ export default async function HomePage() {
             >
               {t.common.openAccount}
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Team band */}
+      <section className="relative isolate overflow-hidden">
+        <Image
+          src="/images/team.jpg"
+          alt="The Trustline Financial Group team"
+          fill
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/70 to-navy-900/40" />
+        <div className="relative mx-auto max-w-7xl px-6 py-28 lg:py-36">
+          <div className="max-w-xl">
+            <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+              {t.landing.whyTitle}
+            </h2>
+            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-navy-100">
+              {t.landing.footerTagline}
+            </p>
           </div>
         </div>
       </section>
