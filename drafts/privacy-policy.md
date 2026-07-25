@@ -79,5 +79,4 @@ collect their data.
 
 ## 11. Changes and contact
 We will post updates here and, for material changes, notify you. Questions or
-requests: **support@trustlinefinancialgroup.com**, or write to **[REGISTERED
-ADDRESS]**. **[Add data-protection officer / representative contact if required.]**
+requests: **support@trustlinefinancialgroup.com**, or write to **[New York]**. **[Add data-protection officer / representative contact if required.]**

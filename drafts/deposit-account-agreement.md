@@ -19,7 +19,7 @@ receives a unique account number.
 
 ## 3. Deposits and availability
 - You submit deposits with the amount and, if requested, proof of payment.
-- Funds are available only after verification (typically within **[X]** business
+- Funds are available only after verification (typically within **[LESS THAN 1-3]** business
   day(s)). **[Insert the actual funds-availability policy required locally.]**
 - We may decline or reverse a deposit that cannot be verified or that appears
   fraudulent.
@@ -41,7 +41,7 @@ fee schedule.]**
 ## 7. Statements
 You will receive periodic (including weekly) statements electronically. Review
 them promptly and report any error or unauthorized transaction to
-**support@trustlinefinancialgroup.com** within **[X]** days. **[Insert error-
+**support@trustlinefinancialgroup.com** within **[14]** days. **[Insert error-
 resolution rights and timelines required by local electronic-transfer law.]**
 
 ## 8. Suspicious activity

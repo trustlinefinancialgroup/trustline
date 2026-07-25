@@ -36,24 +36,24 @@ Clear terms, transparent schedules, and a human decision — no hidden traps.
 
 ## B. Sign-up bonus (structure to finalize)
 
-> **Open your Trustline account and get a [$XX] welcome bonus.**
-> Fund your new account with [$XXX] or more within [30] days of approval, keep it
-> for [90] days, and we'll credit your [$XX] bonus straight to your balance.
+> **Open your Trustline account and get a [$175] welcome bonus.**
+> Fund your new account with [$1000] or more within [30] days of approval, keep it
+> for [90] days, and we'll credit your [UP TO $5PERCENT PER MONTH] bonus straight to your balance.
 
 **Suggested qualifying conditions (Trustline to confirm):**
 - New clients only; one bonus per person/household.
 - Account must be approved and in good standing.
-- Minimum qualifying deposit of **[$XXX]**, held for **[90] days**.
-- Bonus credited by **[date/'within X days of qualifying']**.
-- Offer valid **[start date]**–**[end date]**; may be withdrawn anytime before
+- Minimum qualifying deposit of **[$2500]**, held for **[90] days**.
+- Bonus credited by **[date/'within 7 BUSINESS days of qualifying']**.
+- Offer valid **[365]**–**[365]**; may be withdrawn anytime before
   you qualify.
 - Bonus may be reported as interest/income where required by law.
 
 *Alternative ideas Trustline could choose instead of or alongside a cash bonus:*
-- **Referral bonus:** you and a friend each get **[$XX]** when they open and fund
+- **Referral bonus:** you and a friend each get **[$10]** when they open and fund
   an account.
 - **Fee-free period:** no account fees for the first **[12] months**.
-- **Bonus savings rate:** an introductory **[X]% APY** for the first **[X]
+- **Bonus savings rate:** an introductory **[UP TO 5]% APY** for the first **[3]
   months** (requires truth-in-savings disclosure).
 
 ---
@@ -66,7 +66,7 @@ Clear terms, transparent schedules, and a human decision — no hidden traps.
    trail.
 4. **Four languages** — EN / FR / DE / ES, end to end.
 5. **Personal & business** — accounts, loans, mortgages, credit, small business.
-6. **[$XX] welcome bonus** — for new accounts that qualify.
+6. **[$175] welcome bonus** — for new accounts that qualify.
 
 ---
 
