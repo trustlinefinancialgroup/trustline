@@ -14,6 +14,12 @@ const FROM_ADDRESSES: Record<string, string> = {
   accountmanager: "Trustline Financial Group <accountmanager@trustlinefinancialgroup.com>",
 };
 
+const REPLY_TO: Record<string, string> = {
+  info: "info@trustlinefinancialgroup.com",
+  support: "support@trustlinefinancialgroup.com",
+  accountmanager: "accountmanager@trustlinefinancialgroup.com",
+};
+
 async function requireAdmin() {
   const admin = await getSessionUser();
   if (!admin || !isAdmin(admin.role) || admin.status !== "ACTIVE") {
@@ -57,7 +63,7 @@ export async function sendBroadcastAction(
   const body = String(formData.get("body") ?? "").trim();
   const fromKey = String(formData.get("from") ?? "info");
   const fromAddress = FROM_ADDRESSES[fromKey] ?? FROM_ADDRESSES.info;
-  const replyTo = fromKey === "info" ? "support@trustlinefinancialgroup.com" : undefined;
+  const replyTo = REPLY_TO[fromKey] ?? REPLY_TO.info;
 
   if (!viaEmail && !viaNotification) {
     return { error: "Choose at least one channel (email or notification)." };

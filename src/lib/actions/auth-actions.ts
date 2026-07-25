@@ -15,7 +15,7 @@ import {
   isAdmin,
 } from "@/lib/auth";
 import { audit } from "@/lib/audit";
-import { sendWelcomeEmail, sendKycReceivedEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendKycReceivedEmail, sendPasswordResetEmail } from "@/lib/email";
 import { uploadFile, KYC_BUCKET } from "@/lib/storage";
 import { getDict, getLocale } from "@/i18n/server";
 
@@ -184,6 +184,93 @@ export async function submitKycAction(_prev: FormState, formData: FormData): Pro
 
   revalidatePath("/onboarding");
   return null;
+}
+
+// ---------- forgot / reset password ----------
+
+export async function forgotPasswordAction(
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const t = await getDict();
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const parsed = z.string().email().safeParse(email);
+  if (!parsed.success) return { error: t.errors.emailInvalid };
+
+  const user = await db.user.findUnique({ where: { email } });
+  // Only act if the user exists, but always return the same message so we
+  // never reveal whether an email is registered.
+  if (user) {
+    const token = randomBytes(32).toString("hex");
+    await db.verificationToken.create({
+      data: {
+        userId: user.id,
+        token,
+        purpose: "PASSWORD_RESET",
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour
+      },
+    });
+    await audit({
+      actorId: user.id,
+      actorLabel: user.email,
+      action: "PASSWORD_RESET_REQUESTED",
+      targetType: "USER",
+      targetId: user.id,
+    });
+    await sendPasswordResetEmail(user.email, user.firstName, token, user.locale);
+  }
+
+  return { ok: t.reset.sent };
+}
+
+export async function resetPasswordAction(
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const t = await getDict();
+  const token = String(formData.get("token") ?? "");
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  const pwCheck = z
+    .string()
+    .min(10)
+    .regex(/[a-zA-Z]/)
+    .regex(/[0-9]/)
+    .safeParse(password);
+  if (!pwCheck.success) return { error: t.errors.passwordWeak };
+  if (password !== confirm) return { error: t.reset.mismatch };
+
+  const record = await db.verificationToken.findUnique({
+    where: { token },
+    include: { user: true },
+  });
+  if (
+    !record ||
+    record.purpose !== "PASSWORD_RESET" ||
+    record.usedAt ||
+    record.expiresAt < new Date()
+  ) {
+    return { error: t.reset.invalid };
+  }
+
+  const passwordHash = await hashPassword(password);
+  await db.$transaction([
+    db.user.update({ where: { id: record.userId }, data: { passwordHash } }),
+    db.verificationToken.update({
+      where: { id: record.id },
+      data: { usedAt: new Date() },
+    }),
+  ]);
+  await audit({
+    actorId: record.userId,
+    actorLabel: record.user.email,
+    action: "PASSWORD_RESET_COMPLETED",
+    targetType: "USER",
+    targetId: record.userId,
+  });
+
+  return { ok: t.reset.done };
 }
 
 // ---------- login / logout ----------

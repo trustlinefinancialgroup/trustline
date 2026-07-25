@@ -51,7 +51,15 @@ export default async function LoginPage() {
               submitting: t.auth.signingIn,
             }}
           />
-          <p className="mt-8 text-center text-sm text-gray-600">
+          <p className="mt-4 text-center text-sm">
+            <Link
+              href="/forgot-password"
+              className="font-semibold text-accent-600 hover:text-accent-700"
+            >
+              {t.reset.forgotLink}
+            </Link>
+          </p>
+          <p className="mt-6 text-center text-sm text-gray-600">
             {t.auth.newTo}{" "}
             <Link href="/signup" className="font-semibold text-accent-600 hover:text-accent-700">
               {t.common.openAccount}

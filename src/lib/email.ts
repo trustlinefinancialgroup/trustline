@@ -4,28 +4,48 @@ import { Resend } from "resend";
 import { db } from "./db";
 import { isLocale, type Locale } from "@/i18n";
 
-// One reusable SMTP connection pool, created on first send.
-let smtpTransport: Transporter | null = null;
-function getSmtpTransport(): Transporter | null {
-  const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASSWORD;
-  if (!host || !user || !pass) return null;
+// Company mailboxes that may act as the "From" sender. They share one password,
+// so we authenticate as whichever mailbox is sending — Spacemail rejects sending
+// "as" an address other than the authenticated one.
+const SENDER_MAILBOXES = [
+  "info@trustlinefinancialgroup.com",
+  "support@trustlinefinancialgroup.com",
+  "accountmanager@trustlinefinancialgroup.com",
+];
 
-  if (!smtpTransport) {
+function extractEmail(from: string) {
+  const m = from.match(/<([^>]+)>/);
+  return (m ? m[1] : from).trim().toLowerCase();
+}
+
+// One cached transport per authenticated mailbox.
+const smtpTransports = new Map<string, Transporter>();
+function getSmtpTransport(fromAddress?: string): Transporter | null {
+  const host = process.env.SMTP_HOST;
+  const pass = process.env.SMTP_PASSWORD;
+  const defaultUser = process.env.SMTP_USER;
+  if (!host || !pass || !defaultUser) return null;
+
+  const wanted = fromAddress ? extractEmail(fromAddress) : "";
+  const user = SENDER_MAILBOXES.includes(wanted) ? wanted : defaultUser;
+
+  if (!smtpTransports.has(user)) {
     const port = Number(process.env.SMTP_PORT ?? 587);
-    smtpTransport = nodemailer.createTransport({
-      host,
-      port,
-      secure: port === 465, // 465 = implicit TLS; 587 = STARTTLS
-      auth: { user, pass },
-      // No pooling (the default): each serverless invocation is isolated, and a
-      // lingering pool can hang the function. Fail fast instead of hanging.
-      connectionTimeout: 10_000,
-      greetingTimeout: 10_000,
-    });
+    smtpTransports.set(
+      user,
+      nodemailer.createTransport({
+        host,
+        port,
+        secure: port === 465, // 465 = implicit TLS; 587 = STARTTLS
+        auth: { user, pass },
+        // No pooling: each serverless invocation is isolated, and a lingering
+        // pool can hang the function. Fail fast instead of hanging.
+        connectionTimeout: 10_000,
+        greetingTimeout: 10_000,
+      })
+    );
   }
-  return smtpTransport;
+  return smtpTransports.get(user) ?? null;
 }
 
 const BRAND = "Trustline Financial Group";
@@ -57,6 +77,7 @@ type EmailStrings = {
   proofRequest: { subject: string; title: string; p1: string; p2: string };
   accountCredited: { subject: string; title: string; p1: string; p2: string; button: string };
   accountDebited: { subject: string; title: string; p1: string; p2: string; button: string };
+  passwordReset: { subject: string; title: string; p1: string; button: string; p2: string; ignore: string };
 };
 
 const STRINGS: Record<Locale, EmailStrings> = {
@@ -143,6 +164,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       p2: "Your new available balance is <strong>{balance}</strong>.",
       button: "View my account",
     },
+    passwordReset: {
+      subject: `Reset your ${BRAND} password`,
+      title: "Password reset, {name}",
+      p1: "We received a request to reset your password. Click below to choose a new one — this link expires in 1 hour.",
+      button: "Reset my password",
+      p2: "For your security, the link can be used only once.",
+      ignore: "If you didn't request this, you can safely ignore this email; your password stays the same.",
+    },
   },
   fr: {
     footerQuestions: "Des questions ? Contactez",
@@ -226,6 +255,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       p1: "Un débit de <strong>{amount}</strong> (référence {ref}) a été appliqué à votre compte. Motif : {reason}.",
       p2: "Votre nouveau solde disponible est de <strong>{balance}</strong>.",
       button: "Voir mon compte",
+    },
+    passwordReset: {
+      subject: `Réinitialisez votre mot de passe ${BRAND}`,
+      title: "Réinitialisation du mot de passe, {name}",
+      p1: "Nous avons reçu une demande de réinitialisation de votre mot de passe. Cliquez ci-dessous pour en choisir un nouveau — ce lien expire dans 1 heure.",
+      button: "Réinitialiser mon mot de passe",
+      p2: "Pour votre sécurité, ce lien ne peut être utilisé qu'une seule fois.",
+      ignore: "Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail ; votre mot de passe reste inchangé.",
     },
   },
   de: {
@@ -311,6 +348,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       p2: "Ihr neuer verfügbarer Saldo beträgt <strong>{balance}</strong>.",
       button: "Mein Konto ansehen",
     },
+    passwordReset: {
+      subject: `Setzen Sie Ihr ${BRAND}-Passwort zurück`,
+      title: "Passwort zurücksetzen, {name}",
+      p1: "Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts erhalten. Klicken Sie unten, um ein neues zu wählen — dieser Link läuft in 1 Stunde ab.",
+      button: "Passwort zurücksetzen",
+      p2: "Zu Ihrer Sicherheit kann der Link nur einmal verwendet werden.",
+      ignore: "Falls Sie dies nicht angefordert haben, ignorieren Sie diese E-Mail; Ihr Passwort bleibt unverändert.",
+    },
   },
   es: {
     footerQuestions: "¿Preguntas? Contacte con",
@@ -395,6 +440,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       p2: "Su nuevo saldo disponible es <strong>{balance}</strong>.",
       button: "Ver mi cuenta",
     },
+    passwordReset: {
+      subject: `Restablezca su contraseña de ${BRAND}`,
+      title: "Restablecer contraseña, {name}",
+      p1: "Recibimos una solicitud para restablecer su contraseña. Haga clic abajo para elegir una nueva — este enlace caduca en 1 hora.",
+      button: "Restablecer mi contraseña",
+      p2: "Por su seguridad, el enlace solo puede usarse una vez.",
+      ignore: "Si no solicitó esto, ignore este correo; su contraseña permanece igual.",
+    },
   },
 };
 
@@ -452,7 +505,7 @@ export async function sendEmail({ to, subject, html, from, replyTo }: SendArgs) 
   const fromAddress = from ?? process.env.EMAIL_FROM ?? `noreply@trustlinefinancialgroup.com`;
   const replyToAddress = replyTo ?? process.env.EMAIL_REPLY_TO;
 
-  const transport = getSmtpTransport();
+  const transport = getSmtpTransport(fromAddress);
   const apiKey = process.env.RESEND_API_KEY;
 
   // No transport configured — log to console/DB so dev never breaks.
@@ -553,6 +606,28 @@ export async function sendWelcomeEmail(
        ${button(link, s.welcome.button)}
        <p>${s.welcome.p3}</p>
        <p>${s.welcome.ignore}</p>`
+    ),
+  });
+}
+
+export async function sendPasswordResetEmail(
+  to: string,
+  firstName: string,
+  resetToken: string,
+  locale?: string
+) {
+  const s = STRINGS[toLocale(locale)];
+  const link = `${appUrl()}/reset-password?token=${resetToken}`;
+  return sendEmail({
+    to,
+    subject: s.passwordReset.subject,
+    html: layout(
+      s,
+      fillName(s.passwordReset.title, firstName),
+      `<p>${s.passwordReset.p1}</p>
+       ${button(link, s.passwordReset.button)}
+       <p>${s.passwordReset.p2}</p>
+       <p>${s.passwordReset.ignore}</p>`
     ),
   });
 }
