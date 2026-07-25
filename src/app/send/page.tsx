@@ -48,7 +48,7 @@ export default async function SendPage() {
         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-9 shadow-sm">
           <h1 className="text-xl font-semibold tracking-tight text-navy-900">{t.send.title}</h1>
           <p className="mt-2 text-sm text-gray-500">
-            {t.bank.available}: <strong className="text-navy-800">{formatMoney(available, locale)}</strong>
+            {t.bank.available}: <strong className="text-navy-800">{formatMoney(available, locale, user.currency)}</strong>
           </p>
           <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{t.send.body}</p>
 

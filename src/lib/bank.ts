@@ -21,10 +21,12 @@ export async function ensureAccountOfKind(userId: string, kind: "CHECKING" | "SA
   const existing = await db.account.findFirst({ where: { userId, kind } });
   if (existing) return existing;
 
+  const owner = await db.user.findUnique({ where: { id: userId }, select: { currency: true } });
+  const currency = owner?.currency ?? "USD";
   for (let attempt = 0; attempt < 5; attempt++) {
     const number = `TL-${randomInt(10_000_000, 100_000_000)}`;
     try {
-      return await db.account.create({ data: { userId, number, kind } });
+      return await db.account.create({ data: { userId, number, kind, currency } });
     } catch {
       // number collision — retry with a new one
     }

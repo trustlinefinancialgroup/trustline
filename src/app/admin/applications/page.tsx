@@ -60,7 +60,7 @@ export default async function ApplicationsPage() {
                   </p>
                   <p className="mt-1 text-xs text-gray-500">
                     {app.createdAt.toLocaleString()}
-                    {app.amountCents ? ` · Requested ${formatMoney(app.amountCents)}` : ""}
+                    {app.amountCents ? ` · Requested ${formatMoney(app.amountCents, "en", app.user.currency)}` : ""}
                   </p>
                 </div>
               </div>

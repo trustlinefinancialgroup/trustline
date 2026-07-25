@@ -62,6 +62,7 @@ export async function signupAction(_prev: FormState, formData: FormData): Promis
 
   const accountTypeRaw = String(formData.get("accountType") ?? "");
   const accountType = accountTypeRaw === "COMMERCIAL" ? "COMMERCIAL" : "PERSONAL";
+  const currency = String(formData.get("currency") ?? "") === "EUR" ? "EUR" : "USD";
 
   const passwordHash = await hashPassword(data.password);
   const verifyToken = randomBytes(32).toString("hex");
@@ -74,6 +75,7 @@ export async function signupAction(_prev: FormState, formData: FormData): Promis
       lastName: data.lastName,
       phone: data.phone,
       accountType,
+      currency,
       locale,
       tokens: {
         create: {

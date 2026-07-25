@@ -26,6 +26,7 @@ model User {
   statusReason String? // shown to admins; set on reject/block
   emailVerified Boolean @default(false)
   locale       String  @default("en") // en | fr | de | es — used for emails too
+  currency     String  @default("USD") // USD | EUR — the client's account currency
   securityWordHash String? // hashed; required to confirm sensitive actions
 
   createdAt DateTime @default(now())

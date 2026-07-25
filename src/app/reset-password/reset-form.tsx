@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { resetPasswordAction, type FormState } from "@/lib/actions/auth-actions";
+import { PasswordInput } from "@/components/password-input";
 
 const inputClass =
   "mt-1.5 w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-[15px] text-navy-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20";
@@ -43,12 +44,12 @@ export function ResetForm({ token, labels }: { token: string; labels: Labels }) 
       <input type="hidden" name="token" value={token} />
       <label className={labelClass}>
         {labels.newPassword}
-        <input name="password" type="password" required minLength={10} className={inputClass} />
+        <PasswordInput name="password" required minLength={10} className={inputClass} autoComplete="new-password" />
         <span className="mt-1.5 block text-xs font-normal text-gray-500">{labels.passwordHint}</span>
       </label>
       <label className={labelClass}>
         {labels.confirmPassword}
-        <input name="confirm" type="password" required minLength={10} className={inputClass} />
+        <PasswordInput name="confirm" required minLength={10} className={inputClass} autoComplete="new-password" />
       </label>
 
       {state?.error && (

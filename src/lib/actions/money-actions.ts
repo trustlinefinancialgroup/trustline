@@ -12,6 +12,7 @@ import {
   newReference,
   pendingWithdrawalCents,
 } from "@/lib/bank";
+import { sendAdjustmentEmail } from "@/lib/email";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
 
@@ -121,31 +122,30 @@ export async function sendMoneyAction(_prev: FormState, formData: FormData): Pro
       targetId: ref,
       details: `${formatMoney(amountCents)} to ${recipient}`,
     });
+
+    // Email both sides (reuses the localized credit/debit templates).
+    const recipientUser = await db.user.findUnique({ where: { id: recipientUserId } });
+    const [senderBal, recipientBal] = await Promise.all([
+      balanceCents(senderChecking.id),
+      balanceCents(recipientAccountId),
+    ]);
+    await sendAdjustmentEmail(
+      user.email, user.firstName, user.locale, "DEBIT",
+      formatMoney(amountCents, user.locale, user.currency), `${ref}-O`,
+      `Sent to ${recipient}`, formatMoney(senderBal, user.locale, user.currency)
+    );
+    if (recipientUser) {
+      await sendAdjustmentEmail(
+        recipientUser.email, recipientUser.firstName, recipientUser.locale, "CREDIT",
+        formatMoney(amountCents, recipientUser.locale, recipientUser.currency), `${ref}-I`,
+        `Received from ${user.firstName} ${user.lastName}`, formatMoney(recipientBal, recipientUser.locale, recipientUser.currency)
+      );
+    }
     redirect("/dashboard?sent=instant");
   }
 
-  // External recipient — pending withdrawal for admin to process.
-  const ref = newReference("W");
-  await db.transaction.create({
-    data: {
-      accountId: senderChecking.id,
-      type: "WITHDRAWAL",
-      status: "PENDING",
-      amountCents: -amountCents,
-      reference: ref,
-      methodKey: "SEND",
-      counterparty: `Send to: ${recipient}`,
-    },
-  });
-  await audit({
-    actorId: user.id,
-    actorLabel: user.email,
-    action: "SEND_EXTERNAL_REQUESTED",
-    targetType: "TRANSACTION",
-    targetId: ref,
-    details: `${formatMoney(amountCents)} to ${recipient}`,
-  });
-  redirect("/dashboard?sent=pending");
+  // Not a Trustline account — direct them to the Withdraw flow for external transfers.
+  return { error: t.send.externalUseWithdraw };
 }
 
 // ---------- savings goals ----------

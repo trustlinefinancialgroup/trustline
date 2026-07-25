@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { loginAction, type FormState } from "@/lib/actions/auth-actions";
+import { PasswordInput } from "@/components/password-input";
 
 const inputClass =
   "mt-1.5 w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-[15px] text-navy-900 placeholder:text-gray-400 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20";
@@ -29,7 +30,7 @@ export function LoginForm({ labels }: { labels: Labels }) {
       </label>
       <label className={labelClass}>
         {labels.password}
-        <input name="password" type="password" required className={inputClass} />
+        <PasswordInput name="password" required className={inputClass} autoComplete="current-password" />
       </label>
 
       {state?.error && (

@@ -91,7 +91,7 @@ export async function submitDepositAction(
     user.email,
     user.firstName,
     user.locale,
-    formatMoney(amountCents, user.locale),
+    formatMoney(amountCents, user.locale, user.currency),
     reference
   );
 

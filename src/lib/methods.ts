@@ -15,6 +15,7 @@ export const METHOD_CATALOG: MethodDef[] = [
   { key: "CASHIER", label: "Cashier's check", icon: "cashier" },
   { key: "USDT", label: "USDT (Tether)", icon: "usdt" },
   { key: "BTC", label: "Bitcoin", icon: "btc" },
+  { key: "OTHER", label: "Other", icon: "other" }, // admin sets a custom label + route (e.g. Wise)
 ];
 
 export function methodDef(key: string): MethodDef {

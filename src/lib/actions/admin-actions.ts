@@ -89,9 +89,9 @@ export async function verifyDepositAction(formData: FormData) {
     client.email,
     client.firstName,
     client.locale,
-    formatMoney(tx.amountCents, client.locale),
+    formatMoney(tx.amountCents, client.locale, client.currency),
     tx.reference,
-    formatMoney(newBalance, client.locale)
+    formatMoney(newBalance, client.locale, client.currency)
   );
 
   revalidatePath("/admin/deposits");
@@ -128,7 +128,7 @@ export async function requestProofAction(formData: FormData) {
     client.email,
     client.firstName,
     client.locale,
-    formatMoney(tx.amountCents, client.locale),
+    formatMoney(tx.amountCents, client.locale, client.currency),
     tx.reference
   );
 
@@ -406,10 +406,10 @@ export async function approveWithdrawalAction(formData: FormData) {
     client.firstName,
     client.locale,
     "DEBIT",
-    formatMoney(Math.abs(tx.amountCents), client.locale),
+    formatMoney(Math.abs(tx.amountCents), client.locale, client.currency),
     tx.reference,
     `Withdrawal via ${label}`,
-    formatMoney(newBalance, client.locale)
+    formatMoney(newBalance, client.locale, client.currency)
   );
 
   revalidatePath("/admin/withdrawals");
@@ -488,7 +488,7 @@ export async function rejectDepositAction(formData: FormData) {
     client.email,
     client.firstName,
     client.locale,
-    formatMoney(tx.amountCents, client.locale),
+    formatMoney(tx.amountCents, client.locale, client.currency),
     tx.reference,
     reason
   );

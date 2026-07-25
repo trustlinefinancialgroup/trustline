@@ -32,7 +32,7 @@ export default async function WithdrawalsQueuePage() {
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-2xl font-semibold tracking-tight text-navy-900">
-                    {formatMoney(Math.abs(tx.amountCents))}
+                    {formatMoney(Math.abs(tx.amountCents), "en", tx.account.currency)}
                   </p>
                   <p className="mt-1 text-sm font-semibold text-navy-800">
                     {tx.account.user.firstName} {tx.account.user.lastName}

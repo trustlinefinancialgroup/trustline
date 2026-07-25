@@ -11,7 +11,6 @@ import { openSavingsAction } from "@/lib/actions/product-actions";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { NotificationCenter } from "@/components/notification-center";
-import { ChatLauncher } from "@/components/chat-launcher";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
 
@@ -256,7 +255,7 @@ export default async function DashboardPage({
                   ? t.products.frozenBadge
                   : app.approvedAmountCents
                     ? fill(t.products.approvedFor, {
-                        amount: formatMoney(app.approvedAmountCents, locale),
+                        amount: formatMoney(app.approvedAmountCents, locale, user.currency),
                       })
                     : t.products.active;
                 stateClass = app.frozen ? "font-semibold text-red-600" : "font-semibold text-green-600";
@@ -345,7 +344,6 @@ export default async function DashboardPage({
           {t.bank.fdic}
         </p>
       </div>
-      <ChatLauncher prefill={{ name: `${user.firstName} ${user.lastName}`, email: user.email }} />
     </main>
   );
 }

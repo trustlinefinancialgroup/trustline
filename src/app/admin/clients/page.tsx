@@ -81,7 +81,7 @@ export default async function ClientsPage() {
                     Balance
                   </p>
                   <p className="text-xl font-semibold tracking-tight text-navy-900">
-                    {u.accounts.length ? formatMoney(balance) : "—"}
+                    {u.accounts.length ? formatMoney(balance, "en", checking?.currency ?? u.currency) : "—"}
                   </p>
                 </div>
               </div>

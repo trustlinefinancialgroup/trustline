@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { changePasswordAction, setSecurityWordAction } from "@/lib/actions/account-actions";
 import type { FormState } from "@/lib/actions/auth-actions";
+import { PasswordInput } from "@/components/password-input";
 
 const inputClass =
   "mt-1.5 w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-[15px] text-navy-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20";
@@ -64,16 +65,16 @@ export function AccountForms({
         <div className="mt-4 space-y-4">
           <label className={labelClass}>
             {labels.currentPassword}
-            <input name="current" type="password" required className={inputClass} />
+            <PasswordInput name="current" required className={inputClass} autoComplete="current-password" />
           </label>
           <label className={labelClass}>
             {labels.newPassword}
-            <input name="password" type="password" required minLength={10} className={inputClass} />
+            <PasswordInput name="password" required minLength={10} className={inputClass} autoComplete="new-password" />
             <span className="mt-1.5 block text-xs font-normal text-gray-500">{labels.passwordHint}</span>
           </label>
           <label className={labelClass}>
             {labels.confirmPassword}
-            <input name="confirm" type="password" required minLength={10} className={inputClass} />
+            <PasswordInput name="confirm" required minLength={10} className={inputClass} autoComplete="new-password" />
           </label>
           <Msg state={pwState} />
           <button
@@ -101,7 +102,7 @@ export function AccountForms({
           </label>
           <label className={labelClass}>
             {labels.passwordToConfirm}
-            <input name="password" type="password" required className={inputClass} />
+            <PasswordInput name="password" required className={inputClass} autoComplete="current-password" />
           </label>
           <Msg state={swState} />
           <button

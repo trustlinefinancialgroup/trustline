@@ -50,16 +50,16 @@ export default async function ProductPage({
   const rows: { label: string; value: string }[] = [
     {
       label: t.products.limitLabel,
-      value: app.approvedAmountCents ? formatMoney(app.approvedAmountCents, locale) : t.products.notSet,
+      value: app.approvedAmountCents ? formatMoney(app.approvedAmountCents, locale, user.currency) : t.products.notSet,
     },
   ];
   if (isRevolving) {
-    rows.push({ label: t.products.availableCredit, value: formatMoney(available, locale) });
+    rows.push({ label: t.products.availableCredit, value: formatMoney(available, locale, user.currency) });
   }
   rows.push(
     {
       label: t.products.outstandingLabel,
-      value: app.outstandingCents != null ? formatMoney(app.outstandingCents, locale) : t.products.notSet,
+      value: app.outstandingCents != null ? formatMoney(app.outstandingCents, locale, user.currency) : t.products.notSet,
     },
     { label: t.products.interestRateLabel, value: app.interestRate || t.products.notSet },
     {

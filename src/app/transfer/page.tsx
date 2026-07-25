@@ -55,11 +55,11 @@ export default async function TransferPage() {
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
             <div className="rounded-xl bg-navy-50/70 p-4">
               <p className="text-gray-500">{t.bank.checking}</p>
-              <p className="mt-1 text-lg font-semibold text-navy-900">{formatMoney(checkingBal, locale)}</p>
+              <p className="mt-1 text-lg font-semibold text-navy-900">{formatMoney(checkingBal, locale, user.currency)}</p>
             </div>
             <div className="rounded-xl bg-navy-50/70 p-4">
               <p className="text-gray-500">{t.bank.savings}</p>
-              <p className="mt-1 text-lg font-semibold text-navy-900">{formatMoney(savingsBal, locale)}</p>
+              <p className="mt-1 text-lg font-semibold text-navy-900">{formatMoney(savingsBal, locale, user.currency)}</p>
             </div>
           </div>
 

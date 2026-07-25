@@ -86,8 +86,8 @@ export default async function GoalsPage() {
                   <div className="flex items-baseline justify-between gap-4">
                     <p className="font-semibold text-navy-900">{goal.name}</p>
                     <p className="text-sm text-gray-600">
-                      <strong className="text-navy-900">{formatMoney(goal.currentCents, locale)}</strong>{" "}
-                      {goal.targetCents ? `${t.goals.of} ${formatMoney(goal.targetCents, locale)}` : t.goals.saved}
+                      <strong className="text-navy-900">{formatMoney(goal.currentCents, locale, user.currency)}</strong>{" "}
+                      {goal.targetCents ? `${t.goals.of} ${formatMoney(goal.targetCents, locale, user.currency)}` : t.goals.saved}
                     </p>
                   </div>
                   {pct !== null && (
