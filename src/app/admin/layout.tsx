@@ -43,8 +43,14 @@ export default async function AdminLayout({
       <header className="border-b border-white/10 bg-navy-900">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
           <Logo theme="dark" href="/admin" subtitle="Admin" />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <span className="hidden text-sm text-navy-300 sm:block">{user.email}</span>
+            <Link
+              href="/account"
+              className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Account
+            </Link>
             <form action={logoutAction}>
               <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
                 Sign out
