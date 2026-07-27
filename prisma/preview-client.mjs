@@ -2,20 +2,37 @@
 //   node --env-file=.env prisma/preview-client.mjs create
 //   node --env-file=.env prisma/preview-client.mjs destroy
 import { PrismaClient } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
 import { randomInt } from "crypto";
 
 const db = new PrismaClient();
+
+/** Deleting a user cascades its rows but not its files — clear those first. */
+async function purgeFiles(email) {
+  const docs = await db.kycDocument.findMany({ where: { user: { email } } });
+  if (docs.length === 0) return 0;
+  const supa = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { persistSession: false },
+  });
+  await supa.storage
+    .from(process.env.SUPABASE_KYC_BUCKET ?? "kyc-documents")
+    .remove(docs.map((d) => d.storedName));
+  return docs.length;
+}
 const EMAIL = "preview-check@trustline.local";
 const APPLICANT = "preview-applicant@trustline.local";
 const PASSWORD = "PreviewCheck123";
 const mode = process.argv[2] ?? "create";
 
 if (mode === "destroy") {
+  const files = (await purgeFiles(EMAIL)) + (await purgeFiles(APPLICANT));
   const n = await db.user.deleteMany({ where: { email: { in: [EMAIL, APPLICANT] } } });
-  console.log("removed:", n.count);
+  console.log("removed:", n.count, "users,", files, "files");
 } else if (mode === "applicant") {
   // A verified-email applicant sitting on the identity step, for KYC checks.
+  const files = await purgeFiles(APPLICANT);
+  if (files) console.log("cleared", files, "old identity files");
   await db.user.deleteMany({ where: { email: APPLICANT } });
   const user = await db.user.create({
     data: {
