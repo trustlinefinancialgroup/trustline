@@ -9,6 +9,9 @@ export const de: Dict = {
     openAccount: "Konto eröffnen",
     chooseFile: "Datei auswählen",
     noFileChosen: "Keine Datei ausgewählt",
+    optimising: "Ihr Foto wird vorbereitet…",
+    fileTooBigPicked:
+      "Diese Datei ist zu groß. Fotografieren Sie das Dokument stattdessen mit der Kamera — Fotos verkleinern wir automatisch.",
     language: "Sprache",
   },
   legal: {
@@ -175,7 +178,8 @@ export const de: Dict = {
     selfieHint:
       "Halten Sie das Dokument neben Ihr Gesicht. Gesicht und Dokument müssen auf demselben Foto lesbar sein.",
     passportNote: "Bei einem Reisepass genügt die Fotoseite — keine Rückseite nötig.",
-    uploadHint: "JPG, PNG oder PDF — bis zu 8 MB je Datei. Wird nur zur Identitätsprüfung verwendet.",
+    uploadHint:
+      "JPG, PNG oder PDF. Handyfotos sind völlig ausreichend — wir verkleinern sie für Sie. Wird nur zur Identitätsprüfung verwendet.",
     submitKyc: "Zur Prüfung einreichen",
     submittingKyc: "Wird hochgeladen…",
     reviewTitle: "Ihr Antrag wird geprüft",
@@ -556,7 +560,7 @@ export const de: Dict = {
     rejected:
       "Dieser Antrag wurde nicht genehmigt. Kontaktieren Sie support@trustlinefinancialgroup.com für Einzelheiten.",
     needFile: "Bitte laden Sie Ihr Dokument hoch.",
-    fileTooBig: "Das Dokument muss kleiner als 8 MB sein.",
+    fileTooBig: "Diese Datei ist zu groß. Fotografieren Sie das Dokument stattdessen — Fotos verkleinern wir für Sie.",
     fileType: "Das Dokument muss eine JPG-, PNG-, WEBP- oder PDF-Datei sein.",
     firstNameRequired: "Vorname ist erforderlich",
     lastNameRequired: "Nachname ist erforderlich",

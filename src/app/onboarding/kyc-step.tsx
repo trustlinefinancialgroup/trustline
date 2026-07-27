@@ -21,6 +21,8 @@ export function KycStep({
   submittingLabel,
   chooseFileLabel,
   noFileLabel,
+  optimisingLabel,
+  tooBigLabel,
 }: {
   title: string;
   body: string;
@@ -36,6 +38,8 @@ export function KycStep({
   submittingLabel: string;
   chooseFileLabel: string;
   noFileLabel: string;
+  optimisingLabel: string;
+  tooBigLabel: string;
 }) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(
     submitKycAction,
@@ -80,6 +84,8 @@ export function KycStep({
             accept={ACCEPT}
             chooseLabel={chooseFileLabel}
             emptyLabel={noFileLabel}
+            optimisingLabel={optimisingLabel}
+            tooBigLabel={tooBigLabel}
           />
         </div>
 
@@ -95,6 +101,8 @@ export function KycStep({
               accept={ACCEPT}
               chooseLabel={chooseFileLabel}
               emptyLabel={noFileLabel}
+              optimisingLabel={optimisingLabel}
+              tooBigLabel={tooBigLabel}
             />
           </div>
         )}
@@ -106,6 +114,8 @@ export function KycStep({
             accept={ACCEPT}
             chooseLabel={chooseFileLabel}
             emptyLabel={noFileLabel}
+            optimisingLabel={optimisingLabel}
+            tooBigLabel={tooBigLabel}
           />
           <span className="mt-1.5 block text-xs font-normal text-gray-500">{selfieHint}</span>
         </div>

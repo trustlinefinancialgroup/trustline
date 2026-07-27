@@ -19,6 +19,8 @@ type Labels = {
   submitting: string;
   chooseFile: string;
   noFile: string;
+  optimising: string;
+  fileTooBig: string;
 };
 
 export function DepositForm({ methodKey, labels }: { methodKey: string; labels: Labels }) {
@@ -57,6 +59,8 @@ export function DepositForm({ methodKey, labels }: { methodKey: string; labels: 
           accept="image/jpeg,image/png,image/webp,application/pdf"
           chooseLabel={labels.chooseFile}
           emptyLabel={labels.noFile}
+          optimisingLabel={labels.optimising}
+          tooBigLabel={labels.fileTooBig}
           required={false}
         />
         <span className="mt-1.5 block text-xs font-normal text-gray-500">{labels.proofHint}</span>

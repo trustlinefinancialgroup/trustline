@@ -147,6 +147,8 @@ export default async function DepositPage({
                   submitting: t.bank.submittingDeposit,
                   chooseFile: t.common.chooseFile,
                   noFile: t.common.noFileChosen,
+                  optimising: t.common.optimising,
+                  fileTooBig: t.common.fileTooBigPicked,
                 }}
               />
             </>

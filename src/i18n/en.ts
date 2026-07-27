@@ -7,6 +7,9 @@ export const en = {
     openAccount: "Open an account",
     chooseFile: "Choose file",
     noFileChosen: "No file selected",
+    optimising: "Preparing your photo…",
+    fileTooBigPicked:
+      "That file is too large to upload. Photograph the document with your camera instead — we shrink photos automatically.",
     language: "Language",
   },
   legal: {
@@ -172,7 +175,8 @@ export const en = {
     selfieHint:
       "Hold the document next to your face. Both your face and the document must be readable in the same photo.",
     passportNote: "A passport only needs its photo page — no back required.",
-    uploadHint: "JPG, PNG, or PDF — up to 8 MB each. Used only for identity verification.",
+    uploadHint:
+      "JPG, PNG, or PDF. Photos taken on your phone are fine — we shrink them for you. Used only for identity verification.",
     submitKyc: "Submit for review",
     submittingKyc: "Uploading…",
     reviewTitle: "Your application is under review",
@@ -553,7 +557,7 @@ export const en = {
     rejected:
       "This application was not approved. Contact support@trustlinefinancialgroup.com for details.",
     needFile: "Please upload your document.",
-    fileTooBig: "The document must be under 8 MB.",
+    fileTooBig: "That file is too large. Photograph the document instead — we shrink photos for you.",
     fileType: "The document must be a JPG, PNG, WEBP, or PDF file.",
     firstNameRequired: "First name is required",
     lastNameRequired: "Last name is required",

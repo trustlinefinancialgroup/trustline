@@ -97,6 +97,8 @@ export default async function OnboardingPage() {
               submittingLabel={t.onboarding.submittingKyc}
               chooseFileLabel={t.common.chooseFile}
               noFileLabel={t.common.noFileChosen}
+              optimisingLabel={t.common.optimising}
+              tooBigLabel={t.common.fileTooBigPicked}
             />
           )}
 
