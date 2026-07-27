@@ -26,9 +26,23 @@ const PASSWORD = "PreviewCheck123";
 const mode = process.argv[2] ?? "create";
 
 if (mode === "destroy") {
-  const files = (await purgeFiles(EMAIL)) + (await purgeFiles(APPLICANT));
-  const n = await db.user.deleteMany({ where: { email: { in: [EMAIL, APPLICANT] } } });
-  console.log("removed:", n.count, "users,", files, "files");
+  // Optionally target one account: destroy preview-check@trustline.local
+  const only = process.argv[3];
+  const targets = only ? [only] : [EMAIL, APPLICANT];
+
+  let files = 0;
+  let chats = 0;
+  for (const email of targets) {
+    files += await purgeFiles(email);
+    // A conversation survives its owner (userId is set to null on delete), so
+    // remove it explicitly rather than leaving test threads in the console.
+    const removed = await db.chatConversation.deleteMany({ where: { user: { email } } });
+    chats += removed.count;
+  }
+
+  const n = await db.user.deleteMany({ where: { email: { in: targets } } });
+  console.log(`removed ${n.count} user(s), ${files} identity file(s), ${chats} chat thread(s)`);
+  console.log("targets:", targets.join(", "));
 } else if (mode === "applicant") {
   // A verified-email applicant sitting on the identity step, for KYC checks.
   const files = await purgeFiles(APPLICANT);
