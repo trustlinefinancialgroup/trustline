@@ -11,40 +11,61 @@ type Face = {
   chip: string;
   chipLine: string;
   ring: string; // decorative arc colour
+  /** Diagonal gloss band, the thing that makes a flat fill read as a card. */
+  sheen: string;
+  /** Lit top edge and shadowed bottom edge, so the card has thickness. */
+  edge: string;
 };
 
+// Built on the brand palette in globals.css — navy-800 #0a1f3d, navy-900
+// #061530, navy-950 #030c1f, accent-500 #2f6fed — so the cards belong to the
+// same system as the rest of the site rather than approximating it.
 const FACES: Record<CardTheme, Face> = {
   BLUE: {
-    background: "linear-gradient(135deg,#1B3F7A 0%,#0A1F3D 55%,#08182F 100%)",
+    background:
+      "radial-gradient(120% 140% at 78% 8%, rgba(47,111,237,0.42) 0%, rgba(47,111,237,0) 58%)," +
+      "linear-gradient(146deg,#173763 0%,#0a1f3d 46%,#061530 78%,#030c1f 100%)",
     ink: "#F2F5FA",
-    inkSoft: "#9DB3D6",
+    inkSoft: "#94A8C9",
     chip: "#E4C56B",
     chipLine: "#B9973A",
-    ring: "#3D6BB5",
+    ring: "#2F6FED",
+    sheen: "linear-gradient(112deg,transparent 26%,rgba(255,255,255,0.10) 44%,rgba(255,255,255,0.02) 52%,transparent 62%)",
+    edge: "inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.45)",
   },
   BLACK: {
-    background: "linear-gradient(135deg,#2A2E36 0%,#111318 60%,#08090C 100%)",
+    background:
+      "radial-gradient(120% 140% at 78% 8%, rgba(201,162,39,0.20) 0%, rgba(201,162,39,0) 55%)," +
+      "linear-gradient(146deg,#33373F 0%,#1A1D23 42%,#0D0F13 76%,#050608 100%)",
     ink: "#F5F6F8",
     inkSoft: "#9AA1AE",
     chip: "#D9C07C",
     chipLine: "#A98718",
-    ring: "#454B57",
+    ring: "#C9A227",
+    sheen: "linear-gradient(112deg,transparent 24%,rgba(255,255,255,0.13) 44%,rgba(255,255,255,0.03) 53%,transparent 64%)",
+    edge: "inset 0 1px 0 rgba(255,255,255,0.20), inset 0 -1px 0 rgba(0,0,0,0.6)",
   },
   GOLD: {
-    background: "linear-gradient(135deg,#E8CE7C 0%,#C9A227 55%,#A5811A 100%)",
-    ink: "#37290A",
-    inkSoft: "#6B5314",
+    background:
+      "linear-gradient(146deg,#F6E7B2 0%,#E3CE84 18%,#D9B44A 38%,#C9A227 58%,#A87F1C 82%,#8C6714 100%)",
+    ink: "#3A2B07",
+    inkSoft: "#7A5F16",
     chip: "#FBF2D4",
-    chipLine: "#A5811A",
-    ring: "#F3E3AE",
+    chipLine: "#9C7A18",
+    ring: "#FFF4CE",
+    sheen: "linear-gradient(112deg,transparent 22%,rgba(255,255,255,0.55) 42%,rgba(255,255,255,0.12) 52%,transparent 66%)",
+    edge: "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(90,64,10,0.5)",
   },
   PLATINUM: {
-    background: "linear-gradient(135deg,#F1F3F6 0%,#C7CBD2 55%,#A2A8B3 100%)",
-    ink: "#22262D",
+    background:
+      "linear-gradient(146deg,#FBFCFD 0%,#E1E5EB 26%,#C2C8D2 52%,#A9B0BC 74%,#8E96A4 100%)",
+    ink: "#1E2229",
     inkSoft: "#5B626D",
     chip: "#E7DCB4",
     chipLine: "#9C8A50",
     ring: "#FFFFFF",
+    sheen: "linear-gradient(112deg,transparent 22%,rgba(255,255,255,0.75) 42%,rgba(255,255,255,0.2) 52%,transparent 66%)",
+    edge: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(80,88,100,0.45)",
   },
 };
 
@@ -116,6 +137,14 @@ export function BankCard({
         className="pointer-events-none absolute -bottom-24 -left-10 h-52 w-52 rounded-full opacity-15"
         style={{ background: `radial-gradient(circle, ${face.ring} 0%, transparent 70%)` }}
       />
+      {/* gloss band sweeping across the face */}
+      <div className="pointer-events-none absolute inset-0" style={{ background: face.sheen }} />
+      {/* lit top edge and shadowed bottom edge — kept off the container so the
+          hover shadow on the parent still applies */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl"
+        style={{ boxShadow: face.edge }}
+      />
 
       <div className="relative flex h-full flex-col justify-between">
         <div className="flex items-start justify-between gap-3">
@@ -144,15 +173,18 @@ export function BankCard({
         </div>
 
         <div className="flex items-center gap-3">
-          {/* chip */}
+          {/* chip — flat gold reads as plastic, so it gets a lit top half,
+              a shaded lower half and proper contact pads */}
           <svg width="38" height="29" viewBox="0 0 38 29" aria-hidden="true">
             <rect width="38" height="29" rx="5" fill={face.chip} />
-            <path
-              d="M0 14.5H38M19 0V29M11 5.5V23.5M27 5.5V23.5"
-              stroke={face.chipLine}
-              strokeWidth="1"
-              fill="none"
-            />
+            <path d="M0 14.5 H38 V24 a5 5 0 0 1 -5 5 H5 a5 5 0 0 1 -5 -5 Z" fill="#000" opacity="0.14" />
+            <rect x="0.5" y="0.5" width="37" height="28" rx="4.5" fill="none" stroke="#FFF" strokeOpacity="0.5" />
+            <g stroke={face.chipLine} strokeWidth="1.1" fill="none" opacity="0.85">
+              <path d="M0 14.5 H38" />
+              <path d="M13 0 V29" />
+              <path d="M25 0 V29" />
+              <path d="M13 7 H0 M25 7 H38 M13 22 H0 M25 22 H38" />
+            </g>
           </svg>
           {/* contactless */}
           <svg width="18" height="22" viewBox="0 0 18 22" aria-hidden="true">
