@@ -110,26 +110,32 @@ export default async function ProductPage({
   const available = Math.max(0, limit - owed);
   const active = view.state === "ACTIVE";
 
+  // "Balance" means opposite things on a card and on a current account, so the
+  // labels say plainly which is which. Owing nothing is a real figure — it
+  // shows as zero rather than "not set".
   const terms: { label: string; value: string }[] = [];
   if (app?.status === "APPROVED") {
-    terms.push({
-      label: t.products.limitLabel,
-      value: limit ? formatMoney(limit, locale, user.currency) : t.products.notSet,
-    });
+    const money = (cents: number) => formatMoney(cents, locale, user.currency);
+
     if (isRevolving) {
+      terms.push(
+        { label: t.products.creditLimitLabel, value: limit ? money(limit) : t.products.notSet },
+        { label: t.products.availableCredit, value: money(available) },
+        { label: t.products.balanceOwed, value: money(owed) }
+      );
+    } else if (isInstallment) {
+      terms.push(
+        { label: t.products.amountBorrowed, value: limit ? money(limit) : t.products.notSet },
+        { label: t.products.remainingToRepay, value: money(owed) }
+      );
+    } else {
       terms.push({
-        label: t.products.availableCredit,
-        value: formatMoney(available, locale, user.currency),
+        label: t.products.limitLabel,
+        value: limit ? money(limit) : t.products.notSet,
       });
     }
+
     terms.push(
-      {
-        label: t.products.outstandingLabel,
-        value:
-          app.outstandingCents != null
-            ? formatMoney(app.outstandingCents, locale, user.currency)
-            : t.products.notSet,
-      },
       { label: t.products.interestRateLabel, value: app.interestRate || t.products.notSet },
       {
         label: t.products.dueDateLabel,
@@ -387,6 +393,11 @@ export default async function ProductPage({
                     </div>
                   ))}
                 </dl>
+                {isRevolving && (
+                  <p className="mt-3 text-xs leading-relaxed text-gray-500">
+                    {t.products.owedNote}
+                  </p>
+                )}
 
                 <ProductMoneyForms
                   appId={app.id}

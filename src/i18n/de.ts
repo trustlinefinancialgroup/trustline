@@ -641,6 +641,12 @@ export const de: Dict = {
     frozenNote: "Diese Karte ist gesperrt und kann erst nach dem Entsperren verwendet werden.",
     notSet: "Nicht festgelegt",
     availableCredit: "Verfügbarer Kredit",
+    creditLimitLabel: "Kreditlimit",
+    balanceOwed: "Offener Saldo",
+    amountBorrowed: "Aufgenommener Betrag",
+    remainingToRepay: "Noch zurückzuzahlen",
+    owedNote:
+      "Der offene Saldo ist das, was Sie uns derzeit schulden — es ist kein verfügbares Guthaben. Der verfügbare Kredit ist Ihr Limit abzüglich dieses Saldos.",
     disbursedNote: "Ihr Kredit wurde auf Ihr Girokonto ausgezahlt.",
     draw: "Auf Girokonto abrufen",
     pay: "Zahlung leisten",

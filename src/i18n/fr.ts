@@ -641,6 +641,12 @@ export const fr: Dict = {
     frozenNote: "Cette carte est bloquée et ne peut pas être utilisée tant que vous ne la débloquez pas.",
     notSet: "Non défini",
     availableCredit: "Crédit disponible",
+    creditLimitLabel: "Plafond de crédit",
+    balanceOwed: "Solde dû",
+    amountBorrowed: "Montant emprunté",
+    remainingToRepay: "Reste à rembourser",
+    owedNote:
+      "Le solde dû correspond à ce que vous nous devez actuellement — ce n'est pas de l'argent disponible à dépenser. Le crédit disponible est votre plafond moins ce solde.",
     disbursedNote: "Votre prêt a été versé sur votre compte courant.",
     draw: "Transférer vers le compte courant",
     pay: "Effectuer un paiement",

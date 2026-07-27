@@ -641,6 +641,12 @@ export const es: Dict = {
     frozenNote: "Esta tarjeta está congelada y no puede usarse hasta que la descongele.",
     notSet: "Sin definir",
     availableCredit: "Crédito disponible",
+    creditLimitLabel: "Límite de crédito",
+    balanceOwed: "Saldo pendiente",
+    amountBorrowed: "Importe prestado",
+    remainingToRepay: "Pendiente de devolver",
+    owedNote:
+      "El saldo pendiente es lo que nos debes ahora mismo — no es dinero disponible para gastar. El crédito disponible es tu límite menos ese saldo.",
     disbursedNote: "Su préstamo se abonó en su cuenta corriente.",
     draw: "Pasar a cuenta corriente",
     pay: "Hacer un pago",

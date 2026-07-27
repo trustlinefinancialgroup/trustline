@@ -639,6 +639,12 @@ export const en = {
     frozenNote: "This card is frozen and can't be used until you unfreeze it.",
     notSet: "Not set",
     availableCredit: "Available credit",
+    creditLimitLabel: "Credit limit",
+    balanceOwed: "Balance owed",
+    amountBorrowed: "Amount borrowed",
+    remainingToRepay: "Remaining to repay",
+    owedNote:
+      "Balance owed is what you currently owe us — it is not money available to spend. Available credit is your limit minus that balance.",
     disbursedNote: "Your loan was disbursed to your checking account.",
     draw: "Draw to checking",
     pay: "Make a payment",
