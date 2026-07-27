@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth-actions";
 import { openSavingsAction, toggleFreezeAction } from "@/lib/actions/product-actions";
-import { balanceCents, ensureAccount, formatMoney, getSavings } from "@/lib/bank";
+import { balanceCents, formatMoney, getSavings } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { productDef, productLabel } from "@/lib/products";
@@ -12,6 +12,7 @@ import { buildProductView } from "@/lib/product-view";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { BankCard } from "@/components/bank-card";
+import { ProductTile } from "@/components/product-tile";
 import { CardWithReveal } from "@/components/card-details";
 import { TransactionList } from "@/components/transaction-list";
 import { ProductMoneyForms } from "./product-money-forms";
@@ -50,14 +51,13 @@ export default async function ProductPage({
   const t = await getDict();
   const locale = await getLocale();
 
-  const [apps, savings, checking] = await Promise.all([
+  const [apps, savings] = await Promise.all([
     db.productApplication.findMany({
       where: { userId: user.id, productKey: key },
       orderBy: { createdAt: "desc" },
       take: 1,
     }),
     getSavings(user.id),
-    ensureAccount(user.id),
   ]);
   const app = apps[0] ?? null;
   const savingsBal = savings ? await balanceCents(savings.id) : 0;
@@ -69,7 +69,6 @@ export default async function ProductPage({
     savingsOpen: Boolean(savings),
     savingsBalanceCents: savingsBal,
     savingsNumber: savings?.number,
-    checkingNumber: checking.number,
     t,
     locale,
     currency: user.currency,
@@ -147,21 +146,22 @@ export default async function ProductPage({
     }
   }
 
-  const cardProps = {
-    theme: view.theme,
-    productName: view.title,
-    badge: view.badge,
-    holder: view.holder,
-    holderPlaceholder: view.holderPlaceholder,
-    number: view.number,
-    numberText: view.numberText,
-    showNumber: view.showNumber,
-    expiry: view.expiry,
-    valueLabel: view.valueLabel,
-    value: view.value,
-    status: view.status,
-    placeholder: view.placeholder,
-  };
+  const cardProps =
+    view.render === "card"
+      ? {
+          theme: view.theme,
+          productName: view.title,
+          badge: view.badge,
+          holder: view.holder,
+          holderPlaceholder: view.holderPlaceholder,
+          number: view.number,
+          expiry: view.expiry,
+          valueLabel: view.valueLabel,
+          value: view.value,
+          status: view.status,
+          placeholder: view.placeholder,
+        }
+      : null;
 
   return (
     <main className="flex min-h-screen flex-1 flex-col bg-navy-50/50">
@@ -191,32 +191,47 @@ export default async function ProductPage({
         )}
 
         <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,360px)_1fr]">
-          {/* The card face */}
+          {/* The product's own artwork — a card face, or its photograph */}
           <div>
-            {def.card && active ? (
-              <CardWithReveal
-                card={cardProps}
-                cvv={app?.cardCvv}
-                labels={{
-                  show: t.products.showDetails,
-                  hide: t.products.hideDetails,
-                  number: t.products.cardNumberLabel,
-                  expiry: t.products.expiryLabel,
-                  cvv: t.products.cvvLabel,
-                  copy: t.products.copy,
-                  copied: t.products.copied,
-                  notIssued: t.products.cardNotIssued,
-                }}
-              />
+            {cardProps ? (
+              active ? (
+                <CardWithReveal
+                  card={cardProps}
+                  cvv={app?.cardCvv}
+                  labels={{
+                    show: t.products.showDetails,
+                    hide: t.products.hideDetails,
+                    number: t.products.cardNumberLabel,
+                    expiry: t.products.expiryLabel,
+                    cvv: t.products.cvvLabel,
+                    copy: t.products.copy,
+                    copied: t.products.copied,
+                    notIssued: t.products.cardNotIssued,
+                  }}
+                />
+              ) : (
+                <>
+                  <BankCard {...cardProps} />
+                  {view.state !== "REVIEW" && (
+                    <p className="mt-4 rounded-lg bg-navy-50/70 px-3.5 py-2.5 text-sm text-navy-700">
+                      {t.products.sampleCard}
+                    </p>
+                  )}
+                </>
+              )
             ) : (
-              <>
-                <BankCard {...cardProps} />
-                {view.placeholder && view.state !== "REVIEW" && (
-                  <p className="mt-4 rounded-lg bg-navy-50/70 px-3.5 py-2.5 text-sm text-navy-700">
-                    {def.card ? t.products.sampleCard : t.products.samplePreview}
-                  </p>
-                )}
-              </>
+              view.render === "tile" && (
+                <ProductTile
+                  title={view.title}
+                  photo={view.photo}
+                  icon={view.icon}
+                  valueLabel={view.valueLabel}
+                  value={view.value}
+                  status={view.status}
+                  placeholder={view.placeholder}
+                  cta={null}
+                />
+              )
             )}
           </div>
 

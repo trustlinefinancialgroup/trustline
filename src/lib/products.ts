@@ -1,51 +1,213 @@
-// Product tiles per account type, aligned by index with the i18n landing items
-// (personal.items / commercial.items). "kind" controls the tile's behavior.
-export type CardTheme = "BLUE" | "GOLD" | "PLATINUM" | "BLACK" | "TEAL" | "VIOLET" | "SLATE" | "GREEN";
+// Product catalogue. Entries are aligned by index with the i18n landing items
+// (personal.items / commercial.items), and "kind" controls the tile's behaviour.
+//
+// Only genuine card products render a card face. Everything else is a product
+// tile with its own photograph, so a mortgage looks like a home and not a
+// payment card.
+
+export type CardTheme = "BLUE" | "GOLD" | "PLATINUM" | "BLACK";
+
+/** A question asked on the application form. Rendered from this definition. */
+export type FieldDef = {
+  name: string;
+  kind: "text" | "money" | "number" | "select" | "textarea";
+  /** Option values for selects; labels come from i18n products.fieldOptions. */
+  options?: string[];
+  required?: boolean;
+  /** Only shown when another field has one of these values. */
+  showIf?: { field: string; equals: string[] };
+};
 
 export type ProductDef = {
   key: string;
   kind: "apply" | "savings" | "deposit";
-  amount?: boolean; // whether the application asks for a requested amount
-  card?: boolean; // credit-card style (approval sets a tier + limit)
+  amount?: boolean; // application asks for a requested amount
+  card?: boolean; // card product: tier chooser, card face, issued details
   term?: boolean; // application asks for a repayment term in months
   // installment: principal disbursed to checking on approval, repaid over time.
   // revolving: a credit line the client draws from directly.
   credit?: "installment" | "revolving";
-  // Face colour once the product is active. Cards override this with their
-  // approved tier; everything unopened shows the blue Trustline card.
-  theme: CardTheme;
+  /** Photograph behind the tile, from /public/images. Cards don't use one. */
+  photo?: string;
+  /** Icon key from components/icons.tsx, drawn on the tile. */
+  icon: string;
+  /** Extra questions beyond the shared ones. */
+  fields?: FieldDef[];
 };
 
+// Asked on every application — the basics any bank wants up front.
+export const SHARED_FIELDS: FieldDef[] = [
+  {
+    name: "employmentStatus",
+    kind: "select",
+    required: true,
+    options: ["EMPLOYED", "SELF_EMPLOYED", "RETIRED", "STUDENT", "UNEMPLOYED"],
+  },
+  {
+    name: "employer",
+    kind: "text",
+    showIf: { field: "employmentStatus", equals: ["EMPLOYED", "SELF_EMPLOYED"] },
+  },
+  { name: "annualIncome", kind: "money", required: true },
+  {
+    name: "housingStatus",
+    kind: "select",
+    required: true,
+    options: ["OWN_OUTRIGHT", "OWN_MORTGAGE", "RENT", "LIVING_WITH_FAMILY"],
+  },
+];
+
 export const PERSONAL_PRODUCTS: ProductDef[] = [
-  { key: "CREDIT_CARD", kind: "apply", amount: true, card: true, credit: "revolving", theme: "BLACK" },
-  { key: "SAVINGS", kind: "savings", theme: "TEAL" },
-  { key: "PERSONAL_LOAN", kind: "apply", amount: true, term: true, credit: "installment", theme: "VIOLET" },
-  { key: "MORTGAGE", kind: "apply", amount: true, term: true, credit: "installment", theme: "GREEN" },
-  { key: "PERSONAL_INSURANCE", kind: "apply", theme: "SLATE" },
+  {
+    key: "CREDIT_CARD",
+    kind: "apply",
+    card: true,
+    credit: "revolving",
+    icon: "card",
+  },
+  { key: "SAVINGS", kind: "savings", photo: "planning.jpg", icon: "savings" },
+  {
+    key: "PERSONAL_LOAN",
+    kind: "apply",
+    amount: true,
+    term: true,
+    credit: "installment",
+    photo: "signing.jpg",
+    icon: "lending",
+    fields: [{ name: "purpose", kind: "textarea" }],
+  },
+  {
+    key: "MORTGAGE",
+    kind: "apply",
+    amount: true,
+    term: true,
+    credit: "installment",
+    photo: "family-home.jpg",
+    icon: "mortgage",
+    fields: [
+      {
+        name: "propertyType",
+        kind: "select",
+        required: true,
+        options: ["HOUSE", "APARTMENT", "LAND", "COMMERCIAL"],
+      },
+      { name: "propertyPrice", kind: "money", required: true },
+      { name: "downPayment", kind: "money", required: true },
+      { name: "propertyLocation", kind: "text", required: true },
+    ],
+  },
+  {
+    key: "PERSONAL_INSURANCE",
+    kind: "apply",
+    photo: "advisor-meeting.jpg",
+    icon: "insurance",
+    fields: [
+      {
+        name: "coverType",
+        kind: "select",
+        required: true,
+        options: ["LIFE", "HOME", "AUTO", "TRAVEL", "HEALTH"],
+      },
+      { name: "coveredPeople", kind: "number" },
+    ],
+  },
 ];
 
 export const COMMERCIAL_PRODUCTS: ProductDef[] = [
-  { key: "BUSINESS_CARD", kind: "apply", amount: true, card: true, credit: "revolving", theme: "BLACK" },
-  { key: "DEPOSITS", kind: "deposit", theme: "TEAL" },
-  { key: "FOREIGN_DRAFTS", kind: "apply", amount: true, theme: "VIOLET" },
-  { key: "INTEREST_CHECKING", kind: "apply", theme: "GREEN" },
-  { key: "TELE_BANKING", kind: "apply", theme: "SLATE" },
-  { key: "MONEY_MARKET", kind: "apply", amount: true, theme: "TEAL" },
-  { key: "SMALL_BUSINESS", kind: "apply", amount: true, term: true, credit: "installment", theme: "VIOLET" },
+  {
+    key: "BUSINESS_CARD",
+    kind: "apply",
+    card: true,
+    credit: "revolving",
+    icon: "card",
+    fields: [{ name: "businessName", kind: "text", required: true }],
+  },
+  { key: "DEPOSITS", kind: "deposit", photo: "card-payment.jpg", icon: "deposit" },
+  {
+    key: "FOREIGN_DRAFTS",
+    kind: "apply",
+    amount: true,
+    photo: "hero-city.jpg",
+    icon: "draft",
+    fields: [
+      { name: "destinationCountry", kind: "text", required: true },
+      { name: "beneficiaryName", kind: "text", required: true },
+    ],
+  },
+  {
+    key: "INTEREST_CHECKING",
+    kind: "apply",
+    photo: "professional.jpg",
+    icon: "checking",
+    fields: [{ name: "businessName", kind: "text", required: true }],
+  },
+  {
+    key: "TELE_BANKING",
+    kind: "apply",
+    photo: "team-laptop.jpg",
+    icon: "phone",
+    fields: [{ name: "businessName", kind: "text", required: true }],
+  },
+  {
+    key: "MONEY_MARKET",
+    kind: "apply",
+    amount: true,
+    photo: "planning.jpg",
+    icon: "money",
+    fields: [{ name: "businessName", kind: "text", required: true }],
+  },
+  {
+    key: "SMALL_BUSINESS",
+    kind: "apply",
+    amount: true,
+    term: true,
+    credit: "installment",
+    photo: "signing.jpg",
+    icon: "buildings",
+    fields: [
+      { name: "businessName", kind: "text", required: true },
+      { name: "yearsTrading", kind: "number", required: true },
+      { name: "annualRevenue", kind: "money", required: true },
+      { name: "purpose", kind: "textarea" },
+    ],
+  },
 ];
 
-/** Card tiers a client can request when applying for a card product. */
-export const CARD_TIERS = ["GOLD", "PLATINUM", "BLACK"] as const;
+/**
+ * Card tiers, lowest first. Clients pick a tier rather than naming a limit —
+ * each tier carries its own range and the final limit is set at approval.
+ * Amounts are in cents; a null max means "and above".
+ */
+export const CARD_TIERS = ["CLASSIC", "GOLD", "PLATINUM", "BLACK"] as const;
 export type CardTier = (typeof CARD_TIERS)[number];
 
-/** The face colour to draw for a product in a given state. */
-export function themeFor(def: ProductDef, opts: { active: boolean; tier?: string | null }): CardTheme {
-  if (!opts.active) return "BLUE";
-  if (def.card) {
-    const tier = (opts.tier ?? "").toUpperCase();
-    return tier === "GOLD" || tier === "PLATINUM" || tier === "BLACK" ? tier : "BLUE";
-  }
-  return def.theme;
+export const TIER_LIMITS: Record<CardTier, { min: number; max: number | null }> = {
+  CLASSIC: { min: 50_000, max: 250_000 },
+  GOLD: { min: 250_000, max: 1_000_000 },
+  PLATINUM: { min: 1_000_000, max: 2_500_000 },
+  BLACK: { min: 2_500_000, max: null },
+};
+
+export const TIER_THEMES: Record<CardTier, CardTheme> = {
+  CLASSIC: "BLUE",
+  GOLD: "GOLD",
+  PLATINUM: "PLATINUM",
+  BLACK: "BLACK",
+};
+
+export function isCardTier(value: unknown): value is CardTier {
+  return typeof value === "string" && (CARD_TIERS as readonly string[]).includes(value);
+}
+
+/** The card face colour for a tier, defaulting to the Trustline blue. */
+export function themeForTier(tier?: string | null): CardTheme {
+  const t = (tier ?? "").toUpperCase();
+  return isCardTier(t) ? TIER_THEMES[t] : "BLUE";
+}
+
+/** Every question a product's application asks, shared ones first. */
+export function fieldsFor(def: ProductDef): FieldDef[] {
+  return [...SHARED_FIELDS, ...(def.fields ?? [])];
 }
 
 export function productsFor(accountType: string): ProductDef[] {

@@ -1,10 +1,12 @@
-import { db } from "@/lib/db";
+﻿import { db } from "@/lib/db";
 import { formatMoney } from "@/lib/bank";
 import {
   approveApplicationAction,
   declineApplicationAction,
   updateProductAction,
 } from "@/lib/actions/admin-actions";
+import { productDef } from "@/lib/products";
+import { ApplicationDetails } from "@/components/application-details";
 
 function toDateInput(d: Date | null) {
   if (!d) return "";
@@ -66,6 +68,11 @@ export default async function ApplicationsPage() {
                   </p>
                 </div>
               </div>
+              <ApplicationDetails
+                def={productDef(app.user.accountType, app.productKey)}
+                details={app.details}
+                currency={app.user.currency}
+              />
               {app.purpose && (
                 <p className="mt-3 rounded-xl bg-navy-50/60 p-3 text-sm text-gray-700">{app.purpose}</p>
               )}
@@ -92,6 +99,7 @@ export default async function ApplicationsPage() {
                         className="mt-1 block rounded-md border border-gray-300 px-2 py-2 text-sm"
                       >
                         <option value="">—</option>
+                        <option value="CLASSIC">Classic</option>
                         <option value="GOLD">Gold</option>
                         <option value="PLATINUM">Platinum</option>
                         <option value="BLACK">Black</option>
@@ -241,7 +249,8 @@ export default async function ApplicationsPage() {
                           className="mt-1 w-full rounded-md border border-gray-300 px-2 py-2 text-sm"
                         >
                           <option value="">—</option>
-                          <option value="GOLD">Gold</option>
+                          <option value="CLASSIC">Classic</option>
+                        <option value="GOLD">Gold</option>
                           <option value="PLATINUM">Platinum</option>
                           <option value="BLACK">Black</option>
                         </select>
@@ -276,3 +285,4 @@ export default async function ApplicationsPage() {
     </div>
   );
 }
+

@@ -1,12 +1,13 @@
 import type { Dict } from "@/i18n";
-import { fill } from "@/i18n";
 import { formatMoney } from "@/lib/bank";
-import { productsFor, themeFor, type CardTheme, type ProductDef } from "@/lib/products";
+import { productsFor, themeForTier, type CardTheme, type ProductDef } from "@/lib/products";
 
 // One place that decides how a product looks in every state, so the dashboard
-// grid and the product page can never drift apart.
+// grid and the product page can never drift apart. Card products render a card
+// face; everything else renders a photo tile.
 
 export type ProductState = "APPLY" | "REVIEW" | "DECLINED" | "ACTIVE" | "CLOSED" | "DEPOSIT";
+export type Tone = "ok" | "pending" | "bad" | "muted";
 
 export type CardApp = {
   id: string;
@@ -21,33 +22,35 @@ export type CardApp = {
   adminNote: string | null;
 };
 
-export type ProductView = {
+type Common = {
   def: ProductDef;
   title: string;
   body: string;
   state: ProductState;
-  theme: CardTheme;
-  badge: string | null;
-  status: { label: string; tone: "ok" | "pending" | "bad" | "muted" } | null;
-  holder: string | null;
-  /** Shown in place of a cardholder name while the product is a preview. */
-  holderPlaceholder: string;
-  number: string | null;
-  numberText: string | null;
-  showNumber: boolean;
-  expiry: string | null;
-  placeholder: boolean;
+  status: { label: string; tone: Tone } | null;
   valueLabel: string | null;
   value: string | null;
   href: string;
   cta: string;
 };
 
-const TIER_BADGES: Record<string, string> = {
-  GOLD: "Gold",
-  PLATINUM: "Platinum",
-  BLACK: "Black",
-};
+export type ProductView =
+  | (Common & {
+      render: "card";
+      theme: CardTheme;
+      badge: string | null;
+      holder: string | null;
+      holderPlaceholder: string;
+      number: string | null;
+      expiry: string | null;
+      placeholder: boolean;
+    })
+  | (Common & {
+      render: "tile";
+      photo: string | null;
+      icon: string;
+      placeholder: boolean;
+    });
 
 export function buildProductView({
   def,
@@ -56,7 +59,6 @@ export function buildProductView({
   savingsOpen,
   savingsBalanceCents,
   savingsNumber,
-  checkingNumber,
   t,
   locale,
   currency,
@@ -68,121 +70,139 @@ export function buildProductView({
   savingsOpen: boolean;
   savingsBalanceCents: number;
   savingsNumber?: string | null;
-  checkingNumber?: string | null;
   t: Dict;
   locale: string;
   currency: string;
   holderName: string;
 }): ProductView {
-  const base = {
+  const common = {
     def,
     title: item.title,
     body: item.body,
     href: `/product/${def.key}`,
-    holder: null as string | null,
-    holderPlaceholder: def.card ? t.products.yourName : "",
-    number: null as string | null,
-    numberText: null as string | null,
-    showNumber: Boolean(def.card),
-    expiry: null as string | null,
-    badge: null as string | null,
     valueLabel: null as string | null,
     value: null as string | null,
   };
+  const tile = { render: "tile" as const, photo: def.photo ?? null, icon: def.icon };
 
-  // Deposits tile (commercial) — always available, no application.
+  // Deposits (commercial) — always available, no application.
   if (def.kind === "deposit") {
     return {
-      ...base,
+      ...common,
+      ...tile,
       state: "DEPOSIT",
-      theme: def.theme,
-      placeholder: false,
       status: null,
-      holder: holderName,
-      numberText: checkingNumber ?? null,
+      placeholder: false,
       cta: t.bank.makeDeposit,
     };
   }
 
-  // Savings — open instantly, then it carries a real balance.
+  // Savings — opened instantly, then it carries a real balance.
   if (def.kind === "savings") {
     if (!savingsOpen) {
-      return {
-        ...base,
-        state: "CLOSED",
-        theme: "BLUE",
-        placeholder: true,
-        status: null,
-        cta: t.products.open,
-      };
+      return { ...common, ...tile, state: "CLOSED", status: null, placeholder: true, cta: t.products.open };
     }
     return {
-      ...base,
+      ...common,
+      ...tile,
       state: "ACTIVE",
-      theme: def.theme,
-      placeholder: false,
       status: { label: t.products.activeBadge, tone: "ok" },
-      holder: holderName,
-      numberText: savingsNumber ?? null,
-      valueLabel: t.products.balanceLabel,
+      placeholder: false,
+      valueLabel: savingsNumber ?? t.products.balanceLabel,
       value: formatMoney(savingsBalanceCents, locale, currency),
       cta: t.products.viewDetails,
     };
   }
 
-  // Applyable products.
-  if (!app || app.status === "DECLINED") {
-    return {
-      ...base,
-      state: app?.status === "DECLINED" ? "DECLINED" : "APPLY",
-      theme: "BLUE",
-      placeholder: true,
-      status:
-        app?.status === "DECLINED" ? { label: t.products.declined, tone: "bad" } : null,
-      cta: app?.status === "DECLINED" ? t.products.reapply : t.products.apply,
-    };
+  // --- Applyable products ---
+  const notYet = !app || app.status === "DECLINED";
+  const declined = app?.status === "DECLINED";
+  const inReview = app?.status === "SUBMITTED";
+
+  if (notYet || inReview) {
+    const state: ProductState = declined ? "DECLINED" : inReview ? "REVIEW" : "APPLY";
+    const status = declined
+      ? { label: t.products.declined, tone: "bad" as Tone }
+      : inReview
+        ? { label: t.products.underReview, tone: "pending" as Tone }
+        : null;
+    const cta = inReview
+      ? t.products.viewDetails
+      : declined
+        ? t.products.reapply
+        : t.products.apply;
+
+    if (def.card) {
+      return {
+        ...common,
+        render: "card",
+        state,
+        status,
+        theme: "BLUE",
+        badge: t.products.tiers.CLASSIC,
+        holder: null,
+        holderPlaceholder: t.products.yourName,
+        number: null,
+        expiry: null,
+        placeholder: true,
+        cta,
+      };
+    }
+    return { ...common, ...tile, state, status, placeholder: true, cta };
   }
 
-  if (app.status === "SUBMITTED") {
-    return {
-      ...base,
-      state: "REVIEW",
-      theme: "BLUE",
-      placeholder: true,
-      status: { label: t.products.underReview, tone: "pending" },
-      cta: t.products.viewDetails,
-    };
-  }
-
-  // Approved and active.
-  const limit = app.approvedAmountCents ?? 0;
-  const owed = app.outstandingCents ?? 0;
+  // --- Approved and active ---
+  const limit = app!.approvedAmountCents ?? 0;
+  const owed = app!.outstandingCents ?? 0;
   const isRevolving = def.credit === "revolving";
+  const isInstallment = def.credit === "installment";
+
+  const valueLabel = isRevolving
+    ? t.products.availableCredit
+    : isInstallment
+      ? t.products.outstandingLabel
+      : limit
+        ? t.products.limitLabel
+        : null;
   const value = isRevolving
     ? formatMoney(Math.max(0, limit - owed), locale, currency)
-    : def.credit === "installment"
+    : isInstallment
       ? formatMoney(owed, locale, currency)
       : limit
         ? formatMoney(limit, locale, currency)
         : null;
 
+  const status = app!.frozen
+    ? { label: t.products.frozenBadge, tone: "bad" as Tone }
+    : { label: t.products.activeBadge, tone: "ok" as Tone };
+
+  if (def.card) {
+    const tier = app!.cardTier;
+    return {
+      ...common,
+      render: "card",
+      state: "ACTIVE",
+      status: app!.frozen ? status : null, // an active card speaks for itself
+      theme: themeForTier(tier),
+      badge: tier ? t.products.tiers[tier as keyof typeof t.products.tiers] ?? tier : null,
+      holder: app!.cardHolder || holderName.toUpperCase(),
+      holderPlaceholder: t.products.yourName,
+      number: app!.cardNumber,
+      expiry: app!.cardExpiry,
+      placeholder: false,
+      valueLabel,
+      value,
+      cta: t.products.viewDetails,
+    };
+  }
+
   return {
-    ...base,
+    ...common,
+    ...tile,
     state: "ACTIVE",
-    theme: themeFor(def, { active: true, tier: app.cardTier }),
+    status,
     placeholder: false,
-    status: app.frozen ? { label: t.products.frozenBadge, tone: "bad" } : null,
-    holder: def.card ? app.cardHolder || holderName.toUpperCase() : holderName,
-    number: def.card ? app.cardNumber : null,
-    expiry: def.card ? app.cardExpiry : null,
-    badge: def.card ? (app.cardTier ? TIER_BADGES[app.cardTier] ?? app.cardTier : null) : null,
-    valueLabel: isRevolving
-      ? t.products.availableCredit
-      : def.credit === "installment"
-        ? t.products.outstandingLabel
-        : limit
-          ? t.products.limitLabel
-          : null,
+    valueLabel,
     value,
     cta: t.products.viewDetails,
   };
@@ -204,5 +224,3 @@ export function productsWithLabels(t: Dict, accountType: string) {
   const items = accountType === "COMMERCIAL" ? t.landing.commercial.items : t.landing.personal.items;
   return defs.map((def, i) => ({ def, item: items[i] ?? { title: def.key, body: "" } }));
 }
-
-export { fill };

@@ -16,6 +16,20 @@ export function formatMoney(cents: number, locale: string = "en", currency = "US
   return new Intl.NumberFormat(intl, { style: "currency", currency }).format(cents / 100);
 }
 
+/**
+ * Like formatMoney, but drops the cents on whole amounts — for headline figures
+ * such as credit limit ranges, where "$2,500" reads better than "$2,500.00".
+ */
+export function formatMoneyWhole(cents: number, locale: string = "en", currency = "USD") {
+  if (cents % 100 !== 0) return formatMoney(cents, locale, currency);
+  const intl = INTL_LOCALES[(locale as Locale) in INTL_LOCALES ? (locale as Locale) : "en"];
+  return new Intl.NumberFormat(intl, {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(cents / 100);
+}
+
 /** Returns the user's account of a kind, creating it with a unique number if needed. */
 export async function ensureAccountOfKind(userId: string, kind: "CHECKING" | "SAVINGS") {
   const existing = await db.account.findFirst({ where: { userId, kind } });

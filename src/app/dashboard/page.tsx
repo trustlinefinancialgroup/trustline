@@ -11,6 +11,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { NotificationCenter } from "@/components/notification-center";
 import { BankCard } from "@/components/bank-card";
+import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -67,7 +68,6 @@ export default async function DashboardPage({
       savingsOpen: Boolean(savings),
       savingsBalanceCents: savingsBal,
       savingsNumber: savings?.number,
-      checkingNumber: account.number,
       t,
       locale,
       currency: user.currency,
@@ -226,8 +226,12 @@ export default async function DashboardPage({
         <p className="mt-1 text-sm text-gray-500">{t.products.productsSubtitle}</p>
         <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {productViews.map((v) => (
-            <Link key={v.def.key} href={v.href} className="group block">
-              <div className={v.placeholder ? "opacity-75 transition group-hover:opacity-100" : ""}>
+            <Link
+              key={v.def.key}
+              href={v.href}
+              className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
+            >
+              {v.render === "card" ? (
                 <BankCard
                   theme={v.theme}
                   productName={v.title}
@@ -235,21 +239,35 @@ export default async function DashboardPage({
                   holder={v.holder}
                   holderPlaceholder={v.holderPlaceholder}
                   number={v.number}
-                  numberText={v.numberText}
-                  showNumber={v.showNumber}
                   expiry={v.expiry}
                   valueLabel={v.valueLabel}
                   value={v.value}
                   status={v.status}
                   placeholder={v.placeholder}
-                  className="transition group-hover:-translate-y-0.5 group-hover:shadow-xl"
+                  className={`transition duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl ${
+                    v.placeholder ? "opacity-80 group-hover:opacity-100" : ""
+                  }`}
                 />
-              </div>
-              <div className="mt-3 flex items-center justify-between gap-3 px-1">
+              ) : (
+                <ProductTile
+                  title={v.title}
+                  photo={v.photo}
+                  icon={v.icon}
+                  valueLabel={v.valueLabel}
+                  value={v.value}
+                  status={v.status}
+                  placeholder={v.placeholder}
+                  cta={null}
+                  className="transition duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl"
+                />
+              )}
+              <div className="mt-3 flex items-center gap-2 px-1">
                 <p className="text-sm font-semibold text-navy-900">{v.title}</p>
-                <span className="shrink-0 text-xs font-semibold text-accent-600 group-hover:text-accent-700">
-                  {v.cta} →
-                </span>
+                {!v.value && (
+                  <span className="rounded-full bg-accent-50 px-2.5 py-0.5 text-[11px] font-semibold text-accent-700 transition group-hover:bg-accent-500 group-hover:text-white">
+                    {v.cta}
+                  </span>
+                )}
               </div>
             </Link>
           ))}

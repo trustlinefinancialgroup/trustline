@@ -46,38 +46,6 @@ const FACES: Record<CardTheme, Face> = {
     chipLine: "#9C8A50",
     ring: "#FFFFFF",
   },
-  TEAL: {
-    background: "linear-gradient(135deg,#12706E 0%,#0B4E52 55%,#07373C 100%)",
-    ink: "#EAF7F6",
-    inkSoft: "#8FC6C3",
-    chip: "#E4C56B",
-    chipLine: "#B9973A",
-    ring: "#2C9C96",
-  },
-  VIOLET: {
-    background: "linear-gradient(135deg,#4B3A93 0%,#2E2263 55%,#1E1642 100%)",
-    ink: "#F2EFFB",
-    inkSoft: "#AFA3DA",
-    chip: "#E4C56B",
-    chipLine: "#B9973A",
-    ring: "#6B57C4",
-  },
-  GREEN: {
-    background: "linear-gradient(135deg,#1C6B41 0%,#124A2D 55%,#0C331F 100%)",
-    ink: "#ECF8F1",
-    inkSoft: "#96C7AC",
-    chip: "#E4C56B",
-    chipLine: "#B9973A",
-    ring: "#2E9159",
-  },
-  SLATE: {
-    background: "linear-gradient(135deg,#4A5568 0%,#2D3748 55%,#1C222E 100%)",
-    ink: "#F2F4F8",
-    inkSoft: "#A3AEC2",
-    chip: "#E4C56B",
-    chipLine: "#B9973A",
-    ring: "#69768D",
-  },
 };
 
 const STATUS_TONES = {
@@ -106,10 +74,6 @@ export type BankCardProps = {
   number?: string | null;
   expiry?: string | null;
   masked?: boolean;
-  /** Printed instead of a card number — e.g. a savings account number. */
-  numberText?: string | null;
-  /** Products without a number (loans, insurance) leave the line empty. */
-  showNumber?: boolean;
   /** Bottom-right figure, e.g. available credit or savings balance. */
   valueLabel?: string | null;
   value?: string | null;
@@ -129,8 +93,6 @@ export function BankCard({
   number,
   expiry,
   masked = true,
-  numberText,
-  showNumber = true,
   valueLabel,
   value,
   status,
@@ -208,13 +170,7 @@ export function BankCard({
           className="min-h-[1.4em] font-mono text-[15px] tracking-[0.1em] sm:text-[17px]"
           style={{ color: face.ink }}
         >
-          {numberText
-            ? numberText
-            : !showNumber
-              ? ""
-              : placeholder
-                ? "••••  ••••  ••••  ••••"
-                : formatCardNumber(number, masked)}
+          {placeholder ? "••••  ••••  ••••  ••••" : formatCardNumber(number, masked)}
         </p>
 
         <div className="flex items-end justify-between gap-3">

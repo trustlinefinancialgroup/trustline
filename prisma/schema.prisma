@@ -91,9 +91,12 @@ model ProductApplication {
   user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   productKey         String // CREDIT_CARD, PERSONAL_LOAN, MORTGAGE, ...
   status             String    @default("SUBMITTED") // SUBMITTED | APPROVED | DECLINED
-  amountCents        Int? // requested amount (loans/credit/mortgage)
+  amountCents        Int? // requested amount (loans/mortgage) — cards use tiers
   termMonths         Int?
   purpose            String?
+  // Answers to the product's application questions (employment, income,
+  // property details…). Shape is driven by FieldDef in src/lib/products.ts.
+  details            Json?
   approvedAmountCents Int? // approved limit/amount
   cardTier           String? // GOLD | PLATINUM | BLACK (cards) — as approved
   requestedTier      String? // tier the client asked for on the application

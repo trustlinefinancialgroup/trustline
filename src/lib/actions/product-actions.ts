@@ -15,7 +15,7 @@ import {
   newReference,
   pendingWithdrawalCents,
 } from "@/lib/bank";
-import { productDef, CARD_TIERS } from "@/lib/products";
+import { productDef, fieldsFor, isCardTier } from "@/lib/products";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
 
@@ -99,26 +99,66 @@ export async function submitApplicationAction(
   });
   if (open) return { error: t.products.alreadyApplied };
 
+  // Cards don't take a requested amount — the chosen tier carries its range.
   let amountCents: number | null = null;
-  if (def.amount) {
+  if (def.amount && !def.card) {
     const raw = String(formData.get("amount") ?? "").trim().replace(",", ".");
     const cents = Math.round(Number(raw) * 100);
-    if (raw && Number.isFinite(cents) && cents > 0 && cents <= MAX_AMOUNT_CENTS) {
-      amountCents = cents;
+    if (!raw || !Number.isFinite(cents) || cents <= 0 || cents > MAX_AMOUNT_CENTS) {
+      return { error: t.bank.amountInvalid };
     }
+    amountCents = cents;
   }
-  const purpose = String(formData.get("purpose") ?? "").trim().slice(0, 300) || null;
 
   const tierRaw = String(formData.get("requestedTier") ?? "").trim().toUpperCase();
-  const requestedTier =
-    def.card && (CARD_TIERS as readonly string[]).includes(tierRaw) ? tierRaw : null;
+  const requestedTier = def.card && isCardTier(tierRaw) ? tierRaw : null;
 
   const termRaw = Number(formData.get("termMonths"));
   const termMonths =
     def.term && Number.isFinite(termRaw) && termRaw > 0 && termRaw <= 480 ? Math.round(termRaw) : null;
 
+  // The product's own questions, validated against its field definitions.
+  const details: Record<string, string | number> = {};
+  for (const field of fieldsFor(def)) {
+    if (field.showIf) {
+      const dependency = String(formData.get(field.showIf.field) ?? "");
+      if (!field.showIf.equals.includes(dependency)) continue;
+    }
+    const raw = String(formData.get(field.name) ?? "").trim();
+    if (!raw) {
+      if (field.required) return { error: t.products.requiredField };
+      continue;
+    }
+    if (field.kind === "money") {
+      const cents = Math.round(Number(raw.replace(",", ".")) * 100);
+      if (!Number.isFinite(cents) || cents < 0 || cents > MAX_AMOUNT_CENTS) {
+        return { error: t.bank.amountInvalid };
+      }
+      details[field.name] = cents;
+    } else if (field.kind === "number") {
+      const n = Number(raw);
+      if (!Number.isFinite(n) || n < 0 || n > 1_000_000) return { error: t.products.requiredField };
+      details[field.name] = Math.round(n);
+    } else if (field.kind === "select") {
+      if (!(field.options ?? []).includes(raw)) return { error: t.products.requiredField };
+      details[field.name] = raw;
+    } else {
+      details[field.name] = raw.slice(0, 300);
+    }
+  }
+
+  const purpose = typeof details.purpose === "string" ? details.purpose : null;
+
   await db.productApplication.create({
-    data: { userId: user.id, productKey, amountCents, purpose, requestedTier, termMonths },
+    data: {
+      userId: user.id,
+      productKey,
+      amountCents,
+      purpose,
+      requestedTier,
+      termMonths,
+      details,
+    },
   });
 
   await audit({

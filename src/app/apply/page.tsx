@@ -4,7 +4,14 @@ import { getSessionUser, isAdmin } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth-actions";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
-import { productDef, productLabel } from "@/lib/products";
+import {
+  productDef,
+  productLabel,
+  CARD_TIERS,
+  TIER_LIMITS,
+  SHARED_FIELDS,
+} from "@/lib/products";
+import { formatMoney, formatMoneyWhole } from "@/lib/bank";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { ApplyForm } from "./apply-form";
@@ -28,6 +35,25 @@ export default async function ApplyPage({
   const t = await getDict();
   const locale = await getLocale();
   const label = productLabel(t.landing, user.accountType, type!);
+
+  // Each tier advertises its own limit range, so nobody has to name a number.
+  const tierRanges = Object.fromEntries(
+    CARD_TIERS.map((tier) => {
+      const { min, max } = TIER_LIMITS[tier];
+      const minLabel = formatMoneyWhole(min, locale, user.currency);
+      return [
+        tier,
+        max === null
+          ? fill(t.products.tierFrom, { min: minLabel })
+          : fill(t.products.tierRange, {
+              min: minLabel,
+              max: formatMoneyWhole(max, locale, user.currency),
+            }),
+      ];
+    })
+  );
+  // The currency prefix for money inputs, taken from the client's currency.
+  const currencySymbol = formatMoney(0, locale, user.currency).replace(/[\d.,\s]/g, "");
 
   return (
     <main className="flex min-h-screen flex-1 flex-col bg-navy-50/50">
@@ -67,6 +93,9 @@ export default async function ApplyPage({
             showTerm={!!def.term}
             showTiers={!!def.card}
             holderName={`${user.firstName} ${user.lastName}`.trim()}
+            currencySymbol={currencySymbol}
+            sharedFields={SHARED_FIELDS}
+            productFields={def.fields ?? []}
             labels={{
               amount: t.products.amountLabel,
               purpose: t.products.purposeLabel,
@@ -74,10 +103,18 @@ export default async function ApplyPage({
               submitting: t.products.applying,
               chooseTier: t.products.chooseTier,
               tierHint: t.products.tierHint,
+              tierLimit: t.products.tierLimit,
               term: t.products.termLabel,
               termMonths: t.products.termMonths,
+              aboutYou: t.products.aboutYou,
+              aboutYouHint: t.products.aboutYouHint,
+              aboutProduct: t.products.aboutProduct,
+              choose: t.products.choose,
               tiers: t.products.tiers,
               tierBlurbs: t.products.tierBlurbs,
+              tierRanges,
+              fields: t.products.fields,
+              fieldOptions: t.products.fieldOptions,
             }}
           />
         </div>
