@@ -48,3 +48,6 @@ next-env.d.ts
 uploads/
 prisma/dev.db*
 .env
+
+# review/forensic source images (optimized copies in public/images)
+/reviews and forensic

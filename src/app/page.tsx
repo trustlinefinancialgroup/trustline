@@ -212,6 +212,64 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Fast & secure */}
+      <section className="bg-navy-50/60">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent-600">
+              {t.landing.fastKicker}
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
+              {t.landing.fastTitle}
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-gray-600">{t.landing.fastBody}</p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {t.landing.fast.map((f, i) => {
+              const Icon = [Icons.deposit, Icons.money, Icons.business][i];
+              return (
+                <div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600">
+                    <Icon className="h-6 w-6" />
+                  </span>
+                  <h3 className="mt-5 text-lg font-semibold text-navy-900">{f.title}</h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{f.body}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Forensic & security */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="grid items-center gap-14 lg:grid-cols-2">
+          <div className="relative h-[380px] overflow-hidden rounded-3xl">
+            <Image src="/images/forensic.webp" alt="Trustline forensic investigation team" fill className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-950/50 to-transparent" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent-600">
+              {t.landing.forensicKicker}
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
+              {t.landing.forensicTitle}
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-gray-600">{t.landing.forensicBody}</p>
+            <ul className="mt-6 space-y-3">
+              {t.landing.forensicPoints.map((p) => (
+                <li key={p} className="flex gap-3 text-[15px] text-navy-800">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-50 text-accent-600">
+                    <Icons.shield className="h-4 w-4" />
+                  </span>
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Welcome bonus */}
       <section className="mx-auto max-w-7xl px-6 pb-8">
         <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-accent-600 to-navy-800 px-8 py-12 sm:px-12">
@@ -264,6 +322,47 @@ export default async function HomePage() {
             <p className="mt-4 max-w-md text-[15px] leading-relaxed text-navy-100">
               {t.landing.footerTagline}
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="bg-navy-50/60">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent-600">
+              {t.landing.reviewsKicker}
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl">
+              {t.landing.reviewsTitle}
+            </h2>
+            <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-navy-700">
+              <span className="text-accent-500">★★★★★</span> {t.landing.reviewsAvg}
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { img: "christopher", name: "Christopher Walker", handle: "@cwalker", quote: "I compared loan offers from several banks before choosing Trustline — their rate was easily the most competitive, and the funds arrived far faster than I expected." },
+              { img: "rachel", name: "Rachel Thompson", handle: "@rachelth", quote: "Buying our first home felt overwhelming until Trustline. Their mortgage specialists explained every step, secured us an excellent fixed rate, and finished ahead of schedule." },
+              { img: "michael", name: "Michael Anderson", handle: "@manderson", quote: "Their Forensic Financial Investigation Unit reviewed a suspicious transaction the same day, secured my account, and I was back to banking without any hassle." },
+              { img: "sophia", name: "Sophia Bennett", handle: "@sophiab", quote: "What impressed me most is how fast everything happens. Deposits are smooth and withdrawals reach my account almost instantly — speed and security together." },
+              { img: "natalie", name: "Natalie Foster", handle: "@natalief", quote: "Trustline detected an attempted fraudulent login while I was overseas, verified my identity, and restored full access quickly. Outstanding service." },
+              { img: "emily", name: "Emily Carter", handle: "@emilycarter", quote: "Every withdrawal I've made has been processed within minutes, and whenever I have a question, someone knowledgeable is always available to help." },
+            ].map((r) => (
+              <figure key={r.img} className="flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="text-sm text-accent-500">★★★★★</div>
+                <blockquote className="mt-3 flex-1 text-[15px] leading-relaxed text-gray-700">
+                  &ldquo;{r.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-5 flex items-center gap-3">
+                  <Image src={`/images/reviews/${r.img}.webp`} alt={r.name} width={44} height={44} className="h-11 w-11 rounded-full object-cover" />
+                  <div>
+                    <p className="text-sm font-semibold text-navy-900">{r.name}</p>
+                    <p className="text-xs text-gray-500">{r.handle}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
