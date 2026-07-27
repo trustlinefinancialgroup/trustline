@@ -186,6 +186,18 @@ export default async function DashboardPage({
         {/* Quick links */}
         <div className="mt-4 flex flex-wrap gap-3">
           <Link
+            href="/activity"
+            className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
+          >
+            {t.activity.link}
+          </Link>
+          <Link
+            href="/statements"
+            className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
+          >
+            {t.statements.link}
+          </Link>
+          <Link
             href="/goals"
             className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
           >
