@@ -251,8 +251,7 @@ export default async function DashboardPage({
               ) : (
                 <ProductTile
                   title={v.title}
-                  photo={v.photo}
-                  icon={v.icon}
+                  art={v.art}
                   valueLabel={v.valueLabel}
                   value={v.value}
                   status={v.status}

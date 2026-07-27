@@ -47,8 +47,7 @@ export type ProductView =
     })
   | (Common & {
       render: "tile";
-      photo: string | null;
-      icon: string;
+      art: string | null;
       placeholder: boolean;
     });
 
@@ -83,7 +82,7 @@ export function buildProductView({
     valueLabel: null as string | null,
     value: null as string | null,
   };
-  const tile = { render: "tile" as const, photo: def.photo ?? null, icon: def.icon };
+  const tile = { render: "tile" as const, art: def.art ?? null };
 
   // Deposits (commercial) — always available, no application.
   if (def.kind === "deposit") {

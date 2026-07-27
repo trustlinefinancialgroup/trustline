@@ -27,9 +27,9 @@ export type ProductDef = {
   // installment: principal disbursed to checking on approval, repaid over time.
   // revolving: a credit line the client draws from directly.
   credit?: "installment" | "revolving";
-  /** Photograph behind the tile, from /public/images. Cards don't use one. */
-  photo?: string;
-  /** Icon key from components/icons.tsx, drawn on the tile. */
+  /** Illustration key from components/product-art.tsx. Cards don't use one. */
+  art?: string;
+  /** Icon key from components/icons.tsx, used in compact listings. */
   icon: string;
   /** Extra questions beyond the shared ones. */
   fields?: FieldDef[];
@@ -65,14 +65,14 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     credit: "revolving",
     icon: "card",
   },
-  { key: "SAVINGS", kind: "savings", photo: "planning.jpg", icon: "savings" },
+  { key: "SAVINGS", kind: "savings", art: "vault", icon: "savings" },
   {
     key: "PERSONAL_LOAN",
     kind: "apply",
     amount: true,
     term: true,
     credit: "installment",
-    photo: "signing.jpg",
+    art: "contract",
     icon: "lending",
     fields: [{ name: "purpose", kind: "textarea" }],
   },
@@ -82,7 +82,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     amount: true,
     term: true,
     credit: "installment",
-    photo: "family-home.jpg",
+    art: "house",
     icon: "mortgage",
     fields: [
       {
@@ -99,7 +99,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
   {
     key: "PERSONAL_INSURANCE",
     kind: "apply",
-    photo: "advisor-meeting.jpg",
+    art: "shield",
     icon: "insurance",
     fields: [
       {
@@ -122,12 +122,12 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     icon: "card",
     fields: [{ name: "businessName", kind: "text", required: true }],
   },
-  { key: "DEPOSITS", kind: "deposit", photo: "card-payment.jpg", icon: "deposit" },
+  { key: "DEPOSITS", kind: "deposit", art: "deposit", icon: "deposit" },
   {
     key: "FOREIGN_DRAFTS",
     kind: "apply",
     amount: true,
-    photo: "hero-city.jpg",
+    art: "globe",
     icon: "draft",
     fields: [
       { name: "destinationCountry", kind: "text", required: true },
@@ -137,14 +137,14 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
   {
     key: "INTEREST_CHECKING",
     kind: "apply",
-    photo: "professional.jpg",
+    art: "cheque",
     icon: "checking",
     fields: [{ name: "businessName", kind: "text", required: true }],
   },
   {
     key: "TELE_BANKING",
     kind: "apply",
-    photo: "team-laptop.jpg",
+    art: "handset",
     icon: "phone",
     fields: [{ name: "businessName", kind: "text", required: true }],
   },
@@ -152,7 +152,7 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     key: "MONEY_MARKET",
     kind: "apply",
     amount: true,
-    photo: "planning.jpg",
+    art: "market",
     icon: "money",
     fields: [{ name: "businessName", kind: "text", required: true }],
   },
@@ -162,7 +162,7 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     amount: true,
     term: true,
     credit: "installment",
-    photo: "signing.jpg",
+    art: "storefront",
     icon: "buildings",
     fields: [
       { name: "businessName", kind: "text", required: true },

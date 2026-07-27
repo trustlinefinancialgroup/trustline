@@ -223,8 +223,7 @@ export default async function ProductPage({
               view.render === "tile" && (
                 <ProductTile
                   title={view.title}
-                  photo={view.photo}
-                  icon={view.icon}
+                  art={view.art}
                   valueLabel={view.valueLabel}
                   value={view.value}
                   status={view.status}
