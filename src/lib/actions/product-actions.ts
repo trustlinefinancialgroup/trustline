@@ -15,7 +15,7 @@ import {
   newReference,
   pendingWithdrawalCents,
 } from "@/lib/bank";
-import { productsFor, productDef } from "@/lib/products";
+import { productDef, CARD_TIERS } from "@/lib/products";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
 
@@ -41,6 +41,7 @@ export async function openSavingsAction() {
     targetId: user.id,
   });
   revalidatePath("/dashboard");
+  revalidatePath("/product/SAVINGS");
 }
 
 // ---------- transfer between checking and savings ----------
@@ -108,8 +109,16 @@ export async function submitApplicationAction(
   }
   const purpose = String(formData.get("purpose") ?? "").trim().slice(0, 300) || null;
 
+  const tierRaw = String(formData.get("requestedTier") ?? "").trim().toUpperCase();
+  const requestedTier =
+    def.card && (CARD_TIERS as readonly string[]).includes(tierRaw) ? tierRaw : null;
+
+  const termRaw = Number(formData.get("termMonths"));
+  const termMonths =
+    def.term && Number.isFinite(termRaw) && termRaw > 0 && termRaw <= 480 ? Math.round(termRaw) : null;
+
   await db.productApplication.create({
-    data: { userId: user.id, productKey, amountCents, purpose },
+    data: { userId: user.id, productKey, amountCents, purpose, requestedTier, termMonths },
   });
 
   await audit({
@@ -121,7 +130,7 @@ export async function submitApplicationAction(
     details: `Applied for ${productKey}${amountCents ? ` (${formatMoney(amountCents)})` : ""}`,
   });
 
-  redirect("/dashboard?applied=1");
+  redirect(`/product/${productKey}`);
 }
 
 // Draw from a revolving credit line into checking (increases what's owed).
@@ -149,6 +158,7 @@ export async function drawCreditAction(_prev: FormState, formData: FormData): Pr
     db.transaction.create({
       data: {
         accountId: checking.id,
+        applicationId: app.id,
         type: "CREDIT",
         status: "POSTED",
         amountCents: cents,
@@ -159,7 +169,7 @@ export async function drawCreditAction(_prev: FormState, formData: FormData): Pr
     }),
     db.productApplication.update({ where: { id: app.id }, data: { outstandingCents: owed + cents } }),
   ]);
-  redirect(`/product/${app.id}?drawn=1`);
+  redirect(`/product/${app.productKey}?drawn=1`);
 }
 
 // Repay a loan or credit line from checking (reduces what's owed).
@@ -190,6 +200,7 @@ export async function payProductAction(_prev: FormState, formData: FormData): Pr
     db.transaction.create({
       data: {
         accountId: checking.id,
+        applicationId: app.id,
         type: "PAYMENT",
         status: "POSTED",
         amountCents: -cents,
@@ -200,7 +211,7 @@ export async function payProductAction(_prev: FormState, formData: FormData): Pr
     }),
     db.productApplication.update({ where: { id: app.id }, data: { outstandingCents: owed - cents } }),
   ]);
-  redirect(`/product/${app.id}?paid=1`);
+  redirect(`/product/${app.productKey}?paid=1`);
 }
 
 // Client freezes/unfreezes their own approved card.
@@ -226,6 +237,6 @@ export async function toggleFreezeAction(formData: FormData) {
     details: `${app.frozen ? "Unfroze" : "Froze"} ${app.productKey}`,
   });
 
-  revalidatePath(`/product/${app.id}`);
+  revalidatePath(`/product/${app.productKey}`);
   revalidatePath("/dashboard");
 }

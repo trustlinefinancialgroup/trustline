@@ -61,6 +61,8 @@ export default async function ApplicationsPage() {
                   <p className="mt-1 text-xs text-gray-500">
                     {app.createdAt.toLocaleString()}
                     {app.amountCents ? ` · Requested ${formatMoney(app.amountCents, "en", app.user.currency)}` : ""}
+                    {app.termMonths ? ` · ${app.termMonths} months` : ""}
+                    {app.requestedTier ? ` · Wants ${humanize(app.requestedTier)} card` : ""}
                   </p>
                 </div>
               </div>
@@ -86,6 +88,7 @@ export default async function ApplicationsPage() {
                       Card tier
                       <select
                         name="cardTier"
+                        defaultValue={app.requestedTier ?? ""}
                         className="mt-1 block rounded-md border border-gray-300 px-2 py-2 text-sm"
                       >
                         <option value="">—</option>
@@ -192,6 +195,74 @@ export default async function ApplicationsPage() {
                     <span className="mb-2">Frozen</span>
                   </label>
                 </div>
+
+                {isCard(app.productKey) && (
+                  <div className="mt-4 rounded-xl border border-navy-100 bg-navy-50/40 p-4">
+                    <p className="text-xs font-bold uppercase tracking-wide text-navy-700">
+                      Card face
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Shown on the client&apos;s card. These are display-only details — they are
+                      not real card-network credentials and cannot be used to spend anywhere.
+                    </p>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-5">
+                      <label className="text-xs font-semibold text-gray-600 sm:col-span-2">
+                        Card number
+                        <input
+                          name="cardNumber"
+                          defaultValue={app.cardNumber ?? ""}
+                          placeholder="16 digits"
+                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm"
+                        />
+                      </label>
+                      <label className="text-xs font-semibold text-gray-600">
+                        Expires
+                        <input
+                          name="cardExpiry"
+                          defaultValue={app.cardExpiry ?? ""}
+                          placeholder="MM/YY"
+                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm"
+                        />
+                      </label>
+                      <label className="text-xs font-semibold text-gray-600">
+                        Security code
+                        <input
+                          name="cardCvv"
+                          defaultValue={app.cardCvv ?? ""}
+                          placeholder="123"
+                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm"
+                        />
+                      </label>
+                      <label className="text-xs font-semibold text-gray-600">
+                        Tier
+                        <select
+                          name="cardTier"
+                          defaultValue={app.cardTier ?? ""}
+                          className="mt-1 w-full rounded-md border border-gray-300 px-2 py-2 text-sm"
+                        >
+                          <option value="">—</option>
+                          <option value="GOLD">Gold</option>
+                          <option value="PLATINUM">Platinum</option>
+                          <option value="BLACK">Black</option>
+                        </select>
+                      </label>
+                      <label className="text-xs font-semibold text-gray-600 sm:col-span-3">
+                        Name on card
+                        <input
+                          name="cardHolder"
+                          defaultValue={app.cardHolder ?? ""}
+                          placeholder={`${app.user.firstName} ${app.user.lastName}`.toUpperCase()}
+                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm uppercase"
+                        />
+                      </label>
+                      <label className="flex items-end gap-2 text-xs font-semibold text-gray-600 sm:col-span-2">
+                        <input type="checkbox" name="reissue" className="mb-2.5 h-4 w-4" />
+                        <span className="mb-2">Reissue (new number, expiry &amp; code)</span>
+                      </label>
+                    </div>
+                  </div>
+                )}
+
                 <div className="mt-3 flex justify-end">
                   <button className="rounded-full bg-navy-800 px-5 py-2 text-sm font-bold text-white transition hover:bg-navy-700">
                     Save terms

@@ -45,8 +45,11 @@ export default async function ApplyPage({
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-lg flex-1 px-6 py-12">
-        <Link href="/dashboard" className="text-sm font-semibold text-accent-600 hover:text-accent-700">
+      <div className={`mx-auto w-full flex-1 px-6 py-12 ${def.card ? "max-w-3xl" : "max-w-lg"}`}>
+        <Link
+          href={`/product/${def.key}`}
+          className="text-sm font-semibold text-accent-600 hover:text-accent-700"
+        >
           ← {t.bank.back}
         </Link>
         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-9 shadow-sm">
@@ -59,12 +62,22 @@ export default async function ApplyPage({
           </p>
           <ApplyForm
             productKey={type!}
+            productName={label?.title ?? type!}
             showAmount={!!def.amount}
+            showTerm={!!def.term}
+            showTiers={!!def.card}
+            holderName={`${user.firstName} ${user.lastName}`.trim()}
             labels={{
               amount: t.products.amountLabel,
               purpose: t.products.purposeLabel,
               submit: t.products.submit,
               submitting: t.products.applying,
+              chooseTier: t.products.chooseTier,
+              tierHint: t.products.tierHint,
+              term: t.products.termLabel,
+              termMonths: t.products.termMonths,
+              tiers: t.products.tiers,
+              tierBlurbs: t.products.tierBlurbs,
             }}
           />
         </div>

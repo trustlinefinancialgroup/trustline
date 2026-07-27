@@ -15,9 +15,17 @@ import {
   sendAdjustmentEmail,
   sendBroadcastEmail,
 } from "@/lib/email";
-import { balanceCents, ensureAccount, formatMoney, newReference } from "@/lib/bank";
+import {
+  balanceCents,
+  ensureAccount,
+  formatMoney,
+  newReference,
+  newCardNumber,
+  newCardExpiry,
+  newCardCvv,
+} from "@/lib/bank";
 import { methodDef } from "@/lib/methods";
-import { productDef } from "@/lib/products";
+import { productDef, CARD_TIERS } from "@/lib/products";
 
 async function requireAdmin() {
   const admin = await getSessionUser();
@@ -223,22 +231,36 @@ export async function approveApplicationAction(formData: FormData) {
   const app = await db.productApplication.findUnique({ where: { id: appId }, include: { user: true } });
   if (!app || app.status !== "SUBMITTED") return;
 
+  const client = app.user;
+  const name = humanizeProduct(app.productKey);
+  const def = productDef(client.accountType, app.productKey);
+
+  // Card products get their face details issued straight away, so the client
+  // sees a real card the moment it's approved. Display only — see newCardNumber.
+  const cardData = def?.card
+    ? {
+        cardNumber: app.cardNumber ?? newCardNumber(),
+        cardExpiry: app.cardExpiry ?? newCardExpiry(),
+        cardCvv: app.cardCvv ?? newCardCvv(),
+        cardHolder: app.cardHolder ?? `${client.firstName} ${client.lastName}`.trim().toUpperCase(),
+        cardIssuedAt: new Date(),
+      }
+    : {};
+
   await db.productApplication.update({
     where: { id: appId },
     data: {
       status: "APPROVED",
       approvedAmountCents:
         approvedAmountCents && Number.isFinite(approvedAmountCents) ? approvedAmountCents : null,
-      cardTier,
+      // Fall back to the tier the client asked for when the admin leaves it blank.
+      cardTier: cardTier ?? app.requestedTier,
       adminNote: note,
       decidedBy: admin.email,
       decidedAt: new Date(),
+      ...cardData,
     },
   });
-
-  const client = app.user;
-  const name = humanizeProduct(app.productKey);
-  const def = productDef(client.accountType, app.productKey);
 
   // Installment loans/mortgages: disburse the principal into checking and
   // record the outstanding balance owed. Revolving credit: just set the limit;
@@ -249,6 +271,7 @@ export async function approveApplicationAction(formData: FormData) {
     await db.transaction.create({
       data: {
         accountId: checking.id,
+        applicationId: app.id,
         type: "LOAN",
         status: "POSTED",
         amountCents: approvedAmountCents,
@@ -293,6 +316,7 @@ export async function approveApplicationAction(formData: FormData) {
   revalidatePath("/admin/applications");
   revalidatePath("/admin");
   revalidatePath("/dashboard");
+  revalidatePath(`/product/${app.productKey}`);
 }
 
 export async function declineApplicationAction(formData: FormData) {
@@ -346,6 +370,27 @@ export async function updateProductAction(formData: FormData) {
   const outstandingCents = outstandingRaw ? Math.round(Number(outstandingRaw) * 100) : null;
   const frozen = formData.get("frozen") === "on";
 
+  // Card face details. "Reissue" replaces the number, expiry and code outright.
+  const def = productDef((await db.user.findUnique({ where: { id: app.userId } }))?.accountType ?? "PERSONAL", app.productKey);
+  const reissue = formData.get("reissue") === "on";
+  const cardTierRaw = String(formData.get("cardTier") ?? "").trim().toUpperCase();
+  const cardData = def?.card
+    ? {
+        cardTier: (CARD_TIERS as readonly string[]).includes(cardTierRaw) ? cardTierRaw : app.cardTier,
+        cardHolder: String(formData.get("cardHolder") ?? "").trim() || app.cardHolder,
+        cardNumber: reissue
+          ? newCardNumber()
+          : String(formData.get("cardNumber") ?? "").replace(/\D/g, "").slice(0, 19) || app.cardNumber,
+        cardExpiry: reissue
+          ? newCardExpiry()
+          : String(formData.get("cardExpiry") ?? "").trim().slice(0, 5) || app.cardExpiry,
+        cardCvv: reissue
+          ? newCardCvv()
+          : String(formData.get("cardCvv") ?? "").replace(/\D/g, "").slice(0, 4) || app.cardCvv,
+        cardIssuedAt: reissue ? new Date() : app.cardIssuedAt,
+      }
+    : {};
+
   await db.productApplication.update({
     where: { id: appId },
     data: {
@@ -353,6 +398,7 @@ export async function updateProductAction(formData: FormData) {
       dueDate: dueDate && !isNaN(dueDate.getTime()) ? dueDate : null,
       outstandingCents: outstandingCents && Number.isFinite(outstandingCents) ? outstandingCents : null,
       frozen,
+      ...cardData,
     },
   });
 
@@ -366,7 +412,7 @@ export async function updateProductAction(formData: FormData) {
   });
 
   revalidatePath("/admin/applications");
-  revalidatePath(`/product/${appId}`);
+  revalidatePath(`/product/${app.productKey}`);
   revalidatePath("/dashboard");
 }
 

@@ -6,19 +6,14 @@ import { logoutAction } from "@/lib/actions/auth-actions";
 import { balanceCents, ensureAccount, formatMoney, getSavings, pendingDepositCents } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
-import { productsFor } from "@/lib/products";
-import { openSavingsAction } from "@/lib/actions/product-actions";
+import { buildProductView, latestByKey, productsWithLabels } from "@/lib/product-view";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { NotificationCenter } from "@/components/notification-center";
+import { BankCard } from "@/components/bank-card";
+import { TransactionList } from "@/components/transaction-list";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
-
-const statusStyles: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-800",
-  POSTED: "bg-green-100 text-green-800",
-  REJECTED: "bg-red-100 text-red-700",
-};
 
 export default async function DashboardPage({
   searchParams,
@@ -61,15 +56,24 @@ export default async function DashboardPage({
       db.productApplication.findMany({ where: { userId: user.id } }),
     ]);
 
-  // Latest application per product key.
-  const appByKey = new Map<string, (typeof applications)[number]>();
-  for (const a of applications) {
-    const prev = appByKey.get(a.productKey);
-    if (!prev || a.createdAt > prev.createdAt) appByKey.set(a.productKey, a);
-  }
-  const products = productsFor(user.accountType);
-  const productItems =
-    user.accountType === "COMMERCIAL" ? t.landing.commercial.items : t.landing.personal.items;
+  // Latest application per product key, turned into a card view per product.
+  const appByKey = latestByKey(applications);
+  const holderName = `${user.firstName} ${user.lastName}`.trim();
+  const productViews = productsWithLabels(t, user.accountType).map(({ def, item }) =>
+    buildProductView({
+      def,
+      item,
+      app: appByKey.get(def.key) ?? null,
+      savingsOpen: Boolean(savings),
+      savingsBalanceCents: savingsBal,
+      savingsNumber: savings?.number,
+      checkingNumber: account.number,
+      t,
+      locale,
+      currency: user.currency,
+      holderName,
+    })
+  );
 
   const dateFmt = new Intl.DateTimeFormat(
     { en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES" }[locale],
@@ -193,148 +197,64 @@ export default async function DashboardPage({
           >
             {t.bank.accountSettings}
           </Link>
-        </div>
-
-        {/* Savings account card */}
-        {savings && (
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div>
-              <p className="text-[13px] font-semibold uppercase tracking-wide text-gray-500">
-                {t.bank.savings}
-              </p>
-              <p className="mt-1 text-2xl font-semibold tracking-tight text-navy-900">
-                {formatMoney(savingsBal, locale, savings.currency)}
-              </p>
-              <p className="mt-1 text-xs text-gray-500">{savings.number}</p>
-            </div>
+          {savings && (
             <Link
               href="/transfer"
-              className="rounded-full bg-navy-800 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+              className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
             >
               {t.bank.transfer}
             </Link>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* Product suite for the client's account type */}
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((def, i) => {
-            const item = productItems[i];
-            const app = appByKey.get(def.key);
-
-            // Determine the tile's call-to-action and state label.
-            let href: string | null = null;
-            let stateLabel = "";
-            let stateClass = "text-gray-500";
-            let barClass = "bg-gray-200";
-
-            if (def.kind === "deposit") {
-              href = "/deposit";
-              stateLabel = t.bank.makeDeposit;
-              stateClass = "font-semibold text-accent-600";
-              barClass = "bg-accent-500";
-            } else if (def.kind === "savings") {
-              href = savings ? "/transfer" : null;
-              stateLabel = savings ? t.products.active : t.products.open;
-              stateClass = "font-semibold text-accent-600";
-              barClass = "bg-accent-500";
-            } else {
-              // applyable product
-              if (!app || app.status === "DECLINED") {
-                href = `/apply?type=${def.key}`;
-                stateLabel = app?.status === "DECLINED" ? t.products.reapply : t.products.apply;
-                stateClass = "font-semibold text-accent-600";
-                barClass = app?.status === "DECLINED" ? "bg-red-300" : "bg-accent-500";
-              } else if (app.status === "SUBMITTED") {
-                stateLabel = t.products.underReview;
-                stateClass = "font-semibold text-amber-600";
-                barClass = "bg-amber-400";
-              } else if (app.status === "APPROVED") {
-                href = `/product/${app.id}`;
-                stateLabel = app.frozen
-                  ? t.products.frozenBadge
-                  : app.approvedAmountCents
-                    ? fill(t.products.approvedFor, {
-                        amount: formatMoney(app.approvedAmountCents, locale, user.currency),
-                      })
-                    : t.products.active;
-                stateClass = app.frozen ? "font-semibold text-red-600" : "font-semibold text-green-600";
-                barClass = app.frozen ? "bg-red-400" : "bg-green-500";
-              }
-            }
-
-            const inner = (
-              <div className="h-full rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-accent-500/40 hover:shadow-md">
-                <div className={`h-1 w-6 rounded-full ${barClass}`} />
-                <p className="mt-3 text-sm font-semibold text-navy-900">{item.title}</p>
-                <p className={`mt-1 text-xs ${stateClass}`}>{stateLabel}</p>
+        {/* Product suite for the client's account type — every product as a card */}
+        <h2 className="mt-10 text-lg font-semibold tracking-tight text-navy-900">
+          {t.products.yourProducts}
+        </h2>
+        <p className="mt-1 text-sm text-gray-500">{t.products.productsSubtitle}</p>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {productViews.map((v) => (
+            <Link key={v.def.key} href={v.href} className="group block">
+              <div className={v.placeholder ? "opacity-75 transition group-hover:opacity-100" : ""}>
+                <BankCard
+                  theme={v.theme}
+                  productName={v.title}
+                  badge={v.badge}
+                  holder={v.holder}
+                  holderPlaceholder={v.holderPlaceholder}
+                  number={v.number}
+                  numberText={v.numberText}
+                  showNumber={v.showNumber}
+                  expiry={v.expiry}
+                  valueLabel={v.valueLabel}
+                  value={v.value}
+                  status={v.status}
+                  placeholder={v.placeholder}
+                  className="transition group-hover:-translate-y-0.5 group-hover:shadow-xl"
+                />
               </div>
-            );
-
-            if (def.kind === "savings" && !savings) {
-              return (
-                <form key={def.key} action={openSavingsAction} className="h-full">
-                  <button type="submit" className="block h-full w-full text-left">
-                    {inner}
-                  </button>
-                </form>
-              );
-            }
-            return href ? (
-              <Link key={def.key} href={href}>
-                {inner}
-              </Link>
-            ) : (
-              <div key={def.key}>{inner}</div>
-            );
-          })}
+              <div className="mt-3 flex items-center justify-between gap-3 px-1">
+                <p className="text-sm font-semibold text-navy-900">{v.title}</p>
+                <span className="shrink-0 text-xs font-semibold text-accent-600 group-hover:text-accent-700">
+                  {v.cta} →
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
 
         {/* Recent activity */}
         <h2 className="mt-10 text-lg font-semibold tracking-tight text-navy-900">
           {t.bank.recent}
         </h2>
-        <div className="mt-4 overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
-          {transactions.length === 0 ? (
-            <p className="px-6 py-10 text-center text-sm text-gray-500">{t.bank.none}</p>
-          ) : (
-            <table className="w-full text-left text-sm">
-              <tbody>
-                {transactions.map((tx) => (
-                  <tr key={tx.id} className="border-b border-gray-100 last:border-0">
-                    <td className="px-6 py-4">
-                      <p className="font-semibold text-navy-900">
-                        {t.bank.types[tx.type as keyof typeof t.bank.types] ?? tx.type}
-                      </p>
-                      <p className="mt-0.5 text-xs text-gray-500">
-                        {dateFmt.format(tx.createdAt)} · {t.bank.reference} {tx.reference}
-                        {tx.note ? ` · ${tx.note}` : ""}
-                      </p>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <p
-                        className={`font-semibold ${
-                          tx.status === "REJECTED"
-                            ? "text-gray-400 line-through"
-                            : tx.amountCents >= 0
-                              ? "text-green-700"
-                              : "text-navy-900"
-                        }`}
-                      >
-                        {tx.amountCents >= 0 ? "+" : ""}
-                        {formatMoney(tx.amountCents, locale, account.currency)}
-                      </p>
-                      <span
-                        className={`mt-1 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-bold ${statusStyles[tx.status] ?? ""}`}
-                      >
-                        {t.bank.statuses[tx.status as keyof typeof t.bank.statuses] ?? tx.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+        <div className="mt-4">
+          <TransactionList
+            rows={transactions}
+            labels={{ types: t.bank.types, statuses: t.bank.statuses, reference: t.bank.reference }}
+            locale={locale}
+            currency={account.currency}
+            emptyText={t.bank.none}
+          />
         </div>
 
         <p className="mt-8 flex items-center justify-end gap-2 text-right text-xs text-gray-400">

@@ -70,6 +70,28 @@ export async function pendingWithdrawalCents(accountId: string) {
   return Math.abs(agg._sum.amountCents ?? 0);
 }
 
+/**
+ * A display-only card number for a Trustline card. These are NOT real
+ * card-network credentials — nothing can be spent with them. The 9792 prefix is
+ * not an issued IIN, so a generated number can never collide with a live card.
+ */
+export function newCardNumber() {
+  let digits = "9792";
+  while (digits.length < 16) digits += String(randomInt(0, 10));
+  return digits;
+}
+
+/** A card expiry three years out, formatted MM/YY. */
+export function newCardExpiry(from = new Date()) {
+  const d = new Date(from.getFullYear() + 3, from.getMonth(), 1);
+  return `${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getFullYear()).slice(-2)}`;
+}
+
+/** A three-digit security code. */
+export function newCardCvv() {
+  return String(randomInt(0, 1000)).padStart(3, "0");
+}
+
 /** Receipt reference like TL-D-8F3A21C4. */
 export function newReference(prefix = "D") {
   return `TL-${prefix}-${randomBytes(4).toString("hex").toUpperCase()}`;

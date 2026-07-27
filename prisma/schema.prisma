@@ -95,7 +95,8 @@ model ProductApplication {
   termMonths         Int?
   purpose            String?
   approvedAmountCents Int? // approved limit/amount
-  cardTier           String? // GOLD | PLATINUM | BLACK (cards)
+  cardTier           String? // GOLD | PLATINUM | BLACK (cards) — as approved
+  requestedTier      String? // tier the client asked for on the application
   adminNote          String?
   decidedBy          String?
   decidedAt          DateTime?
@@ -104,7 +105,16 @@ model ProductApplication {
   dueDate            DateTime? // next payment due
   outstandingCents   Int? // current balance / accrued interest
   frozen             Boolean   @default(false) // cards: client or admin freeze
+  // Card face details, issued by an admin. DISPLAY ONLY — these are not real
+  // card-network credentials and cannot be used to spend anywhere.
+  cardNumber         String? // 16 digits, no spaces
+  cardExpiry         String? // "MM/YY"
+  cardCvv            String? // 3 digits
+  cardHolder         String? // name embossed on the card
+  cardIssuedAt       DateTime?
   createdAt          DateTime  @default(now())
+
+  transactions Transaction[]
 
   @@index([userId, status])
 }
@@ -161,6 +171,11 @@ model Transaction {
   accountId String
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
+  // Ties a ledger row to the product it belongs to (card draw, loan payment…)
+  // so each product page can show its own transaction history.
+  applicationId String?
+  application   ProductApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
   type        String // DEPOSIT | WITHDRAWAL | ADJUSTMENT
   status      String @default("PENDING") // PENDING | POSTED | REJECTED
   amountCents Int // credits positive, debits negative
@@ -180,6 +195,8 @@ model Transaction {
 
   createdAt DateTime  @default(now())
   postedAt  DateTime?
+
+  @@index([applicationId, createdAt])
 }
 
 model KycDocument {
