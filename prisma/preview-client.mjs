@@ -7,12 +7,29 @@ import { randomInt } from "crypto";
 
 const db = new PrismaClient();
 const EMAIL = "preview-check@trustline.local";
+const APPLICANT = "preview-applicant@trustline.local";
 const PASSWORD = "PreviewCheck123";
 const mode = process.argv[2] ?? "create";
 
 if (mode === "destroy") {
-  const n = await db.user.deleteMany({ where: { email: EMAIL } });
+  const n = await db.user.deleteMany({ where: { email: { in: [EMAIL, APPLICANT] } } });
   console.log("removed:", n.count);
+} else if (mode === "applicant") {
+  // A verified-email applicant sitting on the identity step, for KYC checks.
+  await db.user.deleteMany({ where: { email: APPLICANT } });
+  const user = await db.user.create({
+    data: {
+      email: APPLICANT,
+      passwordHash: await bcrypt.hash(PASSWORD, 10),
+      firstName: "Preview",
+      lastName: "Applicant",
+      phone: "+10000000001",
+      role: "CLIENT",
+      status: "PENDING",
+      emailVerified: true,
+    },
+  });
+  console.log("applicant:", user.email, PASSWORD);
 } else {
   await db.user.deleteMany({ where: { email: EMAIL } });
   const user = await db.user.create({

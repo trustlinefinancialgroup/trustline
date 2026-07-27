@@ -87,8 +87,12 @@ export default async function OnboardingPage() {
               body={t.onboarding.kycBody}
               docTypeLabel={t.onboarding.docTypeLabel}
               docTypes={t.onboarding.docTypes}
-              uploadLabel={t.onboarding.uploadLabel}
               uploadHint={t.onboarding.uploadHint}
+              frontLabel={t.onboarding.uploadFront}
+              backLabel={t.onboarding.uploadBack}
+              selfieLabel={t.onboarding.uploadSelfie}
+              selfieHint={t.onboarding.selfieHint}
+              passportNote={t.onboarding.passportNote}
               submitLabel={t.onboarding.submitKyc}
               submittingLabel={t.onboarding.submittingKyc}
               chooseFileLabel={t.common.chooseFile}

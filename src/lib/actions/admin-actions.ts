@@ -24,6 +24,7 @@ import {
   newCardExpiry,
   newCardCvv,
 } from "@/lib/bank";
+import { deleteFiles, KYC_BUCKET } from "@/lib/storage";
 import { methodDef } from "@/lib/methods";
 import { productDef, CARD_TIERS } from "@/lib/products";
 
@@ -43,9 +44,10 @@ export async function approveAccountAction(formData: FormData) {
     where: { id: userId },
     include: { kycDocuments: true },
   });
-  // Approval requires a verified email and at least one identity document.
-  if (!user || user.status !== "PENDING" || !user.emailVerified || user.kycDocuments.length === 0)
-    return;
+  // Approval requires a verified email and identity documents — either still
+  // on file, or already reviewed and purged by an admin.
+  const hasDocs = user ? user.kycDocuments.length > 0 || user.kycDocsDeletedAt !== null : false;
+  if (!user || user.status !== "PENDING" || !user.emailVerified || !hasDocs) return;
 
   await db.user.update({
     where: { id: userId },
@@ -208,6 +210,48 @@ export async function adjustBalanceAction(formData: FormData) {
 
   revalidatePath("/admin/clients");
   revalidatePath("/dashboard");
+}
+
+// ---------- identity documents ----------
+
+/**
+ * Purges an applicant's identity images once review is finished: the files
+ * leave the bucket and the rows leave the database, so nothing large is kept.
+ * The audit log records what was removed, which is the only trace that stays.
+ */
+export async function deleteKycDocumentsAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId"));
+  const docId = String(formData.get("docId") || "");
+
+  const docs = await db.kycDocument.findMany({
+    where: docId ? { id: docId, userId } : { userId },
+  });
+  if (docs.length === 0) return;
+
+  // Storage first: if it fails we keep the rows so nothing is orphaned.
+  await deleteFiles(KYC_BUCKET, docs.map((d) => d.storedName));
+  await db.kycDocument.deleteMany({ where: { id: { in: docs.map((d) => d.id) } } });
+
+  const remaining = await db.kycDocument.count({ where: { userId } });
+  if (remaining === 0) {
+    await db.user.update({ where: { id: userId }, data: { kycDocsDeletedAt: new Date() } });
+  }
+
+  const client = await db.user.findUnique({ where: { id: userId } });
+  await audit({
+    actorId: admin.id,
+    actorLabel: admin.email,
+    action: "KYC_DELETED",
+    targetType: "USER",
+    targetId: userId,
+    details: `Deleted ${docs.length} identity file(s) for ${client?.email ?? userId}: ${docs
+      .map((d) => `${d.docType}/${d.side} ${d.fileName} (${Math.round(d.sizeBytes / 1024)} KB)`)
+      .join("; ")}`,
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/clients");
 }
 
 // ---------- product applications ----------

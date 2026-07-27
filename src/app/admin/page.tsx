@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import {
   approveAccountAction,
   rejectAccountAction,
+  deleteKycDocumentsAction,
 } from "@/lib/actions/admin-actions";
 
 const DOC_LABELS: Record<string, string> = {
@@ -10,6 +11,14 @@ const DOC_LABELS: Record<string, string> = {
   PASSPORT: "Passport",
 };
 
+const SIDE_LABELS: Record<string, string> = {
+  FRONT: "Front",
+  BACK: "Back",
+  SELFIE: "Selfie with document",
+};
+
+const SIDE_ORDER = ["FRONT", "BACK", "SELFIE"];
+
 export default async function ReviewQueuePage() {
   const pending = await db.user.findMany({
     where: { status: "PENDING", role: "CLIENT" },
@@ -17,8 +26,12 @@ export default async function ReviewQueuePage() {
     orderBy: { createdAt: "asc" },
   });
 
-  const ready = pending.filter((u) => u.emailVerified && u.kycDocuments.length > 0);
-  const waiting = pending.filter((u) => !u.emailVerified || u.kycDocuments.length === 0);
+  // Documents purged after review still count as submitted, so an applicant
+  // doesn't fall back into "awaiting steps" once their files are deleted.
+  const hasDocs = (u: (typeof pending)[number]) =>
+    u.kycDocuments.length > 0 || u.kycDocsDeletedAt !== null;
+  const ready = pending.filter((u) => u.emailVerified && hasDocs(u));
+  const waiting = pending.filter((u) => !u.emailVerified || !hasDocs(u));
 
   return (
     <div>
@@ -59,19 +72,65 @@ export default async function ReviewQueuePage() {
                     {u.locale.toUpperCase()}
                   </p>
                 </div>
-                <div className="text-sm">
-                  <p className="font-semibold text-navy-700">Identity documents</p>
-                  {u.kycDocuments.map((d) => (
-                    <a
-                      key={d.id}
-                      href={`/api/files/kyc/${d.storedName}`}
-                      target="_blank"
-                      className="block text-accent-600 hover:underline"
-                    >
-                      {DOC_LABELS[d.docType] ?? d.docType} — {d.fileName} (
-                      {Math.round(d.sizeBytes / 1024)} KB)
-                    </a>
-                  ))}
+                <div className="min-w-[16rem] text-sm">
+                  <p className="font-semibold text-navy-700">
+                    Identity documents
+                    {u.kycDocuments.length > 0 && (
+                      <span className="ml-2 font-normal text-gray-400">
+                        {DOC_LABELS[u.kycDocuments[0].docType] ?? u.kycDocuments[0].docType} ·{" "}
+                        {Math.round(
+                          u.kycDocuments.reduce((s, d) => s + d.sizeBytes, 0) / 1024
+                        )}{" "}
+                        KB total
+                      </span>
+                    )}
+                  </p>
+                  {u.kycDocuments.length === 0 ? (
+                    <p className="mt-1 text-xs text-gray-500">
+                      {u.kycDocsDeletedAt
+                        ? `Deleted after review on ${u.kycDocsDeletedAt.toLocaleDateString()}`
+                        : "None uploaded"}
+                    </p>
+                  ) : (
+                    <>
+                      <ul className="mt-1 space-y-1">
+                        {[...u.kycDocuments]
+                          .sort(
+                            (a, b) => SIDE_ORDER.indexOf(a.side) - SIDE_ORDER.indexOf(b.side)
+                          )
+                          .map((d) => (
+                            <li key={d.id} className="flex items-center gap-2">
+                              <a
+                                href={`/api/files/kyc/${d.storedName}`}
+                                target="_blank"
+                                className="text-accent-600 hover:underline"
+                              >
+                                {SIDE_LABELS[d.side] ?? d.side}
+                              </a>
+                              <span className="text-xs text-gray-400">
+                                {Math.round(d.sizeBytes / 1024)} KB
+                              </span>
+                              <form action={deleteKycDocumentsAction} className="ml-auto">
+                                <input type="hidden" name="userId" value={u.id} />
+                                <input type="hidden" name="docId" value={d.id} />
+                                <button
+                                  title="Delete this file permanently"
+                                  className="rounded px-1.5 text-xs font-bold text-gray-400 transition hover:bg-red-50 hover:text-red-600"
+                                >
+                                  ✕
+                                </button>
+                              </form>
+                            </li>
+                          ))}
+                      </ul>
+                      <form action={deleteKycDocumentsAction} className="mt-2">
+                        <input type="hidden" name="userId" value={u.id} />
+                        <button className="rounded-md border border-red-200 px-2.5 py-1 text-xs font-bold text-red-700 transition hover:bg-red-50">
+                          Delete all after review
+                        </button>
+                      </form>
+                    </>
+                  )}
                 </div>
               </div>
 

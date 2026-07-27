@@ -16,7 +16,7 @@ import {
 } from "@/lib/auth";
 import { audit } from "@/lib/audit";
 import { sendWelcomeEmail, sendKycReceivedEmail, sendPasswordResetEmail } from "@/lib/email";
-import { uploadFile, KYC_BUCKET } from "@/lib/storage";
+import { uploadFile, deleteFiles, KYC_BUCKET } from "@/lib/storage";
 import { getDict, getLocale } from "@/i18n/server";
 
 export type FormState = { error?: string; ok?: string } | null;
@@ -147,31 +147,45 @@ export async function submitKycAction(_prev: FormState, formData: FormData): Pro
     ? docTypeRaw
     : "GOVERNMENT_ID";
 
-  const file = formData.get("document");
-  if (!(file instanceof File) || file.size === 0) {
-    return { error: t.errors.needFile };
-  }
-  if (file.size > MAX_UPLOAD_BYTES) {
-    return { error: t.errors.fileTooBig };
-  }
-  if (!ALLOWED_MIME.includes(file.type)) {
-    return { error: t.errors.fileType };
+  // Front, back and a selfie holding the document. A passport has no back.
+  const wanted: { side: string; field: string }[] = [
+    { side: "FRONT", field: "documentFront" },
+    ...(docType === "PASSPORT" ? [] : [{ side: "BACK", field: "documentBack" }]),
+    { side: "SELFIE", field: "documentSelfie" },
+  ];
+
+  const uploads: { side: string; file: File }[] = [];
+  for (const { side, field } of wanted) {
+    const file = formData.get(field);
+    if (!(file instanceof File) || file.size === 0) return { error: t.errors.needFile };
+    if (file.size > MAX_UPLOAD_BYTES) return { error: t.errors.fileTooBig };
+    if (!ALLOWED_MIME.includes(file.type)) return { error: t.errors.fileType };
+    uploads.push({ side, file });
   }
 
-  const ext = path.extname(file.name).toLowerCase() || ".bin";
-  const storedName = `${randomBytes(16).toString("hex")}${ext}`;
-  await uploadFile(KYC_BUCKET, storedName, Buffer.from(await file.arrayBuffer()), file.type);
+  // Replace anything from an earlier attempt so a resubmission doesn't stack up.
+  const previous = await db.kycDocument.findMany({ where: { userId: user.id } });
+  if (previous.length > 0) {
+    await deleteFiles(KYC_BUCKET, previous.map((d) => d.storedName)).catch(() => {});
+    await db.kycDocument.deleteMany({ where: { userId: user.id } });
+  }
 
-  await db.kycDocument.create({
-    data: {
-      userId: user.id,
-      docType,
-      fileName: file.name,
-      storedName,
-      mimeType: file.type,
-      sizeBytes: file.size,
-    },
-  });
+  for (const { side, file } of uploads) {
+    const ext = path.extname(file.name).toLowerCase() || ".bin";
+    const storedName = `${randomBytes(16).toString("hex")}${ext}`;
+    await uploadFile(KYC_BUCKET, storedName, Buffer.from(await file.arrayBuffer()), file.type);
+    await db.kycDocument.create({
+      data: {
+        userId: user.id,
+        docType,
+        side,
+        fileName: file.name,
+        storedName,
+        mimeType: file.type,
+        sizeBytes: file.size,
+      },
+    });
+  }
 
   await audit({
     actorId: user.id,
@@ -179,7 +193,7 @@ export async function submitKycAction(_prev: FormState, formData: FormData): Pro
     action: "KYC_SUBMITTED",
     targetType: "USER",
     targetId: user.id,
-    details: `Identity document submitted (${docType})`,
+    details: `Identity documents submitted (${docType}: ${uploads.map((u) => u.side).join(", ")})`,
   });
 
   await sendKycReceivedEmail(user.email, user.firstName, user.locale);

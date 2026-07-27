@@ -28,6 +28,16 @@ export async function uploadFile(
   if (error) throw new Error(`Upload failed: ${error.message}`);
 }
 
+/**
+ * Permanently removes files from a bucket. Used when an admin purges identity
+ * documents after review — the bytes are gone, only the audit trail remains.
+ */
+export async function deleteFiles(bucket: string, paths: string[]) {
+  if (paths.length === 0) return;
+  const { error } = await adminClient().storage.from(bucket).remove(paths);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
+}
+
 /** Returns the file bytes, or null if missing. */
 export async function downloadFile(bucket: string, path: string): Promise<Buffer | null> {
   const { data, error } = await adminClient().storage.from(bucket).download(path);

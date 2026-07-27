@@ -1,16 +1,22 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitKycAction, type FormState } from "@/lib/actions/auth-actions";
 import { FileField } from "@/components/file-field";
+
+const ACCEPT = "image/jpeg,image/png,image/webp,application/pdf";
 
 export function KycStep({
   title,
   body,
   docTypeLabel,
   docTypes,
-  uploadLabel,
   uploadHint,
+  frontLabel,
+  backLabel,
+  selfieLabel,
+  selfieHint,
+  passportNote,
   submitLabel,
   submittingLabel,
   chooseFileLabel,
@@ -20,8 +26,12 @@ export function KycStep({
   body: string;
   docTypeLabel: string;
   docTypes: Record<string, string>;
-  uploadLabel: string;
   uploadHint: string;
+  frontLabel: string;
+  backLabel: string;
+  selfieLabel: string;
+  selfieHint: string;
+  passportNote: string;
   submitLabel: string;
   submittingLabel: string;
   chooseFileLabel: string;
@@ -31,6 +41,8 @@ export function KycStep({
     submitKycAction,
     null
   );
+  const [docType, setDocType] = useState(Object.keys(docTypes)[0] ?? "GOVERNMENT_ID");
+  const isPassport = docType === "PASSPORT";
 
   return (
     <div>
@@ -49,6 +61,8 @@ export function KycStep({
           {docTypeLabel}
           <select
             name="docType"
+            value={docType}
+            onChange={(e) => setDocType(e.target.value)}
             className="mt-1.5 w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-[15px] text-navy-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
           >
             {Object.entries(docTypes).map(([value, label]) => (
@@ -60,15 +74,43 @@ export function KycStep({
         </label>
 
         <div className="block text-[13px] font-semibold text-navy-800">
-          {uploadLabel}
+          {frontLabel}
           <FileField
-            name="document"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
+            name="documentFront"
+            accept={ACCEPT}
             chooseLabel={chooseFileLabel}
             emptyLabel={noFileLabel}
           />
-          <span className="mt-1.5 block text-xs font-normal text-gray-500">{uploadHint}</span>
         </div>
+
+        {isPassport ? (
+          <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-3.5 py-2.5 text-xs font-normal text-navy-700">
+            {passportNote}
+          </p>
+        ) : (
+          <div className="block text-[13px] font-semibold text-navy-800">
+            {backLabel}
+            <FileField
+              name="documentBack"
+              accept={ACCEPT}
+              chooseLabel={chooseFileLabel}
+              emptyLabel={noFileLabel}
+            />
+          </div>
+        )}
+
+        <div className="block text-[13px] font-semibold text-navy-800">
+          {selfieLabel}
+          <FileField
+            name="documentSelfie"
+            accept={ACCEPT}
+            chooseLabel={chooseFileLabel}
+            emptyLabel={noFileLabel}
+          />
+          <span className="mt-1.5 block text-xs font-normal text-gray-500">{selfieHint}</span>
+        </div>
+
+        <p className="text-xs font-normal text-gray-500">{uploadHint}</p>
 
         {state?.error && (
           <p className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">

@@ -28,6 +28,9 @@ model User {
   locale       String  @default("en") // en | fr | de | es — used for emails too
   currency     String  @default("USD") // USD | EUR — the client's account currency
   securityWordHash String? // hashed; required to confirm sensitive actions
+  // Set when an admin purges the applicant's identity images after review.
+  // The audit log keeps a permanent record of what was held and removed.
+  kycDocsDeletedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -206,12 +209,17 @@ model KycDocument {
   id         String   @id @default(cuid())
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  docType    String // GOVERNMENT_ID | PROOF_OF_ADDRESS | OTHER
+  docType    String // GOVERNMENT_ID | DRIVERS_LICENSE | PASSPORT
+  // Which image this is: the document's front, its back, or the applicant
+  // holding it. Rows created before this field existed are fronts.
+  side       String   @default("FRONT") // FRONT | BACK | SELFIE
   fileName   String // original name as uploaded
-  storedName String // randomized name on disk
+  storedName String // randomized name in the bucket
   mimeType   String
   sizeBytes  Int
   uploadedAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model VerificationToken {

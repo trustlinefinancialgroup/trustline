@@ -4,7 +4,14 @@ import {
   blockAccountAction,
   unblockAccountAction,
   adjustBalanceAction,
+  deleteKycDocumentsAction,
 } from "@/lib/actions/admin-actions";
+
+const SIDE_LABELS: Record<string, string> = {
+  FRONT: "Front",
+  BACK: "Back",
+  SELFIE: "Selfie",
+};
 
 const statusStyles: Record<string, string> = {
   ACTIVE: "bg-green-100 text-green-800",
@@ -16,7 +23,7 @@ const statusStyles: Record<string, string> = {
 export default async function ClientsPage() {
   const clients = await db.user.findMany({
     where: { role: "CLIENT" },
-    include: { accounts: true },
+    include: { accounts: true, kycDocuments: true },
     orderBy: { createdAt: "desc" },
   });
 
@@ -74,6 +81,35 @@ export default async function ClientsPage() {
                   </p>
                   {u.statusReason && (
                     <p className="mt-1 text-xs text-gray-500">{u.statusReason}</p>
+                  )}
+                  {u.kycDocuments.length > 0 && (
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="font-semibold text-navy-700">Identity files:</span>
+                      {u.kycDocuments.map((d) => (
+                        <a
+                          key={d.id}
+                          href={`/api/files/kyc/${d.storedName}`}
+                          target="_blank"
+                          className="text-accent-600 hover:underline"
+                        >
+                          {SIDE_LABELS[d.side] ?? d.side}
+                        </a>
+                      ))}
+                      <span className="text-gray-400">
+                        {Math.round(u.kycDocuments.reduce((s, d) => s + d.sizeBytes, 0) / 1024)} KB
+                      </span>
+                      <form action={deleteKycDocumentsAction}>
+                        <input type="hidden" name="userId" value={u.id} />
+                        <button className="rounded-md border border-red-200 px-2 py-0.5 font-bold text-red-700 transition hover:bg-red-50">
+                          Delete files
+                        </button>
+                      </form>
+                    </div>
+                  )}
+                  {u.kycDocuments.length === 0 && u.kycDocsDeletedAt && (
+                    <p className="mt-2 text-xs text-gray-400">
+                      Identity files deleted {u.kycDocsDeletedAt.toLocaleDateString()}
+                    </p>
                   )}
                 </div>
                 <div className="text-right">
