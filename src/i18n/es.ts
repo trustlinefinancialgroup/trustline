@@ -788,6 +788,35 @@ export const es: Dict = {
     footer:
       "Este extracto se genera a partir del libro mayor de tu cuenta Trustline. Si algo no cuadra, escribe a support@trustlinefinancialgroup.com en un plazo de 60 días.",
   },
+  twoFactor: {
+    title: "Autenticación en dos pasos",
+    settingsDesc:
+      "Pedir un código de un solo uso enviado por correo cada vez que inicies sesión. Tu contraseña por sí sola dejará de bastar para entrar en tu cuenta.",
+    statusOn: "Activada",
+    statusOff: "Desactivada",
+    enable: "Activar dos pasos",
+    disable: "Desactivar dos pasos",
+    enabled: "La autenticación en dos pasos está activada. Te pediremos un código la próxima vez que entres.",
+    disabled: "La autenticación en dos pasos está desactivada.",
+    confirmWithPassword: "Tu contraseña (para confirmar)",
+    onSince: "Activada desde el {date}",
+    recommendation: "Te recomendamos dejarla activada.",
+    checkTitle: "Revisa tu correo",
+    checkBody:
+      "Hemos enviado un código de seis dígitos a {email}. Introdúcelo abajo para terminar de entrar — caduca en 10 minutos.",
+    codeLabel: "Código de seis dígitos",
+    verify: "Verificar y entrar",
+    verifying: "Verificando…",
+    resend: "Enviar un código nuevo",
+    resent: "Un código nuevo va en camino.",
+    cancel: "Usar otra cuenta",
+    wrongCode: "Ese código no es correcto. Revisa tu correo e inténtalo de nuevo.",
+    tooManyAttempts:
+      "Demasiados códigos incorrectos. Por tu seguridad hemos cancelado este inicio de sesión: empieza de nuevo.",
+    expired: "Este inicio de sesión ha caducado. Vuelve a entrar.",
+    noEmailNote:
+      "¿No te llega? Mira en spam o pide uno nuevo. Los códigos van a la dirección de correo de tu cuenta.",
+  },
   account: {
     title: "Ajustes de la cuenta",
     changePassword: "Cambiar contraseña",
@@ -856,6 +885,8 @@ export const es: Dict = {
       PASSWORD_RESET_REQUESTED: "Restablecimiento de contraseña solicitado",
       PASSWORD_RESET_COMPLETED: "Contraseña restablecida",
       SECURITY_WORD_SET: "Palabra de seguridad configurada",
+      TWO_FACTOR_ENABLED: "Autenticación en dos pasos activada",
+      TWO_FACTOR_DISABLED: "Autenticación en dos pasos desactivada",
       SAVINGS_OPENED: "Cuenta de ahorro abierta",
       CARD_FROZEN: "Tarjeta bloqueada",
       CARD_UNFROZEN: "Tarjeta desbloqueada",

@@ -67,3 +67,52 @@ export async function getSessionUser() {
 export function isAdmin(role: string | undefined | null) {
   return role === "ADMIN" || role === "SUPER_ADMIN";
 }
+
+// ---------- two-factor: the half-authenticated state between steps ----------
+
+const PENDING_COOKIE = "tl_2fa";
+const PENDING_MINUTES = 10;
+export const MAX_2FA_ATTEMPTS = 5;
+
+export type PendingPayload = { userId: string; attempts: number };
+
+/**
+ * Set once the password is accepted but before the code is. It is NOT a
+ * session: it carries no role and nothing reads it as authentication. The
+ * attempt count lives inside the signed token so it cannot be reset by
+ * clearing a cookie value.
+ */
+export async function setPendingTwoFactor(userId: string, attempts = 0) {
+  const token = await new SignJWT({ userId, attempts, kind: "2fa" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(`${PENDING_MINUTES}m`)
+    .sign(secretKey());
+
+  const jar = await cookies();
+  jar.set(PENDING_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: PENDING_MINUTES * 60,
+  });
+}
+
+export async function getPendingTwoFactor(): Promise<PendingPayload | null> {
+  const jar = await cookies();
+  const token = jar.get(PENDING_COOKIE)?.value;
+  if (!token) return null;
+  try {
+    const { payload } = await jwtVerify(token, secretKey());
+    if (payload.kind !== "2fa") return null;
+    return { userId: payload.userId as string, attempts: Number(payload.attempts ?? 0) };
+  } catch {
+    return null;
+  }
+}
+
+export async function clearPendingTwoFactor() {
+  const jar = await cookies();
+  jar.delete(PENDING_COOKIE);
+}

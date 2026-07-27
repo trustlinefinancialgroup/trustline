@@ -788,6 +788,35 @@ export const fr: Dict = {
     footer:
       "Ce relevé est généré à partir du registre de votre compte Trustline. En cas d'erreur, contactez support@trustlinefinancialgroup.com sous 60 jours.",
   },
+  twoFactor: {
+    title: "Authentification à deux facteurs",
+    settingsDesc:
+      "Demander un code à usage unique envoyé par e-mail à chaque connexion. Votre mot de passe seul ne suffira plus pour accéder à votre compte.",
+    statusOn: "Activée",
+    statusOff: "Désactivée",
+    enable: "Activer la double authentification",
+    disable: "Désactiver la double authentification",
+    enabled: "L'authentification à deux facteurs est activée. Un code vous sera demandé à la prochaine connexion.",
+    disabled: "L'authentification à deux facteurs est désactivée.",
+    confirmWithPassword: "Votre mot de passe (pour confirmer)",
+    onSince: "Activée depuis le {date}",
+    recommendation: "Nous vous recommandons de la laisser activée.",
+    checkTitle: "Consultez votre e-mail",
+    checkBody:
+      "Nous avons envoyé un code à six chiffres à {email}. Saisissez-le ci-dessous pour terminer la connexion — il expire dans 10 minutes.",
+    codeLabel: "Code à six chiffres",
+    verify: "Vérifier et se connecter",
+    verifying: "Vérification…",
+    resend: "Envoyer un nouveau code",
+    resent: "Un nouveau code est en route.",
+    cancel: "Utiliser un autre compte",
+    wrongCode: "Ce code n'est pas correct. Vérifiez votre e-mail et réessayez.",
+    tooManyAttempts:
+      "Trop de codes incorrects. Pour votre sécurité, cette connexion est annulée — recommencez.",
+    expired: "Cette connexion a expiré. Veuillez vous reconnecter.",
+    noEmailNote:
+      "Pas de code ? Vérifiez vos indésirables ou demandez-en un nouveau. Les codes sont envoyés à l'adresse e-mail de votre compte.",
+  },
   account: {
     title: "Paramètres du compte",
     changePassword: "Changer le mot de passe",
@@ -856,6 +885,8 @@ export const fr: Dict = {
       PASSWORD_RESET_REQUESTED: "Réinitialisation du mot de passe demandée",
       PASSWORD_RESET_COMPLETED: "Mot de passe réinitialisé",
       SECURITY_WORD_SET: "Mot de sécurité défini",
+      TWO_FACTOR_ENABLED: "Authentification à deux facteurs activée",
+      TWO_FACTOR_DISABLED: "Authentification à deux facteurs désactivée",
       SAVINGS_OPENED: "Compte d'épargne ouvert",
       CARD_FROZEN: "Carte bloquée",
       CARD_UNFROZEN: "Carte débloquée",

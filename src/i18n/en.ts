@@ -786,6 +786,35 @@ export const en = {
     footer:
       "This statement is generated from your Trustline account ledger. If anything looks wrong, contact support@trustlinefinancialgroup.com within 60 days.",
   },
+  twoFactor: {
+    title: "Two-factor authentication",
+    settingsDesc:
+      "Ask for a one-time code emailed to you every time you sign in. Your password alone will no longer be enough to reach your account.",
+    statusOn: "On",
+    statusOff: "Off",
+    enable: "Turn on two-factor",
+    disable: "Turn off two-factor",
+    enabled: "Two-factor authentication is on. You'll be asked for a code next time you sign in.",
+    disabled: "Two-factor authentication is off.",
+    confirmWithPassword: "Your password (to confirm)",
+    onSince: "On since {date}",
+    recommendation: "We recommend leaving this on.",
+    checkTitle: "Check your email",
+    checkBody:
+      "We've sent a six-digit code to {email}. Enter it below to finish signing in — it expires in 10 minutes.",
+    codeLabel: "Six-digit code",
+    verify: "Verify and sign in",
+    verifying: "Verifying…",
+    resend: "Send a new code",
+    resent: "A new code is on its way.",
+    cancel: "Use a different account",
+    wrongCode: "That code isn't right. Check your email and try again.",
+    tooManyAttempts:
+      "Too many incorrect codes. For your security we've cancelled this sign-in — start again.",
+    expired: "This sign-in has expired. Please sign in again.",
+    noEmailNote:
+      "No code? Check your spam folder, or send a new one. Codes go to the email address on your account.",
+  },
   account: {
     title: "Account settings",
     changePassword: "Change password",
@@ -854,6 +883,8 @@ export const en = {
       PASSWORD_RESET_REQUESTED: "Password reset requested",
       PASSWORD_RESET_COMPLETED: "Password reset completed",
       SECURITY_WORD_SET: "Security word set",
+      TWO_FACTOR_ENABLED: "Two-factor authentication turned on",
+      TWO_FACTOR_DISABLED: "Two-factor authentication turned off",
       SAVINGS_OPENED: "Savings account opened",
       CARD_FROZEN: "Card frozen",
       CARD_UNFROZEN: "Card unfrozen",

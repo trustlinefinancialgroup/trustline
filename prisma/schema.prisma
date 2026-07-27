@@ -28,6 +28,10 @@ model User {
   locale       String  @default("en") // en | fr | de | es — used for emails too
   currency     String  @default("USD") // USD | EUR — the client's account currency
   securityWordHash String? // hashed; required to confirm sensitive actions
+  // Two-factor authentication is opt-in per client. When on, signing in needs
+  // a one-time code emailed to the address on the account.
+  twoFactorEnabled Boolean   @default(false)
+  twoFactorEnabledAt DateTime?
   // Set when an admin purges the applicant's identity images after review.
   // The audit log keeps a permanent record of what was held and removed.
   kycDocsDeletedAt DateTime?

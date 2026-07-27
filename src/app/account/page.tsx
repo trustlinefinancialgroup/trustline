@@ -8,6 +8,8 @@ import { accountTimeline, lastEventDates } from "@/lib/account-timeline";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { AccountForms } from "./account-forms";
+import { TwoFactorForm } from "./two-factor-form";
+import { fill } from "@/i18n";
 
 export const metadata = { title: "Account settings — Trustline Financial Group" };
 
@@ -88,6 +90,11 @@ export default async function AccountPage() {
             ? t.account.documentsSubmitted
             : t.account.notYet,
       good: Boolean(dates.approved || dates.documentsDeleted),
+    },
+    {
+      label: t.twoFactor.title,
+      value: user.twoFactorEnabled ? t.twoFactor.statusOn : t.twoFactor.statusOff,
+      good: user.twoFactorEnabled,
     },
     {
       label: t.account.lastSignIn,
@@ -199,6 +206,22 @@ export default async function AccountPage() {
               saveSecurityWord: t.account.saveSecurityWord,
               securityWordActive: t.account.securityWordActive,
               passwordHint: t.auth.passwordHint,
+            }}
+          />
+          <TwoFactorForm
+            enabled={user.twoFactorEnabled}
+            labels={{
+              title: t.twoFactor.title,
+              desc: t.twoFactor.settingsDesc,
+              statusOn: t.twoFactor.statusOn,
+              statusOff: t.twoFactor.statusOff,
+              enable: t.twoFactor.enable,
+              disable: t.twoFactor.disable,
+              confirmWithPassword: t.twoFactor.confirmWithPassword,
+              recommendation: t.twoFactor.recommendation,
+              onSince: user.twoFactorEnabledAt
+                ? fill(t.twoFactor.onSince, { date: dateFmt.format(user.twoFactorEnabledAt) })
+                : null,
             }}
           />
         </section>

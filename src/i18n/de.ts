@@ -788,6 +788,35 @@ export const de: Dict = {
     footer:
       "Dieser Auszug wird aus dem Buchungsjournal Ihres Trustline-Kontos erstellt. Bei Unstimmigkeiten wenden Sie sich innerhalb von 60 Tagen an support@trustlinefinancialgroup.com.",
   },
+  twoFactor: {
+    title: "Zwei-Faktor-Authentifizierung",
+    settingsDesc:
+      "Bei jeder Anmeldung einen einmaligen Code per E-Mail anfordern. Ihr Passwort allein genügt dann nicht mehr für den Zugang zu Ihrem Konto.",
+    statusOn: "Aktiv",
+    statusOff: "Inaktiv",
+    enable: "Zwei-Faktor aktivieren",
+    disable: "Zwei-Faktor deaktivieren",
+    enabled: "Die Zwei-Faktor-Authentifizierung ist aktiv. Bei der nächsten Anmeldung fragen wir nach einem Code.",
+    disabled: "Die Zwei-Faktor-Authentifizierung ist deaktiviert.",
+    confirmWithPassword: "Ihr Passwort (zur Bestätigung)",
+    onSince: "Aktiv seit {date}",
+    recommendation: "Wir empfehlen, dies aktiviert zu lassen.",
+    checkTitle: "Sehen Sie in Ihr Postfach",
+    checkBody:
+      "Wir haben einen sechsstelligen Code an {email} gesendet. Geben Sie ihn unten ein, um die Anmeldung abzuschließen — er läuft in 10 Minuten ab.",
+    codeLabel: "Sechsstelliger Code",
+    verify: "Prüfen und anmelden",
+    verifying: "Wird geprüft…",
+    resend: "Neuen Code senden",
+    resent: "Ein neuer Code ist unterwegs.",
+    cancel: "Anderes Konto verwenden",
+    wrongCode: "Dieser Code stimmt nicht. Prüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
+    tooManyAttempts:
+      "Zu viele falsche Codes. Zu Ihrer Sicherheit haben wir diese Anmeldung abgebrochen — bitte neu beginnen.",
+    expired: "Diese Anmeldung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    noEmailNote:
+      "Kein Code? Sehen Sie im Spam-Ordner nach oder fordern Sie einen neuen an. Codes gehen an die E-Mail-Adresse Ihres Kontos.",
+  },
   account: {
     title: "Kontoeinstellungen",
     changePassword: "Passwort ändern",
@@ -856,6 +885,8 @@ export const de: Dict = {
       PASSWORD_RESET_REQUESTED: "Passwortzurücksetzung angefordert",
       PASSWORD_RESET_COMPLETED: "Passwort zurückgesetzt",
       SECURITY_WORD_SET: "Sicherheitswort festgelegt",
+      TWO_FACTOR_ENABLED: "Zwei-Faktor-Authentifizierung aktiviert",
+      TWO_FACTOR_DISABLED: "Zwei-Faktor-Authentifizierung deaktiviert",
       SAVINGS_OPENED: "Sparkonto eröffnet",
       CARD_FROZEN: "Karte gesperrt",
       CARD_UNFROZEN: "Karte entsperrt",

@@ -78,6 +78,7 @@ type EmailStrings = {
   accountCredited: { subject: string; title: string; p1: string; p2: string; button: string };
   accountDebited: { subject: string; title: string; p1: string; p2: string; button: string };
   passwordReset: { subject: string; title: string; p1: string; button: string; p2: string; ignore: string };
+  loginCode: { subject: string; title: string; p1: string; p2: string; ignore: string };
 };
 
 const STRINGS: Record<Locale, EmailStrings> = {
@@ -172,6 +173,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       p2: "For your security, the link can be used only once.",
       ignore: "If you didn't request this, you can safely ignore this email; your password stays the same.",
     },
+    loginCode: {
+      subject: `Your ${BRAND} sign-in code`,
+      title: "Your sign-in code, {name}",
+      p1: "Use this code to finish signing in. It expires in {minutes} minutes and works once.",
+      p2: "We will never ask you for this code by email, phone or chat.",
+      ignore:
+        "If you weren't trying to sign in, someone may have your password. Change it as soon as you can and tell us.",
+    },
   },
   fr: {
     footerQuestions: "Des questions ? Contactez",
@@ -263,6 +272,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       button: "Réinitialiser mon mot de passe",
       p2: "Pour votre sécurité, ce lien ne peut être utilisé qu'une seule fois.",
       ignore: "Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail ; votre mot de passe reste inchangé.",
+    },
+    loginCode: {
+      subject: `Votre code de connexion ${BRAND}`,
+      title: "Votre code de connexion, {name}",
+      p1: "Utilisez ce code pour terminer votre connexion. Il expire dans {minutes} minutes et ne fonctionne qu'une fois.",
+      p2: "Nous ne vous demanderons jamais ce code par e-mail, téléphone ou chat.",
+      ignore:
+        "Si vous n'essayiez pas de vous connecter, quelqu'un possède peut-être votre mot de passe. Changez-le au plus vite et prévenez-nous.",
     },
   },
   de: {
@@ -356,6 +373,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       p2: "Zu Ihrer Sicherheit kann der Link nur einmal verwendet werden.",
       ignore: "Falls Sie dies nicht angefordert haben, ignorieren Sie diese E-Mail; Ihr Passwort bleibt unverändert.",
     },
+    loginCode: {
+      subject: `Ihr ${BRAND}-Anmeldecode`,
+      title: "Ihr Anmeldecode, {name}",
+      p1: "Mit diesem Code schließen Sie die Anmeldung ab. Er läuft in {minutes} Minuten ab und gilt einmalig.",
+      p2: "Wir fragen Sie niemals per E-Mail, Telefon oder Chat nach diesem Code.",
+      ignore:
+        "Wenn Sie sich nicht anmelden wollten, kennt jemand möglicherweise Ihr Passwort. Ändern Sie es schnellstmöglich und sagen Sie uns Bescheid.",
+    },
   },
   es: {
     footerQuestions: "¿Preguntas? Contacte con",
@@ -447,6 +472,14 @@ const STRINGS: Record<Locale, EmailStrings> = {
       button: "Restablecer mi contraseña",
       p2: "Por su seguridad, el enlace solo puede usarse una vez.",
       ignore: "Si no solicitó esto, ignore este correo; su contraseña permanece igual.",
+    },
+    loginCode: {
+      subject: `Su código de acceso de ${BRAND}`,
+      title: "Su código de acceso, {name}",
+      p1: "Use este código para terminar de iniciar sesión. Caduca en {minutes} minutos y sirve una sola vez.",
+      p2: "Nunca le pediremos este código por correo, teléfono ni chat.",
+      ignore:
+        "Si no estaba intentando entrar, puede que alguien tenga su contraseña. Cámbiela cuanto antes y avísenos.",
     },
   },
 };
@@ -628,6 +661,30 @@ export async function sendPasswordResetEmail(
        ${button(link, s.passwordReset.button)}
        <p>${s.passwordReset.p2}</p>
        <p>${s.passwordReset.ignore}</p>`
+    ),
+  });
+}
+
+/** The one-time code for clients who have turned two-factor on. */
+export async function sendLoginCodeEmail(
+  to: string,
+  firstName: string,
+  code: string,
+  locale: string | undefined,
+  minutes: number
+) {
+  const s = STRINGS[toLocale(locale)];
+  return sendEmail({
+    to,
+    subject: s.loginCode.subject,
+    html: layout(
+      s,
+      fillName(s.loginCode.title, firstName),
+      `<p>${s.loginCode.p1.replace("{minutes}", String(minutes))}</p>
+       <p style="margin:28px 0;text-align:center;font-family:ui-monospace,Menlo,Consolas,monospace;
+                 font-size:34px;font-weight:700;letter-spacing:10px;color:#0a1f3d">${code}</p>
+       <p>${s.loginCode.p2}</p>
+       <p>${s.loginCode.ignore}</p>`
     ),
   });
 }

@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { randomBytes } from "crypto";
+import { randomBytes, randomInt } from "crypto";
 import path from "path";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -13,9 +13,18 @@ import {
   hashPassword,
   verifyPassword,
   isAdmin,
+  setPendingTwoFactor,
+  getPendingTwoFactor,
+  clearPendingTwoFactor,
+  MAX_2FA_ATTEMPTS,
 } from "@/lib/auth";
 import { audit } from "@/lib/audit";
-import { sendWelcomeEmail, sendKycReceivedEmail, sendPasswordResetEmail } from "@/lib/email";
+import {
+  sendWelcomeEmail,
+  sendKycReceivedEmail,
+  sendPasswordResetEmail,
+  sendLoginCodeEmail,
+} from "@/lib/email";
 import { uploadFile, deleteFiles, KYC_BUCKET } from "@/lib/storage";
 import { getDict, getLocale } from "@/i18n/server";
 
@@ -315,6 +324,14 @@ export async function loginAction(_prev: FormState, formData: FormData): Promise
   if (user.status === "BLOCKED") return { error: t.errors.blocked };
   if (user.status === "REJECTED") return { error: t.errors.rejected };
 
+  // Two-factor is opt-in. When it is on, the password alone gets you no
+  // session — only a short-lived pending token and a code in your inbox.
+  if (user.twoFactorEnabled) {
+    await issueTwoFactorCode(user.id, user.email, user.firstName, user.locale);
+    await setPendingTwoFactor(user.id);
+    redirect("/login/verify");
+  }
+
   await createSession(user.id, user.role);
   await audit({
     actorId: user.id,
@@ -327,6 +344,112 @@ export async function loginAction(_prev: FormState, formData: FormData): Promise
   if (isAdmin(user.role)) redirect("/admin");
   if (user.status === "PENDING") redirect("/onboarding");
   redirect("/dashboard");
+}
+
+// ---------- two-factor at sign-in ----------
+
+const TWO_FACTOR_MINUTES = 10;
+
+/** Six digits, generated with a CSPRNG rather than Math.random. */
+function newLoginCode() {
+  return String(randomInt(0, 1_000_000)).padStart(6, "0");
+}
+
+/**
+ * Replaces any outstanding code with a fresh one and emails it. The code is
+ * stored as `<userId>.<code>` so two clients can never collide on the same six
+ * digits, and so a lookup is scoped to one account by construction.
+ */
+async function issueTwoFactorCode(
+  userId: string,
+  email: string,
+  firstName: string,
+  locale: string
+) {
+  await db.verificationToken.deleteMany({ where: { userId, purpose: "TWO_FACTOR" } });
+  const code = newLoginCode();
+  await db.verificationToken.create({
+    data: {
+      userId,
+      token: `${userId}.${code}`,
+      purpose: "TWO_FACTOR",
+      expiresAt: new Date(Date.now() + TWO_FACTOR_MINUTES * 60 * 1000),
+    },
+  });
+  await sendLoginCodeEmail(email, firstName, code, locale, TWO_FACTOR_MINUTES);
+}
+
+export async function verifyTwoFactorAction(
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const t = await getDict();
+  const pending = await getPendingTwoFactor();
+  if (!pending) return { error: t.twoFactor.expired };
+
+  const user = await db.user.findUnique({ where: { id: pending.userId } });
+  if (!user) {
+    await clearPendingTwoFactor();
+    return { error: t.twoFactor.expired };
+  }
+
+  const code = String(formData.get("code") ?? "").replace(/\D/g, "");
+  const token = await db.verificationToken.findFirst({
+    where: {
+      userId: user.id,
+      purpose: "TWO_FACTOR",
+      token: `${user.id}.${code}`,
+      usedAt: null,
+      expiresAt: { gt: new Date() },
+    },
+  });
+
+  if (!token) {
+    const attempts = pending.attempts + 1;
+    // Out of attempts: burn the code and send them back to the start, so a
+    // stolen password can't be paired with a brute-forced six digits.
+    if (attempts >= MAX_2FA_ATTEMPTS) {
+      await db.verificationToken.deleteMany({
+        where: { userId: user.id, purpose: "TWO_FACTOR" },
+      });
+      await clearPendingTwoFactor();
+      return { error: t.twoFactor.tooManyAttempts };
+    }
+    await setPendingTwoFactor(user.id, attempts);
+    return { error: t.twoFactor.wrongCode };
+  }
+
+  await db.verificationToken.update({ where: { id: token.id }, data: { usedAt: new Date() } });
+  await clearPendingTwoFactor();
+  await createSession(user.id, user.role);
+  await audit({
+    actorId: user.id,
+    actorLabel: user.email,
+    action: "USER_LOGIN",
+    targetType: "USER",
+    targetId: user.id,
+    details: "Two-factor verified",
+  });
+
+  if (isAdmin(user.role)) redirect("/admin");
+  if (user.status === "PENDING") redirect("/onboarding");
+  redirect("/dashboard");
+}
+
+export async function resendTwoFactorCodeAction(): Promise<FormState> {
+  const t = await getDict();
+  const pending = await getPendingTwoFactor();
+  if (!pending) return { error: t.twoFactor.expired };
+  const user = await db.user.findUnique({ where: { id: pending.userId } });
+  if (!user) return { error: t.twoFactor.expired };
+
+  await issueTwoFactorCode(user.id, user.email, user.firstName, user.locale);
+  return { ok: t.twoFactor.resent };
+}
+
+export async function cancelTwoFactorAction() {
+  await clearPendingTwoFactor();
+  redirect("/login");
 }
 
 export async function logoutAction() {

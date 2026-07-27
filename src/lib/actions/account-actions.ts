@@ -1,12 +1,52 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { getSessionUser, hashPassword, verifyPassword } from "@/lib/auth";
 import { audit } from "@/lib/audit";
 import { getDict } from "@/i18n/server";
 import type { FormState } from "./auth-actions";
+
+/**
+ * Turns two-factor on or off. Both directions need the password: turning it on
+ * so a hijacked session can't lock the real owner out, and turning it off so a
+ * hijacked session can't quietly remove the protection.
+ */
+export async function toggleTwoFactorAction(
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const t = await getDict();
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+
+  const password = String(formData.get("password") ?? "");
+  if (!(await verifyPassword(password, user.passwordHash))) {
+    return { error: t.account.wrongPassword };
+  }
+
+  const enable = !user.twoFactorEnabled;
+  await db.user.update({
+    where: { id: user.id },
+    data: { twoFactorEnabled: enable, twoFactorEnabledAt: enable ? new Date() : null },
+  });
+
+  // Any half-finished sign-in codes are no longer meaningful.
+  await db.verificationToken.deleteMany({ where: { userId: user.id, purpose: "TWO_FACTOR" } });
+
+  await audit({
+    actorId: user.id,
+    actorLabel: user.email,
+    action: enable ? "TWO_FACTOR_ENABLED" : "TWO_FACTOR_DISABLED",
+    targetType: "USER",
+    targetId: user.id,
+  });
+
+  revalidatePath("/account");
+  return { ok: enable ? t.twoFactor.enabled : t.twoFactor.disabled };
+}
 
 export async function changePasswordAction(
   _prev: FormState,
