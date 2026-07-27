@@ -14,6 +14,192 @@ export const de: Dict = {
       "Diese Datei ist zu groß. Fotografieren Sie das Dokument stattdessen mit der Kamera — Fotos verkleinern wir automatisch.",
     language: "Sprache",
   },
+  about: {
+    eyebrow: "Über uns",
+    title: "Eine Bank, bei der noch Menschen entscheiden.",
+    body:
+      "Trustline Financial Group ist eine moderne Bank, gebaut auf einem alten Gedanken: Geld ist etwas Persönliches, und die Entscheidungen darüber verdienen menschliches Urteilsvermögen statt eines automatischen Ja oder Nein.",
+    storyTitle: "Warum wir Trustline gegründet haben",
+    storyBody1:
+      "Bankgeschäfte wurden meist für die Bank optimiert. Anträge verschwinden in Scoring-Modellen, Entscheidungen kommen ohne Begründung, und einen Menschen zu erreichen, der wirklich helfen kann, ist der schwerste Teil.",
+    storyBody2:
+      "Wir gehen den umgekehrten Weg. Jeden Antrag, der bei uns eingeht, liest ein Mensch. Jede Entscheidung wird begründet. Jeder Saldo in Ihrem Dashboard lässt sich auf eine Buchung zurückführen, die Sie einsehen können — mit einer Referenz, die Sie uns nennen können.",
+    commitmentsTitle: "Was das konkret bedeutet",
+    commitments: [
+      {
+        title: "Jeden Antrag prüft ein Mensch",
+        body: "Kontoeröffnungen, Karten, Kredite und Kreditlinien genehmigt unser Team, kein Scoring-Modell. Fehlt uns etwas, fragen wir nach.",
+      },
+      {
+        title: "Immer verständliche Sprache",
+        body: "Konditionen, Zinssätze und die nächste Fälligkeit stehen auf der Produktseite, in Worten, die Sie ohnehin verstehen. Fällt eine Entscheidung negativ aus, sagen wir Ihnen warum.",
+      },
+      {
+        title: "Sicherheit in Ihrer Hand",
+        body: "Ein selbst gewähltes Sicherheitswort schützt Auszahlungen und Überweisungen. Karten sperren Sie sofort im Dashboard, und Ausweisdokumente werden nach der Prüfung gelöscht.",
+      },
+      {
+        title: "Ihre Bank in Ihrer Sprache",
+        body: "Der gesamte Service — Seiten, Kontoauszüge und unsere E-Mails — ist auf Englisch, Französisch, Deutsch und Spanisch verfügbar.",
+      },
+    ],
+    ledgerTitle: "Jede Zahl ist nachvollziehbar",
+    ledgerBody:
+      "Wir verändern niemals einen Saldo. Geld bewegt sich, indem ein Eintrag zu einem Journal hinzugefügt wird, das nur ergänzt wird. Ihr Kontoauszug und Ihr Dashboard sind zwei Ansichten desselben Datensatzes. Deshalb trägt jede Buchung eine Referenz — und deshalb gibt es für jeden Monat bei uns einen herunterladbaren Auszug.",
+    teamTitle: "Die Menschen dahinter",
+    teamBody:
+      "Ein kleines Team aus Bankleuten, Entwicklern und Kundenbetreuern, das Ihre Frage lieber richtig beantwortet, als Sie durch ein Menü zu schicken.",
+    ctaTitle: "Eröffnen Sie in wenigen Minuten ein Konto.",
+    ctaBody: "Einmal Identität bestätigen — den Rest übernimmt unser Team.",
+  },
+  contactPage: {
+    eyebrow: "Kontakt",
+    title: "Sprechen Sie mit einem Menschen.",
+    body:
+      "Wie Sie sich auch melden: Ein Mitglied unseres Teams liest es. Wir antworten innerhalb eines Werktages.",
+    channelsTitle: "So erreichen Sie uns",
+    channels: [
+      {
+        title: "Allgemeine Anfragen",
+        body: "Fragen zu Trustline, zur Kontoeröffnung oder zu allem anderen.",
+        value: "info@trustlinefinancialgroup.com",
+      },
+      {
+        title: "Bestandskunden",
+        body: "Hilfe zu Ihrem Konto, einer Einzahlung, einer Auszahlung oder einer Karte.",
+        value: "support@trustlinefinancialgroup.com",
+      },
+      {
+        title: "Kundenbetreuung",
+        body: "Kredite, Baufinanzierungen und Firmenkundenbeziehungen.",
+        value: "accountmanager@trustlinefinancialgroup.com",
+      },
+    ],
+    liveChatTitle: "Live-Chat",
+    liveChatBody:
+      "Der schnellste Weg für eine kurze Frage. Öffnen Sie den Chat unten rechts auf unserer Startseite — Sie sprechen mit unserem Team, nicht mit einem Bot.",
+    signedInTitle: "Schon Kunde?",
+    signedInBody:
+      "Melden Sie sich an und schreiben Sie uns aus Ihrem Konto heraus. Wir sehen Ihre Daten sofort, Sie müssen weniger erklären.",
+    signedInCta: "Zum Konto anmelden",
+    locationTitle: "Wo wir sind",
+    locationBody: "Trustline Financial Group · New York, Vereinigte Staaten.",
+    responseTitle: "Antwortzeiten",
+    responseBody:
+      "Anfragen beantworten wir innerhalb eines Werktages. Ein- und Auszahlungen prüfen wir in den meisten Fällen noch am selben Werktag.",
+    formTitle: "Schreiben Sie uns",
+    formBody: "Einmal ausfüllen — es landet direkt beim richtigen Team.",
+    name: "Ihr Name",
+    email: "Ihre E-Mail-Adresse",
+    topic: "Worum geht es?",
+    topics: {
+      GENERAL: "Allgemeine Anfrage",
+      ACCOUNT: "Mein Konto",
+      APPLICATION: "Ein gestellter Antrag",
+      DEPOSIT: "Ein- und Auszahlungen",
+      COMPLAINT: "Eine Beschwerde",
+    },
+    message: "Ihre Nachricht",
+    send: "Nachricht senden",
+    sending: "Wird gesendet…",
+    sent: "Vielen Dank — Ihre Nachricht liegt unserem Team vor. Wir antworten an die angegebene Adresse.",
+    errorRequired: "Bitte geben Sie Name, E-Mail und Nachricht an.",
+    errorEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    errorFailed: "Das Senden hat nicht geklappt. Schreiben Sie uns direkt an support@trustlinefinancialgroup.com.",
+  },
+  faqPage: {
+    eyebrow: "Hilfebereich",
+    title: "Fragen, beantwortet.",
+    body: "Was Kundinnen und Kunden uns am häufigsten fragen. Fehlt Ihre Frage? Schreiben Sie uns.",
+    stillStuckTitle: "Noch offen?",
+    stillStuckBody: "Schreiben Sie uns — ein Mensch meldet sich innerhalb eines Werktages.",
+    groups: [
+      {
+        title: "Konto eröffnen",
+        items: [
+          {
+            q: "Wie eröffne ich ein Konto?",
+            a: "Wählen Sie ein Privat- oder Geschäftskonto, geben Sie Name, E-Mail und Telefonnummer an und wählen Sie ein Passwort. Sie bestätigen Ihre E-Mail-Adresse und laden dann Ausweisdokumente hoch. Unser Team prüft alles und schreibt Ihnen, sobald Ihr Konto offen ist.",
+          },
+          {
+            q: "Welche Dokumente brauchen Sie?",
+            a: "Ein amtliches Dokument — Personalausweis, Führerschein oder Reisepass. Wir bitten um ein Foto der Vorderseite, eines der Rückseite und eines von Ihnen mit dem Dokument. Beim Reisepass genügt die Fotoseite. Handyfotos sind völlig in Ordnung; wir verkleinern sie automatisch.",
+          },
+          {
+            q: "Wie lange dauert die Freigabe?",
+            a: "In der Regel weniger als einen Werktag, sobald Ihre E-Mail bestätigt und die Dokumente hochgeladen sind. Fehlt uns etwas, schreiben wir Ihnen, statt einfach abzulehnen.",
+          },
+          {
+            q: "Was passiert mit meinen Ausweisdokumenten?",
+            a: "Sie werden privat gespeichert und niemals weitergegeben. Nach Abschluss der Prüfung löscht unser Team die Bilder; im Prüfprotokoll bleibt festgehalten, dass sie geprüft und entfernt wurden.",
+          },
+        ],
+      },
+      {
+        title: "Geld bewegen",
+        items: [
+          {
+            q: "Wie zahle ich Geld ein?",
+            a: "Wählen Sie auf der Einzahlungsseite eine Methode, und Sie sehen genau, wohin Sie das Geld senden. Erfassen Sie den gesendeten Betrag, hängen Sie bei Bedarf einen Nachweis an — unser Team prüft und schreibt Ihrem Saldo gut. Sie erhalten eine E-Mail-Quittung mit Ihrem neuen Saldo.",
+          },
+          {
+            q: "Wie zahle ich mir Geld aus?",
+            a: "Wählen Sie eine Methode, geben Sie Ihre Auszahlungsdaten und den Betrag an und bestätigen Sie mit Ihrem Sicherheitswort. Unser Team prüft jede Auszahlung. Offene Auszahlungen werden vom verfügbaren Saldo abgezogen, damit dasselbe Geld nicht doppelt ausgegeben wird.",
+          },
+          {
+            q: "Kann ich Geld an ein anderes Trustline-Konto senden?",
+            a: "Ja, sofort, über Kontonummer oder E-Mail-Adresse der Empfängerin oder des Empfängers. Für Überweisungen an eine fremde Bank nutzen Sie stattdessen die Auszahlung.",
+          },
+          {
+            q: "Warum ein Sicherheitswort?",
+            a: "Es ist eine zweite Prüfung bei allem, was Geld aus Ihrem Konto herausbewegt — Auszahlungen und Überweisungen an andere. Umbuchungen zwischen Ihrem eigenen Giro- und Sparkonto brauchen es nicht. Sie legen es in den Kontoeinstellungen fest.",
+          },
+        ],
+      },
+      {
+        title: "Karten, Kredite und Produkte",
+        items: [
+          {
+            q: "Welche Karte bekomme ich?",
+            a: "Sie wählen im Antrag die gewünschte Stufe — Classic, Gold, Platinum oder Black — und jede hat ihren eigenen Limitrahmen. Unser Team bestätigt Stufe und Limit nach der Prüfung; Sie müssen nie selbst einen Betrag nennen.",
+          },
+          {
+            q: "Was passiert nach der Freigabe einer Karte?",
+            a: "Ihre Karte erscheint im Dashboard mit Nummer, Gültigkeit und Sicherheitscode — verborgen, bis Sie sie anzeigen lassen. Sperren und entsperren können Sie sie jederzeit selbst.",
+          },
+          {
+            q: "Wie funktionieren Kredite?",
+            a: "Sagen Sie uns Betrag und Laufzeit. Bei Zusage wird das Geld auf Ihr Girokonto ausgezahlt, und der offene Betrag erscheint auf der Produktseite, wo Sie Ihre Raten zahlen. Kreditlinien funktionieren umgekehrt: Wir setzen ein Limit, und Sie rufen bei Bedarf ab.",
+          },
+          {
+            q: "Wo sehe ich Zinssatz und nächste Fälligkeit?",
+            a: "Auf der Seite des jeweiligen Produkts, neben Limit, aktuellem Saldo und Kartenstufe. Jedes freigegebene Produkt hat seine eigene Seite und seine eigene Umsatzliste.",
+          },
+        ],
+      },
+      {
+        title: "Konto und Sicherheit",
+        items: [
+          {
+            q: "Wo sehe ich Umsätze und Kontoauszüge?",
+            a: "Das Dashboard zeigt die letzten Bewegungen. Die Umsatzseite zeigt alles, filterbar nach Konto, Art, Status und Datum. Unter Kontoauszüge finden Sie für jeden aktiven Monat einen Auszug zum Drucken, als PDF speichern oder als Tabelle herunterladen.",
+          },
+          {
+            q: "Ich habe mein Passwort vergessen.",
+            a: "Nutzen Sie „Passwort vergessen?“ auf der Anmeldeseite. Wir senden Ihnen einen Link, der einmal funktioniert und nach einer Stunde abläuft.",
+          },
+          {
+            q: "Welche Sprachen unterstützen Sie?",
+            a: "Englisch, Französisch, Deutsch und Spanisch — auf der Website, in Ihrem Konto und in unseren E-Mails. Umstellen können Sie über das Globus-Symbol in der Kopfzeile.",
+          },
+          {
+            q: "Sind meine Einlagen abgesichert?",
+            a: "Einlagen sind bis zur gesetzlich zulässigen Höchstgrenze FDIC-versichert. Was für Ihr Konto konkret gilt, steht in Ihrer Einlagenvereinbarung.",
+          },
+        ],
+      },
+    ],
+  },
   legal: {
     heading: "Rechtliches",
     terms: "Nutzungsbedingungen",
@@ -29,6 +215,8 @@ export const de: Dict = {
     commercial: "Firmenkunden",
     why: "Warum Trustline",
     contact: "Kontakt",
+    about: "Über uns",
+    faq: "FAQ",
   },
   landing: {
     badge: "Privatkunden-Banking",
@@ -85,6 +273,8 @@ export const de: Dict = {
       "Privatkunden-Banking, Kredite und Kreditlinien — auf Vertrauen gebaut, ganz in Ihrer Nähe.",
     footerContact: "Kontakt",
     footerClients: "Kunden",
+    footerCompany: "Unternehmen",
+    footerProducts: "Produkte",
     footerLegal: "Rechtliches",
     footerRights: "Alle Rechte vorbehalten.",
     benefitsKicker: "Warum Trustline",

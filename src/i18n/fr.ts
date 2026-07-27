@@ -14,6 +14,192 @@ export const fr: Dict = {
       "Ce fichier est trop volumineux. Photographiez plutôt le document avec votre appareil — nous réduisons les photos automatiquement.",
     language: "Langue",
   },
+  about: {
+    eyebrow: "À propos",
+    title: "Une banque où il y a encore des humains.",
+    body:
+      "Trustline Financial Group est une banque moderne bâtie sur une idée ancienne : l'argent est une affaire personnelle, et les décisions qui l'entourent méritent un jugement humain plutôt qu'un oui ou un non automatique.",
+    storyTitle: "Pourquoi nous avons créé Trustline",
+    storyBody1:
+      "La banque a surtout été optimisée pour la banque. Les demandes disparaissent dans des modèles de scoring, les décisions arrivent sans explication, et joindre une personne capable d'aider est le plus difficile.",
+    storyBody2:
+      "Nous avons pris le chemin inverse. Chaque demande qui nous parvient est lue par quelqu'un. Chaque décision est motivée. Chaque solde de votre tableau de bord renvoie à une opération que vous pouvez consulter, avec une référence que vous pouvez nous citer.",
+    commitmentsTitle: "Ce que cela change concrètement",
+    commitments: [
+      {
+        title: "Une personne examine chaque demande",
+        body: "Ouvertures de compte, cartes, prêts et lignes de crédit sont approuvés par notre équipe, pas par un modèle de scoring. S'il nous manque quelque chose, nous vous le demandons.",
+      },
+      {
+        title: "Un langage clair, toujours",
+        body: "Conditions, taux et prochaine échéance sont écrits sur la page du produit, dans des mots que vous comprenez déjà. Si une décision vous est défavorable, nous vous en donnons la raison.",
+      },
+      {
+        title: "Une sécurité que vous maîtrisez",
+        body: "Un mot de sécurité que vous choisissez protège les retraits et les virements. Les cartes se bloquent instantanément depuis votre tableau de bord, et vos pièces d'identité sont supprimées une fois l'examen terminé.",
+      },
+      {
+        title: "Votre banque dans votre langue",
+        body: "L'ensemble du service — pages, relevés et e-mails — est disponible en anglais, français, allemand et espagnol.",
+      },
+    ],
+    ledgerTitle: "Chaque montant est traçable",
+    ledgerBody:
+      "Nous ne modifions jamais un solde. L'argent circule par ajout d'écritures dans un registre où l'on ne fait qu'ajouter : votre relevé et votre tableau de bord sont deux vues du même enregistrement. C'est pourquoi chaque opération porte une référence, et pourquoi un relevé téléchargeable existe pour chaque mois passé chez nous.",
+    teamTitle: "Les personnes derrière tout cela",
+    teamBody:
+      "Une petite équipe de banquiers, d'ingénieurs et de conseillers qui préfèrent répondre correctement à votre question plutôt que de vous faire naviguer dans un menu.",
+    ctaTitle: "Ouvrez un compte en quelques minutes.",
+    ctaBody: "Vérifiez votre identité une fois, notre équipe s'occupe du reste.",
+  },
+  contactPage: {
+    eyebrow: "Contact",
+    title: "Parlez à une personne.",
+    body:
+      "Quel que soit le moyen choisi, un membre de notre équipe vous lit. Nous répondons sous un jour ouvré.",
+    channelsTitle: "Comment nous joindre",
+    channels: [
+      {
+        title: "Renseignements généraux",
+        body: "Questions sur Trustline, l'ouverture d'un compte, ou tout autre sujet.",
+        value: "info@trustlinefinancialgroup.com",
+      },
+      {
+        title: "Clients existants",
+        body: "Aide sur votre compte, un dépôt, un retrait ou une carte.",
+        value: "support@trustlinefinancialgroup.com",
+      },
+      {
+        title: "Chargés de clientèle",
+        body: "Crédits, prêts immobiliers et relations de banque commerciale.",
+        value: "accountmanager@trustlinefinancialgroup.com",
+      },
+    ],
+    liveChatTitle: "Chat en direct",
+    liveChatBody:
+      "Le plus rapide pour une question courte. Ouvrez le chat en bas à droite de notre page d'accueil — vous parlerez à notre équipe, pas à un robot.",
+    signedInTitle: "Déjà client ?",
+    signedInBody:
+      "Connectez-vous et écrivez-nous depuis votre compte. Nous voyons vos informations immédiatement, vous avez moins à expliquer.",
+    signedInCta: "Accéder à mon compte",
+    locationTitle: "Où nous sommes",
+    locationBody: "Trustline Financial Group · New York, États-Unis.",
+    responseTitle: "Délais de réponse",
+    responseBody:
+      "Les demandes reçoivent une réponse sous un jour ouvré. Les dépôts et retraits sont examinés le jour ouvré même dans la plupart des cas.",
+    formTitle: "Envoyez-nous un message",
+    formBody: "Remplissez ce formulaire : il arrive directement à la bonne équipe.",
+    name: "Votre nom",
+    email: "Votre adresse e-mail",
+    topic: "De quoi s'agit-il ?",
+    topics: {
+      GENERAL: "Renseignement général",
+      ACCOUNT: "Mon compte",
+      APPLICATION: "Une demande que j'ai faite",
+      DEPOSIT: "Dépôts et retraits",
+      COMPLAINT: "Une réclamation",
+    },
+    message: "Votre message",
+    send: "Envoyer le message",
+    sending: "Envoi…",
+    sent: "Merci — votre message est bien arrivé. Nous répondrons à l'adresse indiquée.",
+    errorRequired: "Merci d'indiquer votre nom, votre e-mail et votre message.",
+    errorEmail: "Merci de saisir une adresse e-mail valide.",
+    errorFailed: "L'envoi a échoué. Écrivez-nous directement à support@trustlinefinancialgroup.com.",
+  },
+  faqPage: {
+    eyebrow: "Centre d'aide",
+    title: "Vos questions, nos réponses.",
+    body: "Ce que nos clients nous demandent le plus. Si votre question n'y est pas, écrivez-nous.",
+    stillStuckTitle: "Toujours bloqué ?",
+    stillStuckBody: "Envoyez-nous un message : une personne vous répondra sous un jour ouvré.",
+    groups: [
+      {
+        title: "Ouvrir un compte",
+        items: [
+          {
+            q: "Comment ouvrir un compte ?",
+            a: "Choisissez un compte personnel ou professionnel, indiquez vos nom, e-mail et téléphone, puis choisissez un mot de passe. Vous vérifiez votre e-mail, puis vous téléversez vos pièces d'identité. Notre équipe examine le tout et vous écrit dès l'ouverture de votre compte.",
+          },
+          {
+            q: "Quels documents faut-il ?",
+            a: "Un document officiel : carte nationale d'identité, permis de conduire ou passeport. Nous demandons une photo du recto, une photo du verso et une photo de vous le tenant. Pour un passeport, la page photo suffit. Les photos prises au téléphone conviennent : nous les réduisons automatiquement.",
+          },
+          {
+            q: "Combien de temps prend l'approbation ?",
+            a: "En général moins d'un jour ouvré, une fois votre e-mail vérifié et vos documents envoyés. S'il nous manque quelque chose, nous vous écrivons au lieu de refuser sans explication.",
+          },
+          {
+            q: "Que deviennent mes pièces d'identité ?",
+            a: "Elles sont stockées de façon privée et ne sont jamais partagées. Une fois l'examen terminé, notre équipe supprime les images, et une trace de leur examen et de leur suppression reste dans notre journal d'audit.",
+          },
+        ],
+      },
+      {
+        title: "Faire circuler l'argent",
+        items: [
+          {
+            q: "Comment alimenter mon compte ?",
+            a: "Choisissez une méthode de dépôt sur la page Dépôt : vous verrez exactement où envoyer les fonds. Indiquez le montant envoyé, joignez un justificatif si vous en avez un, et notre équipe vérifie puis crédite votre solde — vous recevez un reçu par e-mail avec votre nouveau solde.",
+          },
+          {
+            q: "Comment retirer ?",
+            a: "Choisissez une méthode, saisissez vos coordonnées de paiement et le montant, puis confirmez avec votre mot de sécurité. Notre équipe examine chaque retrait. Les retraits en attente sont déduits de votre solde disponible pour éviter de dépenser deux fois la même somme.",
+          },
+          {
+            q: "Puis-je envoyer de l'argent à un autre compte Trustline ?",
+            a: "Oui, instantanément, avec le numéro de compte ou l'e-mail du destinataire. Pour envoyer vers une banque extérieure, utilisez plutôt l'option Retrait.",
+          },
+          {
+            q: "Pourquoi un mot de sécurité ?",
+            a: "C'est une seconde vérification sur les opérations qui font sortir de l'argent : retraits et virements vers d'autres personnes. Les transferts entre vos propres comptes courant et épargne n'en ont pas besoin. Vous le définissez dans les paramètres du compte.",
+          },
+        ],
+      },
+      {
+        title: "Cartes, prêts et produits",
+        items: [
+          {
+            q: "Quelle carte vais-je recevoir ?",
+            a: "Vous choisissez la gamme souhaitée lors de la demande — Classic, Gold, Platinum ou Black — et chacune a sa propre fourchette de plafond. Notre équipe confirme la gamme et le plafond définitifs après examen : vous n'avez jamais à indiquer un montant.",
+          },
+          {
+            q: "Que se passe-t-il après l'approbation d'une carte ?",
+            a: "Votre carte apparaît sur votre tableau de bord avec son numéro, sa date d'expiration et son code de sécurité, masqués jusqu'à ce que vous choisissiez de les afficher. Vous pouvez la bloquer et la débloquer vous-même à tout moment.",
+          },
+          {
+            q: "Comment fonctionnent les prêts ?",
+            a: "Indiquez le montant et la durée souhaités. En cas d'accord, les fonds sont versés sur votre compte courant et le montant dû apparaît sur la page du produit, où vous effectuez vos remboursements. Les lignes de crédit fonctionnent à l'inverse : nous fixons un plafond et vous y puisez selon vos besoins.",
+          },
+          {
+            q: "Où voir mon taux et ma prochaine échéance ?",
+            a: "Sur la page du produit, avec votre plafond, votre solde actuel et la gamme de votre carte. Chaque produit approuvé a sa page et son propre historique.",
+          },
+        ],
+      },
+      {
+        title: "Votre compte et votre sécurité",
+        items: [
+          {
+            q: "Où consulter mes opérations et mes relevés ?",
+            a: "Votre tableau de bord affiche l'activité récente. La page Transactions affiche tout, avec des filtres par compte, type, statut et date. La page Relevés propose un relevé pour chaque mois d'activité, à imprimer, enregistrer en PDF ou télécharger en tableur.",
+          },
+          {
+            q: "J'ai oublié mon mot de passe.",
+            a: "Utilisez le lien « Mot de passe oublié ? » sur la page de connexion. Nous vous envoyons un lien à usage unique, valable une heure.",
+          },
+          {
+            q: "Quelles langues proposez-vous ?",
+            a: "Anglais, français, allemand et espagnol — sur le site, dans votre compte et dans les e-mails. Changez de langue avec l'icône globe dans l'en-tête.",
+          },
+          {
+            q: "Mes dépôts sont-ils assurés ?",
+            a: "Les dépôts sont assurés par la FDIC dans la limite maximale autorisée par la loi. Les modalités applicables à votre compte figurent dans votre convention de dépôt.",
+          },
+        ],
+      },
+    ],
+  },
   legal: {
     heading: "Mentions légales",
     terms: "Conditions d'utilisation",
@@ -29,6 +215,8 @@ export const fr: Dict = {
     commercial: "Entreprises",
     why: "Pourquoi Trustline",
     contact: "Contact",
+    about: "À propos",
+    faq: "FAQ",
   },
   landing: {
     badge: "Banque personnelle",
@@ -85,6 +273,8 @@ export const fr: Dict = {
       "Banque personnelle, prêts et crédit — fondés sur la confiance, près de chez vous.",
     footerContact: "Contact",
     footerClients: "Clients",
+    footerCompany: "Entreprise",
+    footerProducts: "Produits",
     footerLegal: "Mentions légales",
     footerRights: "Tous droits réservés.",
     benefitsKicker: "Pourquoi Trustline",

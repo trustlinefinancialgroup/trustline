@@ -12,6 +12,193 @@ export const en = {
       "That file is too large to upload. Photograph the document with your camera instead — we shrink photos automatically.",
     language: "Language",
   },
+  about: {
+    eyebrow: "About us",
+    title: "Banking that still involves people.",
+    body:
+      "Trustline Financial Group is a modern bank built on an old idea: that money is personal, and the decisions around it deserve human judgement rather than an automated yes or no.",
+    storyTitle: "Why we built Trustline",
+    storyBody1:
+      "Most banking has been optimised for the bank. Applications disappear into scoring models, decisions arrive without explanation, and reaching a person who can actually help is the hardest part of the process.",
+    storyBody2:
+      "We took the opposite approach. Every application that reaches us is read by someone. Every decision comes with a reason. Every balance on your dashboard traces back to a transaction you can see, with a reference you can quote to us.",
+    commitmentsTitle: "What that means in practice",
+    commitments: [
+      {
+        title: "A person reviews every application",
+        body: "Account openings, cards, loans and credit lines are approved by our team, not by a scoring model. If we need more from you, we ask.",
+      },
+      {
+        title: "Plain language, always",
+        body: "Terms, rates and next payment dates are written on the product page in words you already understand. If a decision goes against you, we tell you why.",
+      },
+      {
+        title: "Security you control",
+        body: "A security word of your choosing gates withdrawals and transfers. Cards can be frozen instantly from your dashboard, and identity documents are deleted once your review is finished.",
+      },
+      {
+        title: "Banking in your language",
+        body: "The whole service — pages, statements and the emails we send you — is available in English, French, German and Spanish.",
+      },
+    ],
+    ledgerTitle: "Every figure is traceable",
+    ledgerBody:
+      "We never edit a balance. Money moves by adding an entry to a ledger that is only ever appended to, so your statement and your dashboard are two views of the same record. That is why every transaction carries a reference, and why a downloadable statement is available for each month you have been with us.",
+    teamTitle: "The people behind it",
+    teamBody:
+      "A small team of bankers, engineers and support staff who would rather answer your question properly than route you through a menu.",
+    ctaTitle: "Open an account in minutes.",
+    ctaBody: "Verify your identity once, and our team takes it from there.",
+  },
+  contactPage: {
+    eyebrow: "Contact",
+    title: "Talk to a person.",
+    body:
+      "Whichever way you get in touch, a member of our team reads it. We aim to reply within one business day.",
+    channelsTitle: "Ways to reach us",
+    channels: [
+      {
+        title: "General enquiries",
+        body: "Questions about Trustline, opening an account, or anything not covered elsewhere.",
+        value: "info@trustlinefinancialgroup.com",
+      },
+      {
+        title: "Existing clients",
+        body: "Help with your account, a deposit, a withdrawal, or a card.",
+        value: "support@trustlinefinancialgroup.com",
+      },
+      {
+        title: "Account managers",
+        body: "Lending, mortgages, and commercial banking relationships.",
+        value: "accountmanager@trustlinefinancialgroup.com",
+      },
+    ],
+    liveChatTitle: "Live chat",
+    liveChatBody:
+      "The quickest route for a short question. Open the chat from the bottom-right of our homepage — you'll be talking to our team, not a bot.",
+    signedInTitle: "Already a client?",
+    signedInBody:
+      "Sign in and message us from your account. We can see your details straight away, so there's less to explain.",
+    signedInCta: "Sign in to your account",
+    locationTitle: "Where we are",
+    locationBody: "Trustline Financial Group · New York, United States.",
+    responseTitle: "Response times",
+    responseBody:
+      "Enquiries are answered within one business day. Deposits and withdrawals are reviewed the same business day in most cases.",
+    formTitle: "Send us a message",
+    formBody: "Fill this in and it lands with the right team.",
+    name: "Your name",
+    email: "Your email address",
+    topic: "What is this about?",
+    topics: {
+      GENERAL: "General enquiry",
+      ACCOUNT: "My account",
+      APPLICATION: "An application I've made",
+      DEPOSIT: "Deposits and withdrawals",
+      COMPLAINT: "A complaint",
+    },
+    message: "Your message",
+    send: "Send message",
+    sending: "Sending…",
+    sent: "Thank you — your message is with our team. We'll reply to the address you gave us.",
+    errorRequired: "Please fill in your name, email and message.",
+    errorEmail: "Please enter a valid email address.",
+    errorFailed: "We couldn't send that just now. Please email support@trustlinefinancialgroup.com directly.",
+  },
+  faqPage: {
+    eyebrow: "Help centre",
+    title: "Questions, answered.",
+    body:
+      "The things clients ask us most. If yours isn't here, our team is one message away.",
+    stillStuckTitle: "Still stuck?",
+    stillStuckBody: "Send us a message and a person will get back to you within one business day.",
+    groups: [
+      {
+        title: "Opening an account",
+        items: [
+          {
+            q: "How do I open an account?",
+            a: "Choose whether you want a personal or business account, give us your name, email and phone number, and pick a password. You'll verify your email address, then upload identity documents. Our team reviews everything and emails you when your account is open.",
+          },
+          {
+            q: "What documents do you need?",
+            a: "One government-issued document — a national ID card, driving licence or passport. We ask for a photo of the front, a photo of the back, and a photo of you holding it. A passport only needs its photo page. Photos taken on your phone are fine; we shrink them for you automatically.",
+          },
+          {
+            q: "How long does approval take?",
+            a: "Usually less than one business day once your email is verified and your documents are uploaded. If we need anything else, we'll email you rather than simply declining.",
+          },
+          {
+            q: "What happens to my identity documents?",
+            a: "They are stored privately and are never shared. Once your review is complete our team deletes the images, and a record that they were reviewed and removed is kept in our audit log.",
+          },
+        ],
+      },
+      {
+        title: "Moving money",
+        items: [
+          {
+            q: "How do I pay money in?",
+            a: "Choose a deposit method on the Deposit page and you'll see exactly where to send the funds. Record the amount you sent, attach proof if you have it, and our team verifies it and credits your balance — you'll get an email receipt showing your new balance.",
+          },
+          {
+            q: "How do I withdraw?",
+            a: "Choose a method, enter your payout details and the amount, and confirm with your security word. Our team reviews every withdrawal before it is processed. Pending withdrawals are held against your available balance so you can't accidentally spend the same money twice.",
+          },
+          {
+            q: "Can I send money to another Trustline account?",
+            a: "Yes, instantly, using the recipient's account number or email address. To send money to an outside bank, use the Withdraw option instead.",
+          },
+          {
+            q: "Why do you ask for a security word?",
+            a: "It's a second check on the actions that move money out of your account — withdrawals and transfers to other people. Moving money between your own checking and savings doesn't need it. You set it in Account settings.",
+          },
+        ],
+      },
+      {
+        title: "Cards, loans and products",
+        items: [
+          {
+            q: "Which card will I get?",
+            a: "You choose the tier you'd like when you apply — Classic, Gold, Platinum or Black — and each one carries its own credit limit range. Our team confirms the final tier and limit after reviewing your application, so you never have to name an amount yourself.",
+          },
+          {
+            q: "What happens after a card is approved?",
+            a: "Your card appears on your dashboard with its number, expiry and security code, hidden until you choose to show them. You can freeze and unfreeze it yourself at any time from the card's page.",
+          },
+          {
+            q: "How do loans work?",
+            a: "Tell us how much you need and over what term. If approved, the money is paid into your checking account and the amount owed appears on the product page, where you can make repayments. Credit lines work the other way round — we set a limit, and you draw from it when you need to.",
+          },
+          {
+            q: "Where do I see my interest rate and next payment date?",
+            a: "On the product's own page, alongside your limit, current balance and card tier. Every approved product has its own page and its own activity list.",
+          },
+        ],
+      },
+      {
+        title: "Your account and security",
+        items: [
+          {
+            q: "Where can I see my transactions and statements?",
+            a: "Your dashboard shows recent activity. The Transactions page shows everything, filterable by account, type, status and date. The Statements page has a statement for each month you've been active, which you can print, save as a PDF, or download as a spreadsheet file.",
+          },
+          {
+            q: "I've forgotten my password.",
+            a: "Use the 'Forgot password?' link on the sign-in page. We'll email you a link that works once and expires after an hour.",
+          },
+          {
+            q: "Which languages do you support?",
+            a: "English, French, German and Spanish — across the website, your account, and the emails we send you. Change it with the globe icon in the header.",
+          },
+          {
+            q: "Are my deposits insured?",
+            a: "Deposits are FDIC insured up to the maximum permitted by law. The specifics that apply to your account are set out in your deposit agreement.",
+          },
+        ],
+      },
+    ],
+  },
   legal: {
     heading: "Legal",
     terms: "Terms of Service",
@@ -27,6 +214,8 @@ export const en = {
     commercial: "Business",
     why: "Why Trustline",
     contact: "Contact",
+    about: "About us",
+    faq: "FAQ",
   },
   landing: {
     badge: "Personal banking",
@@ -83,6 +272,8 @@ export const en = {
       "Personal banking, lending, and credit — built on trust and close to home.",
     footerContact: "Contact",
     footerClients: "Clients",
+    footerCompany: "Company",
+    footerProducts: "Products",
     footerLegal: "Legal",
     footerRights: "All rights reserved.",
     benefitsKicker: "Why Trustline",
