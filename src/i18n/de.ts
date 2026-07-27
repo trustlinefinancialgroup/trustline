@@ -52,6 +52,116 @@ export const de: Dict = {
     ctaTitle: "Eröffnen Sie in wenigen Minuten ein Konto.",
     ctaBody: "Einmal Identität bestätigen — den Rest übernimmt unser Team.",
   },
+  productPage: {
+    eyebrow: "Produkte",
+    highlightsTitle: "Was Sie bekommen",
+    howTitle: "So funktioniert es",
+    how: [
+      {
+        title: "In wenigen Minuten beantragen",
+        body: "Sagen Sie uns, was Sie brauchen, und etwas zu Ihrer Situation. Nichts davon wird automatisch bewertet.",
+      },
+      {
+        title: "Ein Mensch prüft ihn",
+        body: "Unser Team liest Ihren Antrag und meldet sich — meist innerhalb eines Werktages. Fehlt uns etwas, fragen wir nach, statt abzulehnen.",
+      },
+      {
+        title: "Im Dashboard sichtbar",
+        body: "Nach der Freigabe erhält das Produkt eine eigene Seite mit Ihren Konditionen, Ihrem Saldo und seiner eigenen Umsatzliste.",
+      },
+    ],
+    tiersTitle: "Wählen Sie Ihre Karte",
+    tiersBody:
+      "Jede Stufe hat ihren eigenen Limitrahmen. Sie müssen nie einen Betrag nennen — unser Team bestätigt Stufe und Limit nach der Prüfung.",
+    limitLabel: "Kreditlimit",
+    faqTitle: "Gut zu wissen",
+    otherTitle: "Weitere Produkte",
+    applyCta: "Dieses Produkt beantragen",
+    openCta: "Konto eröffnen und beantragen",
+    signedInNote: "Schon Kunde? Melden Sie sich an und beantragen Sie es im Dashboard.",
+    notFound: "Dieses Produkt ist nicht verfügbar.",
+  },
+  securityPage: {
+    eyebrow: "Betrugsschutz",
+    title: "Eine forensische Einheit auf Ihrer Seite.",
+    body:
+      "Unsere forensische Ermittlungseinheit hat zwei Aufgaben: Betrug von Ihrem Konto fernzuhalten und, wenn doch etwas passiert, zu ermitteln und die Rückholung Ihres Geldes zu verfolgen.",
+    preventTitle: "Verhindern, bevor es passiert",
+    preventBody:
+      "Die meisten Betrugsfälle verhindert man, indem man die falsche Transaktion von vornherein schwer macht.",
+    prevent: [
+      {
+        title: "Rund um die Uhr überwacht",
+        body: "Konten werden auf Muster geprüft, die nicht passen — ungewöhnliche Beträge, unbekannte Ziele, ein plötzlich anderes Verhalten. Auffälliges geht noch am selben Tag an einen menschlichen Prüfer.",
+      },
+      {
+        title: "Jede Auszahlung wird geprüft",
+        body: "Geld verlässt ein Konto nie automatisch. Ein Mitglied unseres Teams prüft jede Auszahlungsanfrage vor der Ausführung — unsere wirksamste Kontrolle.",
+      },
+      {
+        title: "Ein zweites Geheimnis, das nur Sie kennen",
+        body: "Ihr Sicherheitswort ist für Auszahlungen und Überweisungen an andere nötig. Wer Ihr Passwort hat, kann Ihr Geld trotzdem nicht bewegen.",
+      },
+      {
+        title: "Karte sofort sperren",
+        body: "Karte verloren oder etwas Unbekanntes entdeckt? Sperren Sie sie selbst mit einem Tipp im Dashboard — und entsperren Sie sie genauso schnell, wenn es ein Fehlalarm war.",
+      },
+    ],
+    investigateTitle: "Wenn doch etwas passiert",
+    investigateBody:
+      "Melden Sie es, und die Einheit übernimmt. Sie müssen nichts selbst hinterherjagen und erfahren bei jedem Schritt, was geschieht.",
+    steps: [
+      {
+        title: "Sie melden es",
+        body: "Über den Live-Chat, per E-Mail oder aus Ihrem Konto heraus. Die Uhr läuft ab Ihrer Meldung — Tempo zählt mehr als Formulare.",
+      },
+      {
+        title: "Wir sichern das Konto",
+        body: "Karten werden gesperrt und offene ausgehende Zahlungen angehalten, solange wir prüfen. Ihr verbleibender Saldo wird zuerst geschützt.",
+      },
+      {
+        title: "Wir ermitteln",
+        body: "Die Einheit verfolgt die Buchung durch unser Journal, klärt, wie die Zahlung autorisiert wurde, und stellt fest, wohin das Geld ging. Jede Buchung hat Referenz und Zeitstempel — das macht die Nachverfolgung möglich.",
+      },
+      {
+        title: "Wir verfolgen die Rückholung",
+        body: "Hat das Geld Trustline verlassen, kontaktieren wir die empfangende Bank und fordern den Rückruf der Zahlung. Schnelles Handeln verbessert die Aussichten erheblich.",
+      },
+      {
+        title: "Wir stellen es richtig und erklären es",
+        body: "Ergibt unsere Untersuchung, dass eine Buchung nicht von Ihnen autorisiert war, korrigieren wir Ihren Saldo. In jedem Fall erhalten Sie eine schriftliche Erläuterung unserer Feststellungen — keine einzeilige Absage.",
+      },
+    ],
+    urgentTitle: "Glauben Sie, dass gerade etwas nicht stimmt?",
+    urgentBody:
+      "Warten Sie nicht, bis Sie sicher sind. Ein Fehlalarm kostet Sie Minuten; eine Verzögerung kann Sie das Geld kosten.",
+    urgentSteps: [
+      "Sperren Sie Ihre Karte im Dashboard.",
+      "Ändern Sie Ihr Passwort in den Kontoeinstellungen.",
+      "Schreiben Sie an support@trustlinefinancialgroup.com oder öffnen Sie den Live-Chat auf unserer Startseite.",
+    ],
+    protectTitle: "So schützen Sie sich",
+    protect: [
+      {
+        title: "Wir fragen nie nach Ihrem Passwort",
+        body: "Niemand von Trustline fragt nach Ihrem Passwort oder Sicherheitswort — weder per E-Mail noch am Telefon noch im Chat. Wer das tut, sind nicht wir.",
+      },
+      {
+        title: "Prüfen Sie die Adresse, nicht den Namen",
+        body: "Unsere E-Mails kommen von trustlinefinancialgroup.com. Ein Anzeigename lässt sich leicht fälschen, die Domain hinter dem @ nicht.",
+      },
+      {
+        title: "Wir setzen Sie nicht unter Druck",
+        body: "Druck, sofort zu handeln, Drohungen mit einer Kontoschließung oder die Aufforderung, Geld „in Sicherheit“ zu bringen, sind Betrugsmerkmale. Echte Banken lassen Ihnen Zeit.",
+      },
+      {
+        title: "Sehen Sie Ihre Umsätze durch",
+        body: "Ihre Umsatzübersicht zeigt jede Buchung mit Referenz. Ein gelegentlicher Blick ist der schnellste Weg, etwas früh zu bemerken.",
+      },
+    ],
+    ctaTitle: "Fragen zur Sicherheit Ihres Kontos?",
+    ctaBody: "Unser Team beantwortet eine Frage lieber früh, als später einen Schaden zu untersuchen.",
+  },
   contactPage: {
     eyebrow: "Kontakt",
     title: "Sprechen Sie mit einem Menschen.",
@@ -217,6 +327,7 @@ export const de: Dict = {
     contact: "Kontakt",
     about: "Über uns",
     faq: "FAQ",
+    security: "Betrugsschutz",
   },
   landing: {
     badge: "Privatkunden-Banking",

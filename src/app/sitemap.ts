@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { COMMERCIAL_PRODUCTS, PERSONAL_PRODUCTS } from "@/lib/products";
 
 const SITE = "https://trustlinefinancialgroup.com";
 
@@ -8,6 +9,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes: { path: string; priority: number; changeFrequency: "monthly" | "yearly" }[] = [
     { path: "/", priority: 1, changeFrequency: "monthly" },
     { path: "/about", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/security", priority: 0.8, changeFrequency: "monthly" },
+    // Every product in the catalogue gets a public page, so they are listed
+    // from the catalogue rather than by hand.
+    ...[...PERSONAL_PRODUCTS, ...COMMERCIAL_PRODUCTS].map((p) => ({
+      path: `/products/${p.key}`,
+      priority: 0.7,
+      changeFrequency: "monthly" as const,
+    })),
     { path: "/faq", priority: 0.8, changeFrequency: "monthly" },
     { path: "/contact", priority: 0.7, changeFrequency: "monthly" },
     { path: "/signup", priority: 0.7, changeFrequency: "monthly" },

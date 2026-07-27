@@ -52,6 +52,116 @@ export const es: Dict = {
     ctaTitle: "Abre una cuenta en minutos.",
     ctaBody: "Verifica tu identidad una vez y nuestro equipo se encarga del resto.",
   },
+  productPage: {
+    eyebrow: "Productos",
+    highlightsTitle: "Lo que obtienes",
+    howTitle: "Cómo funciona",
+    how: [
+      {
+        title: "Solicítalo en unos minutos",
+        body: "Cuéntanos qué necesitas y algo de tu situación. Nada de lo que escribes se puntúa automáticamente.",
+      },
+      {
+        title: "Lo revisa una persona",
+        body: "Nuestro equipo lee tu solicitud y te responde, normalmente en un día hábil. Si necesitamos algo más, te lo pedimos en lugar de rechazarla.",
+      },
+      {
+        title: "Míralo en tu panel",
+        body: "Una vez aprobado, el producto tiene su propia página con tus condiciones, tu saldo y su propia lista de movimientos.",
+      },
+    ],
+    tiersTitle: "Elige tu tarjeta",
+    tiersBody:
+      "Cada categoría tiene su propio rango de límite. Nunca tienes que indicar un importe: nuestro equipo confirma la categoría y el límite tras la revisión.",
+    limitLabel: "Límite de crédito",
+    faqTitle: "Conviene saber",
+    otherTitle: "Otros productos",
+    applyCta: "Solicitar este producto",
+    openCta: "Abre una cuenta para solicitarlo",
+    signedInNote: "¿Ya eres cliente? Inicia sesión y solicítalo desde tu panel.",
+    notFound: "Ese producto no está disponible.",
+  },
+  securityPage: {
+    eyebrow: "Protección antifraude",
+    title: "Una unidad forense de tu lado.",
+    body:
+      "Nuestra Unidad de Investigación Financiera Forense hace dos cosas: trabaja para que el fraude no llegue a tu cuenta y, cuando algo sale mal, investiga y persigue la recuperación de tu dinero.",
+    preventTitle: "Detenerlo antes de que ocurra",
+    preventBody:
+      "La mayoría del fraude se evita haciendo que la operación equivocada sea difícil de completar desde el principio.",
+    prevent: [
+      {
+        title: "Vigilancia a todas horas",
+        body: "Se vigilan las cuentas en busca de patrones que no encajan: importes inusuales, destinos desconocidos, un cambio repentino de comportamiento. Todo lo que destaca pasa el mismo día a un revisor humano.",
+      },
+      {
+        title: "Toda retirada se revisa",
+        body: "El dinero nunca sale de una cuenta de forma automática. Una persona de nuestro equipo comprueba cada solicitud de retirada antes de procesarla: es el control más eficaz que tenemos.",
+      },
+      {
+        title: "Un segundo secreto que solo tú sabes",
+        body: "Tu palabra de seguridad hace falta para retirar y para enviar dinero a otras personas. Quien tenga tu contraseña sigue sin poder mover tu dinero.",
+      },
+      {
+        title: "Bloqueo instantáneo de la tarjeta",
+        body: "Si pierdes una tarjeta o ves algo que no reconoces, puedes bloquearla tú mismo desde tu panel con un toque. Y desbloquearla igual de rápido si era una falsa alarma.",
+      },
+    ],
+    investigateTitle: "Si algo llega a pasar",
+    investigateBody:
+      "Comunícalo y la unidad se hace cargo. No te dejamos persiguiéndolo por tu cuenta y te contamos qué ocurre en cada fase.",
+    steps: [
+      {
+        title: "Nos avisas",
+        body: "Comunícalo por chat, por correo o desde tu cuenta. El reloj empieza en cuanto nos escribes: la rapidez importa más que el papeleo.",
+      },
+      {
+        title: "Aseguramos la cuenta",
+        body: "Se bloquean las tarjetas y se retienen las salidas pendientes mientras revisamos. Tu saldo restante se protege antes que nada.",
+      },
+      {
+        title: "Investigamos",
+        body: "La unidad rastrea el movimiento en nuestro libro mayor, determina cómo se autorizó el pago e identifica adónde fue el dinero. Cada apunte tiene referencia y marca de tiempo, y eso es lo que hace posible el rastreo.",
+      },
+      {
+        title: "Perseguimos la recuperación",
+        body: "Cuando los fondos han salido de Trustline, contactamos con la entidad receptora y solicitamos la retrocesión del pago. Actuar rápido mejora mucho las opciones de recuperarlo.",
+      },
+      {
+        title: "Lo corregimos y lo explicamos",
+        body: "Si nuestra investigación concluye que una operación no fue autorizada por ti, corregimos tu saldo. En cualquier caso recibes una explicación por escrito de lo que encontramos, no un rechazo de una línea.",
+      },
+    ],
+    urgentTitle: "¿Crees que algo va mal ahora mismo?",
+    urgentBody:
+      "No esperes a estar seguro. Una falsa alarma te cuesta unos minutos; un retraso puede costarte el dinero.",
+    urgentSteps: [
+      "Bloquea tu tarjeta desde tu panel.",
+      "Cambia tu contraseña en los ajustes de la cuenta.",
+      "Escribe a support@trustlinefinancialgroup.com o abre el chat en nuestra página de inicio.",
+    ],
+    protectTitle: "Cómo protegerte",
+    protect: [
+      {
+        title: "Nunca te pediremos tu contraseña",
+        body: "Nadie de Trustline te pedirá jamás tu contraseña ni tu palabra de seguridad, ni por correo, ni por teléfono, ni por chat. Quien lo haga no somos nosotros.",
+      },
+      {
+        title: "Mira la dirección, no el nombre",
+        body: "Nuestros correos salen de trustlinefinancialgroup.com. El nombre que se muestra es fácil de falsificar; el dominio después de la @ no.",
+      },
+      {
+        title: "No te metemos prisa",
+        body: "La presión para actuar ya, las amenazas de cerrar tu cuenta o pedirte que muevas dinero «para protegerlo» son señales de fraude. Un banco de verdad te da tiempo.",
+      },
+      {
+        title: "Revisa tu actividad",
+        body: "Tu historial muestra cada apunte con su referencia. Revisarlo de vez en cuando es la forma más rápida de detectar algo a tiempo.",
+      },
+    ],
+    ctaTitle: "¿Dudas sobre la seguridad de tu cuenta?",
+    ctaBody: "Nuestro equipo prefiere con mucho responder pronto a una pregunta que investigar después una pérdida.",
+  },
   contactPage: {
     eyebrow: "Contacto",
     title: "Habla con una persona.",
@@ -217,6 +327,7 @@ export const es: Dict = {
     contact: "Contacto",
     about: "Sobre nosotros",
     faq: "Preguntas frecuentes",
+    security: "Protección antifraude",
   },
   landing: {
     badge: "Banca personal",

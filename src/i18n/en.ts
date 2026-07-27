@@ -50,6 +50,116 @@ export const en = {
     ctaTitle: "Open an account in minutes.",
     ctaBody: "Verify your identity once, and our team takes it from there.",
   },
+  productPage: {
+    eyebrow: "Products",
+    highlightsTitle: "What you get",
+    howTitle: "How it works",
+    how: [
+      {
+        title: "Apply in a few minutes",
+        body: "Tell us what you need and a little about your circumstances. Nothing you enter is scored automatically.",
+      },
+      {
+        title: "A person reviews it",
+        body: "Our team reads your application and comes back to you — usually within one business day. If we need more, we ask rather than decline.",
+      },
+      {
+        title: "See it on your dashboard",
+        body: "Once approved, the product gets its own page showing your terms, your balance and its own activity list.",
+      },
+    ],
+    tiersTitle: "Choose your card",
+    tiersBody:
+      "Each tier carries its own credit limit range. You never have to name an amount — our team confirms your final tier and limit after review.",
+    limitLabel: "Credit limit",
+    faqTitle: "Good to know",
+    otherTitle: "Other products",
+    applyCta: "Apply for this",
+    openCta: "Open an account to apply",
+    signedInNote: "Already a client? Sign in and apply from your dashboard.",
+    notFound: "That product isn't available.",
+  },
+  securityPage: {
+    eyebrow: "Fraud protection",
+    title: "A forensic unit on your side.",
+    body:
+      "Our Forensic Financial Investigation Unit does two jobs: it works to stop fraud reaching your account, and when something does go wrong, it investigates and pursues recovery of your money.",
+    preventTitle: "Stopping it before it happens",
+    preventBody:
+      "Most fraud is prevented by making the wrong transaction hard to complete in the first place.",
+    prevent: [
+      {
+        title: "Monitoring around the clock",
+        body: "Accounts are watched for patterns that don't fit — unusual amounts, unfamiliar destinations, a sudden change in behaviour. Anything that stands out is escalated to a human reviewer the same day.",
+      },
+      {
+        title: "Every withdrawal is reviewed",
+        body: "Money never leaves an account automatically. A member of our team checks each withdrawal request before it is processed, which is the single most effective control we have.",
+      },
+      {
+        title: "A second secret only you know",
+        body: "Your security word is required for withdrawals and for sending money to other people. Someone who has your password still cannot move your money without it.",
+      },
+      {
+        title: "Instant card freeze",
+        body: "If a card is lost, or you see something you don't recognise, you can freeze it yourself from your dashboard in one tap. Unfreeze it just as quickly if it was a false alarm.",
+      },
+    ],
+    investigateTitle: "If something does happen",
+    investigateBody:
+      "Report it and the unit takes over. You are not left to chase it yourself, and you are told what is happening at each stage.",
+    steps: [
+      {
+        title: "You tell us",
+        body: "Report it from live chat, by email, or from inside your account. The clock starts the moment we hear from you — speed matters more than paperwork.",
+      },
+      {
+        title: "We secure the account",
+        body: "Cards are frozen and pending outbound transactions are held while we look. Your remaining balance is protected first, before anything else is decided.",
+      },
+      {
+        title: "We investigate",
+        body: "The unit traces the transaction through our ledger, establishes how the payment was authorised, and identifies where the money went. Every entry has a reference and a timestamp, which is what makes tracing possible.",
+      },
+      {
+        title: "We pursue recovery",
+        body: "Where funds have left Trustline, we contact the receiving institution and pursue recall of the payment. Acting quickly materially improves the chance of getting money back.",
+      },
+      {
+        title: "We put it right and explain",
+        body: "Where our investigation finds that a transaction was not authorised by you, we correct your balance. Either way you get a written explanation of what we found — not a one-line rejection.",
+      },
+    ],
+    urgentTitle: "Think something is wrong right now?",
+    urgentBody:
+      "Don't wait to be sure. A false alarm costs you a few minutes; a delay can cost you the money.",
+    urgentSteps: [
+      "Freeze your card from your dashboard.",
+      "Change your password from Account settings.",
+      "Email support@trustlinefinancialgroup.com, or open live chat on our homepage.",
+    ],
+    protectTitle: "How to protect yourself",
+    protect: [
+      {
+        title: "We will never ask for your password",
+        body: "Nobody at Trustline will ever ask for your password or your security word — not by email, not on the phone, not in chat. Anyone who does is not us.",
+      },
+      {
+        title: "Check the address, not the name",
+        body: "Our emails come from trustlinefinancialgroup.com. A display name is easy to fake; the domain after the @ is not.",
+      },
+      {
+        title: "We don't rush you",
+        body: "Pressure to act immediately, threats to close your account, or a demand to move money to keep it safe are all signs of fraud. Real banks give you time.",
+      },
+      {
+        title: "Check your activity",
+        body: "Your transaction history shows every entry with a reference. Reviewing it now and then is the fastest way to spot something early.",
+      },
+    ],
+    ctaTitle: "Questions about your account security?",
+    ctaBody: "Our team would far rather answer a question early than investigate a loss later.",
+  },
   contactPage: {
     eyebrow: "Contact",
     title: "Talk to a person.",
@@ -216,6 +326,7 @@ export const en = {
     contact: "Contact",
     about: "About us",
     faq: "FAQ",
+    security: "Fraud protection",
   },
   landing: {
     badge: "Personal banking",

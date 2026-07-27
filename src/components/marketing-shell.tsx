@@ -13,6 +13,7 @@ export async function MarketingHeader() {
   const links = [
     { href: "/#personal", label: t.nav.personal },
     { href: "/#commercial", label: t.nav.commercial },
+    { href: "/security", label: t.nav.security },
     { href: "/about", label: t.nav.about },
     { href: "/faq", label: t.nav.faq },
     { href: "/contact", label: t.nav.contact },
@@ -54,24 +55,27 @@ export async function MarketingFooter() {
 
   return (
     <footer className="bg-navy-950 text-navy-200">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-6">
-        <div className="md:col-span-2">
+      {/* 12 columns so the contact column can be wider than the rest — the
+          mailbox addresses are long enough to collide with Legal otherwise. */}
+      <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-12">
+        <div className="sm:col-span-2 lg:col-span-3">
           <Logo theme="dark" href={null} />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-navy-300">
             {t.landing.footerTagline}
           </p>
         </div>
 
-        <div>
+        <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-white">{t.landing.footerCompany}</p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li><Link href="/about" className="hover:text-white">{t.nav.about}</Link></li>
+            <li><Link href="/security" className="hover:text-white">{t.nav.security}</Link></li>
             <li><Link href="/faq" className="hover:text-white">{t.nav.faq}</Link></li>
             <li><Link href="/contact" className="hover:text-white">{t.nav.contact}</Link></li>
           </ul>
         </div>
 
-        <div>
+        <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-white">{t.landing.footerProducts}</p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li><Link href="/products/CREDIT_CARD" className="hover:text-white">{t.landing.personal.items[0].title}</Link></li>
@@ -82,16 +86,22 @@ export async function MarketingFooter() {
           </ul>
         </div>
 
-        <div>
+        <div className="lg:col-span-3">
           <p className="text-sm font-semibold text-white">{t.landing.footerContact}</p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
-              <a href="mailto:info@trustlinefinancialgroup.com" className="hover:text-white">
+              <a
+                href="mailto:info@trustlinefinancialgroup.com"
+                className="block break-words hover:text-white"
+              >
                 info@trustlinefinancialgroup.com
               </a>
             </li>
             <li>
-              <a href="mailto:support@trustlinefinancialgroup.com" className="hover:text-white">
+              <a
+                href="mailto:support@trustlinefinancialgroup.com"
+                className="block break-words hover:text-white"
+              >
                 support@trustlinefinancialgroup.com
               </a>
             </li>
@@ -100,7 +110,7 @@ export async function MarketingFooter() {
           </ul>
         </div>
 
-        <div>
+        <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-white">{t.landing.footerLegal}</p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li><Link href="/legal/terms" className="hover:text-white">{t.legal.terms}</Link></li>

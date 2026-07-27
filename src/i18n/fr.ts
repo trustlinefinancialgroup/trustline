@@ -52,6 +52,116 @@ export const fr: Dict = {
     ctaTitle: "Ouvrez un compte en quelques minutes.",
     ctaBody: "Vérifiez votre identité une fois, notre équipe s'occupe du reste.",
   },
+  productPage: {
+    eyebrow: "Produits",
+    highlightsTitle: "Ce que vous obtenez",
+    howTitle: "Comment ça marche",
+    how: [
+      {
+        title: "Faites votre demande en quelques minutes",
+        body: "Dites-nous ce dont vous avez besoin et un peu de votre situation. Rien de ce que vous saisissez n'est noté automatiquement.",
+      },
+      {
+        title: "Une personne l'examine",
+        body: "Notre équipe lit votre demande et revient vers vous, généralement sous un jour ouvré. S'il nous manque quelque chose, nous demandons plutôt que de refuser.",
+      },
+      {
+        title: "Retrouvez-le sur votre tableau de bord",
+        body: "Une fois accordé, le produit a sa propre page : vos conditions, votre solde et son historique.",
+      },
+    ],
+    tiersTitle: "Choisissez votre carte",
+    tiersBody:
+      "Chaque gamme a sa propre fourchette de plafond. Vous n'avez jamais à indiquer un montant : notre équipe confirme la gamme et le plafond après examen.",
+    limitLabel: "Plafond de crédit",
+    faqTitle: "Bon à savoir",
+    otherTitle: "Autres produits",
+    applyCta: "Demander ce produit",
+    openCta: "Ouvrir un compte pour faire une demande",
+    signedInNote: "Déjà client ? Connectez-vous et faites votre demande depuis votre tableau de bord.",
+    notFound: "Ce produit n'est pas disponible.",
+  },
+  securityPage: {
+    eyebrow: "Protection contre la fraude",
+    title: "Une unité forensique de votre côté.",
+    body:
+      "Notre unité d'investigation financière a deux missions : empêcher la fraude d'atteindre votre compte et, lorsque quelque chose se produit, enquêter et chercher à récupérer votre argent.",
+    preventTitle: "Empêcher avant qu'il ne soit trop tard",
+    preventBody:
+      "La plupart des fraudes sont évitées en rendant la mauvaise opération difficile à réaliser dès le départ.",
+    prevent: [
+      {
+        title: "Une surveillance permanente",
+        body: "Les comptes sont surveillés pour repérer ce qui détonne : montants inhabituels, destinations inconnues, changement soudain de comportement. Tout signal est transmis le jour même à un examinateur humain.",
+      },
+      {
+        title: "Chaque retrait est examiné",
+        body: "L'argent ne quitte jamais un compte automatiquement. Un membre de notre équipe vérifie chaque demande de retrait avant traitement : c'est notre contrôle le plus efficace.",
+      },
+      {
+        title: "Un second secret que vous seul connaissez",
+        body: "Votre mot de sécurité est exigé pour les retraits et les envois d'argent. Quelqu'un qui aurait votre mot de passe ne peut toujours pas déplacer vos fonds sans lui.",
+      },
+      {
+        title: "Blocage instantané de la carte",
+        body: "Carte perdue ou opération que vous ne reconnaissez pas : bloquez-la vous-même depuis votre tableau de bord en un geste. Débloquez-la aussi vite s'il s'agissait d'une fausse alerte.",
+      },
+    ],
+    investigateTitle: "Si quelque chose arrive malgré tout",
+    investigateBody:
+      "Signalez-le et l'unité prend le relais. Vous n'avez pas à courir après, et vous êtes informé à chaque étape.",
+    steps: [
+      {
+        title: "Vous nous prévenez",
+        body: "Signalez-le par chat, par e-mail ou depuis votre compte. Le compte à rebours démarre dès votre message : la rapidité compte plus que la paperasse.",
+      },
+      {
+        title: "Nous sécurisons le compte",
+        body: "Les cartes sont bloquées et les opérations sortantes en attente sont suspendues pendant l'examen. Votre solde restant est protégé en priorité.",
+      },
+      {
+        title: "Nous enquêtons",
+        body: "L'unité retrace l'opération dans notre registre, établit comment le paiement a été autorisé et identifie où l'argent est allé. Chaque écriture porte une référence et un horodatage : c'est ce qui rend la traçabilité possible.",
+      },
+      {
+        title: "Nous cherchons à récupérer les fonds",
+        body: "Lorsque les fonds ont quitté Trustline, nous contactons l'établissement destinataire et demandons le rappel du paiement. Agir vite améliore nettement les chances de récupération.",
+      },
+      {
+        title: "Nous corrigeons et nous expliquons",
+        body: "Si notre enquête établit qu'une opération n'a pas été autorisée par vous, nous corrigeons votre solde. Dans tous les cas, vous recevez une explication écrite de nos conclusions, pas un refus en une ligne.",
+      },
+    ],
+    urgentTitle: "Vous pensez qu'il y a un problème maintenant ?",
+    urgentBody:
+      "N'attendez pas d'en être sûr. Une fausse alerte vous coûte quelques minutes ; un retard peut vous coûter l'argent.",
+    urgentSteps: [
+      "Bloquez votre carte depuis votre tableau de bord.",
+      "Changez votre mot de passe dans les paramètres du compte.",
+      "Écrivez à support@trustlinefinancialgroup.com ou ouvrez le chat sur notre page d'accueil.",
+    ],
+    protectTitle: "Comment vous protéger",
+    protect: [
+      {
+        title: "Nous ne demandons jamais votre mot de passe",
+        body: "Personne chez Trustline ne vous demandera votre mot de passe ni votre mot de sécurité — ni par e-mail, ni par téléphone, ni par chat. Si on vous le demande, ce n'est pas nous.",
+      },
+      {
+        title: "Vérifiez l'adresse, pas le nom",
+        body: "Nos e-mails proviennent de trustlinefinancialgroup.com. Un nom d'expéditeur est facile à falsifier ; le domaine après le @ ne l'est pas.",
+      },
+      {
+        title: "Nous ne vous pressons pas",
+        body: "Une pression pour agir immédiatement, une menace de fermeture de compte ou une demande de transférer votre argent « pour le protéger » sont des signes de fraude. Une vraie banque vous laisse le temps.",
+      },
+      {
+        title: "Consultez votre activité",
+        body: "Votre historique affiche chaque écriture avec sa référence. Le consulter régulièrement est le moyen le plus rapide de repérer un problème tôt.",
+      },
+    ],
+    ctaTitle: "Des questions sur la sécurité de votre compte ?",
+    ctaBody: "Notre équipe préfère de loin répondre tôt à une question que d'enquêter plus tard sur une perte.",
+  },
   contactPage: {
     eyebrow: "Contact",
     title: "Parlez à une personne.",
@@ -217,6 +327,7 @@ export const fr: Dict = {
     contact: "Contact",
     about: "À propos",
     faq: "FAQ",
+    security: "Protection contre la fraude",
   },
   landing: {
     badge: "Banque personnelle",
