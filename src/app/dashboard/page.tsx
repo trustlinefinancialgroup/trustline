@@ -209,6 +209,13 @@ export default async function DashboardPage({
           >
             {t.bank.accountSettings}
           </Link>
+          <Link
+            href="/support"
+            className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
+          >
+            <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+            {t.support.link}
+          </Link>
           {savings && (
             <Link
               href="/transfer"

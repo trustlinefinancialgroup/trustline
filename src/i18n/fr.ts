@@ -940,6 +940,33 @@ export const fr: Dict = {
     contactRequired: "Veuillez indiquer un e-mail ou les 4 derniers chiffres de votre carte.",
     agent: "Trustline",
     closed: "Ce chat a été clôturé. Envoyez un message pour le rouvrir.",
+    online: "Nous sommes en ligne",
+    starting: "Démarrage…",
+    launcherPrompt: "Une question ? Discutons",
+    you: "Vous",
+    waiting: "Envoyé — un conseiller s'en occupe",
+    empty: "Dites-nous bonjour, nous prenons le relais.",
+  },
+  support: {
+    title: "Assistance en direct",
+    subtitle: "Échangez avec notre équipe sans quitter votre compte.",
+    link: "Assistance en direct",
+    you: "Vous",
+    waiting: "Envoyé — un conseiller s'en occupe",
+    empty: "Votre conversation apparaîtra ici.",
+    signedInAs: "Connecté en tant que",
+    startTitle: "Comment pouvons-nous vous aider ?",
+    startBody:
+      "Vous êtes connecté : aucun formulaire à remplir, nous voyons déjà votre compte. Dites-nous ce dont vous avez besoin et un membre de notre équipe vous répondra ici.",
+    startPlaceholder: "Décrivez ce pour quoi vous avez besoin d'aide…",
+    startButton: "Démarrer la conversation",
+    safetyTitle: "Nous ne demandons jamais votre mot de passe",
+    safetyBody:
+      "Personne chez Trustline ne vous demandera votre mot de passe, votre mot de sécurité ou un code de connexion — ni ici, ni par e-mail, ni par téléphone.",
+    otherTitle: "Autres moyens de nous joindre",
+    hoursTitle: "Délais de réponse",
+    hoursBody:
+      "Le chat en direct reçoit généralement une réponse en quelques minutes aux heures ouvrées. En dehors, nous répondons par e-mail sous un jour ouvré.",
   },
   notif: {
     title: "Notifications",

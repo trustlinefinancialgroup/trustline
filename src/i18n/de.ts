@@ -940,6 +940,33 @@ export const de: Dict = {
     contactRequired: "Bitte geben Sie eine E-Mail oder die letzten 4 Ziffern Ihrer Karte an.",
     agent: "Trustline",
     closed: "Dieser Chat wurde geschlossen. Senden Sie eine Nachricht, um ihn wieder zu öffnen.",
+    online: "Wir sind jetzt online",
+    starting: "Wird gestartet…",
+    launcherPrompt: "Fragen? Schreiben Sie uns",
+    you: "Sie",
+    waiting: "Gesendet — ein Mitarbeiter übernimmt",
+    empty: "Sagen Sie Hallo, den Rest übernehmen wir.",
+  },
+  support: {
+    title: "Live-Support",
+    subtitle: "Sprechen Sie mit unserem Team, ohne Ihr Konto zu verlassen.",
+    link: "Live-Support",
+    you: "Sie",
+    waiting: "Gesendet — ein Mitarbeiter übernimmt",
+    empty: "Ihre Unterhaltung erscheint hier.",
+    signedInAs: "Angemeldet als",
+    startTitle: "Wie können wir helfen?",
+    startBody:
+      "Sie sind angemeldet — kein Formular nötig, wir sehen Ihr Konto bereits. Schreiben Sie uns, was Sie brauchen, und ein Mitglied unseres Teams antwortet hier.",
+    startPlaceholder: "Beschreiben Sie, wobei Sie Hilfe brauchen…",
+    startButton: "Unterhaltung beginnen",
+    safetyTitle: "Wir fragen nie nach Ihrem Passwort",
+    safetyBody:
+      "Niemand von Trustline fragt nach Ihrem Passwort, Ihrem Sicherheitswort oder einem Anmeldecode — weder hier noch per E-Mail oder Telefon.",
+    otherTitle: "Weitere Kontaktwege",
+    hoursTitle: "Antwortzeiten",
+    hoursBody:
+      "Im Live-Chat antworten wir zu Geschäftszeiten meist innerhalb weniger Minuten. Außerhalb davon per E-Mail innerhalb eines Werktages.",
   },
   notif: {
     title: "Mitteilungen",

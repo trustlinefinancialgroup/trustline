@@ -938,6 +938,33 @@ export const en = {
     contactRequired: "Please provide an email or your card's last 4 digits.",
     agent: "Trustline",
     closed: "This chat was closed. Send a message to reopen it.",
+    online: "We're online now",
+    starting: "Starting…",
+    launcherPrompt: "Questions? Chat with us",
+    you: "You",
+    waiting: "Sent — a specialist is picking this up",
+    empty: "Say hello and we'll take it from there.",
+  },
+  support: {
+    title: "Live support",
+    subtitle: "Talk to our team without leaving your account.",
+    link: "Live support",
+    you: "You",
+    waiting: "Sent — a specialist is picking this up",
+    empty: "Your conversation will appear here.",
+    signedInAs: "Signed in as",
+    startTitle: "How can we help?",
+    startBody:
+      "You're signed in, so there's no form to fill in — we can already see your account. Tell us what you need and a member of our team will reply here.",
+    startPlaceholder: "Describe what you need help with…",
+    startButton: "Start the conversation",
+    safetyTitle: "We'll never ask for your password",
+    safetyBody:
+      "Nobody at Trustline will ask for your password, your security word, or a sign-in code — not here, not by email, not on the phone.",
+    otherTitle: "Other ways to reach us",
+    hoursTitle: "Response times",
+    hoursBody:
+      "Live chat is usually answered within a few minutes during business hours. Outside them, we reply by email within one business day.",
   },
   notif: {
     title: "Notifications",

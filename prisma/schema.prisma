@@ -46,18 +46,24 @@ model User {
   notifications Notification[]
   applications  ProductApplication[]
   savingsGoals  SavingsGoal[]
+  chats         ChatConversation[]
 }
 
 // Live chat: one conversation per visitor, with a thread of messages.
 model ChatConversation {
   id             String   @id @default(cuid())
   visitorToken   String   @unique // ties an anonymous browser to its thread
+  // Set when a signed-in client starts a conversation, so support can see who
+  // they are instead of treating them as an anonymous visitor.
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   name           String
   phone          String?
   email          String?
   cardLast4      String?
   status         String   @default("OPEN") // OPEN | CLOSED
   unreadForAdmin Boolean  @default(false)
+  lastNotifiedAt DateTime? // debounces the email alert to the support inbox
   createdAt      DateTime @default(now())
   lastMessageAt  DateTime @default(now())
 

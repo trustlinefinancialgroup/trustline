@@ -1,23 +1,19 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { db } from "@/lib/db";
-
-const COOKIE = "tl_chat";
+import { currentConversation } from "@/lib/chat";
 
 export async function GET() {
-  const jar = await cookies();
-  const token = jar.get(COOKIE)?.value;
-  if (!token) return NextResponse.json({ conversation: null, messages: [] });
-
-  const convo = await db.chatConversation.findUnique({
-    where: { visitorToken: token },
-    include: { messages: { orderBy: { createdAt: "asc" } } },
-  });
+  const convo = await currentConversation();
   if (!convo) return NextResponse.json({ conversation: null, messages: [] });
 
+  const messages = await db.chatMessage.findMany({
+    where: { conversationId: convo.id },
+    orderBy: { createdAt: "asc" },
+  });
+
   return NextResponse.json({
-    conversation: { status: convo.status },
-    messages: convo.messages.map((m) => ({
+    conversation: { status: convo.status, startedAt: convo.createdAt.toISOString() },
+    messages: messages.map((m) => ({
       sender: m.sender,
       body: m.body,
       at: m.createdAt.toISOString(),

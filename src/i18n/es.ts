@@ -940,6 +940,33 @@ export const es: Dict = {
     contactRequired: "Indique un correo o los últimos 4 dígitos de su tarjeta.",
     agent: "Trustline",
     closed: "Este chat se cerró. Envíe un mensaje para reabrirlo.",
+    online: "Estamos en línea",
+    starting: "Iniciando…",
+    launcherPrompt: "¿Dudas? Habla con nosotros",
+    you: "Tú",
+    waiting: "Enviado — un especialista lo está viendo",
+    empty: "Salúdanos y seguimos desde ahí.",
+  },
+  support: {
+    title: "Soporte en directo",
+    subtitle: "Habla con nuestro equipo sin salir de tu cuenta.",
+    link: "Soporte en directo",
+    you: "Tú",
+    waiting: "Enviado — un especialista lo está viendo",
+    empty: "Tu conversación aparecerá aquí.",
+    signedInAs: "Sesión iniciada como",
+    startTitle: "¿Cómo podemos ayudarte?",
+    startBody:
+      "Has iniciado sesión, así que no hay formulario que rellenar: ya vemos tu cuenta. Cuéntanos qué necesitas y un miembro de nuestro equipo te responderá aquí.",
+    startPlaceholder: "Describe en qué necesitas ayuda…",
+    startButton: "Iniciar la conversación",
+    safetyTitle: "Nunca te pediremos tu contraseña",
+    safetyBody:
+      "Nadie de Trustline te pedirá tu contraseña, tu palabra de seguridad ni un código de acceso — ni aquí, ni por correo, ni por teléfono.",
+    otherTitle: "Otras formas de contactarnos",
+    hoursTitle: "Tiempos de respuesta",
+    hoursBody:
+      "El chat en directo se suele atender en pocos minutos en horario laboral. Fuera de él, respondemos por correo en un día hábil.",
   },
   notif: {
     title: "Notificaciones",
