@@ -7,7 +7,8 @@ import { openSavingsAction, toggleFreezeAction } from "@/lib/actions/product-act
 import { balanceCents, formatMoney, getSavings } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
-import { productDef, productLabel } from "@/lib/products";
+import { productDef, productLabel, docsFor } from "@/lib/products";
+import { DocumentChecklist } from "./document-checklist";
 import { buildProductView } from "@/lib/product-view";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
@@ -56,10 +57,32 @@ export default async function ProductPage({
       where: { userId: user.id, productKey: key },
       orderBy: { createdAt: "desc" },
       take: 1,
+      include: { documents: true },
     }),
     getSavings(user.id),
   ]);
   const app = apps[0] ?? null;
+
+  // Supporting paperwork, resolved against the answers they gave. Shown while
+  // an application is being reviewed, and after a decision only if anything is
+  // still outstanding.
+  const docItems =
+    app && app.status !== "DECLINED"
+      ? docsFor(def, app.details).map((requirement) => {
+          const file = app.documents.find((d) => d.docKey === requirement.key);
+          return {
+            key: requirement.key,
+            required: Boolean(requirement.required),
+            name: t.docs.names[requirement.key as keyof typeof t.docs.names] ?? requirement.key,
+            hint: t.docs.hints[requirement.key as keyof typeof t.docs.hints] ?? "",
+            uploaded: file
+              ? { id: file.id, fileName: file.fileName, sizeBytes: file.sizeBytes }
+              : null,
+          };
+        })
+      : [];
+  const outstanding = docItems.filter((d) => d.required && !d.uploaded).length;
+  const showDocs = docItems.length > 0 && (app?.status === "SUBMITTED" || outstanding > 0);
   const savingsBal = savings ? await balanceCents(savings.id) : 0;
 
   const view = buildProductView({
@@ -434,6 +457,57 @@ export default async function ProductPage({
             )}
           </div>
         </div>
+
+        {/* Supporting documents */}
+        {showDocs && app && (
+          <section className="mt-10">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+                {t.docs.title}
+              </h2>
+              <p className="text-sm text-gray-500">
+                {fill(t.docs.progress, {
+                  done: String(docItems.filter((d) => d.uploaded).length),
+                  total: String(docItems.length),
+                })}
+              </p>
+            </div>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">{t.docs.subtitle}</p>
+
+            {app.docsRequestedAt && (
+              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <p className="text-sm font-semibold text-amber-900">{t.docs.requestedTitle}</p>
+                {app.docsNote && (
+                  <p className="mt-1 text-sm text-amber-800">{app.docsNote}</p>
+                )}
+              </div>
+            )}
+
+            {outstanding === 0 && (
+              <p className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+                {t.docs.allIn}
+              </p>
+            )}
+
+            <div className="mt-4">
+              <DocumentChecklist
+                applicationId={app.id}
+                docs={docItems}
+                labels={{
+                  required: t.docs.required,
+                  optional: t.docs.optional,
+                  upload: t.docs.upload,
+                  replace: t.docs.replace,
+                  remove: t.docs.remove,
+                  chooseFile: t.common.chooseFile,
+                  noFile: t.common.noFileChosen,
+                  optimising: t.common.optimising,
+                  fileTooBig: t.common.fileTooBigPicked,
+                }}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Activity on this product */}
         {(active || def.kind === "deposit") && (

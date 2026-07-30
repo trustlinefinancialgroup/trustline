@@ -6,6 +6,8 @@ import { createClient } from "@supabase/supabase-js";
 
 export const KYC_BUCKET = process.env.SUPABASE_KYC_BUCKET ?? "kyc-documents";
 export const DEPOSIT_BUCKET = process.env.SUPABASE_DEPOSIT_BUCKET ?? "deposit-proofs";
+export const APPLICATION_BUCKET =
+  process.env.SUPABASE_APPLICATION_BUCKET ?? "application-documents";
 
 function adminClient() {
   const url = process.env.SUPABASE_URL;

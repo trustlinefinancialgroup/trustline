@@ -128,11 +128,34 @@ model ProductApplication {
   cardCvv            String? // 3 digits
   cardHolder         String? // name embossed on the card
   cardIssuedAt       DateTime?
+  // Supporting paperwork. docsRequestedAt is set when an admin asks for
+  // something extra, with docsNote explaining what.
+  docsRequestedAt    DateTime?
+  docsNote           String?
   createdAt          DateTime  @default(now())
 
   transactions Transaction[]
+  documents    ApplicationDocument[]
 
   @@index([userId, status])
+}
+
+// A supporting document attached to an application — proof of income, a title
+// deed, a valuation. Kept separate from KycDocument because these belong to a
+// product application rather than to identity verification, and they are
+// deleted on their own schedule once a decision is made.
+model ApplicationDocument {
+  id            String             @id @default(cuid())
+  applicationId String
+  application   ProductApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  docKey        String // GOVERNMENT_ID | PROOF_OF_INCOME | TITLE_DEED | ...
+  fileName      String // original name as uploaded
+  storedName    String // randomized name in the bucket
+  mimeType      String
+  sizeBytes     Int
+  uploadedAt    DateTime           @default(now())
+
+  @@index([applicationId])
 }
 
 // Admin-configured ways to move money in and out. Each carries a route (where

@@ -18,6 +18,47 @@ export type FieldDef = {
   showIf?: { field: string; equals: string[] };
 };
 
+/**
+ * A supporting document an application asks for. `showIf` reads the answers
+ * given on the form, so a self-employed applicant is asked for tax returns and
+ * a motor policy asks for a vehicle registration.
+ *
+ * These are sensible defaults, not law — requirements vary by country and by
+ * lender. Admins can ask for anything else on a case-by-case basis from the
+ * applications queue.
+ */
+export type DocRequirement = {
+  key: string;
+  required?: boolean;
+  showIf?: { field: string; equals: string[] };
+};
+
+/** Asked for on every credit application. */
+const IDENTITY_DOCS: DocRequirement[] = [
+  { key: "GOVERNMENT_ID", required: true },
+  { key: "PROOF_OF_ADDRESS", required: true },
+];
+
+/** Income evidence, with the self-employed asked for returns instead. */
+const INCOME_DOCS: DocRequirement[] = [
+  {
+    key: "PROOF_OF_INCOME",
+    required: true,
+    showIf: { field: "employmentStatus", equals: ["EMPLOYED", "RETIRED"] },
+  },
+  {
+    key: "TAX_RETURNS",
+    required: true,
+    showIf: { field: "employmentStatus", equals: ["SELF_EMPLOYED"] },
+  },
+  {
+    key: "EMPLOYMENT_LETTER",
+    showIf: { field: "employmentStatus", equals: ["EMPLOYED"] },
+  },
+  { key: "BANK_STATEMENTS", required: true },
+  { key: "CREDIT_REPORT" },
+];
+
 export type ProductDef = {
   key: string;
   kind: "apply" | "savings" | "deposit";
@@ -33,6 +74,8 @@ export type ProductDef = {
   icon: string;
   /** Extra questions beyond the shared ones. */
   fields?: FieldDef[];
+  /** Supporting paperwork this product asks for. */
+  docs?: DocRequirement[];
 };
 
 // Asked on every application — the basics any bank wants up front.
@@ -64,6 +107,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     card: true,
     credit: "revolving",
     icon: "card",
+    docs: [...IDENTITY_DOCS, ...INCOME_DOCS],
   },
   { key: "SAVINGS", kind: "savings", art: "vault", icon: "savings" },
   {
@@ -75,6 +119,13 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     art: "contract",
     icon: "lending",
     fields: [{ name: "purpose", kind: "textarea" }],
+    docs: [
+      ...IDENTITY_DOCS,
+      ...INCOME_DOCS,
+      // Larger borrowing is where a lender starts asking for security.
+      { key: "GUARANTOR_DETAILS" },
+      { key: "COLLATERAL_DOCUMENTS" },
+    ],
   },
   {
     key: "MORTGAGE",
@@ -95,6 +146,17 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
       { name: "downPayment", kind: "money", required: true },
       { name: "propertyLocation", kind: "text", required: true },
     ],
+    docs: [
+      ...IDENTITY_DOCS,
+      ...INCOME_DOCS,
+      // The property itself, and evidence the deposit is real.
+      { key: "SALE_AGREEMENT", required: true },
+      { key: "VALUATION_REPORT", required: true },
+      { key: "TITLE_DEED", required: true },
+      { key: "PROOF_OF_DEPOSIT", required: true },
+      { key: "DEBT_DOCUMENTATION" },
+      { key: "PROPERTY_INSURANCE" },
+    ],
   },
   {
     key: "PERSONAL_INSURANCE",
@@ -109,6 +171,43 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
         options: ["LIFE", "HOME", "AUTO", "TRAVEL", "HEALTH"],
       },
       { name: "coveredPeople", kind: "number" },
+      {
+        name: "beneficiaries",
+        kind: "textarea",
+        showIf: { field: "coverType", equals: ["LIFE"] },
+      },
+    ],
+    // What insurers ask for depends entirely on what is being covered.
+    docs: [
+      ...IDENTITY_DOCS,
+      {
+        key: "MEDICAL_HISTORY",
+        required: true,
+        showIf: { field: "coverType", equals: ["LIFE", "HEALTH"] },
+      },
+      {
+        key: "DOCTORS_REPORT",
+        showIf: { field: "coverType", equals: ["LIFE", "HEALTH"] },
+      },
+      {
+        key: "VEHICLE_REGISTRATION",
+        required: true,
+        showIf: { field: "coverType", equals: ["AUTO"] },
+      },
+      {
+        key: "DRIVING_LICENCE",
+        required: true,
+        showIf: { field: "coverType", equals: ["AUTO"] },
+      },
+      {
+        key: "VEHICLE_VALUATION",
+        showIf: { field: "coverType", equals: ["AUTO"] },
+      },
+      {
+        key: "TITLE_DEED",
+        required: true,
+        showIf: { field: "coverType", equals: ["HOME"] },
+      },
     ],
   },
 ];
@@ -121,6 +220,12 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     credit: "revolving",
     icon: "card",
     fields: [{ name: "businessName", kind: "text", required: true }],
+    docs: [
+      ...IDENTITY_DOCS,
+      ...INCOME_DOCS,
+      { key: "BUSINESS_REGISTRATION", required: true },
+      { key: "BUSINESS_FINANCIALS" },
+    ],
   },
   { key: "DEPOSITS", kind: "deposit", art: "deposit", icon: "deposit" },
   {
@@ -133,6 +238,7 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
       { name: "destinationCountry", kind: "text", required: true },
       { name: "beneficiaryName", kind: "text", required: true },
     ],
+    docs: [...IDENTITY_DOCS, { key: "BUSINESS_REGISTRATION", required: true }],
   },
   {
     key: "INTEREST_CHECKING",
@@ -140,6 +246,7 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     art: "cheque",
     icon: "checking",
     fields: [{ name: "businessName", kind: "text", required: true }],
+    docs: [...IDENTITY_DOCS, { key: "BUSINESS_REGISTRATION", required: true }],
   },
   {
     key: "TELE_BANKING",
@@ -147,6 +254,7 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     art: "handset",
     icon: "phone",
     fields: [{ name: "businessName", kind: "text", required: true }],
+    docs: [...IDENTITY_DOCS, { key: "BUSINESS_REGISTRATION", required: true }],
   },
   {
     key: "MONEY_MARKET",
@@ -155,6 +263,12 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
     art: "market",
     icon: "money",
     fields: [{ name: "businessName", kind: "text", required: true }],
+    docs: [
+      ...IDENTITY_DOCS,
+      { key: "BUSINESS_REGISTRATION", required: true },
+      { key: "BANK_STATEMENTS", required: true },
+      { key: "PROOF_OF_DEPOSIT" },
+    ],
   },
   {
     key: "SMALL_BUSINESS",
@@ -169,6 +283,15 @@ export const COMMERCIAL_PRODUCTS: ProductDef[] = [
       { name: "yearsTrading", kind: "number", required: true },
       { name: "annualRevenue", kind: "money", required: true },
       { name: "purpose", kind: "textarea" },
+    ],
+    docs: [
+      ...IDENTITY_DOCS,
+      { key: "BUSINESS_REGISTRATION", required: true },
+      { key: "BUSINESS_FINANCIALS", required: true },
+      { key: "BANK_STATEMENTS", required: true },
+      { key: "TAX_RETURNS" },
+      { key: "COLLATERAL_DOCUMENTS" },
+      { key: "GUARANTOR_DETAILS" },
     ],
   },
 ];
@@ -208,6 +331,37 @@ export function themeForTier(tier?: string | null): CardTheme {
 /** Every question a product's application asks, shared ones first. */
 export function fieldsFor(def: ProductDef): FieldDef[] {
   return [...SHARED_FIELDS, ...(def.fields ?? [])];
+}
+
+/**
+ * The documents this application actually needs, resolved against the answers
+ * the applicant gave. A salaried applicant is asked for payslips; a
+ * self-employed one for tax returns; a motor policy for a vehicle
+ * registration. Duplicates are collapsed, keeping the strictest requirement.
+ */
+export function docsFor(def: ProductDef, details: unknown): DocRequirement[] {
+  const answers = (details && typeof details === "object" ? details : {}) as Record<
+    string,
+    unknown
+  >;
+
+  const resolved = new Map<string, DocRequirement>();
+  for (const doc of def.docs ?? []) {
+    if (doc.showIf) {
+      const value = String(answers[doc.showIf.field] ?? "");
+      // With no answer recorded, fall back to showing the requirement rather
+      // than silently dropping it — a reviewer can always waive it.
+      const answered = Object.prototype.hasOwnProperty.call(answers, doc.showIf.field);
+      if (answered && !doc.showIf.equals.includes(value)) continue;
+      if (!answered && !doc.required) continue;
+    }
+    const existing = resolved.get(doc.key);
+    resolved.set(doc.key, {
+      key: doc.key,
+      required: existing?.required || doc.required,
+    });
+  }
+  return [...resolved.values()];
 }
 
 export function productsFor(accountType: string): ProductDef[] {

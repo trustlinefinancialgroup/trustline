@@ -7,6 +7,7 @@ import {
 } from "@/lib/actions/admin-actions";
 import { productDef } from "@/lib/products";
 import { ApplicationDetails } from "@/components/application-details";
+import { ApplicationDocuments } from "@/components/application-documents";
 
 function toDateInput(d: Date | null) {
   if (!d) return "";
@@ -27,12 +28,12 @@ export default async function ApplicationsPage() {
   const [pending, approved] = await Promise.all([
     db.productApplication.findMany({
       where: { status: "SUBMITTED" },
-      include: { user: true },
+      include: { user: true, documents: true },
       orderBy: { createdAt: "asc" },
     }),
     db.productApplication.findMany({
       where: { status: "APPROVED" },
-      include: { user: true },
+      include: { user: true, documents: true },
       orderBy: { decidedAt: "desc" },
     }),
   ]);
@@ -72,6 +73,14 @@ export default async function ApplicationsPage() {
                 def={productDef(app.user.accountType, app.productKey)}
                 details={app.details}
                 currency={app.user.currency}
+              />
+              <ApplicationDocuments
+                applicationId={app.id}
+                def={productDef(app.user.accountType, app.productKey)}
+                details={app.details}
+                documents={app.documents}
+                docsNote={app.docsNote}
+                docsRequestedAt={app.docsRequestedAt}
               />
               {app.purpose && (
                 <p className="mt-3 rounded-xl bg-navy-50/60 p-3 text-sm text-gray-700">{app.purpose}</p>
