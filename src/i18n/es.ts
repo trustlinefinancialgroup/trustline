@@ -516,6 +516,9 @@ export const es: Dict = {
     continue: "Continuar",
   },
   dashboard: {
+    trendLabel: "Saldo de los últimos 90 días",
+    moneyIn: "Entradas, 90 días",
+    moneyOut: "Salidas, 90 días",
     greetingMorning: "Buenos días, {name}",
     greetingAfternoon: "Buenas tardes, {name}",
     greetingEvening: "Buenas noches, {name}",

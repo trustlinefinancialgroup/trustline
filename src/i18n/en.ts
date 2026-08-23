@@ -514,6 +514,9 @@ export const en = {
     continue: "Continue",
   },
   dashboard: {
+    trendLabel: "Balance over the last 90 days",
+    moneyIn: "Money in, 90 days",
+    moneyOut: "Money out, 90 days",
     greetingMorning: "Good morning, {name}",
     greetingAfternoon: "Good afternoon, {name}",
     greetingEvening: "Good evening, {name}",

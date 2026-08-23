@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { formatMoney } from "@/lib/bank";
 import { loadPortfolio, monthChangePercent } from "@/lib/portfolio";
+import { balanceTrend } from "@/lib/trend";
 import { showWelcomeBonus, welcomeBonusState } from "@/lib/promo";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
@@ -12,6 +13,7 @@ import { productsFor } from "@/lib/products";
 import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
+import { BalanceTrend } from "@/components/balance-trend";
 import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
 import { ProductTile } from "@/components/product-tile";
@@ -51,7 +53,7 @@ export default async function DashboardPage({
 
   const portfolio = await loadPortfolio(user.id);
 
-  const [transactions, applications, change, bonus] = await Promise.all([
+  const [transactions, applications, change, bonus, trend] = await Promise.all([
     db.transaction.findMany({
       where: { accountId: { in: portfolio.accountIds } },
       orderBy: { createdAt: "desc" },
@@ -60,6 +62,7 @@ export default async function DashboardPage({
     db.productApplication.findMany({ where: { userId: user.id } }),
     monthChangePercent(portfolio.accountIds, portfolio.totalCents),
     welcomeBonusState(user.id, portfolio.accountIds, user.createdAt),
+    balanceTrend(portfolio.accountIds),
   ]);
 
   // Latest application per product key, turned into a card view per product.
@@ -85,6 +88,17 @@ export default async function DashboardPage({
   const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
   const dateFmt = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", { dateStyle: "medium" });
+  const shortDate = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", {
+    month: "short",
+    day: "numeric",
+  });
+
+  // Formatted server-side so the chart carries no locale or currency logic.
+  const trendData = trend.points.map((p) => ({
+    v: p.balanceCents,
+    date: shortDate.format(p.at),
+    value: formatMoney(p.balanceCents, locale, portfolio.currency),
+  }));
 
   const banners = [
     submitted && t.bank.submittedBanner,
@@ -168,6 +182,12 @@ export default async function DashboardPage({
 
           </div>
 
+          {trend.hasShape && (
+            <div className="mt-4">
+              <BalanceTrend data={trendData} label={t.dashboard.trendLabel} />
+            </div>
+          )}
+
           <div className="no-scrollbar mt-5 flex gap-1 overflow-x-auto border-t border-white/10 pt-5 sm:gap-3">
             <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
             <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
@@ -179,6 +199,29 @@ export default async function DashboardPage({
             <QuickAction href="/goals" icon="target" label={t.bank.actionGoals} />
           </div>
         </div>
+
+        {trend.hasShape && (
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-gray-200/80 bg-white p-4 sm:p-5">
+              <p className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                {t.dashboard.moneyIn}
+              </p>
+              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-navy-900">
+                {formatMoney(trend.inCents, locale, portfolio.currency)}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-gray-200/80 bg-white p-4 sm:p-5">
+              <p className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
+                <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+                {t.dashboard.moneyOut}
+              </p>
+              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-navy-900">
+                {formatMoney(trend.outCents, locale, portfolio.currency)}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Accounts */}
         <section>
