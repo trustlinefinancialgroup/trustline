@@ -158,7 +158,7 @@ export default async function DashboardPage({
 
           </div>
 
-          <div className="mt-7 flex gap-2 overflow-x-auto border-t border-white/10 pt-6 sm:gap-4">
+          <div className="no-scrollbar mt-7 flex gap-2 overflow-x-auto border-t border-white/10 pt-6 sm:gap-4">
             <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
             <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.sendMoney} />
             <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />

@@ -53,3 +53,13 @@ body {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "cv02", "cv03", "cv04";
 }
+
+/* Horizontal rows that scroll on small screens (the balance action tiles)
+   keep the gesture but drop the bar, which no banking app shows. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
