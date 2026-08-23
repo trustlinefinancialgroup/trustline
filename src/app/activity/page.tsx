@@ -3,12 +3,10 @@ import { redirect } from "next/navigation";
 import type { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
-import { logoutAction } from "@/lib/actions/auth-actions";
 import { ensureAccount, getSavings } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { Logo } from "@/components/logo";
+import { AppShell, Page } from "@/components/app-shell";
 import { TransactionList } from "@/components/transaction-list";
 
 export const metadata = { title: "Transactions — Trustline Financial Group" };
@@ -92,30 +90,14 @@ export default async function ActivityPage({
   };
 
   return (
-    <main className="flex min-h-screen flex-1 flex-col bg-navy-50/50">
-      <header className="border-b border-white/10 bg-navy-900">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
-          <Logo theme="dark" href="/dashboard" />
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher current={locale} variant="dark" />
-            <form action={logoutAction}>
-              <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
-                {t.common.signOut}
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto w-full max-w-4xl flex-1 px-6 py-10">
-        <Link href="/dashboard" className="text-sm font-semibold text-accent-600 hover:text-accent-700">
-          ← {t.bank.back}
-        </Link>
-        <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-navy-900">{t.activity.title}</h1>
-            <p className="mt-1 text-sm text-gray-500">{t.activity.subtitle}</p>
-          </div>
+    <AppShell
+      user={user}
+      active="activity"
+      title={t.activity.title}
+      subtitle={t.activity.subtitle}
+    >
+      <Page className="max-w-4xl">
+        <div className="flex justify-end">
           <Link
             href="/statements"
             className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
@@ -220,7 +202,7 @@ export default async function ActivityPage({
             </div>
           </div>
         )}
-      </div>
-    </main>
+      </Page>
+    </AppShell>
   );
 }

@@ -4,6 +4,7 @@ import {
   blockAccountAction,
   unblockAccountAction,
   adjustBalanceAction,
+  creditWelcomeBonusAction,
   deleteKycDocumentsAction,
 } from "@/lib/actions/admin-actions";
 
@@ -34,6 +35,14 @@ export default async function ClientsPage() {
     _sum: { amountCents: true },
   });
   const balanceByAccount = new Map(sums.map((s) => [s.accountId, s._sum.amountCents ?? 0]));
+
+  // Which clients have already been paid the welcome bonus — one lookup for
+  // the whole page, so the button can hide itself once it has been used.
+  const bonusRows = await db.transaction.findMany({
+    where: { type: "BONUS" },
+    select: { account: { select: { userId: true } } },
+  });
+  const bonusPaid = new Set(bonusRows.map((r) => r.account.userId));
 
   return (
     <div>
@@ -161,6 +170,18 @@ export default async function ClientsPage() {
                       Apply
                     </button>
                   </form>
+
+                  {!bonusPaid.has(u.id) && (
+                    <form action={creditWelcomeBonusAction}>
+                      <input type="hidden" name="userId" value={u.id} />
+                      <button
+                        title="Credits the advertised $175 new-client welcome bonus, once per client"
+                        className="rounded-md border border-accent-300 px-3 py-2 text-xs font-bold text-accent-700 hover:bg-accent-50"
+                      >
+                        Pay welcome bonus
+                      </button>
+                    </form>
+                  )}
 
                   <form action={blockAccountAction} className="flex items-end gap-2">
                     <input type="hidden" name="userId" value={u.id} />

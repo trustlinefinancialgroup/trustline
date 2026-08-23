@@ -47,6 +47,60 @@ model User {
   applications  ProductApplication[]
   savingsGoals  SavingsGoal[]
   chats         ChatConversation[]
+  sessions      Session[]
+  tickets       SupportTicket[]
+}
+
+// One row per signed-in device, so a client can see where their account is
+// open and end a session they don't recognise. The JWT cookie carries this
+// row's id; a revoked or missing row stops being accepted at the next request.
+model Session {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Coarse device description parsed from the user agent ("Chrome on Windows").
+  // The raw user agent is kept for support; the IP address is never stored.
+  label      String
+  userAgent  String?
+  createdAt  DateTime  @default(now())
+  lastSeenAt DateTime  @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+
+  @@index([userId, revokedAt])
+}
+
+// A support request the client can follow, unlike live chat which disappears
+// when the tab closes. Messages thread underneath.
+model SupportTicket {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reference       String   @unique // TL-S-XXXXXXXX, quoted back to the client
+  category        String // ACCOUNT | TRANSACTION | CARD | LOAN | SECURITY | OTHER
+  subject         String
+  status          String   @default("OPEN") // OPEN | AWAITING_CLIENT | RESOLVED
+  unreadForAdmin  Boolean  @default(true)
+  unreadForClient Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  lastMessageAt   DateTime @default(now())
+
+  messages TicketMessage[]
+
+  @@index([userId, lastMessageAt])
+  @@index([status, lastMessageAt])
+}
+
+model TicketMessage {
+  id          String        @id @default(cuid())
+  ticketId    String
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender      String // CLIENT | ADMIN
+  authorLabel String // name shown on the message
+  body        String
+  createdAt   DateTime      @default(now())
+
+  @@index([ticketId, createdAt])
 }
 
 // Live chat: one conversation per visitor, with a thread of messages.
@@ -132,6 +186,13 @@ model ProductApplication {
   // something extra, with docsNote explaining what.
   docsRequestedAt    DateTime?
   docsNote           String?
+  // Card controls the client manages themselves from the cards page. Limits
+  // are null until an admin sets one, which means "no limit set" rather than
+  // a limit of zero.
+  dailyLimitCents    Int?
+  monthlyLimitCents  Int?
+  contactless        Boolean   @default(true)
+  onlinePayments     Boolean   @default(true)
   createdAt          DateTime  @default(now())
 
   transactions Transaction[]

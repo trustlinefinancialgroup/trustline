@@ -1,13 +1,10 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
-import { logoutAction } from "@/lib/actions/auth-actions";
 import { balanceCents, ensureAccount, formatMoney } from "@/lib/bank";
 import { createGoalAction, releaseGoalAction } from "@/lib/actions/money-actions";
 import { getDict, getLocale } from "@/i18n/server";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { Logo } from "@/components/logo";
+import { AppShell, Page } from "@/components/app-shell";
 import { AddMoneyForm } from "./add-money-form";
 
 export const metadata = { title: "Savings goals — Trustline Financial Group" };
@@ -30,30 +27,18 @@ export default async function GoalsPage() {
   ]);
 
   return (
-    <main className="flex min-h-screen flex-1 flex-col bg-navy-50/50">
-      <header className="border-b border-white/10 bg-navy-900">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
-          <Logo theme="dark" href="/dashboard" />
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher current={locale} variant="dark" />
-            <form action={logoutAction}>
-              <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
-                {t.common.signOut}
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-12">
-        <Link href="/dashboard" className="text-sm font-semibold text-accent-600 hover:text-accent-700">
-          ← {t.bank.back}
-        </Link>
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight text-navy-900">{t.goals.title}</h1>
-        <p className="mt-1 text-[15px] text-gray-600">{t.goals.subtitle}</p>
+    <AppShell user={user} active="accounts" title={t.goals.title} subtitle={t.goals.subtitle}>
+      <Page className="max-w-2xl">
+        {/* Goals are funded from checking, so lead with what is there to move */}
+        <p className="mb-5 rounded-xl border border-gray-200/80 bg-white px-4 py-3 text-[13px] text-gray-500">
+          {t.bank.available}:{" "}
+          <strong className="tnum text-navy-900">
+            {formatMoney(available, locale, user.currency)}
+          </strong>
+        </p>
 
         {/* Create a goal */}
-        <form action={createGoalAction} className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <form action={createGoalAction} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="text-[13px] font-semibold text-navy-800">
               {t.goals.name}
@@ -112,7 +97,7 @@ export default async function GoalsPage() {
             })
           )}
         </div>
-      </div>
-    </main>
+      </Page>
+    </AppShell>
   );
 }

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
-import { logoutAction } from "@/lib/actions/auth-actions";
 import { openSavingsAction, toggleFreezeAction } from "@/lib/actions/product-actions";
 import { balanceCents, formatMoney, getSavings } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
@@ -10,8 +9,7 @@ import { fill } from "@/i18n";
 import { productDef, productLabel, docsFor } from "@/lib/products";
 import { DocumentChecklist } from "./document-checklist";
 import { buildProductView } from "@/lib/product-view";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { Logo } from "@/components/logo";
+import { AppShell, Page } from "@/components/app-shell";
 import { BankCard } from "@/components/bank-card";
 import { ProductTile } from "@/components/product-tile";
 import { CardWithReveal } from "@/components/card-details";
@@ -85,9 +83,10 @@ export default async function ProductPage({
   const showDocs = docItems.length > 0 && (app?.status === "SUBMITTED" || outstanding > 0);
   const savingsBal = savings ? await balanceCents(savings.id) : 0;
 
+  const item = productLabel(t.landing, user.accountType, key) ?? { title: key, body: "" };
   const view = buildProductView({
     def,
-    item: productLabel(t.landing, user.accountType, key) ?? { title: key, body: "" },
+    item,
     app,
     savingsOpen: Boolean(savings),
     savingsBalanceCents: savingsBal,
@@ -192,23 +191,12 @@ export default async function ProductPage({
         }
       : null;
 
-  return (
-    <main className="flex min-h-screen flex-1 flex-col bg-navy-50/50">
-      <header className="border-b border-white/10 bg-navy-900">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
-          <Logo theme="dark" href="/dashboard" />
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher current={locale} variant="dark" />
-            <form action={logoutAction}>
-              <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
-                {t.common.signOut}
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+  // Cards and lending have their own hubs; everything else belongs to accounts.
+  const activeNav = def.card ? "cards" : def.credit ? "loans" : "accounts";
 
-      <div className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
+  return (
+    <AppShell user={user} active={activeNav} title={view.title} subtitle={item.body}>
+      <Page className="max-w-5xl">
         <Link href="/dashboard" className="text-sm font-semibold text-accent-600 hover:text-accent-700">
           ← {t.products.backToProducts}
         </Link>
@@ -536,7 +524,7 @@ export default async function ProductPage({
             {fill(t.products.appliedOn, { date: dateFmt.format(app.createdAt) })}
           </p>
         )}
-      </div>
-    </main>
+      </Page>
+    </AppShell>
   );
 }

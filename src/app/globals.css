@@ -46,3 +46,10 @@ body {
     transform: translateY(0) scale(1);
   }
 }
+
+/* Money and other figures line up column-to-column instead of jittering as
+   digits change width. Applied to every balance, table amount and statement. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "cv02", "cv03", "cv04";
+}

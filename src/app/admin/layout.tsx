@@ -17,13 +17,15 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  const [pendingCount, depositCount, withdrawalCount, applicationCount, chatCount] = await Promise.all([
-    db.user.count({ where: { status: "PENDING", role: "CLIENT" } }),
-    db.transaction.count({ where: { status: "PENDING", type: "DEPOSIT" } }),
-    db.transaction.count({ where: { status: "PENDING", type: "WITHDRAWAL" } }),
-    db.productApplication.count({ where: { status: "SUBMITTED" } }),
-    db.chatConversation.count({ where: { unreadForAdmin: true } }),
-  ]);
+  const [pendingCount, depositCount, withdrawalCount, applicationCount, chatCount, ticketCount] =
+    await Promise.all([
+      db.user.count({ where: { status: "PENDING", role: "CLIENT" } }),
+      db.transaction.count({ where: { status: "PENDING", type: "DEPOSIT" } }),
+      db.transaction.count({ where: { status: "PENDING", type: "WITHDRAWAL" } }),
+      db.productApplication.count({ where: { status: "SUBMITTED" } }),
+      db.chatConversation.count({ where: { unreadForAdmin: true } }),
+      db.supportTicket.count({ where: { unreadForAdmin: true } }),
+    ]);
 
   const nav = [
     { href: "/admin", label: "Review queue", badge: pendingCount },
@@ -31,6 +33,7 @@ export default async function AdminLayout({
     { href: "/admin/deposits", label: "Deposits", badge: depositCount },
     { href: "/admin/withdrawals", label: "Withdrawals", badge: withdrawalCount },
     { href: "/admin/chat", label: "Live chat", badge: chatCount },
+    { href: "/admin/tickets", label: "Support tickets", badge: ticketCount },
     { href: "/admin/clients", label: "Clients" },
     { href: "/admin/inbox", label: "Inbox" },
     { href: "/admin/messages", label: "Messages" },

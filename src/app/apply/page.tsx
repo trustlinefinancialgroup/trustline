@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser, isAdmin } from "@/lib/auth";
-import { logoutAction } from "@/lib/actions/auth-actions";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import {
@@ -12,8 +11,7 @@ import {
   SHARED_FIELDS,
 } from "@/lib/products";
 import { formatMoney, formatMoneyWhole } from "@/lib/bank";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { Logo } from "@/components/logo";
+import { AppShell, Page } from "@/components/app-shell";
 import { ApplyForm } from "./apply-form";
 
 export const metadata = { title: "Apply — Trustline Financial Group" };
@@ -55,23 +53,12 @@ export default async function ApplyPage({
   // The currency prefix for money inputs, taken from the client's currency.
   const currencySymbol = formatMoney(0, locale, user.currency).replace(/[\d.,\s]/g, "");
 
-  return (
-    <main className="flex min-h-screen flex-1 flex-col bg-navy-50/50">
-      <header className="border-b border-white/10 bg-navy-900">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
-          <Logo theme="dark" href="/dashboard" />
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher current={locale} variant="dark" />
-            <form action={logoutAction}>
-              <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
-                {t.common.signOut}
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+  // Applications belong to whichever hub the product itself lives in.
+  const activeNav = def.card ? "cards" : def.credit ? "loans" : "accounts";
 
-      <div className={`mx-auto w-full flex-1 px-6 py-12 ${def.card ? "max-w-3xl" : "max-w-lg"}`}>
+  return (
+    <AppShell user={user} active={activeNav} title={t.products.applyTitle} subtitle={label?.title}>
+      <Page className={def.card ? "max-w-3xl" : "max-w-lg"}>
         <Link
           href={`/product/${def.key}`}
           className="text-sm font-semibold text-accent-600 hover:text-accent-700"
@@ -118,7 +105,7 @@ export default async function ApplyPage({
             }}
           />
         </div>
-      </div>
-    </main>
+      </Page>
+    </AppShell>
   );
 }
