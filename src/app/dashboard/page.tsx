@@ -237,7 +237,7 @@ export default async function DashboardPage({
                 account={account}
                 t={t}
                 locale={locale}
-                href={`/activity?account=${account.id}`}
+                href={`/accounts/${account.id}`}
               />
             ))}
             {!portfolio.savings && savingsOffered && (

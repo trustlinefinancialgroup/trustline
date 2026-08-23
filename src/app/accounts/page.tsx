@@ -61,7 +61,7 @@ export default async function AccountsPage() {
                   account={account}
                   t={t}
                   locale={locale}
-                  href={`/activity?account=${account.id}`}
+                  href={`/accounts/${account.id}`}
                   showFullNumber
                 />
                 <p className="px-1 text-[11px] text-gray-400">

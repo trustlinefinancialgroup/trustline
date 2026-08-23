@@ -28,6 +28,7 @@ export default async function ActivityPage({
     from?: string;
     to?: string;
     page?: string;
+    q?: string;
   }>;
 }) {
   const user = await getSessionUser();
@@ -48,11 +49,21 @@ export default async function ActivityPage({
   const from = q.from ? new Date(`${q.from}T00:00:00Z`) : null;
   const to = q.to ? new Date(`${q.to}T23:59:59Z`) : null;
   const page = Math.max(1, Number(q.page) || 1);
+  const search = (q.q ?? "").trim().slice(0, 80);
 
   const where: Prisma.TransactionWhereInput = {
     accountId: accountId ?? { in: accounts.map((a) => a.id) },
     ...(type ? { type } : {}),
     ...(status ? { status } : {}),
+    ...(search
+      ? {
+          OR: [
+            { note: { contains: search, mode: "insensitive" as const } },
+            { reference: { contains: search, mode: "insensitive" as const } },
+            { counterparty: { contains: search, mode: "insensitive" as const } },
+          ],
+        }
+      : {}),
     ...(from || to
       ? {
           createdAt: {
@@ -78,6 +89,7 @@ export default async function ActivityPage({
     const sp = new URLSearchParams();
     const merged = {
       account: accountId,
+      q: search,
       type,
       status,
       from: q.from,
@@ -97,9 +109,21 @@ export default async function ActivityPage({
       subtitle={t.activity.subtitle}
     >
       <Page className="max-w-4xl">
+        <form className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          {/* Search first — it is what someone reaches for when hunting one
+              payment, and it survives the other filters. */}
+          <label className="block text-[13px] font-semibold text-navy-800">
+            <span className="sr-only">{t.activity.searchLabel}</span>
+            <input
+              type="search"
+              name="q"
+              defaultValue={search}
+              placeholder={t.activity.searchPlaceholder}
+              className="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+            />
+          </label>
 
-        <form className="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <label className="text-[13px] font-semibold text-navy-800">
               {t.activity.accountLabel}
               <select name="account" defaultValue={accountId ?? ""} className={selectClass}>
