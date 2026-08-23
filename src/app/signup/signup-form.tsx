@@ -51,7 +51,7 @@ export function SignupForm({ labels }: { labels: Labels }) {
                 defaultChecked={i === 0}
                 className="peer sr-only"
               />
-              <span className="block rounded-full py-2 text-center text-sm font-semibold text-gray-500 transition peer-checked:bg-white peer-checked:text-navy-900 peer-checked:shadow-sm">
+              <span className="block rounded-xl py-2 text-center text-sm font-semibold text-gray-500 transition peer-checked:bg-white peer-checked:text-navy-900 peer-checked:shadow-sm">
                 {opt.label}
               </span>
             </label>
@@ -68,7 +68,7 @@ export function SignupForm({ labels }: { labels: Labels }) {
           ].map((opt, i) => (
             <label key={opt.value} className="cursor-pointer">
               <input type="radio" name="currency" value={opt.value} defaultChecked={i === 0} className="peer sr-only" />
-              <span className="block rounded-full py-2 text-center text-sm font-semibold text-gray-500 transition peer-checked:bg-white peer-checked:text-navy-900 peer-checked:shadow-sm">
+              <span className="block rounded-xl py-2 text-center text-sm font-semibold text-gray-500 transition peer-checked:bg-white peer-checked:text-navy-900 peer-checked:shadow-sm">
                 {opt.label}
               </span>
             </label>

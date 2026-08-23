@@ -275,7 +275,7 @@ export default async function ProductPage({
                 </p>
                 <Link
                   href={`/apply?type=${def.key}`}
-                  className="mt-5 block rounded-full bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="mt-5 block rounded-xl bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
                 >
                   {t.products.apply}
                 </Link>
@@ -290,7 +290,7 @@ export default async function ProductPage({
                 </p>
                 <Link
                   href={`/apply?type=${def.key}`}
-                  className="mt-5 block rounded-full bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="mt-5 block rounded-xl bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
                 >
                   {t.products.reapply}
                 </Link>
@@ -379,7 +379,7 @@ export default async function ProductPage({
                 </p>
                 <Link
                   href="/deposit"
-                  className="mt-5 block rounded-full bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="mt-5 block rounded-xl bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
                 >
                   {t.bank.makeDeposit}
                 </Link>
