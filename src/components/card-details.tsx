@@ -53,7 +53,7 @@ export function CardWithReveal({
           <button
             type="button"
             onClick={() => setRevealed((v) => !v)}
-            className="mt-4 w-full rounded-full border border-gray-200 bg-white py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
+            className="mt-4 w-full rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
           >
             {revealed ? labels.hide : labels.show}
           </button>

@@ -118,13 +118,13 @@ export default async function AboutPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/signup"
-              className="rounded-full bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
+              className="rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
             >
               {t.common.openAccount}
             </Link>
             <Link
               href="/contact"
-              className="rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="rounded-xl border border-white/25 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t.nav.contact}
             </Link>

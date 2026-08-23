@@ -48,7 +48,7 @@ export default async function InboxPage({
           <Link
             key={tab.key}
             href={`/admin/inbox?box=${tab.key}`}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+            className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
               box === tab.key
                 ? "bg-navy-800 text-white"
                 : "bg-white text-navy-800 hover:bg-navy-50"

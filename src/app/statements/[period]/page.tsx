@@ -57,7 +57,7 @@ export default async function StatementPage({
           <div className="flex flex-wrap gap-3">
             <a
               href={`/api/statements/${period}`}
-              className="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40"
+              className="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40"
             >
               {t.statements.csv}
             </a>

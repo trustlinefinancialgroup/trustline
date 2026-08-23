@@ -149,6 +149,40 @@ export function QuickAction({
   );
 }
 
+/**
+ * Page tabs. An underline rail that scrolls sideways rather than a row of
+ * pills that wrap onto a second line as soon as a label is more than one word.
+ */
+export function Tabs({
+  items,
+}: {
+  items: { key: string; href: string; label: string; active: boolean; dot?: boolean }[];
+}) {
+  return (
+    <div className="no-scrollbar -mx-4 overflow-x-auto border-b border-gray-200 px-4 sm:-mx-6 sm:px-6">
+      <nav className="flex min-w-max gap-6">
+        {items.map((item) => (
+          <Link
+            key={item.key}
+            href={item.href}
+            aria-current={item.active ? "page" : undefined}
+            className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 pb-3 pt-1 text-sm font-semibold transition ${
+              item.active
+                ? "border-accent-500 text-navy-900"
+                : "border-transparent text-gray-500 hover:text-navy-900"
+            }`}
+          >
+            {item.label}
+            {item.dot && (
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-500" aria-hidden="true" />
+            )}
+          </Link>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
 /** A back link that uses a chevron rather than a text arrow. */
 export function BackLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -178,7 +212,7 @@ export function ActionButton({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+      className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
         variant === "solid"
           ? "bg-accent-500 text-white shadow-sm hover:bg-accent-600"
           : "border border-white/25 text-white hover:bg-white/10"

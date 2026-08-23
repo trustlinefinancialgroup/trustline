@@ -54,7 +54,7 @@ export function ReplyForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-4 rounded-full bg-navy-800 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700 disabled:opacity-60"
+        className="mt-4 rounded-xl bg-navy-800 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700 disabled:opacity-60"
       >
         {pending ? "Sending…" : "Send reply"}
       </button>

@@ -5,7 +5,7 @@ import { getSessionUser, isAdmin } from "@/lib/auth";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
 import { Icons, NavIcons } from "@/components/icons";
-import { Card, EmptyState, SectionHead, StatusChip, type Tone } from "@/components/ui";
+import { Card, EmptyState, SectionHead, StatusChip, Tabs, type Tone } from "@/components/ui";
 import { SupportConsole } from "./support-console";
 import { NewTicketForm } from "./new-ticket-form";
 
@@ -57,23 +57,15 @@ export default async function SupportPage({
   return (
     <AppShell user={user} active="support" title={t.tickets.title} subtitle={t.tickets.subtitle}>
       <Page className="space-y-5">
-        <div className="flex flex-wrap gap-1.5 rounded-full border border-gray-200 bg-white p-1.5">
-          {TABS.map((key) => (
-            <Link
-              key={key}
-              href={`/support?tab=${key}`}
-              aria-current={key === tab ? "page" : undefined}
-              className={`flex-1 rounded-full px-4 py-2 text-center text-[13px] font-semibold transition ${
-                key === tab ? "bg-navy-800 text-white" : "text-navy-700 hover:bg-navy-50"
-              }`}
-            >
-              {tabLabels[key]}
-              {key === "tickets" && tickets.some((x) => x.unreadForClient) && (
-                <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-accent-500 align-middle" />
-              )}
-            </Link>
-          ))}
-        </div>
+        <Tabs
+          items={TABS.map((key) => ({
+            key,
+            href: `/support?tab=${key}`,
+            label: tabLabels[key],
+            active: key === tab,
+            dot: key === "tickets" && tickets.some((x) => x.unreadForClient),
+          }))}
+        />
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
           <div>
@@ -107,7 +99,7 @@ export default async function SupportPage({
                   action={
                     <Link
                       href="/support?tab=new"
-                      className="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                      className="rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
                     >
                       {t.tickets.newTicket}
                     </Link>

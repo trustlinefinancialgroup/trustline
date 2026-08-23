@@ -70,7 +70,7 @@ export default async function CardsPage({
               cardProduct ? (
                 <Link
                   href={`/product/${cardProduct.key}`}
-                  className="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
                 >
                   {t.products.apply}
                 </Link>
@@ -112,7 +112,7 @@ export default async function CardsPage({
               <Link
                 key={c.id}
                 href={`/cards?card=${c.id}`}
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[13px] font-semibold transition ${
+                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-semibold transition ${
                   c.id === app.id
                     ? "border-navy-800 bg-navy-800 text-white"
                     : "border-gray-200 bg-white text-navy-800 hover:border-accent-500/40"
@@ -166,7 +166,7 @@ export default async function CardsPage({
                 <input type="hidden" name="appId" value={app.id} />
                 <button
                   type="submit"
-                  className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+                  className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
                     app.frozen
                       ? "bg-accent-500 text-white hover:bg-accent-600"
                       : "border border-gray-200 bg-white text-navy-800 hover:border-accent-500/40"
@@ -330,7 +330,7 @@ function ControlRow({
       <button
         type="submit"
         aria-pressed={on}
-        className={`shrink-0 rounded-full px-4 py-1.5 text-[12px] font-bold uppercase tracking-wide transition ${
+        className={`shrink-0 rounded-xl px-4 py-1.5 text-[12px] font-bold uppercase tracking-wide transition ${
           on
             ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 hover:bg-emerald-100"
             : "bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-500/15 hover:bg-gray-200"

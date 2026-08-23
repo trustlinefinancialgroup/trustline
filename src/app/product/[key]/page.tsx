@@ -334,7 +334,7 @@ export default async function ProductPage({
                 <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
                   {t.products.openSavingsNote}
                 </p>
-                <button className="mt-5 w-full rounded-full bg-accent-500 py-3 text-sm font-semibold text-white transition hover:bg-accent-600">
+                <button className="mt-5 w-full rounded-xl bg-accent-500 py-3 text-sm font-semibold text-white transition hover:bg-accent-600">
                   {t.products.openSavingsCta}
                 </button>
               </form>
@@ -357,13 +357,13 @@ export default async function ProductPage({
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link
                     href="/transfer"
-                    className="rounded-full bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                    className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
                   >
                     {t.bank.transfer}
                   </Link>
                   <Link
                     href="/goals"
-                    className="rounded-full border border-gray-200 px-6 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40"
+                    className="rounded-xl border border-gray-200 px-6 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40"
                   >
                     {t.bank.goalsLink}
                   </Link>
@@ -430,7 +430,7 @@ export default async function ProductPage({
                     <form action={toggleFreezeAction}>
                       <input type="hidden" name="appId" value={app.id} />
                       <button
-                        className={`w-full rounded-full py-3 text-sm font-semibold text-white transition ${
+                        className={`w-full rounded-xl py-3 text-sm font-semibold text-white transition ${
                           app.frozen ? "bg-accent-500 hover:bg-accent-600" : "bg-navy-800 hover:bg-navy-700"
                         }`}
                       >

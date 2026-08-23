@@ -282,7 +282,7 @@ export default async function ApplicationsPage() {
                 )}
 
                 <div className="mt-3 flex justify-end">
-                  <button className="rounded-full bg-navy-800 px-5 py-2 text-sm font-bold text-white transition hover:bg-navy-700">
+                  <button className="rounded-xl bg-navy-800 px-5 py-2 text-sm font-bold text-white transition hover:bg-navy-700">
                     Save terms
                   </button>
                 </div>

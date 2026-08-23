@@ -49,7 +49,7 @@ export default async function GoalsPage() {
               <input name="target" type="number" step="0.01" min="0" placeholder="0.00" className={inputClass} />
             </label>
           </div>
-          <button className="mt-4 rounded-full bg-navy-800 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700">
+          <button className="mt-4 rounded-xl bg-navy-800 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700">
             {t.goals.createBtn}
           </button>
         </form>
@@ -87,7 +87,7 @@ export default async function GoalsPage() {
                     />
                     <form action={releaseGoalAction}>
                       <input type="hidden" name="goalId" value={goal.id} />
-                      <button className="rounded-full border border-gray-300 px-4 py-2 text-xs font-semibold text-navy-700 transition hover:bg-navy-50">
+                      <button className="rounded-xl border border-gray-300 px-4 py-2 text-xs font-semibold text-navy-700 transition hover:bg-navy-50">
                         {t.goals.release}
                       </button>
                     </form>

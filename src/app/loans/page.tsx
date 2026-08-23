@@ -73,7 +73,7 @@ export default async function LoansPage() {
         lendingProducts.length > 0 ? (
           <Link
             href={`/product/${lendingProducts[0].key}`}
-            className="hidden rounded-full bg-accent-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-accent-600 sm:inline-flex"
+            className="hidden rounded-xl bg-accent-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-accent-600 sm:inline-flex"
           >
             {t.products.apply}
           </Link>
@@ -215,7 +215,7 @@ export default async function LoansPage() {
                     <div className="mt-5 flex flex-wrap gap-2">
                       <Link
                         href={`/product/${def.key}`}
-                        className="rounded-full bg-navy-800 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-navy-700"
+                        className="rounded-xl bg-navy-800 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-navy-700"
                       >
                         {t.loansPage.manage}
                       </Link>

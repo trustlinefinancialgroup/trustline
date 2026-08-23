@@ -256,7 +256,7 @@ export async function PlainShell({
           <div className="flex items-center gap-3">
             <LanguageSwitcher current={locale} variant="dark" />
             <form action={logoutAction}>
-              <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
+              <button className="rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
                 {t.common.signOut}
               </button>
             </form>

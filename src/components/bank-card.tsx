@@ -125,8 +125,14 @@ export function BankCard({
 
   return (
     <div
-      className={`relative aspect-[1.586/1] w-full overflow-hidden rounded-2xl p-5 shadow-lg shadow-navy-900/20 ${className}`}
-      style={{ background: face.background }}
+      className={`relative aspect-[1.586/1] w-full overflow-hidden rounded-2xl shadow-lg shadow-navy-900/20 ${className}`}
+      style={{
+        background: face.background,
+        // 1cqw = 1% of this card's width, so the face scales as one piece and
+        // never depends on the browser's font size.
+        containerType: "inline-size",
+        padding: "5.2cqw",
+      }}
     >
       {/* decorative arcs */}
       <div
@@ -150,22 +156,22 @@ export function BankCard({
         <div className="flex items-start justify-between gap-3">
           <div>
             <p
-              className="text-[13px] font-semibold uppercase tracking-[0.2em]"
-              style={{ color: face.ink }}
+              className="font-semibold uppercase tracking-[0.2em]"
+              style={{ color: face.ink, fontSize: "3.5cqw", lineHeight: 1.2 }}
             >
               Trustline
             </p>
             <p
-              className="mt-0.5 text-[8px] font-medium uppercase tracking-[0.32em]"
-              style={{ color: face.inkSoft }}
+              className="mt-0.5 font-medium uppercase tracking-[0.32em]"
+              style={{ color: face.inkSoft, fontSize: "2.1cqw", lineHeight: 1.2 }}
             >
               Financial Group
             </p>
           </div>
           {badge && (
             <span
-              className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-              style={{ color: face.ink }}
+              className="font-semibold uppercase tracking-[0.2em]"
+              style={{ color: face.ink, fontSize: "2.7cqw", lineHeight: 1.2 }}
             >
               {badge}
             </span>
@@ -175,7 +181,7 @@ export function BankCard({
         <div className="flex items-center gap-3">
           {/* chip — flat gold reads as plastic, so it gets a lit top half,
               a shaded lower half and proper contact pads */}
-          <svg width="38" height="29" viewBox="0 0 38 29" aria-hidden="true">
+          <svg viewBox="0 0 38 29" aria-hidden="true" style={{ width: "10cqw", height: "7.6cqw" }}>
             <rect width="38" height="29" rx="5" fill={face.chip} />
             <path d="M0 14.5 H38 V24 a5 5 0 0 1 -5 5 H5 a5 5 0 0 1 -5 -5 Z" fill="#000" opacity="0.14" />
             <rect x="0.5" y="0.5" width="37" height="28" rx="4.5" fill="none" stroke="#FFF" strokeOpacity="0.5" />
@@ -187,7 +193,7 @@ export function BankCard({
             </g>
           </svg>
           {/* contactless */}
-          <svg width="18" height="22" viewBox="0 0 18 22" aria-hidden="true">
+          <svg viewBox="0 0 18 22" aria-hidden="true" style={{ width: "4.7cqw", height: "5.8cqw" }}>
             <path
               d="M3 7 a9 9 0 0 1 0 8 M8 4 a14 14 0 0 1 0 14"
               fill="none"
@@ -199,8 +205,8 @@ export function BankCard({
         </div>
 
         <p
-          className="min-h-[1.4em] font-mono text-[15px] tracking-[0.1em] sm:text-[17px]"
-          style={{ color: face.ink }}
+          className="font-mono tracking-[0.1em]"
+          style={{ color: face.ink, fontSize: "4.5cqw", lineHeight: 1.4, minHeight: "1.4em" }}
         >
           {placeholder ? "••••  ••••  ••••  ••••" : formatCardNumber(number, masked)}
         </p>
@@ -208,23 +214,32 @@ export function BankCard({
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             <p
-              className="truncate text-[10px] font-semibold uppercase tracking-[0.16em]"
-              style={{ color: face.ink }}
+              className="truncate font-semibold uppercase tracking-[0.16em]"
+              style={{ color: face.ink, fontSize: "2.8cqw", lineHeight: 1.25 }}
             >
               {holder || holderPlaceholder}
             </p>
-            <p className="mt-0.5 text-[9px] uppercase tracking-[0.16em]" style={{ color: face.inkSoft }}>
+            <p
+              className="mt-0.5 truncate uppercase tracking-[0.16em]"
+              style={{ color: face.inkSoft, fontSize: "2.4cqw", lineHeight: 1.25 }}
+            >
               {expiry ? `Valid thru ${expiry}` : productName}
             </p>
           </div>
           {value ? (
             <div className="shrink-0 text-right">
               {valueLabel && (
-                <p className="text-[8px] uppercase tracking-[0.16em]" style={{ color: face.inkSoft }}>
+                <p
+                  className="uppercase tracking-[0.16em]"
+                  style={{ color: face.inkSoft, fontSize: "2.2cqw", lineHeight: 1.25 }}
+                >
                   {valueLabel}
                 </p>
               )}
-              <p className="text-sm font-semibold" style={{ color: face.ink }}>
+              <p
+                className="font-semibold"
+                style={{ color: face.ink, fontSize: "3.8cqw", lineHeight: 1.25 }}
+              >
                 {value}
               </p>
             </div>

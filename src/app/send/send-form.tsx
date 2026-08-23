@@ -54,7 +54,7 @@ export function SendForm({ labels }: { labels: Labels }) {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-full bg-accent-500 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-600 disabled:opacity-60"
+        className="w-full rounded-xl bg-accent-500 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-600 disabled:opacity-60"
       >
         {pending ? labels.submitting : labels.submit}
       </button>

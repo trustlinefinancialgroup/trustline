@@ -24,7 +24,7 @@ export async function LegalShell({
             <LanguageSwitcher current={locale} variant="dark" />
             <Link
               href="/"
-              className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t.legal.back}
             </Link>

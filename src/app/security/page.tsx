@@ -115,7 +115,7 @@ export default async function SecurityPage() {
               </ol>
               <Link
                 href="/contact"
-                className="mt-7 inline-block rounded-full bg-accent-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
+                className="mt-7 inline-block rounded-xl bg-accent-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
               >
                 {t.nav.contact}
               </Link>
@@ -152,7 +152,7 @@ export default async function SecurityPage() {
           </div>
           <Link
             href="/contact"
-            className="rounded-full bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
+            className="rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
           >
             {t.nav.contact}
           </Link>

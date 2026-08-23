@@ -79,7 +79,7 @@ export function AccountForms({
           <Msg state={pwState} />
           <button
             disabled={pwPending}
-            className="rounded-full bg-navy-800 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700 disabled:opacity-60"
+            className="rounded-xl bg-navy-800 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700 disabled:opacity-60"
           >
             {labels.updatePassword}
           </button>
@@ -107,7 +107,7 @@ export function AccountForms({
           <Msg state={swState} />
           <button
             disabled={swPending}
-            className="rounded-full bg-navy-800 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700 disabled:opacity-60"
+            className="rounded-xl bg-navy-800 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-navy-700 disabled:opacity-60"
           >
             {labels.saveSecurityWord}
           </button>

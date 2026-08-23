@@ -100,7 +100,7 @@ function DocRow({
         {state?.error && <p className="mt-1.5 text-xs text-red-600">{state.error}</p>}
         <button
           disabled={pending}
-          className="mt-2 rounded-full bg-navy-800 px-5 py-2 text-xs font-semibold text-white transition hover:bg-navy-700 disabled:opacity-60"
+          className="mt-2 rounded-xl bg-navy-800 px-5 py-2 text-xs font-semibold text-white transition hover:bg-navy-700 disabled:opacity-60"
         >
           {doc.uploaded ? labels.replace : labels.upload}
         </button>

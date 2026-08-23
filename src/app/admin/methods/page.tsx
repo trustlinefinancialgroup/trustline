@@ -38,12 +38,22 @@ export default async function MethodsPage() {
                   defaultValue={m?.label ?? def.label}
                   className="rounded-md border border-gray-300 px-2 py-1 text-sm font-semibold text-navy-900"
                 />
-                <span
-                  className={`ml-auto rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-                    m?.enabled ? "bg-green-100 text-green-800" : "bg-gray-200 text-gray-600"
-                  }`}
-                >
-                  {m?.enabled ? "Enabled" : "Off"}
+                <span className="ml-auto flex items-center gap-2">
+                  {/* Enabled is not the same as visible. A method restricted to
+                      one account type is invisible to everyone else, which is
+                      the usual reason a client reports "missing" methods. */}
+                  {m?.enabled && m.accountTypes !== "ALL" && (
+                    <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-bold text-amber-800">
+                      {m.accountTypes === "PERSONAL" ? "Personal only" : "Business only"}
+                    </span>
+                  )}
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                      m?.enabled ? "bg-green-100 text-green-800" : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
+                    {m?.enabled ? "Enabled" : "Off"}
+                  </span>
                 </span>
               </div>
 
@@ -87,7 +97,7 @@ export default async function MethodsPage() {
                   <input type="checkbox" name="forWithdrawal" defaultChecked={m?.forWithdrawal ?? true} className="h-4 w-4" />
                   Withdrawals
                 </label>
-                <button className="ml-auto rounded-full bg-navy-800 px-5 py-2 text-sm font-bold text-white transition hover:bg-navy-700">
+                <button className="ml-auto rounded-xl bg-navy-800 px-5 py-2 text-sm font-bold text-white transition hover:bg-navy-700">
                   Save
                 </button>
               </div>

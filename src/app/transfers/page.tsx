@@ -8,7 +8,7 @@ import { methodDef, methodVisibleFor } from "@/lib/methods";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
 import { PaymentIcon } from "@/components/payment-icons";
-import { Card, Eyebrow } from "@/components/ui";
+import { Card, Eyebrow, Tabs } from "@/components/ui";
 import { DepositForm } from "../deposit/deposit-form";
 import { RequestMethod } from "../deposit/request-method";
 import { WithdrawForm } from "../withdraw/withdraw-form";
@@ -88,23 +88,14 @@ export default async function TransfersPage({
           <p className="tnum font-mono text-[12px] text-gray-400">{portfolio.primary.number}</p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-1.5 rounded-full border border-gray-200 bg-white p-1.5">
-          {visibleTabs.map((key) => (
-            <Link
-              key={key}
-              href={`/transfers?tab=${key}`}
-              aria-current={key === tab ? "page" : undefined}
-              className={`flex-1 rounded-full px-4 py-2 text-center text-[13px] font-semibold transition ${
-                key === tab
-                  ? "bg-navy-800 text-white"
-                  : "text-navy-700 hover:bg-navy-50"
-              }`}
-            >
-              {tabLabels[key]}
-            </Link>
-          ))}
-        </div>
+        <Tabs
+          items={visibleTabs.map((key) => ({
+            key,
+            href: `/transfers?tab=${key}`,
+            label: tabLabels[key],
+            active: key === tab,
+          }))}
+        />
 
         <Card>
           {/* ---- Send to another Trustline client ---- */}
@@ -348,7 +339,7 @@ function SecurityWordPrompt({ t }: { t: { bank: { securityWordMissing: string; g
       {t.bank.securityWordMissing}
       <Link
         href="/account/security"
-        className="mt-3 inline-block rounded-full bg-navy-800 px-5 py-2 text-xs font-bold text-white transition hover:bg-navy-700"
+        className="mt-3 inline-block rounded-xl bg-navy-800 px-5 py-2 text-xs font-bold text-white transition hover:bg-navy-700"
       >
         {t.bank.goToAccount}
       </Link>

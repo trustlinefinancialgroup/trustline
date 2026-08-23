@@ -78,7 +78,7 @@ export function NewTicketForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-full bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
+        className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
       >
         {pending ? labels.submitting : labels.submit}
       </button>

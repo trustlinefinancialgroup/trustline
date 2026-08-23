@@ -69,7 +69,7 @@ export function TwoFactorForm({
         <button
           type="submit"
           disabled={pending}
-          className={`w-full rounded-full py-3 text-sm font-semibold text-white transition disabled:opacity-60 ${
+          className={`w-full rounded-xl py-3 text-sm font-semibold text-white transition disabled:opacity-60 ${
             enabled ? "bg-navy-800 hover:bg-navy-700" : "bg-accent-500 hover:bg-accent-600"
           }`}
         >

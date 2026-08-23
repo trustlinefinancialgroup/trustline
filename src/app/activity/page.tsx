@@ -143,7 +143,7 @@ export default async function ActivityPage({
             </label>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <button className="rounded-full bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600">
+            <button className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600">
               {t.activity.apply}
             </button>
             <Link
@@ -178,7 +178,7 @@ export default async function ActivityPage({
               {page > 1 && (
                 <Link
                   href={params({ page: String(page - 1) })}
-                  className="rounded-full border border-gray-200 bg-white px-4 py-2 font-semibold text-navy-800 transition hover:border-accent-500/40"
+                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 font-semibold text-navy-800 transition hover:border-accent-500/40"
                 >
                   {t.activity.prev}
                 </Link>
@@ -186,7 +186,7 @@ export default async function ActivityPage({
               {page < pages && (
                 <Link
                   href={params({ page: String(page + 1) })}
-                  className="rounded-full border border-gray-200 bg-white px-4 py-2 font-semibold text-navy-800 transition hover:border-accent-500/40"
+                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 font-semibold text-navy-800 transition hover:border-accent-500/40"
                 >
                   {t.activity.next}
                 </Link>

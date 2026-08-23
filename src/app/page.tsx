@@ -43,13 +43,13 @@ export default async function HomePage() {
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 href="/signup"
-                className="rounded-full bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
+                className="rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
               >
                 {t.common.openAccount}
               </Link>
               <Link
                 href="/login"
-                className="rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="rounded-xl border border-white/25 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 {t.common.signIn}
               </Link>
@@ -73,7 +73,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/signup"
-              className="mt-7 inline-block rounded-full bg-navy-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-800"
+              className="mt-7 inline-block rounded-xl bg-navy-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-800"
             >
               {t.landing.getStarted}
             </Link>
@@ -119,7 +119,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/signup"
-              className="rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
+              className="rounded-xl bg-accent-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
             >
               {t.landing.getStarted}
             </Link>
@@ -269,7 +269,7 @@ export default async function HomePage() {
             <p className="text-xs text-white/70">{t.landing.bonusTerms}</p>
             <Link
               href="/signup"
-              className="rounded-full bg-white px-8 py-4 text-sm font-semibold text-navy-900 shadow-lg transition hover:bg-navy-50"
+              className="rounded-xl bg-white px-8 py-4 text-sm font-semibold text-navy-900 shadow-lg transition hover:bg-navy-50"
             >
               {t.common.openAccount}
             </Link>
@@ -349,7 +349,7 @@ export default async function HomePage() {
           </h2>
           <Link
             href="/signup"
-            className="rounded-full bg-accent-500 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
+            className="rounded-xl bg-accent-500 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600"
           >
             {t.common.openAccount}
           </Link>

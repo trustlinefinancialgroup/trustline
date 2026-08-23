@@ -138,7 +138,7 @@ export default async function SecurityPage() {
                       <input type="hidden" name="sessionId" value={s.id} />
                       <button
                         type="submit"
-                        className="rounded-full border border-gray-200 px-4 py-2 text-[12px] font-semibold text-navy-800 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+                        className="rounded-xl border border-gray-200 px-4 py-2 text-[12px] font-semibold text-navy-800 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700"
                       >
                         {t.securityPageApp.endSession}
                       </button>

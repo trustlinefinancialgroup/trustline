@@ -50,12 +50,12 @@ export default async function AdminLayout({
             <span className="hidden text-sm text-navy-300 sm:block">{user.email}</span>
             <Link
               href="/account"
-              className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               Account
             </Link>
             <form action={logoutAction}>
-              <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
+              <button className="rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
                 Sign out
               </button>
             </form>

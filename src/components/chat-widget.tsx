@@ -178,7 +178,7 @@ export function ChatWidget({
               {error && <p className="text-xs text-red-600">{error}</p>}
               <button
                 disabled={pending}
-                className="w-full rounded-full bg-accent-500 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
+                className="w-full rounded-xl bg-accent-500 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
               >
                 {pending ? labels.starting : labels.start}
               </button>
@@ -189,7 +189,7 @@ export function ChatWidget({
 
       <div className="flex items-center gap-3">
         {!open && unread === 0 && (
-          <span className="hidden rounded-full bg-white px-3.5 py-2 text-[13px] font-semibold text-navy-800 shadow-lg shadow-navy-900/10 sm:block">
+          <span className="hidden rounded-xl bg-white px-3.5 py-2 text-[13px] font-semibold text-navy-800 shadow-lg shadow-navy-900/10 sm:block">
             {labels.launcherPrompt}
           </span>
         )}

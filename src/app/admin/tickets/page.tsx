@@ -68,7 +68,7 @@ export default async function AdminTicketsPage({
           <Link
             key={s ?? "all"}
             href={s ? `/admin/tickets?status=${s}` : "/admin/tickets"}
-            className={`rounded-full border px-4 py-1.5 text-[13px] font-semibold transition ${
+            className={`rounded-xl border px-4 py-1.5 text-[13px] font-semibold transition ${
               statusFilter === s || (!statusFilter && !s)
                 ? "border-navy-800 bg-navy-800 text-white"
                 : "border-gray-200 bg-white text-navy-800 hover:border-accent-500/40"

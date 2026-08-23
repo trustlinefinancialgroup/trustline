@@ -43,14 +43,14 @@ export function VerifyEmailStep({
       <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
         <button
           onClick={() => router.refresh()}
-          className="rounded-full bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+          className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
         >
           {refreshLabel}
         </button>
         <form action={formAction}>
           <button
             disabled={pending}
-            className="rounded-full border border-gray-300 px-6 py-2.5 text-sm font-semibold text-navy-800 transition hover:bg-navy-50 disabled:opacity-60"
+            className="rounded-xl border border-gray-300 px-6 py-2.5 text-sm font-semibold text-navy-800 transition hover:bg-navy-50 disabled:opacity-60"
           >
             {resendLabel}
           </button>
