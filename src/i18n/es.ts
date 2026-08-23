@@ -692,6 +692,7 @@ export const es: Dict = {
     viewActivity: "Ver movimientos",
   },
   bank: {
+    actionDeposit: "Ingresar",
     availableBalance: "Saldo disponible",
     accountNo: "Cuenta",
     pendingNote: "{amount} en depósitos pendientes de verificación",

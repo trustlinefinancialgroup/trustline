@@ -52,7 +52,7 @@ export default async function StatementPage({
             href="/statements"
             className="text-sm font-semibold text-accent-600 hover:text-accent-700"
           >
-            ← {t.statements.back}
+            {t.statements.back}
           </Link>
           <div className="flex flex-wrap gap-3">
             <a

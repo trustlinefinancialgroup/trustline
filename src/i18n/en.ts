@@ -689,6 +689,7 @@ export const en = {
     viewActivity: "View activity",
   },
   bank: {
+    actionDeposit: "Deposit",
     availableBalance: "Available balance",
     accountNo: "Account",
     pendingNote: "{amount} in deposits awaiting verification",

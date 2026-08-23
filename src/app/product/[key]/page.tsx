@@ -10,6 +10,7 @@ import { productDef, productLabel, docsFor } from "@/lib/products";
 import { DocumentChecklist } from "./document-checklist";
 import { buildProductView } from "@/lib/product-view";
 import { AppShell, Page } from "@/components/app-shell";
+import { BackLink } from "@/components/ui";
 import { BankCard } from "@/components/bank-card";
 import { ProductTile } from "@/components/product-tile";
 import { CardWithReveal } from "@/components/card-details";
@@ -197,9 +198,7 @@ export default async function ProductPage({
   return (
     <AppShell user={user} active={activeNav} title={view.title} subtitle={item.body}>
       <Page className="max-w-5xl">
-        <Link href="/dashboard" className="text-sm font-semibold text-accent-600 hover:text-accent-700">
-          ← {t.products.backToProducts}
-        </Link>
+        <BackLink href="/dashboard">{t.products.backToProducts}</BackLink>
 
         {(drawn || paid || opened) && (
           <p className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">

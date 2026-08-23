@@ -119,6 +119,49 @@ export function StatTile({
   );
 }
 
+/**
+ * The row of round action tiles every modern banking app puts under the
+ * balance — an icon in a soft circle with its label beneath, rather than a
+ * button with an arrow glyph inside it.
+ */
+export function QuickAction({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: string;
+  label: string;
+}) {
+  const draw = NavIcons[icon] ?? Icons[icon] ?? NavIcons.home;
+  return (
+    <Link
+      href={href}
+      className="group flex w-[4.5rem] shrink-0 flex-col items-center gap-2 text-center focus:outline-none sm:w-20"
+    >
+      <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/20 group-focus-visible:ring-2 group-focus-visible:ring-white/60">
+        {draw({ className: "h-[22px] w-[22px]" })}
+      </span>
+      <span className="text-[12px] font-medium leading-tight text-navy-200 transition group-hover:text-white">
+        {label}
+      </span>
+    </Link>
+  );
+}
+
+/** A back link that uses a chevron rather than a text arrow. */
+export function BackLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600 transition hover:text-accent-700"
+    >
+      {NavIcons.chevronLeft({ className: "h-4 w-4" })}
+      {children}
+    </Link>
+  );
+}
+
 /** Round action button used on the balance hero and page headers. */
 export function ActionButton({
   href,

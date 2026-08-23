@@ -4,6 +4,7 @@ import { getSessionUser, isAdmin } from "@/lib/auth";
 import { getDict, getLocale } from "@/i18n/server";
 import { formatPeriod, statementPeriods } from "@/lib/statements";
 import { AppShell, Page } from "@/components/app-shell";
+import { NavIcons } from "@/components/icons";
 
 export const metadata = { title: "Statements — Trustline Financial Group" };
 
@@ -48,8 +49,9 @@ export default async function StatementsPage() {
                     <span className="font-semibold text-navy-900">
                       {monthFmt.format(new Date(Date.UTC(p.year, p.month - 1, 1)))}
                     </span>
-                    <span className="text-sm font-semibold text-accent-600">
-                      {t.statements.view} →
+                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600">
+                      {t.statements.view}
+                      <NavIcons.chevronRight className="h-4 w-4" />
                     </span>
                   </Link>
                 </li>

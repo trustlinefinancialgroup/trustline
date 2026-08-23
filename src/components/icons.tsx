@@ -121,6 +121,24 @@ export const NavIcons: Record<string, (p: IconProps) => React.ReactElement> = {
   download: ({ className }) => (
     <svg {...base} className={className}><path d="M12 4v10M8 10l4 4 4-4" /><path d="M5 19h14" /></svg>
   ),
+  vault: ({ className }) => (
+    <svg {...base} className={className}><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="12" cy="12" r="3.6" /><path d="M12 8.4V6.8M12 17.2v-1.6M15.6 12h1.6M6.8 12h1.6" /></svg>
+  ),
+  send: ({ className }) => (
+    <svg {...base} className={className}><path d="M20.5 3.5 11 13" /><path d="M20.5 3.5 14.5 20.5l-3.5-7.5-7.5-3.5z" /></svg>
+  ),
+  bank: ({ className }) => (
+    <svg {...base} className={className}><path d="M4 10h16" /><path d="M12 4 4 8h16z" /><path d="M6.5 10v7M10.5 10v7M13.5 10v7M17.5 10v7" /><path d="M4 20h16" /></svg>
+  ),
+  swap: ({ className }) => (
+    <svg {...base} className={className}><path d="M4 8h11a3 3 0 0 1 0 6" /><path d="M7 5 4 8l3 3" /><path d="M20 16H9a3 3 0 0 1 0-6" /><path d="M17 19l3-3-3-3" /></svg>
+  ),
+  target: ({ className }) => (
+    <svg {...base} className={className}><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="1" /></svg>
+  ),
+  chevronLeft: ({ className }) => (
+    <svg {...base} className={className}><path d="m15 6-6 6 6 6" /></svg>
+  ),
   ticket: ({ className }) => (
     <svg {...base} className={className}><path d="M4 9V7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a2.5 2.5 0 0 0 0 5v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a2.5 2.5 0 0 0 0-5z" /><path d="M13 6v3M13 13v5" /></svg>
   ),

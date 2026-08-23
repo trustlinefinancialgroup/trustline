@@ -694,6 +694,7 @@ export const de: Dict = {
     viewActivity: "Umsätze ansehen",
   },
   bank: {
+    actionDeposit: "Einzahlen",
     availableBalance: "Verfügbarer Saldo",
     accountNo: "Konto",
     pendingNote: "{amount} an Einzahlungen warten auf Verifizierung",

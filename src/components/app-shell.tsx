@@ -8,6 +8,7 @@ import { Logo } from "@/components/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { NotificationCenter } from "@/components/notification-center";
 import { MobileDrawer } from "@/components/mobile-drawer";
+import { BackLink } from "@/components/ui";
 
 type ShellUser = {
   id: string;
@@ -263,9 +264,7 @@ export async function PlainShell({
         </div>
       </header>
       <Page>
-        <Link href={backHref} className="text-sm font-semibold text-accent-600 hover:text-accent-700">
-          ← {t.bank.back}
-        </Link>
+        <BackLink href={backHref}>{t.bank.back}</BackLink>
         <h1 className="mt-4 text-2xl font-semibold tracking-tight text-navy-900">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
         <div className="mt-8">{children}</div>

@@ -69,7 +69,7 @@ export default async function InboxPage({
       {!error && openMessage && (
         <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <Link href={`/admin/inbox?box=${box}`} className="text-sm font-semibold text-accent-600 hover:text-accent-700">
-            ← Back to inbox
+            Back to inbox
           </Link>
           <h2 className="mt-3 text-lg font-semibold text-navy-900">{openMessage.subject}</h2>
           <p className="mt-1 text-sm text-gray-600">

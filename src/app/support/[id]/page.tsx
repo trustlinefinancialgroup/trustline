@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { closeTicketAction } from "@/lib/actions/ticket-actions";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
-import { Card, SectionHead, StatusChip, type Tone } from "@/components/ui";
+import { BackLink, Card, SectionHead, StatusChip, type Tone } from "@/components/ui";
 import { TicketReplyForm } from "../reply-form";
 
 export const metadata = { title: "Support ticket — Trustline Financial Group" };
@@ -56,12 +55,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
     >
       <Page className="max-w-3xl space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link
-            href="/support?tab=tickets"
-            className="text-sm font-semibold text-accent-600 hover:text-accent-700"
-          >
-            ← {t.tickets.allTickets}
-          </Link>
+          <BackLink href="/support?tab=tickets">{t.tickets.allTickets}</BackLink>
           <StatusChip tone={statusTone(ticket.status)}>
             {t.tickets.statuses[ticket.status as keyof typeof t.tickets.statuses] ?? ticket.status}
           </StatusChip>

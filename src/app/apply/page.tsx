@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { getDict, getLocale } from "@/i18n/server";
@@ -12,6 +11,7 @@ import {
 } from "@/lib/products";
 import { formatMoney, formatMoneyWhole } from "@/lib/bank";
 import { AppShell, Page } from "@/components/app-shell";
+import { BackLink } from "@/components/ui";
 import { ApplyForm } from "./apply-form";
 
 export const metadata = { title: "Apply — Trustline Financial Group" };
@@ -64,12 +64,7 @@ export default async function ApplyPage({
       subtitle={label?.body}
     >
       <Page className={def.card ? "max-w-3xl" : "max-w-lg"}>
-        <Link
-          href={`/product/${def.key}`}
-          className="text-sm font-semibold text-accent-600 hover:text-accent-700"
-        >
-          ← {t.bank.back}
-        </Link>
+        <BackLink href={`/product/${def.key}`}>{t.bank.back}</BackLink>
         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-9 shadow-sm">
           <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
             {t.products.verifyNote}

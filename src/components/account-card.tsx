@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { fill, type Dict } from "@/i18n";
 import { formatMoney } from "@/lib/bank";
-import { Icons } from "@/components/icons";
+import { NavIcons } from "@/components/icons";
 import { Eyebrow, StatusChip } from "@/components/ui";
 import type { PortfolioAccount } from "@/lib/portfolio";
 
@@ -28,7 +28,7 @@ export function AccountCard({
   showFullNumber?: boolean;
 }) {
   const isSavings = account.kind === "SAVINGS";
-  const Icon = isSavings ? Icons.savings : Icons.checking;
+  const Icon = isSavings ? NavIcons.vault : NavIcons.wallet;
   const kindLabel = isSavings ? t.bank.savings : t.bank.checking;
 
   const body = (

@@ -13,10 +13,10 @@ import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
 import { Greeting, TodayDate } from "@/components/greeting";
-import { Icons, NavIcons } from "@/components/icons";
+import { NavIcons } from "@/components/icons";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
-import { ActionButton, Eyebrow, SectionHead } from "@/components/ui";
+import { Eyebrow, QuickAction, SectionHead } from "@/components/ui";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -118,19 +118,9 @@ export default async function DashboardPage({
           </p>
         ))}
 
-        {showWelcomeBonus(bonus) && (
-          <WelcomeBonusBanner
-            state={bonus}
-            t={t}
-            locale={locale}
-            currency={portfolio.currency}
-            creditedDate={bonus.creditedAt ? dateFmt.format(bonus.creditedAt) : null}
-          />
-        )}
-
         {/* Portfolio hero */}
         <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-6 shadow-lg shadow-navy-900/20 sm:p-8">
-          <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
             <div className="min-w-0">
               <Eyebrow className="text-navy-300">{t.dashboard.totalBalance}</Eyebrow>
               <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -166,17 +156,17 @@ export default async function DashboardPage({
               )}
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <ActionButton href="/transfers?tab=deposit" icon="arrowDown">
-                {t.bank.makeDeposit}
-              </ActionButton>
-              <ActionButton href="/transfers?tab=send" icon="exchange" variant="ghost">
-                {t.bank.sendMoney}
-              </ActionButton>
-              <ActionButton href="/transfers?tab=withdraw" icon="arrowUp" variant="ghost">
-                {t.bank.withdraw}
-              </ActionButton>
-            </div>
+          </div>
+
+          <div className="mt-7 flex gap-2 overflow-x-auto border-t border-white/10 pt-6 sm:gap-4">
+            <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
+            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.sendMoney} />
+            <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
+            {portfolio.savings && (
+              <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
+            )}
+            <QuickAction href="/statements" icon="statement" label={t.statements.link} />
+            <QuickAction href="/goals" icon="target" label={t.bank.goalsLink} />
           </div>
         </div>
 
@@ -214,27 +204,15 @@ export default async function DashboardPage({
           </div>
         </section>
 
-        {/* Secondary destinations that aren't on the tab bar */}
-        <div className="flex flex-wrap gap-2.5">
-          {[
-            { href: "/statements", label: t.statements.link, icon: "statement" },
-            { href: "/goals", label: t.bank.goalsLink, icon: "savings" },
-            { href: "/documents", label: t.appnav.documents, icon: "list" },
-            { href: "/support", label: t.support.link, icon: "chat" },
-          ].map((link) => {
-            const Icon = NavIcons[link.icon] ?? Icons[link.icon];
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-[13px] font-semibold text-navy-800 transition hover:border-accent-500/40 hover:shadow-sm"
-              >
-                <Icon className="h-4 w-4 text-gray-400" />
-                {link.label}
-              </Link>
-            );
-          })}
-        </div>
+        {showWelcomeBonus(bonus) && (
+          <WelcomeBonusBanner
+            state={bonus}
+            t={t}
+            locale={locale}
+            currency={portfolio.currency}
+            creditedDate={bonus.creditedAt ? dateFmt.format(bonus.creditedAt) : null}
+          />
+        )}
 
         {/* Product suite for the client's account type */}
         <section>
