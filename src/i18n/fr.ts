@@ -605,6 +605,8 @@ export const fr: Dict = {
     identityBody: "Le document avec lequel votre compte a été ouvert.",
     identityDeleted:
       "Vos pièces d'identité ont été supprimées après l'approbation de votre compte, comme promis. Il ne subsiste qu'une trace de leur conservation et de leur suppression.",
+    identityNone:
+      "Nous n'avons aucune pièce d'identité à votre dossier. Si nous en avons besoin, nous vous le demanderons ici et par e-mail.",
     identityNote: "Seuls vous et notre équipe d'examen pouvez ouvrir ces fichiers.",
     title: "Documents",
     subtitle: "Relevés, contrats et tout ce que vous nous avez envoyé",
@@ -667,7 +669,7 @@ export const fr: Dict = {
     badge: "Offre nouveau client",
     title: "Prime de bienvenue de 175 $",
     pendingBody:
-      "Votre prime de bienvenue est en cours de traitement. Notre équipe la créditera sur votre compte dès que votre dossier aura été examiné.",
+      "En cours de traitement — nous la créditons dès que votre dossier est examiné.",
     creditedTitle: "Votre prime de bienvenue a été créditée",
     creditedBody: "{amount} ont été ajoutés à votre compte le {date}.",
     rateTitle: "Jusqu'à 5 % pendant vos 90 premiers jours",
@@ -694,6 +696,8 @@ export const fr: Dict = {
     viewActivity: "Voir les opérations",
   },
   bank: {
+    actionSend: "Envoyer",
+    actionGoals: "Objectifs",
     actionDeposit: "Dépôt",
     availableBalance: "Solde disponible",
     accountNo: "Compte",

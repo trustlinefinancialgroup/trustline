@@ -137,12 +137,12 @@ export function QuickAction({
   return (
     <Link
       href={href}
-      className="group flex w-[4.5rem] shrink-0 flex-col items-center gap-2 text-center focus:outline-none sm:w-20"
+      className="group flex w-[3.9rem] shrink-0 flex-col items-center gap-1.5 text-center focus:outline-none sm:w-[4.5rem]"
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/20 group-focus-visible:ring-2 group-focus-visible:ring-white/60">
-        {draw({ className: "h-[22px] w-[22px]" })}
+      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/20 group-focus-visible:ring-2 group-focus-visible:ring-white/60">
+        {draw({ className: "h-5 w-5" })}
       </span>
-      <span className="text-[12px] font-medium leading-tight text-navy-200 transition group-hover:text-white">
+      <span className="w-full truncate text-[11px] font-medium leading-tight text-navy-200 transition group-hover:text-white">
         {label}
       </span>
     </Link>

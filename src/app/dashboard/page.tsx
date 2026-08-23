@@ -12,7 +12,7 @@ import { productsFor } from "@/lib/products";
 import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
-import { Greeting, TodayDate } from "@/components/greeting";
+import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
@@ -98,15 +98,7 @@ export default async function DashboardPage({
     <AppShell
       user={user}
       active="dashboard"
-      title={
-        <Greeting
-          morning={fill(t.dashboard.greetingMorning, { name: user.firstName })}
-          afternoon={fill(t.dashboard.greetingAfternoon, { name: user.firstName })}
-          evening={fill(t.dashboard.greetingEvening, { name: user.firstName })}
-          fallback={fill(t.dashboard.welcomeBack, { name: user.firstName })}
-        />
-      }
-      subtitle={<TodayDate locale={INTL_LOCALES[locale] ?? "en-US"} />}
+      title={t.dashboard.overview}
     >
       <Page className="space-y-6">
         {banners.map((text) => (
@@ -118,13 +110,31 @@ export default async function DashboardPage({
           </p>
         ))}
 
+        {showWelcomeBonus(bonus) && !bonus.credited && (
+          <WelcomeBonusBanner
+            state={bonus}
+            t={t}
+            locale={locale}
+            currency={portfolio.currency}
+            creditedDate={null}
+          />
+        )}
+
         {/* Portfolio hero */}
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-6 shadow-lg shadow-navy-900/20 sm:p-8">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-5 shadow-lg shadow-navy-900/20 sm:p-7">
           <div>
             <div className="min-w-0">
-              <Eyebrow className="text-navy-300">{t.dashboard.totalBalance}</Eyebrow>
-              <div className="mt-2 flex flex-wrap items-center gap-3">
-                <p className="tnum text-4xl font-semibold tracking-tight text-white sm:text-[2.75rem]">
+              <p className="text-[13px] text-navy-300">
+                <Greeting
+                  morning={fill(t.dashboard.greetingMorning, { name: user.firstName })}
+                  afternoon={fill(t.dashboard.greetingAfternoon, { name: user.firstName })}
+                  evening={fill(t.dashboard.greetingEvening, { name: user.firstName })}
+                  fallback={fill(t.dashboard.welcomeBack, { name: user.firstName })}
+                />
+              </p>
+              <Eyebrow className="mt-3 text-navy-300">{t.dashboard.totalBalance}</Eyebrow>
+              <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <p className="tnum text-[2rem] font-semibold leading-none tracking-tight text-white sm:text-[2.5rem]">
                   {formatMoney(portfolio.totalCents, locale, portfolio.currency)}
                 </p>
                 {change !== null && (
@@ -140,7 +150,7 @@ export default async function DashboardPage({
                   </span>
                 )}
               </div>
-              <p className="tnum mt-2 text-sm text-navy-300">
+              <p className="tnum mt-2 text-[12px] text-navy-300">
                 {t.bank.accountNo} {portfolio.primary.number}
               </p>
               {portfolio.totalPendingDepositCents > 0 && (
@@ -158,15 +168,15 @@ export default async function DashboardPage({
 
           </div>
 
-          <div className="no-scrollbar mt-7 flex gap-2 overflow-x-auto border-t border-white/10 pt-6 sm:gap-4">
+          <div className="no-scrollbar mt-5 flex gap-1 overflow-x-auto border-t border-white/10 pt-5 sm:gap-3">
             <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
-            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.sendMoney} />
+            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
             <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
             {portfolio.savings && (
               <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
             )}
             <QuickAction href="/statements" icon="statement" label={t.statements.link} />
-            <QuickAction href="/goals" icon="target" label={t.bank.goalsLink} />
+            <QuickAction href="/goals" icon="target" label={t.bank.actionGoals} />
           </div>
         </div>
 
@@ -204,7 +214,7 @@ export default async function DashboardPage({
           </div>
         </section>
 
-        {showWelcomeBonus(bonus) && (
+        {showWelcomeBonus(bonus) && bonus.credited && (
           <WelcomeBonusBanner
             state={bonus}
             t={t}

@@ -604,6 +604,8 @@ export const es: Dict = {
     identityBody: "El documento con el que se abrió tu cuenta.",
     identityDeleted:
       "Tus documentos de identidad se eliminaron tras aprobarse tu cuenta, tal y como te prometimos. Solo queda constancia de que se conservaron y se eliminaron.",
+    identityNone:
+      "No tenemos ningún documento de identidad tuyo archivado. Si necesitamos alguno, te lo pediremos aquí y por correo.",
     identityNote: "Solo tú y nuestro equipo de revisión podéis abrir estos archivos.",
     title: "Documentos",
     subtitle: "Extractos, contratos y todo lo que nos has enviado",
@@ -666,7 +668,7 @@ export const es: Dict = {
     badge: "Oferta para nuevos clientes",
     title: "Bono de bienvenida de 175 $",
     pendingBody:
-      "Tu bono de bienvenida se está procesando. Nuestro equipo lo abonará en tu cuenta en cuanto se revise tu solicitud.",
+      "En proceso: lo abonamos en cuanto se revise tu solicitud.",
     creditedTitle: "Tu bono de bienvenida ya está abonado",
     creditedBody: "Se añadieron {amount} a tu cuenta el {date}.",
     rateTitle: "Hasta un 5 % durante tus primeros 90 días",
@@ -692,6 +694,8 @@ export const es: Dict = {
     viewActivity: "Ver movimientos",
   },
   bank: {
+    actionSend: "Enviar",
+    actionGoals: "Objetivos",
     actionDeposit: "Ingresar",
     availableBalance: "Saldo disponible",
     accountNo: "Cuenta",

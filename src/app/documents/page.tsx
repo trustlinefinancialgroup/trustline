@@ -64,8 +64,7 @@ export default async function DocumentsPage() {
   ];
 
   const identityPurged = identity.length === 0 && user.kycDocsDeletedAt !== null;
-  const nothingYet =
-    periods.length === 0 && uploads.length === 0 && identity.length === 0 && !identityPurged;
+  const nothingYet = periods.length === 0 && uploads.length === 0;
 
   const sideLabel: Record<string, string> = {
     FRONT: t.onboarding.uploadFront,
@@ -137,13 +136,16 @@ export default async function DocumentsPage() {
         )}
 
         {/* The identity document the account was opened with */}
-        {(identity.length > 0 || identityPurged) && (
-          <section>
+        <section>
             <SectionHead
               title={t.documentsPage.identity}
               subtitle={t.documentsPage.identityBody}
             />
-            {identityPurged ? (
+            {identity.length === 0 && !identityPurged ? (
+              <p className="mt-4 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-[13px] leading-relaxed text-gray-600">
+                {t.documentsPage.identityNone}
+              </p>
+            ) : identityPurged ? (
               <p className="mt-4 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-[13px] leading-relaxed text-gray-600">
                 {t.documentsPage.identityDeleted}
               </p>
@@ -184,7 +186,6 @@ export default async function DocumentsPage() {
             )}
             <p className="mt-2 px-1 text-[11px] text-gray-400">{t.documentsPage.identityNote}</p>
           </section>
-        )}
 
         {/* Paperwork the client sent us with an application */}
         {uploads.length > 0 && (

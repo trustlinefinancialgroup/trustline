@@ -601,6 +601,8 @@ export const en = {
     identityBody: "The document your account was opened with.",
     identityDeleted:
       "Your identity documents were deleted after your account was approved, as promised. Only a record that they were held and removed remains.",
+    identityNone:
+      "We have no identity documents on file for you. If we need any, we will ask you here and by email.",
     identityNote: "Only you and our review team can open these files.",
     title: "Documents",
     subtitle: "Statements, agreements and anything you have sent us",
@@ -663,7 +665,7 @@ export const en = {
     badge: "New client offer",
     title: "$175 welcome bonus",
     pendingBody:
-      "Your welcome bonus is being processed. Our team credits it to your account once your application has been reviewed.",
+      "Being processed — we credit it once your application has been reviewed.",
     creditedTitle: "Your welcome bonus has been credited",
     creditedBody: "{amount} was added to your account on {date}.",
     rateTitle: "Unlock up to 5% for your first 90 days",
@@ -689,6 +691,8 @@ export const en = {
     viewActivity: "View activity",
   },
   bank: {
+    actionSend: "Send",
+    actionGoals: "Goals",
     actionDeposit: "Deposit",
     availableBalance: "Available balance",
     accountNo: "Account",

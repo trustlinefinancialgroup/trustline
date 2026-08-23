@@ -606,6 +606,8 @@ export const de: Dict = {
     identityBody: "Das Dokument, mit dem Ihr Konto eröffnet wurde.",
     identityDeleted:
       "Ihre Ausweisdokumente wurden nach der Freigabe Ihres Kontos wie zugesagt gelöscht. Es bleibt nur der Nachweis, dass sie vorlagen und entfernt wurden.",
+    identityNone:
+      "Uns liegen keine Ausweisdokumente von Ihnen vor. Falls wir welche benötigen, fragen wir hier und per E-Mail danach.",
     identityNote: "Nur Sie und unser Prüfteam können diese Dateien öffnen.",
     title: "Dokumente",
     subtitle: "Kontoauszüge, Verträge und alles, was Sie uns geschickt haben",
@@ -668,7 +670,7 @@ export const de: Dict = {
     badge: "Angebot für Neukunden",
     title: "175 $ Willkommensbonus",
     pendingBody:
-      "Ihr Willkommensbonus wird bearbeitet. Unser Team schreibt ihn Ihrem Konto gut, sobald Ihr Antrag geprüft wurde.",
+      "Wird bearbeitet — wir schreiben ihn gut, sobald Ihr Antrag geprüft ist.",
     creditedTitle: "Ihr Willkommensbonus wurde gutgeschrieben",
     creditedBody: "{amount} wurden Ihrem Konto am {date} gutgeschrieben.",
     rateTitle: "Bis zu 5 % in Ihren ersten 90 Tagen",
@@ -694,6 +696,8 @@ export const de: Dict = {
     viewActivity: "Umsätze ansehen",
   },
   bank: {
+    actionSend: "Senden",
+    actionGoals: "Sparziele",
     actionDeposit: "Einzahlen",
     availableBalance: "Verfügbarer Saldo",
     accountNo: "Konto",
