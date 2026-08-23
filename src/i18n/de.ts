@@ -565,6 +565,7 @@ export const de: Dict = {
     noActivity: "Auf dieser Karte gibt es noch keine Umsätze.",
   },
   loansPage: {
+    available: "Wofür Sie sich bewerben können",
     title: "Kredite und Hypotheken",
     subtitle: "Von Menschen geprüfte Finanzierungen mit klar beziffelten Konditionen",
     empty: "Sie haben keine laufenden Finanzierungen",
@@ -601,6 +602,11 @@ export const de: Dict = {
     version: "Kundenportal",
   },
   documentsPage: {
+    identity: "Ausweisdokumente",
+    identityBody: "Das Dokument, mit dem Ihr Konto eröffnet wurde.",
+    identityDeleted:
+      "Ihre Ausweisdokumente wurden nach der Freigabe Ihres Kontos wie zugesagt gelöscht. Es bleibt nur der Nachweis, dass sie vorlagen und entfernt wurden.",
+    identityNote: "Nur Sie und unser Prüfteam können diese Dateien öffnen.",
     title: "Dokumente",
     subtitle: "Kontoauszüge, Verträge und alles, was Sie uns geschickt haben",
     empty: "Hier ist noch nichts",

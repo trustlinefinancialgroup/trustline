@@ -565,6 +565,7 @@ export const es: Dict = {
     noActivity: "Todavía no hay movimientos en esta tarjeta.",
   },
   loansPage: {
+    available: "Lo que puedes solicitar",
     title: "Préstamos e hipotecas",
     subtitle: "Financiación revisada por personas, con condiciones expresadas en cifras claras",
     empty: "No tienes financiación activa",
@@ -599,6 +600,11 @@ export const es: Dict = {
     version: "Portal de cliente",
   },
   documentsPage: {
+    identity: "Documentos de identidad",
+    identityBody: "El documento con el que se abrió tu cuenta.",
+    identityDeleted:
+      "Tus documentos de identidad se eliminaron tras aprobarse tu cuenta, tal y como te prometimos. Solo queda constancia de que se conservaron y se eliminaron.",
+    identityNote: "Solo tú y nuestro equipo de revisión podéis abrir estos archivos.",
     title: "Documentos",
     subtitle: "Extractos, contratos y todo lo que nos has enviado",
     empty: "Aquí todavía no hay nada",

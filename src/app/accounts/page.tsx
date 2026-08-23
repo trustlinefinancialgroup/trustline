@@ -5,6 +5,7 @@ import { formatMoney } from "@/lib/bank";
 import { loadPortfolio } from "@/lib/portfolio";
 import { loadHoldings } from "@/lib/holdings";
 import { productsWithLabels } from "@/lib/product-view";
+import { productsFor } from "@/lib/products";
 import { availableCreditCents } from "@/lib/lending";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
@@ -33,6 +34,9 @@ export default async function AccountsPage() {
   const titles = new Map(
     productsWithLabels(t, user.accountType).map(({ def, item }) => [def.key, item.title])
   );
+
+  // Business clients have no savings product, so don't offer them one.
+  const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
   const dateFmt = new Intl.DateTimeFormat(
     { en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES" }[locale],
@@ -66,7 +70,7 @@ export default async function AccountsPage() {
               </div>
             ))}
 
-            {!portfolio.savings && (
+            {!portfolio.savings && savingsOffered && (
               <Link
                 href="/product/SAVINGS"
                 className="group flex min-h-[9.5rem] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 transition hover:border-accent-500/50 hover:bg-white"

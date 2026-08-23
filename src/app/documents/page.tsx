@@ -30,12 +30,18 @@ export default async function DocumentsPage() {
   const t = await getDict();
   const locale = await getLocale();
 
-  const [periods, uploads] = await Promise.all([
+  const [periods, uploads, identity] = await Promise.all([
     statementPeriods(user.id),
     db.applicationDocument.findMany({
       where: { application: { userId: user.id } },
       orderBy: { uploadedAt: "desc" },
       include: { application: { select: { productKey: true } } },
+    }),
+    // The client's own identity photos. They can always see what they sent us,
+    // right up until the team purges them after review.
+    db.kycDocument.findMany({
+      where: { userId: user.id },
+      orderBy: [{ uploadedAt: "asc" }],
     }),
   ]);
 
@@ -57,7 +63,15 @@ export default async function DocumentsPage() {
     { href: "/legal/e-consent", label: t.legal.eConsent },
   ];
 
-  const nothingYet = periods.length === 0 && uploads.length === 0;
+  const identityPurged = identity.length === 0 && user.kycDocsDeletedAt !== null;
+  const nothingYet =
+    periods.length === 0 && uploads.length === 0 && identity.length === 0 && !identityPurged;
+
+  const sideLabel: Record<string, string> = {
+    FRONT: t.onboarding.uploadFront,
+    BACK: t.onboarding.uploadBack,
+    SELFIE: t.onboarding.uploadSelfie,
+  };
 
   return (
     <AppShell
@@ -119,6 +133,56 @@ export default async function DocumentsPage() {
                 );
               })}
             </div>
+          </section>
+        )}
+
+        {/* The identity document the account was opened with */}
+        {(identity.length > 0 || identityPurged) && (
+          <section>
+            <SectionHead
+              title={t.documentsPage.identity}
+              subtitle={t.documentsPage.identityBody}
+            />
+            {identityPurged ? (
+              <p className="mt-4 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-[13px] leading-relaxed text-gray-600">
+                {t.documentsPage.identityDeleted}
+              </p>
+            ) : (
+              <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+                {identity.map((doc, i) => (
+                  <div
+                    key={doc.id}
+                    className={`flex flex-wrap items-center justify-between gap-3 px-5 py-4 ${
+                      i > 0 ? "border-t border-gray-100" : ""
+                    }`}
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                        <Icons.shield className="h-[18px] w-[18px]" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-navy-900">
+                          {t.onboarding.docTypes[
+                            doc.docType as keyof typeof t.onboarding.docTypes
+                          ] ?? doc.docType}
+                        </p>
+                        <p className="tnum truncate text-[12px] text-gray-500">
+                          {sideLabel[doc.side] ?? doc.side} · {dateFmt.format(doc.uploadedAt)} ·{" "}
+                          {fileSize(doc.sizeBytes)}
+                        </p>
+                      </div>
+                    </div>
+                    <a
+                      href={`/api/files/kyc/${doc.storedName}`}
+                      className="shrink-0 rounded-full border border-gray-200 px-4 py-1.5 text-[12px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+                    >
+                      {t.documentsPage.open}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+            <p className="mt-2 px-1 text-[11px] text-gray-400">{t.documentsPage.identityNote}</p>
           </section>
         )}
 

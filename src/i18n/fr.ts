@@ -565,6 +565,7 @@ export const fr: Dict = {
     noActivity: "Aucune opération sur cette carte pour le moment.",
   },
   loansPage: {
+    available: "Ce que vous pouvez demander",
     title: "Prêts et hypothèques",
     subtitle: "Des financements examinés par des humains, aux conditions clairement chiffrées",
     empty: "Vous n'avez aucun emprunt en cours",
@@ -600,6 +601,11 @@ export const fr: Dict = {
     version: "Espace client",
   },
   documentsPage: {
+    identity: "Pièces d'identité",
+    identityBody: "Le document avec lequel votre compte a été ouvert.",
+    identityDeleted:
+      "Vos pièces d'identité ont été supprimées après l'approbation de votre compte, comme promis. Il ne subsiste qu'une trace de leur conservation et de leur suppression.",
+    identityNote: "Seuls vous et notre équipe d'examen pouvez ouvrir ces fichiers.",
     title: "Documents",
     subtitle: "Relevés, contrats et tout ce que vous nous avez envoyé",
     empty: "Rien pour le moment",

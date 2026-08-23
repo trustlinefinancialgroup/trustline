@@ -7,6 +7,7 @@ import { loadHoldings } from "@/lib/holdings";
 import { availableCreditCents } from "@/lib/lending";
 import { toggleFreezeAction, updateCardControlAction } from "@/lib/actions/product-actions";
 import { buildProductView, productsWithLabels } from "@/lib/product-view";
+import { productsFor } from "@/lib/products";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
 import { CardWithReveal } from "@/components/card-details";
@@ -55,6 +56,9 @@ export default async function CardsPage({
     { dateStyle: "medium" }
   );
 
+  // A personal client applies for CREDIT_CARD, a business one for BUSINESS_CARD.
+  const cardProduct = productsFor(user.accountType).find((d) => d.card);
+
   if (!selected) {
     return (
       <AppShell user={user} active="cards" title={t.cardsPage.title} subtitle={t.cardsPage.subtitle}>
@@ -63,12 +67,14 @@ export default async function CardsPage({
             title={t.cardsPage.empty}
             body={t.cardsPage.emptyBody}
             action={
-              <Link
-                href="/product/CREDIT_CARD"
-                className="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
-              >
-                {t.products.apply}
-              </Link>
+              cardProduct ? (
+                <Link
+                  href={`/product/${cardProduct.key}`}
+                  className="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                >
+                  {t.products.apply}
+                </Link>
+              ) : null
             }
           />
         </Page>

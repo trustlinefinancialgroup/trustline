@@ -253,8 +253,7 @@ export default async function ProductPage({
 
           {/* The detail panel */}
           <div className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h1 className="text-xl font-semibold tracking-tight text-navy-900">{view.title}</h1>
+            <div className="flex flex-wrap items-center gap-3">
               {view.state === "ACTIVE" && (
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-bold ${

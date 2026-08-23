@@ -57,7 +57,12 @@ export default async function ApplyPage({
   const activeNav = def.card ? "cards" : def.credit ? "loans" : "accounts";
 
   return (
-    <AppShell user={user} active={activeNav} title={t.products.applyTitle} subtitle={label?.title}>
+    <AppShell
+      user={user}
+      active={activeNav}
+      title={fill(t.products.applyTitle, { product: label?.title ?? type! })}
+      subtitle={label?.body}
+    >
       <Page className={def.card ? "max-w-3xl" : "max-w-lg"}>
         <Link
           href={`/product/${def.key}`}
@@ -66,11 +71,7 @@ export default async function ApplyPage({
           ← {t.bank.back}
         </Link>
         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-9 shadow-sm">
-          <h1 className="text-xl font-semibold tracking-tight text-navy-900">
-            {fill(t.products.applyTitle, { product: label?.title ?? type! })}
-          </h1>
-          {label?.body && <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{label.body}</p>}
-          <p className="mt-4 rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
+          <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
             {t.products.verifyNote}
           </p>
           <ApplyForm

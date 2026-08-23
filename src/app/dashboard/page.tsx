@@ -8,6 +8,7 @@ import { showWelcomeBonus, welcomeBonusState } from "@/lib/promo";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { buildProductView, latestByKey, productsWithLabels } from "@/lib/product-view";
+import { productsFor } from "@/lib/products";
 import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
@@ -78,6 +79,10 @@ export default async function DashboardPage({
       holderName,
     })
   );
+
+  // Savings is a personal product — business clients have no /product/SAVINGS
+  // page, so offering them one would land on a 404.
+  const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
   const dateFmt = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", { dateStyle: "medium" });
 
@@ -192,7 +197,7 @@ export default async function DashboardPage({
                 href={`/activity?account=${account.id}`}
               />
             ))}
-            {!portfolio.savings && (
+            {!portfolio.savings && savingsOffered && (
               <Link
                 href="/product/SAVINGS"
                 className="group flex min-h-[9.5rem] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 transition hover:border-accent-500/50 hover:bg-white"

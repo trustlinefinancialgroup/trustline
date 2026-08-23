@@ -562,6 +562,7 @@ export const en = {
     noActivity: "Nothing on this card yet.",
   },
   loansPage: {
+    available: "What you can apply for",
     title: "Loans and mortgages",
     subtitle: "Human-reviewed lending with terms set out in plain figures",
     empty: "You have no active borrowing",
@@ -596,6 +597,11 @@ export const en = {
     version: "Client portal",
   },
   documentsPage: {
+    identity: "Identity documents",
+    identityBody: "The document your account was opened with.",
+    identityDeleted:
+      "Your identity documents were deleted after your account was approved, as promised. Only a record that they were held and removed remains.",
+    identityNote: "Only you and our review team can open these files.",
     title: "Documents",
     subtitle: "Statements, agreements and anything you have sent us",
     empty: "Nothing here yet",

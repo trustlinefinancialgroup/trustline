@@ -12,6 +12,7 @@ import {
   repaidPercent,
 } from "@/lib/lending";
 import { productsWithLabels } from "@/lib/product-view";
+import { productsFor } from "@/lib/products";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { AppShell, Page } from "@/components/app-shell";
@@ -54,6 +55,9 @@ export default async function LoansPage() {
     { dateStyle: "medium" }
   );
 
+  // What this client could actually borrow — cards live on their own page.
+  const lendingProducts = productsFor(user.accountType).filter((d) => d.credit && !d.card);
+
   const lendingApplications = applications.filter((a) => {
     const title = titles.get(a.productKey);
     return title && holdings.loans.every((l) => l.app.id !== a.id);
@@ -66,28 +70,45 @@ export default async function LoansPage() {
       title={t.loansPage.title}
       subtitle={t.loansPage.subtitle}
       actions={
-        <Link
-          href="/dashboard"
-          className="hidden rounded-full bg-accent-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-accent-600 sm:inline-flex"
-        >
-          {t.products.apply}
-        </Link>
+        lendingProducts.length > 0 ? (
+          <Link
+            href={`/product/${lendingProducts[0].key}`}
+            className="hidden rounded-full bg-accent-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-accent-600 sm:inline-flex"
+          >
+            {t.products.apply}
+          </Link>
+        ) : null
       }
     >
       <Page className="space-y-8">
         {holdings.loans.length === 0 ? (
-          <EmptyState
-            title={t.loansPage.empty}
-            body={t.loansPage.emptyBody}
-            action={
-              <Link
-                href="/dashboard"
-                className="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
-              >
-                {t.products.apply}
-              </Link>
-            }
-          />
+          <section>
+            <EmptyState title={t.loansPage.empty} body={t.loansPage.emptyBody} />
+            {lendingProducts.length > 0 && (
+              <>
+                <SectionHead className="mt-8" title={t.loansPage.available} />
+                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {lendingProducts.map((d) => (
+                    <Link
+                      key={d.key}
+                      href={`/product/${d.key}`}
+                      className="group rounded-2xl border border-gray-200/80 bg-white p-5 transition hover:border-accent-500/40 hover:shadow-md"
+                    >
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-50 text-navy-600">
+                        <Icons.lending className="h-5 w-5" />
+                      </span>
+                      <p className="mt-3 text-sm font-semibold text-navy-900">
+                        {titles.get(d.key) ?? d.key}
+                      </p>
+                      <span className="mt-2 inline-block rounded-full bg-accent-50 px-2.5 py-0.5 text-[11px] font-semibold text-accent-700 transition group-hover:bg-accent-500 group-hover:text-white">
+                        {t.products.apply}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
+          </section>
         ) : (
           <section>
             <SectionHead title={t.loansPage.activeLoans} />
