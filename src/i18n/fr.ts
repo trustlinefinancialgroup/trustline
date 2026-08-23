@@ -605,8 +605,6 @@ export const fr: Dict = {
     identityBody: "Le document avec lequel votre compte a été ouvert.",
     identityDeleted:
       "Vos pièces d'identité ont été supprimées après l'approbation de votre compte, comme promis. Il ne subsiste qu'une trace de leur conservation et de leur suppression.",
-    identityNone:
-      "Nous n'avons aucune pièce d'identité à votre dossier. Si nous en avons besoin, nous vous le demanderons ici et par e-mail.",
     identityNote: "Seuls vous et notre équipe d'examen pouvez ouvrir ces fichiers.",
     title: "Documents",
     subtitle: "Relevés, contrats et tout ce que vous nous avez envoyé",

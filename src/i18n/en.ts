@@ -601,8 +601,6 @@ export const en = {
     identityBody: "The document your account was opened with.",
     identityDeleted:
       "Your identity documents were deleted after your account was approved, as promised. Only a record that they were held and removed remains.",
-    identityNone:
-      "We have no identity documents on file for you. If we need any, we will ask you here and by email.",
     identityNote: "Only you and our review team can open these files.",
     title: "Documents",
     subtitle: "Statements, agreements and anything you have sent us",

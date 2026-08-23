@@ -606,8 +606,6 @@ export const de: Dict = {
     identityBody: "Das Dokument, mit dem Ihr Konto eröffnet wurde.",
     identityDeleted:
       "Ihre Ausweisdokumente wurden nach der Freigabe Ihres Kontos wie zugesagt gelöscht. Es bleibt nur der Nachweis, dass sie vorlagen und entfernt wurden.",
-    identityNone:
-      "Uns liegen keine Ausweisdokumente von Ihnen vor. Falls wir welche benötigen, fragen wir hier und per E-Mail danach.",
     identityNote: "Nur Sie und unser Prüfteam können diese Dateien öffnen.",
     title: "Dokumente",
     subtitle: "Kontoauszüge, Verträge und alles, was Sie uns geschickt haben",

@@ -135,17 +135,15 @@ export default async function DocumentsPage() {
           </section>
         )}
 
-        {/* The identity document the account was opened with */}
-        <section>
+        {/* The identity document the account was opened with — listed only
+            once something has actually been uploaded. */}
+        {(identity.length > 0 || identityPurged) && (
+          <section>
             <SectionHead
               title={t.documentsPage.identity}
               subtitle={t.documentsPage.identityBody}
             />
-            {identity.length === 0 && !identityPurged ? (
-              <p className="mt-4 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-[13px] leading-relaxed text-gray-600">
-                {t.documentsPage.identityNone}
-              </p>
-            ) : identityPurged ? (
+            {identityPurged ? (
               <p className="mt-4 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-[13px] leading-relaxed text-gray-600">
                 {t.documentsPage.identityDeleted}
               </p>
@@ -186,6 +184,7 @@ export default async function DocumentsPage() {
             )}
             <p className="mt-2 px-1 text-[11px] text-gray-400">{t.documentsPage.identityNote}</p>
           </section>
+        )}
 
         {/* Paperwork the client sent us with an application */}
         {uploads.length > 0 && (

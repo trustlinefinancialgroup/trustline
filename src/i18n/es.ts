@@ -604,8 +604,6 @@ export const es: Dict = {
     identityBody: "El documento con el que se abrió tu cuenta.",
     identityDeleted:
       "Tus documentos de identidad se eliminaron tras aprobarse tu cuenta, tal y como te prometimos. Solo queda constancia de que se conservaron y se eliminaron.",
-    identityNone:
-      "No tenemos ningún documento de identidad tuyo archivado. Si necesitamos alguno, te lo pediremos aquí y por correo.",
     identityNote: "Solo tú y nuestro equipo de revisión podéis abrir estos archivos.",
     title: "Documentos",
     subtitle: "Extractos, contratos y todo lo que nos has enviado",
