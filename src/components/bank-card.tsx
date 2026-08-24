@@ -233,13 +233,13 @@ export function BankCard({
           <div className="min-w-0">
             <p
               className="truncate font-semibold uppercase tracking-[0.16em]"
-              style={{ color: face.ink, fontSize: "3.6cqw", lineHeight: 1.25 }}
+              style={{ color: face.ink, fontSize: "4.2cqw", lineHeight: 1.25 }}
             >
               {holder || holderPlaceholder}
             </p>
             <p
               className="mt-0.5 truncate uppercase tracking-[0.16em]"
-              style={{ color: face.inkSoft, fontSize: "3.0cqw", lineHeight: 1.25 }}
+              style={{ color: face.inkSoft, fontSize: "3.4cqw", lineHeight: 1.25 }}
             >
               {expiry ? `Valid thru ${expiry}` : productName}
             </p>
