@@ -128,21 +128,35 @@ export function QuickAction({
   href,
   icon,
   label,
+  tone = "light",
 }: {
   href: string;
   icon: string;
   label: string;
+  /** "dark" for use inside the navy balance card, "light" on the page itself. */
+  tone?: "light" | "dark";
 }) {
   const draw = NavIcons[icon] ?? Icons[icon] ?? NavIcons.home;
+  const dark = tone === "dark";
   return (
     <Link
       href={href}
       className="group flex w-[3.9rem] shrink-0 flex-col items-center gap-1.5 text-center focus:outline-none sm:w-[4.5rem]"
     >
-      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/20 group-focus-visible:ring-2 group-focus-visible:ring-white/60">
+      <span
+        className={`flex h-11 w-11 items-center justify-center rounded-xl transition ${
+          dark
+            ? "bg-white/10 text-white ring-1 ring-inset ring-white/15 group-hover:bg-white/20"
+            : "bg-white text-navy-700 ring-1 ring-inset ring-gray-200 group-hover:ring-accent-500/40 group-hover:text-accent-600"
+        }`}
+      >
         {draw({ className: "h-5 w-5" })}
       </span>
-      <span className="w-full truncate text-[11px] font-medium leading-tight text-navy-200 transition group-hover:text-white">
+      <span
+        className={`w-full truncate text-[11px] font-medium leading-tight transition ${
+          dark ? "text-navy-200 group-hover:text-white" : "text-navy-800"
+        }`}
+      >
         {label}
       </span>
     </Link>

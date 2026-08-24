@@ -953,6 +953,7 @@ export const de: Dict = {
     backToProducts: "Zurück zum Dashboard",
   },
   activity: {
+    filtersLabel: "Filter",
     searchLabel: "Umsätze durchsuchen",
     searchPlaceholder: "Nach Text, Referenz oder Empfänger suchen",
     title: "Umsatzübersicht",

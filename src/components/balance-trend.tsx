@@ -16,7 +16,7 @@ import { useId, useMemo, useRef, useState } from "react";
 export type TrendDatum = { v: number; date: string; value: string };
 
 const W = 600; // viewBox units; the SVG scales to its container
-const H = 130;
+const H = 72;
 const PAD_Y = 10;
 
 export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: string }) {
@@ -56,21 +56,19 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
     <figure className="relative m-0">
       <figcaption className="sr-only">{label}</figcaption>
 
-      {/* Read-out sits above the plot so it never covers the line */}
-      <div className="mb-1 flex h-5 items-center justify-end gap-2 text-[11px] text-navy-300">
-        {active && (
-          <>
-            <span className="tnum">{active.date}</span>
-            <span className="tnum font-semibold text-white">{active.value}</span>
-          </>
-        )}
-      </div>
+      {/* Read-out floats over the plot's top-right rather than taking a row */}
+      {active && (
+        <div className="pointer-events-none absolute right-0 top-0 z-10 flex items-center gap-2 rounded-lg bg-navy-950/80 px-2 py-1 text-[11px] backdrop-blur-sm">
+          <span className="tnum text-navy-300">{active.date}</span>
+          <span className="tnum font-semibold text-white">{active.value}</span>
+        </div>
+      )}
 
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="none"
-        className="h-[110px] w-full touch-none"
+        className="h-14 w-full touch-none"
         role="img"
         aria-label={label}
         onPointerMove={onMove}

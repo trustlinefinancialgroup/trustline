@@ -94,13 +94,13 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
           )}
 
           <div className="no-scrollbar mt-5 flex gap-1 overflow-x-auto border-t border-white/10 pt-5 sm:gap-3">
-            <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
-            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
-            <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
+            <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} tone="dark" />
+            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} tone="dark" />
+            <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} tone="dark" />
             {portfolio.savings && (
-              <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
+              <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} tone="dark" />
             )}
-            <QuickAction href="/statements" icon="statement" label={t.statements.link} />
+            <QuickAction href="/statements" icon="statement" label={t.statements.link} tone="dark" />
           </div>
         </div>
 

@@ -135,7 +135,7 @@ export default async function DashboardPage({
         )}
 
         {/* Portfolio hero */}
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-5 shadow-lg shadow-navy-900/20 sm:p-7">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-4 shadow-lg shadow-navy-900/20 sm:p-6">
           <div>
             <div className="min-w-0">
               <p className="text-[13px] text-navy-300">
@@ -146,7 +146,7 @@ export default async function DashboardPage({
                   fallback={fill(t.dashboard.welcomeBack, { name: user.firstName })}
                 />
               </p>
-              <Eyebrow className="mt-3 text-navy-300">{t.dashboard.totalBalance}</Eyebrow>
+              <Eyebrow className="mt-2.5 text-navy-300">{t.dashboard.totalBalance}</Eyebrow>
               <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <p className="tnum text-[2rem] font-semibold leading-none tracking-tight text-white sm:text-[2.5rem]">
                   {formatMoney(portfolio.totalCents, locale, portfolio.currency)}
@@ -164,9 +164,6 @@ export default async function DashboardPage({
                   </span>
                 )}
               </div>
-              <p className="tnum mt-2 text-[12px] text-navy-300">
-                {t.bank.accountNo} {portfolio.primary.number}
-              </p>
               {portfolio.totalPendingDepositCents > 0 && (
                 <p className="tnum mt-3 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-navy-100">
                   {fill(t.bank.pendingNote, {
@@ -183,21 +180,22 @@ export default async function DashboardPage({
           </div>
 
           {trend.hasShape && (
-            <div className="mt-4">
+            <div className="mt-3">
               <BalanceTrend data={trendData} label={t.dashboard.trendLabel} />
             </div>
           )}
 
-          <div className="no-scrollbar mt-5 flex gap-1 overflow-x-auto border-t border-white/10 pt-5 sm:gap-3">
-            <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
-            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
-            <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
-            {portfolio.savings && (
-              <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
-            )}
-            <QuickAction href="/statements" icon="statement" label={t.statements.link} />
-            <QuickAction href="/goals" icon="target" label={t.bank.actionGoals} />
-          </div>
+        </div>
+
+        <div className="no-scrollbar -mx-1 flex gap-1 overflow-x-auto px-1 sm:gap-3">
+          <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
+          <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
+          <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
+          {portfolio.savings && (
+            <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
+          )}
+          <QuickAction href="/statements" icon="statement" label={t.statements.link} />
+          <QuickAction href="/goals" icon="target" label={t.bank.actionGoals} />
         </div>
 
         {trend.hasShape && (

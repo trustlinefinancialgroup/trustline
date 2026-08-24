@@ -7,6 +7,7 @@ import { ensureAccount, getSavings } from "@/lib/bank";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { AppShell, Page } from "@/components/app-shell";
+import { NavIcons } from "@/components/icons";
 import { TransactionList } from "@/components/transaction-list";
 
 export const metadata = { title: "Transactions — Trustline Financial Group" };
@@ -50,6 +51,8 @@ export default async function ActivityPage({
   const to = q.to ? new Date(`${q.to}T23:59:59Z`) : null;
   const page = Math.max(1, Number(q.page) || 1);
   const search = (q.q ?? "").trim().slice(0, 80);
+  // Shown on the collapsed filter row, so nobody wonders why a list looks short.
+  const activeFilters = [accountId, type, status, q.from, q.to].filter(Boolean).length;
 
   const where: Prisma.TransactionWhereInput = {
     accountId: accountId ?? { in: accounts.map((a) => a.id) },
@@ -109,9 +112,9 @@ export default async function ActivityPage({
       subtitle={t.activity.subtitle}
     >
       <Page className="max-w-4xl">
-        <form className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          {/* Search first — it is what someone reaches for when hunting one
-              payment, and it survives the other filters. */}
+        <form className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+          {/* Search stays out in the open — it is what someone reaches for when
+              hunting one payment. */}
           <label className="block text-[13px] font-semibold text-navy-800">
             <span className="sr-only">{t.activity.searchLabel}</span>
             <input
@@ -123,7 +126,18 @@ export default async function ActivityPage({
             />
           </label>
 
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <details className="group mt-3" open={activeFilters > 0}>
+            <summary className="flex cursor-pointer list-none items-center gap-2 text-[13px] font-semibold text-navy-800 marker:content-none">
+              <NavIcons.chevronRight className="h-4 w-4 text-gray-400 transition group-open:rotate-90" />
+              {t.activity.filtersLabel}
+              {activeFilters > 0 && (
+                <span className="tnum rounded-full bg-accent-500 px-2 py-0.5 text-[11px] font-bold text-white">
+                  {activeFilters}
+                </span>
+              )}
+            </summary>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <label className="text-[13px] font-semibold text-navy-800">
               {t.activity.accountLabel}
               <select name="account" defaultValue={accountId ?? ""} className={selectClass}>
@@ -176,7 +190,8 @@ export default async function ActivityPage({
             >
               {t.activity.clear}
             </Link>
-          </div>
+            </div>
+          </details>
         </form>
 
         <div className="mt-6">

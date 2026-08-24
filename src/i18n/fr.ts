@@ -953,6 +953,7 @@ export const fr: Dict = {
     backToProducts: "Retour au tableau de bord",
   },
   activity: {
+    filtersLabel: "Filtres",
     searchLabel: "Rechercher des opérations",
     searchPlaceholder: "Rechercher par libellé, référence ou bénéficiaire",
     title: "Historique des transactions",

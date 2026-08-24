@@ -951,6 +951,7 @@ export const es: Dict = {
     backToProducts: "Volver al panel",
   },
   activity: {
+    filtersLabel: "Filtros",
     searchLabel: "Buscar movimientos",
     searchPlaceholder: "Buscar por concepto, referencia o destinatario",
     title: "Historial de movimientos",

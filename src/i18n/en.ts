@@ -948,6 +948,7 @@ export const en = {
     backToProducts: "Back to dashboard",
   },
   activity: {
+    filtersLabel: "Filters",
     searchLabel: "Search transactions",
     searchPlaceholder: "Search by description, reference or recipient",
     title: "Transaction history",
