@@ -6,10 +6,13 @@ import { useId, useMemo, useRef, useState } from "react";
  * The balance over time, drawn on the dark balance card.
  *
  * One series, so there is no legend — the card's own label names it. The line
- * is 2px on a recessive baseline, the fill is a single sequential hue fading
- * out, and hovering anywhere reveals a crosshair with that day's figure. The
- * hit area is the full plot rather than the line itself, so it is reachable on
- * a phone.
+ * is 2px on a recessive baseline, the fill is that same hue fading out, and
+ * hovering anywhere reveals a crosshair with that day's figure. The hit area is
+ * the full plot rather than the line itself, so it is reachable on a phone.
+ *
+ * The hue is the direction the balance went over the period — green up, red
+ * down — matching the percentage chip beside it. It was fixed blue, which meant
+ * the two could disagree about the same number.
  */
 
 /** Each point arrives pre-formatted, so Intl stays on the server. */
@@ -18,6 +21,12 @@ export type TrendDatum = { v: number; date: string; value: string };
 const W = 600; // viewBox units; the SVG scales to its container
 const H = 72;
 const PAD_Y = 10;
+
+/** Same greens and reds the figures use, so a rise reads the same everywhere. */
+const UP = "#34d399";
+const DOWN = "#f87171";
+/** Flat, or too few points to have a direction. */
+const FLAT = "#5b8def";
 
 export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: string }) {
   const gradientId = useId();
@@ -42,6 +51,10 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
   if (!geom) return null;
 
   const active = hover === null ? null : data[hover];
+
+  const first = data[0].v;
+  const last = data[data.length - 1].v;
+  const hue = last > first ? UP : last < first ? DOWN : FLAT;
 
   function onMove(event: React.PointerEvent<SVGSVGElement>) {
     const svg = svgRef.current;
@@ -76,8 +89,8 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
       >
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#5b8def" stopOpacity="0.38" />
-            <stop offset="100%" stopColor="#5b8def" stopOpacity="0" />
+            <stop offset="0%" stopColor={hue} stopOpacity="0.38" />
+            <stop offset="100%" stopColor={hue} stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -85,7 +98,7 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
         <path
           d={geom.line}
           fill="none"
-          stroke="#5b8def"
+          stroke={hue}
           strokeWidth="2"
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -109,7 +122,7 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
               cx={geom.x(hover)}
               cy={geom.y(active.v)}
               r="5"
-              fill="#5b8def"
+              fill={hue}
               stroke="#061530"
               strokeWidth="2"
               vectorEffect="non-scaling-stroke"

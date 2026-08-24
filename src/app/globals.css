@@ -85,6 +85,9 @@ body {
   --color-brand-500: #4c86f5;
   --color-brand-600: #2f6fed;
 
+  /* Rewards and bonuses — the chip gold from the card faces, so a gift
+     never wears the same blue as a balance. */
+  --color-gift: #e4c56b;
   --color-pos: #34d399;
   --color-neg: #f87171;
 }

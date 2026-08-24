@@ -29,9 +29,12 @@ export function WelcomeBonusBanner({
   const showRateProgress = !state.qualifiesForRate;
 
   return (
-    <div className="rounded-2xl border border-brand-500/25 bg-brand-500/10 px-4 py-3.5 sm:px-5">
+    // Gold rather than brand blue: this is a reward, not a balance, and the
+    // blue panel made it read as just another figure. The hue is the one
+    // already on the card chip and the Gold tier.
+    <div className="rounded-2xl border border-gift/30 bg-gift/10 px-4 py-3.5 sm:px-5">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/10 text-brand-400">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gift/15 text-gift">
           <Icons.gift className="h-[18px] w-[18px]" />
         </span>
 
@@ -60,7 +63,7 @@ export function WelcomeBonusBanner({
               </p>
               <Link
                 href="/transfers?tab=deposit"
-                className="text-[12px] font-semibold text-brand-400 transition hover:text-brand-400"
+                className="text-[12px] font-semibold text-gift transition hover:text-fg"
               >
                 {t.promo.fundNow}
               </Link>
