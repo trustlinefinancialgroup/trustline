@@ -70,16 +70,6 @@ export default async function LoansPage() {
       active="loans"
       title={t.loansPage.title}
       subtitle={t.loansPage.subtitle}
-      actions={
-        lendingProducts.length > 0 ? (
-          <Link
-            href={`/product/${lendingProducts[0].key}`}
-            className="hidden rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-brand-400 sm:inline-flex"
-          >
-            {t.products.apply}
-          </Link>
-        ) : null
-      }
     >
       <Page className="space-y-8">
         {holdings.loans.length === 0 ? (

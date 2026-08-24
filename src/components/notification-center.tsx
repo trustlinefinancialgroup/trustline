@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { markNotificationsReadAction } from "@/lib/actions/broadcast-actions";
 
@@ -105,9 +106,11 @@ export function NotificationCenter({
         </div>
       )}
 
-      {/* Login popup toast */}
-      {toast.length > 0 && (
-        <div className="fixed right-4 top-20 z-[60] w-80 space-y-3">
+      {/* Login popup toast — portalled for the same reason as the drawer: a
+          backdrop-filtered header would otherwise pin it inside the bar. */}
+      {toast.length > 0 &&
+        createPortal(
+          <div className="fixed right-4 top-20 z-[60] w-[min(20rem,calc(100vw-2rem))] space-y-3">
           {toast.map((n) => (
             <div
               key={n.id}
@@ -128,8 +131,9 @@ export function NotificationCenter({
               </p>
             </div>
           ))}
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
