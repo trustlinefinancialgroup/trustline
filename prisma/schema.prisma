@@ -233,6 +233,9 @@ model DepositMethod {
   routeIdentifier   String? // account number / tag / wallet address
   routeInstitution  String?
   routeInstructions String?
+  // How long this rail usually takes, in the admin's own words. Null falls
+  // back to the sensible default in src/lib/methods.ts.
+  etaLabel          String?
   sortOrder         Int      @default(0)
   createdAt         DateTime @default(now())
 }

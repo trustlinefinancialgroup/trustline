@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { formatMoney } from "@/lib/bank";
 import { loadPortfolio } from "@/lib/portfolio";
-import { methodDef, methodVisibleFor } from "@/lib/methods";
+import { methodDef, methodEta, methodVisibleFor } from "@/lib/methods";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
 import { PaymentIcon } from "@/components/payment-icons";
@@ -143,7 +143,13 @@ export default async function TransfersPage({
                 </>
               ) : (
                 <>
-                  <SelectedMethod label={selected.label} iconKey={selected.key} tab="deposit" changeLabel={t.bank.chooseMethod} />
+                  <SelectedMethod
+                    label={selected.label}
+                    iconKey={selected.key}
+                    eta={methodEta(selected.key, selected.etaLabel)}
+                    tab="deposit"
+                    changeLabel={t.bank.chooseMethod}
+                  />
 
                   {(selected.routeName ||
                     selected.routeIdentifier ||
@@ -218,7 +224,13 @@ export default async function TransfersPage({
                 </>
               ) : (
                 <>
-                  <SelectedMethod label={selected.label} iconKey={selected.key} tab="withdraw" changeLabel={t.bank.chooseMethod} />
+                  <SelectedMethod
+                    label={selected.label}
+                    iconKey={selected.key}
+                    eta={methodEta(selected.key, selected.etaLabel)}
+                    tab="withdraw"
+                    changeLabel={t.bank.chooseMethod}
+                  />
                   <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.withdrawBody}
                   </p>
@@ -309,20 +321,25 @@ function MethodGrid({
 function SelectedMethod({
   label,
   iconKey,
+  eta,
   tab,
   changeLabel,
 }: {
   label: string;
   iconKey: string;
+  eta: string;
   tab: Tab;
   changeLabel: string;
 }) {
   return (
     <div className="mt-4 flex items-center gap-3 rounded-xl bg-ink-2 p-4">
-      <span className="text-fg-muted">
+      <span className="shrink-0 text-fg-muted">
         <PaymentIcon icon={methodDef(iconKey).icon} className="h-7 w-7" />
       </span>
-      <span className="font-semibold text-fg">{label}</span>
+      <span className="min-w-0">
+        <span className="block truncate font-semibold text-fg">{label}</span>
+        <span className="block truncate text-[12px] text-fg-faint">{eta}</span>
+      </span>
       <Link
         href={`/transfers?tab=${tab}`}
         className="ml-auto text-xs font-semibold text-brand-400 hover:text-brand-400"

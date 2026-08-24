@@ -67,6 +67,15 @@ export default async function MethodsPage() {
                   </select>
                 </label>
                 <label className="text-xs font-semibold text-fg-muted">
+                  How long it takes
+                  <input
+                    name="etaLabel"
+                    defaultValue={m?.etaLabel ?? ""}
+                    placeholder={def.eta}
+                    className={inputClass}
+                  />
+                </label>
+                <label className="text-xs font-semibold text-fg-muted">
                   Route name
                   <input name="routeName" defaultValue={m?.routeName ?? ""} placeholder="Account name" className={inputClass} />
                 </label>

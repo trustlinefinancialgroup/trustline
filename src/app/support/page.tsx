@@ -20,7 +20,7 @@ function isTab(value: unknown): value is Tab {
   return typeof value === "string" && (TABS as readonly string[]).includes(value);
 }
 
-export function statusTone(status: string): Tone {
+function statusTone(status: string): Tone {
   return status === "RESOLVED" ? "ok" : status === "AWAITING_CLIENT" ? "info" : "pending";
 }
 
@@ -68,7 +68,7 @@ export default async function SupportPage({
         />
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
-          <div>
+          <div className="min-w-0">
             {tab === "chat" && (
               <SupportConsole
                 clientName={`${user.firstName} ${user.lastName}`.trim()}
@@ -115,15 +115,15 @@ export default async function SupportPage({
                         i > 0 ? "border-t border-line-soft" : ""
                       }`}
                     >
-                      <div className="min-w-0">
-                        <p className="flex items-center gap-2 truncate text-sm font-semibold text-fg">
+                      <div className="min-w-0 flex-1">
+                        <p className="flex items-center gap-2 text-sm font-semibold text-fg">
                           {ticket.unreadForClient && (
                             <span
                               className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"
                               aria-hidden="true"
                             />
                           )}
-                          {ticket.subject}
+                          <span className="truncate">{ticket.subject}</span>
                         </p>
                         <p className="tnum mt-0.5 truncate text-[12px] text-fg-muted">
                           {ticket.reference} ·{" "}

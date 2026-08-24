@@ -342,10 +342,22 @@ export default async function DashboardPage({
                     className="transition duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl"
                   />
                 )}
-                <div className="mt-3 flex items-center gap-2 px-1">
-                  <p className="text-sm font-semibold text-fg">{v.title}</p>
+                {/* A product needs a name, a line on what it is, and a figure
+                    or an action — not a title with a pill stuck to it. */}
+                <div className="mt-3 flex items-end justify-between gap-3 px-1">
+                  <div className="min-w-0">
+                    <p className="truncate text-[15px] font-semibold text-fg">{v.title}</p>
+                    {v.value ? (
+                      <p className="tnum mt-0.5 truncate text-[13px] text-fg-muted">
+                        {v.valueLabel ? `${v.valueLabel}: ` : ""}
+                        {v.value}
+                      </p>
+                    ) : (
+                      <p className="mt-0.5 line-clamp-1 text-[13px] text-fg-muted">{v.body}</p>
+                    )}
+                  </div>
                   {!v.value && (
-                    <span className="rounded-full bg-brand-500/12 px-2.5 py-0.5 text-[11px] font-semibold text-brand-400 transition group-hover:bg-brand-500 group-hover:text-white">
+                    <span className="shrink-0 text-[13px] font-medium text-brand-400 transition group-hover:text-fg">
                       {v.cta}
                     </span>
                   )}

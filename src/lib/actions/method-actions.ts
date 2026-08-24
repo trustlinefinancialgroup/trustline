@@ -32,6 +32,7 @@ export async function saveMethodAction(formData: FormData) {
     })(),
     forDeposit: formData.get("forDeposit") === "on",
     forWithdrawal: formData.get("forWithdrawal") === "on",
+    etaLabel: String(formData.get("etaLabel") ?? "").trim() || null,
     routeName: String(formData.get("routeName") ?? "").trim() || null,
     routeIdentifier: String(formData.get("routeIdentifier") ?? "").trim() || null,
     routeInstitution: String(formData.get("routeInstitution") ?? "").trim() || null,
