@@ -5,7 +5,7 @@ import { signupAction, type FormState } from "@/lib/actions/auth-actions";
 import { PasswordInput } from "@/components/password-input";
 
 const inputClass =
-  "mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg placeholder:text-fg-faint transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
+  "mt-1.5 w-full rounded-lg border border-line bg-ink-2 px-3.5 py-2.5 text-[15px] text-fg placeholder:text-fg-faint transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 const labelClass = "block text-[13px] font-semibold text-fg";
 

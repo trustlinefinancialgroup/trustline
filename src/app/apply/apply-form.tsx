@@ -7,7 +7,7 @@ import { BankCard } from "@/components/bank-card";
 import { CARD_TIERS, type FieldDef } from "@/lib/products";
 
 const inputClass =
-  "mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
+  "mt-1.5 w-full rounded-lg border border-line bg-ink-2 px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 const labelClass = "block text-[13px] font-semibold text-fg";
 
 const TERMS = [12, 24, 36, 60, 120, 240, 360];

@@ -11,7 +11,7 @@ import { AddMoneyForm } from "./add-money-form";
 export const metadata = { title: "Savings goals — Trustline Financial Group" };
 
 const inputClass =
-  "mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
+  "mt-1 w-full rounded-lg border border-line bg-ink-2 px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 export default async function GoalsPage({
   searchParams,

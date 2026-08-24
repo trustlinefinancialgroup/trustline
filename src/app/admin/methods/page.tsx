@@ -5,7 +5,7 @@ import { PaymentIcon } from "@/components/payment-icons";
 import { saveMethodAction } from "@/lib/actions/method-actions";
 
 const inputClass =
-  "mt-1 w-full rounded-md border border-line px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
+  "mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 export default async function MethodsPage() {
   const existing = await db.depositMethod.findMany({ select: METHOD_COLUMNS });

@@ -138,3 +138,31 @@ body {
 .scheme-dark {
   color-scheme: dark;
 }
+
+/* Native controls in the app. A <select>'s dropdown is painted by the browser
+   from the element's own background-color, so a transparent control drops open
+   white however dark the page is. Belt and braces alongside the utility class
+   each field carries. */
+.scheme-dark select,
+.scheme-dark option,
+.scheme-dark optgroup {
+  background-color: var(--color-ink-2);
+  color: var(--color-fg);
+}
+
+/* Date and time controls come with a black-on-black calendar icon. */
+.scheme-dark input[type="date"]::-webkit-calendar-picker-indicator,
+.scheme-dark input[type="time"]::-webkit-calendar-picker-indicator,
+.scheme-dark input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.55;
+}
+
+/* Autofill paints its own yellow-white unless it is told otherwise. */
+.scheme-dark input:-webkit-autofill,
+.scheme-dark input:-webkit-autofill:hover,
+.scheme-dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-fg);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-ink-2) inset;
+  caret-color: var(--color-fg);
+}

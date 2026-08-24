@@ -165,6 +165,12 @@ export async function AppShell({
                   signOutLabel={t.common.signOut}
                 />
               </div>
+              <div className="mt-4 border-t border-line-soft px-6 pt-4 sm:hidden">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
+                  {t.common.language}
+                </p>
+                <LanguageSwitcher current={locale} variant="dark" />
+              </div>
             </MobileDrawer>
 
             <div className="min-w-0 flex-1">
@@ -182,7 +188,9 @@ export async function AppShell({
                 items={notifItems}
                 labels={{ title: t.notif.title, empty: t.notif.empty, dismiss: t.notif.dismiss }}
               />
-              <LanguageSwitcher current={locale} variant="dark" />
+              <span className="hidden sm:block">
+                <LanguageSwitcher current={locale} variant="dark" />
+              </span>
               <Link
                 href="/account"
                 title={`${user.firstName} ${user.lastName}`}

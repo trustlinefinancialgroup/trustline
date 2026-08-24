@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { forgotPasswordAction, type FormState } from "@/lib/actions/auth-actions";
 
 const inputClass =
-  "mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
+  "mt-1.5 w-full rounded-lg border border-line bg-ink-2 px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 export function ForgotForm({ labels }: { labels: { email: string; submit: string } }) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(
