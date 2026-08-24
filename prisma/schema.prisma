@@ -49,6 +49,36 @@ model User {
   chats         ChatConversation[]
   sessions      Session[]
   tickets       SupportTicket[]
+  payees        Payee[]
+}
+
+// Someone a client pays more than once — an electricity company, a landlord,
+// another Trustline client. Saving them means the account details are entered
+// once rather than retyped every month, which is the whole point.
+//
+// Payees are archived, never deleted: a payment's history has to survive the
+// payee being put away.
+model Payee {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String // "Con Edison"
+  nickname       String? // "Apartment electric"
+  kind           String    @default("BILLER") // BILLER | PERSON | INTERNAL
+  // How the money leaves, drawn from the same catalogue as withdrawals.
+  methodKey      String?
+  accountRef     String? // account number, tag or handle
+  institution    String?
+  // Set when the payee is another Trustline client, so the payment is internal
+  // and settles at once instead of queueing for review.
+  internalUserId String?
+  lastPaidAt     DateTime?
+  archivedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  transactions Transaction[]
+
+  @@index([userId, archivedAt])
 }
 
 // One row per signed-in device, so a client can see where their account is
@@ -279,6 +309,11 @@ model Transaction {
   applicationId String?
   application   ProductApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
 
+  // Set when the payment went to a saved payee, so a client can see everything
+  // they have ever paid one. Survives the payee being archived.
+  payeeId String?
+  payee   Payee?  @relation(fields: [payeeId], references: [id], onDelete: SetNull)
+
   type        String // DEPOSIT | WITHDRAWAL | ADJUSTMENT
   status      String @default("PENDING") // PENDING | POSTED | REJECTED
   amountCents Int // credits positive, debits negative
@@ -300,6 +335,7 @@ model Transaction {
   postedAt  DateTime?
 
   @@index([applicationId, createdAt])
+  @@index([payeeId, createdAt])
 }
 
 model KycDocument {

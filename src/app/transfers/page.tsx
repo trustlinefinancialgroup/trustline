@@ -8,6 +8,7 @@ import { METHOD_COLUMNS, methodDef, methodEta, methodVisibleFor } from "@/lib/me
 import { methodEtaOverrides } from "@/lib/method-eta";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
+import { NavIcons } from "@/components/icons";
 import { PaymentIcon } from "@/components/payment-icons";
 import { Card, Eyebrow, Tabs } from "@/components/ui";
 import { DepositForm } from "../deposit/deposit-form";
@@ -80,6 +81,21 @@ export default async function TransfersPage({
       subtitle={t.transfers.subtitle}
     >
       <Page className="max-w-3xl space-y-5">
+        {/* Bills live on their own screen — this is the signpost to it. */}
+        <Link
+          href="/payments"
+          className="elev-1 flex items-center gap-3.5 rounded-2xl border border-line bg-ink-1 px-5 py-3.5 transition hover:border-brand-500/40"
+        >
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-500/12 text-brand-400">
+            <NavIcons.bill className="h-[18px] w-[18px]" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[14px] font-medium text-fg">{t.payments.title}</span>
+            <span className="block truncate text-xs text-fg-faint">{t.payments.lede}</span>
+          </span>
+          <NavIcons.chevronRight className="h-4 w-4 shrink-0 text-fg-faint" />
+        </Link>
+
         {/* Available balance */}
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-ink-1 px-5 py-4">
           <div>

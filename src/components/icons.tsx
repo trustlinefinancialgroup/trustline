@@ -142,6 +142,9 @@ export const NavIcons: Record<string, (p: IconProps) => React.ReactElement> = {
   chevronLeft: ({ className }) => (
     <svg {...base} className={className}><path d="m15 6-6 6 6 6" /></svg>
   ),
+  bill: ({ className }) => (
+    <svg {...base} className={className}><path d="M6 3h12v17l-2.5-1.5L13 20l-2.5-1.5L8 20l-2-1.5z" /><path d="M9.5 8h5M9.5 12h5" /></svg>
+  ),
   ticket: ({ className }) => (
     <svg {...base} className={className}><path d="M4 9V7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a2.5 2.5 0 0 0 0 5v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a2.5 2.5 0 0 0 0-5z" /><path d="M13 6v3M13 13v5" /></svg>
   ),
