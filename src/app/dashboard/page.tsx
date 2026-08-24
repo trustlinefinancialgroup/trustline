@@ -12,14 +12,13 @@ import { buildProductView, latestByKey, productsWithLabels } from "@/lib/product
 import { productsFor } from "@/lib/products";
 import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
-import { BankCard, CardSwatch } from "@/components/bank-card";
+import { BankCard } from "@/components/bank-card";
 import { BalanceTrend } from "@/components/balance-trend";
 import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
-import { ProductArt } from "@/components/product-art";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
-import { Eyebrow, QuickAction, SectionHead, StatusChip } from "@/components/ui";
+import { Eyebrow, QuickAction, SectionHead } from "@/components/ui";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -93,6 +92,14 @@ export default async function DashboardPage({
 
   // Savings is a personal product — business clients have no /product/SAVINGS
   // page, so offering them one would land on a 404.
+  // Ranked so the phone layout leads with the product that matters most to
+  // this client: something they hold, then something in flight, then an offer.
+  const productRank = (v: (typeof productViews)[number]) =>
+    v.value ? 0 : v.status ? 1 : 2;
+  const [heroProduct, ...restProducts] = [...productViews].sort(
+    (a, b) => productRank(a) - productRank(b)
+  );
+
   const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
   const dateFmt = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", { dateStyle: "medium" });
@@ -309,58 +316,103 @@ export default async function DashboardPage({
         <section>
           <SectionHead title={t.products.yourProducts} subtitle={t.products.productsSubtitle} />
 
-          {/* Phone: stacked rows. Each product is fully visible at rest — no
-              sideways scrolling, so nothing can shift under a thumb, and the
-              section is ~380px instead of the ~1900px the full-bleed tiles
-              took. The artwork survives as a thumbnail at the same 1.586:1
-              ratio it was cut for. */}
-          <ul className="elev-2 mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1 sm:hidden">
-            {productViews.map((v, i) => (
-              <li key={v.def.key}>
-                <Link
-                  href={v.href}
-                  className={`flex items-center gap-3.5 px-4 py-3 transition active:bg-ink-2 ${
-                    i > 0 ? "border-t border-line-soft" : ""
-                  }`}
-                >
-                  <span
-                    className={`h-[54px] w-[86px] shrink-0 overflow-hidden rounded-lg border border-line bg-ink-2 ${
-                      v.placeholder ? "opacity-60" : ""
-                    }`}
-                  >
-                    {v.render === "card" ? (
-                      <CardSwatch theme={v.theme} />
-                    ) : (
-                      v.art && <ProductArt art={v.art} className="h-full w-full" />
-                    )}
+          {/* Phone: one product leads at full width and the rest sit two-up.
+              Stacking five full-bleed tiles ran to ~1900px and buried the page;
+              a flat list of thumbnails fixed the height and threw the artwork
+              away. This keeps the artwork at a size worth looking at and still
+              fits the section in ~560px. Whatever is furthest along leads —
+              an approved product, then one under review, then the first offer. */}
+          <div className="mt-4 sm:hidden">
+            <Link href={heroProduct.href} className="group block">
+              {heroProduct.render === "card" ? (
+                <BankCard
+                  theme={heroProduct.theme}
+                  productName={heroProduct.title}
+                  badge={heroProduct.badge}
+                  holder={heroProduct.holder}
+                  holderPlaceholder={heroProduct.holderPlaceholder}
+                  number={heroProduct.number}
+                  expiry={heroProduct.expiry}
+                  valueLabel={heroProduct.valueLabel}
+                  value={heroProduct.value}
+                  status={heroProduct.status}
+                  placeholder={heroProduct.placeholder}
+                />
+              ) : (
+                <ProductTile
+                  title={heroProduct.title}
+                  art={heroProduct.art}
+                  valueLabel={heroProduct.valueLabel}
+                  value={heroProduct.value}
+                  status={heroProduct.status}
+                  placeholder={heroProduct.placeholder}
+                  cta={null}
+                />
+              )}
+              <div className="mt-3 flex items-end justify-between gap-3 px-1">
+                <div className="min-w-0">
+                  <p className="truncate text-[15px] font-semibold text-fg">{heroProduct.title}</p>
+                  {heroProduct.value ? (
+                    <p className="tnum mt-0.5 truncate text-[13px] text-fg-muted">
+                      {heroProduct.valueLabel ? `${heroProduct.valueLabel}: ` : ""}
+                      {heroProduct.value}
+                    </p>
+                  ) : (
+                    <p className="mt-0.5 line-clamp-1 text-[13px] text-fg-muted">{heroProduct.body}</p>
+                  )}
+                </div>
+                {!heroProduct.value && (
+                  <span className="shrink-0 text-[13px] font-medium text-brand-400">
+                    {heroProduct.cta}
                   </span>
+                )}
+              </div>
+            </Link>
 
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[14px] font-medium text-fg">{v.title}</span>
-                    {v.value ? (
-                      <span className="tnum mt-0.5 block truncate text-[13px] text-fg-muted">
-                        {v.valueLabel ? `${v.valueLabel}: ` : ""}
-                        {v.value}
-                      </span>
-                    ) : (
-                      <span className="mt-0.5 block truncate text-[13px] text-fg-muted">{v.body}</span>
-                    )}
-                  </span>
-
-                  <span className="flex shrink-0 items-center gap-2">
-                    {v.status ? (
-                      <StatusChip tone={v.status.tone}>{v.status.label}</StatusChip>
-                    ) : (
-                      <span className="text-[13px] font-medium text-brand-400">{v.cta}</span>
-                    )}
-                    <NavIcons.chevronRight className="h-4 w-4 text-fg-faint" />
-                  </span>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              {restProducts.map((v) => (
+                <Link key={v.def.key} href={v.href} className="group block">
+                  {v.render === "card" ? (
+                    <div className="overflow-hidden rounded-2xl">
+                      <BankCard
+                        theme={v.theme}
+                        productName={v.title}
+                        badge={v.badge}
+                        holder={v.holder}
+                        holderPlaceholder={v.holderPlaceholder}
+                        number={v.number}
+                        expiry={v.expiry}
+                        valueLabel={v.valueLabel}
+                        value={v.value}
+                        status={v.status}
+                        placeholder={v.placeholder}
+                      />
+                    </div>
+                  ) : (
+                    <ProductTile
+                      title={v.title}
+                      art={v.art}
+                      valueLabel={v.valueLabel}
+                      value={v.value}
+                      status={v.status}
+                      placeholder={v.placeholder}
+                      cta={null}
+                      size="sm"
+                      aspect="aspect-[4/3]"
+                    />
+                  )}
+                  <div className="mt-2 px-0.5">
+                    <p className="truncate text-[13.5px] font-semibold text-fg">{v.title}</p>
+                    <p className="tnum mt-0.5 truncate text-[12px] text-fg-muted">
+                      {v.value ?? v.cta}
+                    </p>
+                  </div>
                 </Link>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </div>
+          </div>
 
-          {/* Tablet and up there is room for the full faces, so they get one. */}
+          {/* Tablet and up there is room for every face at full size. */}
           <div className="mt-5 hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3">
             {productViews.map((v) => (
               <Link

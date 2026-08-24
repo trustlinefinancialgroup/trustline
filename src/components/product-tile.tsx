@@ -24,6 +24,14 @@ export type ProductTileProps = {
   placeholder?: boolean;
   /** Shown in place of the figure while the product isn't open. */
   cta?: string | null;
+  /**
+   * "sm" is the two-up grid on a phone: the artwork still leads, but the
+   * padding and type step down so a 160px tile doesn't read as a shrunken
+   * poster. Everything else is identical, so a tile is a tile at any width.
+   */
+  size?: "sm" | "md";
+  /** Defaults to a payment card's ratio; the grid crops taller. */
+  aspect?: string;
   className?: string;
 };
 
@@ -35,11 +43,14 @@ export function ProductTile({
   status,
   placeholder = false,
   cta,
+  size = "md",
+  aspect = "aspect-[1.586/1]",
   className = "",
 }: ProductTileProps) {
+  const sm = size === "sm";
   return (
     <div
-      className={`relative aspect-[1.586/1] w-full overflow-hidden rounded-2xl border border-line bg-ink-1 elev-2 ${className}`}
+      className={`relative ${aspect} w-full overflow-hidden rounded-2xl border border-line bg-ink-1 elev-2 ${className}`}
     >
       {art && (
         <ProductArt
@@ -56,11 +67,13 @@ export function ProductTile({
         }`}
       />
 
-      <div className="relative flex h-full flex-col justify-between p-5">
+      <div className={`relative flex h-full flex-col justify-between ${sm ? "p-3" : "p-5"}`}>
         <div className="flex items-start justify-end">
           {status && (
             <span
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${STATUS_TONES[status.tone]}`}
+              className={`shrink-0 rounded-full font-bold uppercase tracking-wide ${
+                sm ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[10px]"
+              } ${STATUS_TONES[status.tone]}`}
             >
               {status.label}
             </span>
@@ -70,15 +83,25 @@ export function ProductTile({
         <div>
           {value ? (
             <>
-              {valueLabel && (
+              {valueLabel && !sm && (
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-fg-muted">
                   {valueLabel}
                 </p>
               )}
-              <p className="mt-1 text-2xl font-semibold tracking-tight text-white">{value}</p>
+              <p
+                className={`mt-1 font-semibold tracking-tight text-white ${
+                  sm ? "text-[17px]" : "text-2xl"
+                }`}
+              >
+                {value}
+              </p>
             </>
           ) : cta ? (
-            <span className="inline-flex rounded-xl bg-ink-2 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500">
+            <span
+              className={`inline-flex rounded-xl bg-ink-2 font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500 ${
+                sm ? "px-3 py-1.5 text-[12px]" : "px-4 py-2 text-[13px]"
+              }`}
+            >
               {cta}
             </span>
           ) : (
