@@ -1183,6 +1183,10 @@ export const fr: Dict = {
     externalUseWithdraw: "Ce n'est pas un compte Trustline. Pour envoyer vers une banque externe, utilisez l'option Retirer.",
   },
   goals: {
+    ideaEmergency: "Fonds d'urgence",
+    ideaTrip: "Un voyage",
+    ideaHome: "Apport immobilier",
+    ideaGift: "Un plaisir",
     title: "Objectifs d'épargne",
     subtitle: "Mettez de l'argent de côté pour vos projets.",
     none: "Aucun objectif pour l'instant. Créez-en un pour commencer à épargner.",

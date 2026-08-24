@@ -17,6 +17,7 @@ import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { AppShell, Page } from "@/components/app-shell";
 import { Icons } from "@/components/icons";
+import { ProductArt } from "@/components/product-art";
 import {
   Card,
   EmptyState,
@@ -39,9 +40,9 @@ export default async function LoansPage() {
   const locale = await getLocale();
 
   const holdings = await loadHoldings(user.id, user.accountType);
-  const titles = new Map(
-    productsWithLabels(t, user.accountType).map(({ def, item }) => [def.key, item.title])
-  );
+  const labelled = productsWithLabels(t, user.accountType);
+  const titles = new Map(labelled.map(({ def, item }) => [def.key, item.title]));
+  const blurbs = new Map(labelled.map(({ def, item }) => [def.key, item.body]));
 
   // Every application the client has made, so the page shows decisions too.
   const applications = await db.productApplication.findMany({
@@ -86,22 +87,32 @@ export default async function LoansPage() {
             <EmptyState title={t.loansPage.empty} body={t.loansPage.emptyBody} />
             {lendingProducts.length > 0 && (
               <>
-                <SectionHead className="mt-8" title={t.loansPage.available} />
-                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {lendingProducts.map((d) => (
+                <SectionHead className="mt-9" title={t.loansPage.available} />
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {lendingProducts.map((d, i) => (
                     <Link
                       key={d.key}
                       href={`/product/${d.key}`}
-                      className="group rounded-2xl border border-line bg-ink-1 p-5 transition hover:border-brand-500/40 hover:shadow-md"
+                      className="rise elev-2 group flex flex-col overflow-hidden rounded-2xl border border-line bg-ink-1 transition hover:border-brand-500/40"
+                      style={{ animationDelay: `${60 + i * 60}ms` }}
                     >
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-2 text-fg-muted">
-                        <Icons.lending className="h-5 w-5" />
-                      </span>
-                      <p className="mt-3 text-sm font-semibold text-fg">
-                        {titles.get(d.key) ?? d.key}
-                      </p>
-                      <span className="mt-2 inline-block rounded-full bg-brand-500/12 px-2.5 py-0.5 text-[11px] font-semibold text-brand-400 transition group-hover:bg-brand-500 group-hover:text-white">
-                        {t.products.apply}
+                      {/* The product's own illustration already existed and was
+                          never shown on this page. */}
+                      {d.art && (
+                        <span className="block border-b border-line-soft">
+                          <ProductArt art={d.art} className="block w-full" />
+                        </span>
+                      )}
+                      <span className="flex flex-1 flex-col p-5">
+                        <span className="text-[15px] font-semibold text-fg">
+                          {titles.get(d.key) ?? d.key}
+                        </span>
+                        <span className="mt-1.5 flex-1 text-[13px] leading-relaxed text-fg-muted">
+                          {blurbs.get(d.key)}
+                        </span>
+                        <span className="mt-4 inline-flex w-fit items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-400">
+                          {t.products.apply}
+                        </span>
                       </span>
                     </Link>
                   ))}

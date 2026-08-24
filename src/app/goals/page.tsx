@@ -5,6 +5,7 @@ import { balanceCents, ensureAccount, formatMoney } from "@/lib/bank";
 import { createGoalAction, releaseGoalAction } from "@/lib/actions/money-actions";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
+import { Icons, NavIcons } from "@/components/icons";
 import { AddMoneyForm } from "./add-money-form";
 
 export const metadata = { title: "Savings goals — Trustline Financial Group" };
@@ -12,7 +13,11 @@ export const metadata = { title: "Savings goals — Trustline Financial Group" }
 const inputClass =
   "mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
-export default async function GoalsPage() {
+export default async function GoalsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ name?: string; target?: string }>;
+}) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   if (isAdmin(user.role)) redirect("/admin");
@@ -20,6 +25,7 @@ export default async function GoalsPage() {
 
   const t = await getDict();
   const locale = await getLocale();
+  const prefill = await searchParams;
   const account = await ensureAccount(user.id);
   const [available, goals] = await Promise.all([
     balanceCents(account.id),
@@ -42,11 +48,26 @@ export default async function GoalsPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="text-[13px] font-semibold text-fg">
               {t.goals.name}
-              <input name="name" required maxLength={60} placeholder={t.goals.namePlaceholder} className={inputClass} />
+              <input
+                name="name"
+                required
+                maxLength={60}
+                defaultValue={prefill.name ?? ""}
+                placeholder={t.goals.namePlaceholder}
+                className={inputClass}
+              />
             </label>
             <label className="text-[13px] font-semibold text-fg">
               {t.goals.target}
-              <input name="target" type="number" step="0.01" min="0" placeholder="0.00" className={inputClass} />
+              <input
+                name="target"
+                type="number"
+                step="0.01"
+                min="0"
+                defaultValue={prefill.target ?? ""}
+                placeholder="0.00"
+                className={inputClass}
+              />
             </label>
           </div>
           <button className="mt-4 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-brand-400">
@@ -57,9 +78,41 @@ export default async function GoalsPage() {
         {/* Goals list */}
         <div className="mt-6 space-y-4">
           {goals.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-line bg-ink-1 p-8 text-center text-sm text-fg-muted">
-              {t.goals.none}
-            </p>
+            /* An empty page should suggest, not apologise. Each of these fills
+               the form above rather than creating anything on its own. */
+            <div>
+              <p className="text-[13px] text-fg-muted">{t.goals.none}</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {(
+                  [
+                    ["target", t.goals.ideaEmergency, 200_000],
+                    ["globe", t.goals.ideaTrip, 150_000],
+                    ["mortgage", t.goals.ideaHome, 2_000_000],
+                    ["gift", t.goals.ideaGift, 50_000],
+                  ] as const
+                ).map(([icon, label, target], i) => {
+                  const Icon = NavIcons[icon] ?? Icons[icon];
+                  return (
+                    <a
+                      key={label}
+                      href={`/goals?name=${encodeURIComponent(label)}&target=${target / 100}`}
+                      className="rise elev-1 flex items-center gap-3 rounded-2xl border border-line bg-ink-1 p-4 transition hover:border-brand-500/40"
+                      style={{ animationDelay: `${i * 50}ms` }}
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-2 text-brand-400">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[14px] font-medium text-fg">{label}</span>
+                        <span className="tnum block text-[12px] text-fg-faint">
+                          {formatMoney(target, locale, user.currency)}
+                        </span>
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
           ) : (
             goals.map((goal) => {
               const pct =

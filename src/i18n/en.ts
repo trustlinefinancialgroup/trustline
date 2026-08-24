@@ -1178,6 +1178,10 @@ export const en = {
     externalUseWithdraw: "That's not a Trustline account. To send money to an outside bank, use the Withdraw option.",
   },
   goals: {
+    ideaEmergency: "Emergency fund",
+    ideaTrip: "A trip",
+    ideaHome: "Home deposit",
+    ideaGift: "Something special",
     title: "Savings goals",
     subtitle: "Set money aside for the things you're saving toward.",
     none: "No goals yet. Create one to start setting money aside.",

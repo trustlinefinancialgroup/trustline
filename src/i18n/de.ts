@@ -1183,6 +1183,10 @@ export const de: Dict = {
     externalUseWithdraw: "Das ist kein Trustline-Konto. Für eine externe Bank nutzen Sie die Option Auszahlen.",
   },
   goals: {
+    ideaEmergency: "Notgroschen",
+    ideaTrip: "Eine Reise",
+    ideaHome: "Eigenkapital fürs Zuhause",
+    ideaGift: "Etwas Besonderes",
     title: "Sparziele",
     subtitle: "Legen Sie Geld für Ihre Ziele beiseite.",
     none: "Noch keine Ziele. Erstellen Sie eines, um Geld beiseitezulegen.",

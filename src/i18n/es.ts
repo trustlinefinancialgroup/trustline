@@ -1181,6 +1181,10 @@ export const es: Dict = {
     externalUseWithdraw: "Esa no es una cuenta Trustline. Para enviar a un banco externo, use la opción Retirar.",
   },
   goals: {
+    ideaEmergency: "Fondo de emergencia",
+    ideaTrip: "Un viaje",
+    ideaHome: "Entrada de la casa",
+    ideaGift: "Un capricho",
     title: "Metas de ahorro",
     subtitle: "Aparte dinero para lo que está ahorrando.",
     none: "Aún no hay metas. Cree una para empezar a apartar dinero.",

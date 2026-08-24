@@ -2,18 +2,19 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
-import { formatMoney } from "@/lib/bank";
+import { formatMoney, formatMoneyWhole } from "@/lib/bank";
 import { loadHoldings } from "@/lib/holdings";
 import { availableCreditCents } from "@/lib/lending";
 import { toggleFreezeAction, updateCardControlAction } from "@/lib/actions/product-actions";
 import { buildProductView, productsWithLabels } from "@/lib/product-view";
-import { productsFor } from "@/lib/products";
+import { CARD_TIERS, TIER_LIMITS, TIER_THEMES, productsFor } from "@/lib/products";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
+import { BankCard } from "@/components/bank-card";
 import { CardWithReveal } from "@/components/card-details";
 import { NavIcons } from "@/components/icons";
 import { TransactionList } from "@/components/transaction-list";
-import { Card, Eyebrow, EmptyState, ProgressBar, SectionHead, StatusChip } from "@/components/ui";
+import { Card, Eyebrow, ProgressBar, SectionHead, StatusChip } from "@/components/ui";
 
 export const metadata = { title: "Cards — Trustline Financial Group" };
 
@@ -59,24 +60,62 @@ export default async function CardsPage({
   // A personal client applies for CREDIT_CARD, a business one for BUSINESS_CARD.
   const cardProduct = productsFor(user.accountType).find((d) => d.card);
 
+  // Nothing held yet is not a reason to show nothing. The four tiers are real
+  // products with real limits, so the page becomes the shopfront it should be.
   if (!selected) {
     return (
       <AppShell user={user} active="cards" title={t.cardsPage.title} subtitle={t.cardsPage.subtitle}>
-        <Page>
-          <EmptyState
-            title={t.cardsPage.empty}
-            body={t.cardsPage.emptyBody}
-            action={
-              cardProduct ? (
-                <Link
-                  href={`/product/${cardProduct.key}`}
-                  className="rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
-                >
-                  {t.products.apply}
-                </Link>
-              ) : null
-            }
-          />
+        <Page className="space-y-6">
+          <div className="rise">
+            <h2 className="text-[17px] font-semibold tracking-tight text-fg">
+              {t.cardsPage.empty}
+            </h2>
+            <p className="mt-1.5 max-w-xl text-[14px] leading-relaxed text-fg-muted">
+              {t.cardsPage.emptyBody}
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {CARD_TIERS.map((tier, i) => {
+              const range = TIER_LIMITS[tier];
+              return (
+                <div key={tier} className="rise" style={{ animationDelay: `${60 + i * 60}ms` }}>
+                  <BankCard
+                    theme={TIER_THEMES[tier]}
+                    productName={t.products.tiers[tier]}
+                    badge={t.products.tiers[tier]}
+                    holderPlaceholder={t.products.yourName}
+                    placeholder
+                  />
+                  <div className="mt-4 px-1">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <p className="text-[15px] font-semibold text-fg">
+                        {t.products.tiers[tier]}
+                      </p>
+                      <p className="tnum text-[13px] font-medium text-fg-muted">
+                        {range.max
+                          ? `${formatMoneyWhole(range.min, locale, user.currency)} – ${formatMoneyWhole(range.max, locale, user.currency)}`
+                          : `${formatMoneyWhole(range.min, locale, user.currency)}+`}
+                      </p>
+                    </div>
+                    <p className="mt-1 text-[13px] leading-relaxed text-fg-muted">
+                      {t.products.tierBlurbs[tier]}
+                    </p>
+                    {cardProduct && (
+                      <Link
+                        href={`/apply?type=${cardProduct.key}&tier=${tier}`}
+                        className="mt-3 inline-block rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-brand-400"
+                      >
+                        {t.products.apply}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="px-1 text-[12px] text-fg-faint">{t.products.tierHint}</p>
         </Page>
       </AppShell>
     );
