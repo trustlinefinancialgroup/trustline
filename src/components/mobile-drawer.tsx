@@ -60,7 +60,14 @@ export function MobileDrawer({
             <NavIcons.close className="h-5 w-5" />
           </button>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto pb-6" onClick={() => setOpen(false)}>
+        {/* Closing on click is what makes a nav link feel right, but it must
+            not swallow a control that stays put — the language buttons. */}
+        <div
+          className="min-h-0 flex-1 overflow-y-auto pb-6"
+          onClick={(e) => {
+            if ((e.target as HTMLElement).closest("a,[data-keep-open]")) setOpen(false);
+          }}
+        >
           {children}
         </div>
       </div>

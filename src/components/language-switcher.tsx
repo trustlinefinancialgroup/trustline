@@ -22,6 +22,41 @@ function GlobeIcon({ className }: { className?: string }) {
   );
 }
 
+/**
+ * The four languages laid out flat, for somewhere with room — the drawer,
+ * under its own heading. A globe there would be saying "language" twice, and
+ * a dropdown inside a drawer is a menu inside a menu.
+ */
+export function LanguageChoices({ current }: { current: Locale }) {
+  const [pending, startTransition] = useTransition();
+
+  return (
+    <div className="flex gap-1.5">
+      {LOCALES.map((l) => {
+        const on = l === current;
+        return (
+          <button
+            key={l}
+            type="button"
+            disabled={pending}
+            aria-current={on ? "true" : undefined}
+            onClick={() => {
+              if (!on) startTransition(() => setLocaleAction(l));
+            }}
+            className={`flex-1 rounded-lg px-2 py-2 text-[12px] font-semibold tracking-wide transition disabled:opacity-60 ${
+              on
+                ? "bg-brand-500/15 text-brand-400 ring-1 ring-inset ring-brand-500/30"
+                : "bg-ink-2 text-fg-muted hover:text-fg"
+            }`}
+          >
+            {l.toUpperCase()}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function LanguageSwitcher({
   current,
   variant = "dark",

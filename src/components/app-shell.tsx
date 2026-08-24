@@ -5,7 +5,7 @@ import { getDict, getLocale } from "@/i18n/server";
 import { primaryNav, secondaryNav, type NavItem, type NavKey } from "@/lib/nav";
 import { Icons, NavIcons } from "@/components/icons";
 import { Logo } from "@/components/logo";
-import { LanguageSwitcher } from "@/components/language-switcher";
+import { LanguageChoices, LanguageSwitcher } from "@/components/language-switcher";
 import { NotificationCenter } from "@/components/notification-center";
 import { MobileDrawer } from "@/components/mobile-drawer";
 import { BackLink } from "@/components/ui";
@@ -74,6 +74,7 @@ function NavColumn({
         <form action={logoutAction}>
           <button
             type="submit"
+            data-keep-open
             className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium text-fg-muted transition hover:bg-ink-1 hover:text-fg"
           >
             <NavIcons.logout className="h-[18px] w-[18px] shrink-0 text-fg-faint" />
@@ -169,7 +170,7 @@ export async function AppShell({
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
                   {t.common.language}
                 </p>
-                <LanguageSwitcher current={locale} variant="dark" />
+                <LanguageChoices current={locale} />
               </div>
             </MobileDrawer>
 
