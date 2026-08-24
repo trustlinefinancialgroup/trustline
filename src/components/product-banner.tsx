@@ -24,6 +24,14 @@ export type ProductBannerProps = {
   art?: string | null;
   /** Card products show their real face rather than artwork. */
   theme?: CardTheme | null;
+  /** The rest of the card face — tier badge, holder, number, expiry. Passing
+   *  these through is what makes it the Classic card from the Cards page
+   *  rather than a blank blue rectangle. */
+  badge?: string | null;
+  holder?: string | null;
+  holderPlaceholder?: string;
+  number?: string | null;
+  expiry?: string | null;
   valueLabel?: string | null;
   value?: string | null;
   status?: { label: string; tone: keyof typeof STATUS_TONES } | null;
@@ -36,6 +44,11 @@ export function ProductBanner({
   body,
   art,
   theme,
+  badge,
+  holder,
+  holderPlaceholder = "",
+  number,
+  expiry,
   valueLabel,
   value,
   status,
@@ -49,11 +62,11 @@ export function ProductBanner({
       <BankCard
         theme={theme}
         productName={title}
-        badge={null}
-        holder={null}
-        holderPlaceholder=""
-        number={null}
-        expiry={null}
+        badge={badge}
+        holder={holder}
+        holderPlaceholder={holderPlaceholder}
+        number={number}
+        expiry={expiry}
         valueLabel={valueLabel}
         value={value}
         status={status}

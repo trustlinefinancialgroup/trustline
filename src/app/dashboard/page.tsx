@@ -321,6 +321,11 @@ export default async function DashboardPage({
                   body={v.body}
                   art={v.render === "tile" ? v.art : null}
                   theme={v.render === "card" ? v.theme : null}
+                  badge={v.render === "card" ? v.badge : null}
+                  holder={v.render === "card" ? v.holder : null}
+                  holderPlaceholder={v.render === "card" ? v.holderPlaceholder : ""}
+                  number={v.render === "card" ? v.number : null}
+                  expiry={v.render === "card" ? v.expiry : null}
                   valueLabel={v.valueLabel}
                   value={v.value}
                   status={v.status}
