@@ -61,11 +61,17 @@ export function MobileDrawer({
           </button>
         </div>
         {/* Closing on click is what makes a nav link feel right, but it must
-            not swallow a control that stays put — the language buttons. */}
+            not swallow a control that stays put — the language buttons — and
+            it must never close over a form. Closing unmounts this portal, and
+            unmounting a <form> mid-click removes it before its action can
+            dispatch: that is what stopped Sign out working on a phone. Its
+            redirect tears the drawer down anyway. */}
         <div
           className="min-h-0 flex-1 overflow-y-auto pb-6"
           onClick={(e) => {
-            if ((e.target as HTMLElement).closest("a,[data-keep-open]")) setOpen(false);
+            const el = e.target as HTMLElement;
+            if (el.closest("form")) return;
+            if (el.closest("a,[data-close-drawer]")) setOpen(false);
           }}
         >
           {children}

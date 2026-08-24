@@ -74,7 +74,6 @@ function NavColumn({
         <form action={logoutAction}>
           <button
             type="submit"
-            data-keep-open
             className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium text-fg-muted transition hover:bg-ink-1 hover:text-fg"
           >
             <NavIcons.logout className="h-[18px] w-[18px] shrink-0 text-fg-faint" />
