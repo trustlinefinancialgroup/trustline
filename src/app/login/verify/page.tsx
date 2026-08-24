@@ -31,7 +31,7 @@ export default async function TwoFactorPage() {
   const locale = await getLocale();
 
   return (
-    <main className="flex min-h-screen flex-1 flex-col bg-ink-2">
+    <main className="scheme-dark flex min-h-screen flex-1 flex-col bg-ink-0 text-fg">
       <header className="border-b border-white/10 bg-navy-900">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
           <Logo theme="dark" href="/" />

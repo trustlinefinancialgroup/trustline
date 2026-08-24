@@ -131,3 +131,10 @@ body {
     animation: none;
   }
 }
+
+/* Native controls follow the page. Without this a <select> drops open white on
+   a dark form, and date pickers and scrollbars do the same. Scoped to the app;
+   the marketing site stays light. */
+.scheme-dark {
+  color-scheme: dark;
+}

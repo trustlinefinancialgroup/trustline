@@ -358,7 +358,7 @@ function ControlRow({
   return (
     <form
       action={updateCardControlAction}
-      className="flex items-center justify-between gap-4 rounded-xl border border-line px-4 py-3"
+      className="flex items-center justify-between gap-4 rounded-xl border border-line bg-ink-2 px-4 py-3"
     >
       <input type="hidden" name="appId" value={appId} />
       <input type="hidden" name="control" value={control} />

@@ -154,7 +154,7 @@ export default async function ClientsPage() {
                         min="0.01"
                         required
                         placeholder="0.00"
-                        className="mt-1 block w-28 rounded-md border border-line px-3 py-2 text-sm"
+                        className="mt-1 block w-28 rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                       />
                     </label>
                     <label className="block text-xs font-semibold text-fg-muted">
@@ -163,7 +163,7 @@ export default async function ClientsPage() {
                         name="reason"
                         required
                         placeholder="e.g. Interest for July"
-                        className="mt-1 block w-52 rounded-md border border-line px-3 py-2 text-sm"
+                        className="mt-1 block w-52 rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                       />
                     </label>
                     <button className="rounded-md bg-brand-500 px-4 py-2 text-sm font-bold text-white hover:bg-brand-400">
@@ -188,7 +188,7 @@ export default async function ClientsPage() {
                     <input
                       name="reason"
                       placeholder="Block reason"
-                      className="w-36 rounded-md border border-line px-2 py-2 text-xs"
+                      className="w-36 rounded-md border border-line bg-ink-2 px-2 py-2 text-xs"
                     />
                     <button className="rounded-md border border-red-300 px-3 py-2 text-xs font-bold text-neg hover:bg-neg/10">
                       Block

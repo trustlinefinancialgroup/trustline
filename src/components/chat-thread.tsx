@@ -165,7 +165,7 @@ export function Composer({
           }
         }}
         placeholder={labels.placeholder}
-        className="max-h-28 flex-1 resize-none rounded-2xl border border-line px-4 py-2.5 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+        className="max-h-28 flex-1 resize-none rounded-2xl border border-line bg-ink-2 px-4 py-2.5 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
       />
       <button
         type="submit"

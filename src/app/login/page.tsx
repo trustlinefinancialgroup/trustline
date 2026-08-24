@@ -12,7 +12,7 @@ export default async function LoginPage() {
   const locale = await getLocale();
 
   return (
-    <main className="flex min-h-screen flex-1">
+    <main className="scheme-dark flex min-h-screen flex-1 bg-ink-0 text-fg">
       {/* Left brand panel */}
       <div className="relative hidden w-[42%] overflow-hidden bg-navy-900 lg:block">
         <Image src="/images/professional.jpg" alt="" fill className="object-cover opacity-30" />
@@ -33,11 +33,11 @@ export default async function LoginPage() {
       {/* Form side */}
       <div className="relative flex flex-1 items-center justify-center px-6 py-12">
         <div className="absolute right-6 top-6">
-          <LanguageSwitcher current={locale} variant="light" />
+          <LanguageSwitcher current={locale} variant="dark" />
         </div>
         <div className="w-full max-w-md">
           <div className="mb-10 lg:hidden">
-            <Logo theme="light" />
+            <Logo theme="dark" />
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-fg">
             {t.auth.loginTitle}

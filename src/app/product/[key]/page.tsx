@@ -363,7 +363,7 @@ export default async function ProductPage({
                   </Link>
                   <Link
                     href="/goals"
-                    className="rounded-xl border border-line px-6 py-2.5 text-sm font-semibold text-fg transition hover:border-brand-500/40"
+                    className="rounded-xl border border-line bg-ink-2 px-6 py-2.5 text-sm font-semibold text-fg transition hover:border-brand-500/40"
                   >
                     {t.bank.goalsLink}
                   </Link>

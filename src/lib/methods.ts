@@ -39,6 +39,26 @@ export function methodEta(key: string, override?: string | null) {
   return custom || methodDef(key).eta;
 }
 
+/**
+ * Columns every deployment is guaranteed to have. `etaLabel` is deliberately
+ * absent: it is read separately and guarded, so shipping the code before the
+ * column exists cannot take a page down — which is exactly what it did once.
+ */
+export const METHOD_COLUMNS = {
+  id: true,
+  key: true,
+  label: true,
+  enabled: true,
+  accountTypes: true,
+  forDeposit: true,
+  forWithdrawal: true,
+  routeName: true,
+  routeIdentifier: true,
+  routeInstitution: true,
+  routeInstructions: true,
+  sortOrder: true,
+} as const;
+
 export function methodVisibleFor(accountTypes: string, userType: string) {
   return accountTypes === "ALL" || accountTypes === userType;
 }

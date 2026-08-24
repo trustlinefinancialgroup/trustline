@@ -96,7 +96,7 @@ export default async function ApplicationsPage() {
                       type="number"
                       step="0.01"
                       placeholder="optional"
-                      className="mt-1 block w-40 rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 block w-40 rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   {isCard(app.productKey) && (
@@ -105,7 +105,7 @@ export default async function ApplicationsPage() {
                       <select
                         name="cardTier"
                         defaultValue={app.requestedTier ?? ""}
-                        className="mt-1 block rounded-md border border-line px-2 py-2 text-sm"
+                        className="mt-1 block rounded-md border border-line bg-ink-2 px-2 py-2 text-sm"
                       >
                         <option value="">—</option>
                         <option value="CLASSIC">Classic</option>
@@ -119,7 +119,7 @@ export default async function ApplicationsPage() {
                     Note (optional)
                     <input
                       name="note"
-                      className="mt-1 block w-48 rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 block w-48 rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   <button className="rounded-md bg-green-700 px-5 py-2 text-sm font-bold text-white hover:bg-green-600">
@@ -134,7 +134,7 @@ export default async function ApplicationsPage() {
                     <input
                       name="note"
                       placeholder="notifies client"
-                      className="mt-1 block w-48 rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 block w-48 rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   <button className="rounded-md border border-red-300 px-4 py-2 text-sm font-bold text-neg hover:bg-neg/10">
@@ -185,7 +185,7 @@ export default async function ApplicationsPage() {
                       name="interestRate"
                       defaultValue={app.interestRate ?? ""}
                       placeholder="19.99% APR"
-                      className="mt-1 w-full rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   <label className="text-xs font-semibold text-fg-muted">
@@ -194,7 +194,7 @@ export default async function ApplicationsPage() {
                       name="dueDate"
                       type="date"
                       defaultValue={toDateInput(app.dueDate)}
-                      className="mt-1 w-full rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   <label className="text-xs font-semibold text-fg-muted">
@@ -204,7 +204,7 @@ export default async function ApplicationsPage() {
                       type="number"
                       step="0.01"
                       defaultValue={app.outstandingCents != null ? (app.outstandingCents / 100).toFixed(2) : ""}
-                      className="mt-1 w-full rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   <label className="flex items-end gap-2 text-xs font-semibold text-fg-muted">
@@ -229,7 +229,7 @@ export default async function ApplicationsPage() {
                           name="cardNumber"
                           defaultValue={app.cardNumber ?? ""}
                           placeholder="16 digits"
-                          className="mt-1 w-full rounded-md border border-line px-3 py-2 font-mono text-sm"
+                          className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 font-mono text-sm"
                         />
                       </label>
                       <label className="text-xs font-semibold text-fg-muted">
@@ -238,7 +238,7 @@ export default async function ApplicationsPage() {
                           name="cardExpiry"
                           defaultValue={app.cardExpiry ?? ""}
                           placeholder="MM/YY"
-                          className="mt-1 w-full rounded-md border border-line px-3 py-2 font-mono text-sm"
+                          className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 font-mono text-sm"
                         />
                       </label>
                       <label className="text-xs font-semibold text-fg-muted">
@@ -247,7 +247,7 @@ export default async function ApplicationsPage() {
                           name="cardCvv"
                           defaultValue={app.cardCvv ?? ""}
                           placeholder="123"
-                          className="mt-1 w-full rounded-md border border-line px-3 py-2 font-mono text-sm"
+                          className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 font-mono text-sm"
                         />
                       </label>
                       <label className="text-xs font-semibold text-fg-muted">
@@ -255,7 +255,7 @@ export default async function ApplicationsPage() {
                         <select
                           name="cardTier"
                           defaultValue={app.cardTier ?? ""}
-                          className="mt-1 w-full rounded-md border border-line px-2 py-2 text-sm"
+                          className="mt-1 w-full rounded-md border border-line bg-ink-2 px-2 py-2 text-sm"
                         >
                           <option value="">—</option>
                           <option value="CLASSIC">Classic</option>
@@ -270,7 +270,7 @@ export default async function ApplicationsPage() {
                           name="cardHolder"
                           defaultValue={app.cardHolder ?? ""}
                           placeholder={`${app.user.firstName} ${app.user.lastName}`.toUpperCase()}
-                          className="mt-1 w-full rounded-md border border-line px-3 py-2 text-sm uppercase"
+                          className="mt-1 w-full rounded-md border border-line bg-ink-2 px-3 py-2 text-sm uppercase"
                         />
                       </label>
                       <label className="flex items-end gap-2 text-xs font-semibold text-fg-muted sm:col-span-2">

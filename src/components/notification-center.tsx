@@ -85,7 +85,7 @@ export function NotificationCenter({
 
       {open && (
         <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-line bg-ink-1 shadow-xl shadow-navy-900/10">
-          <p className="border-b border-line-soft px-4 py-3 text-sm font-semibold text-fg">
+          <p className="border-b border-line bg-ink-2-soft px-4 py-3 text-sm font-semibold text-fg">
             {labels.title}
           </p>
           <div className="max-h-96 overflow-y-auto">

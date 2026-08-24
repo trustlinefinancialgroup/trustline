@@ -40,7 +40,7 @@ export function AdminTicketReply({
         required
         rows={5}
         maxLength={4000}
-        className="mt-1.5 w-full resize-y rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+        className="mt-1.5 w-full resize-y rounded-lg border border-line bg-ink-2 px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
       />
 
       <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -51,7 +51,7 @@ export function AdminTicketReply({
           id="admin-reply-status"
           name="status"
           defaultValue={currentStatus === "RESOLVED" ? "RESOLVED" : "AWAITING_CLIENT"}
-          className="rounded-lg border border-line px-3 py-2 text-[13px] text-fg"
+          className="rounded-lg border border-line bg-ink-2 px-3 py-2 text-[13px] text-fg"
         >
           <option value="AWAITING_CLIENT">Awaiting client</option>
           <option value="OPEN">Open</option>

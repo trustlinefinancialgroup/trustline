@@ -116,13 +116,13 @@ export default async function DocumentsPage() {
                     <div className="flex shrink-0 items-center gap-2">
                       <Link
                         href={`/statements/${key}`}
-                        className="rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
+                        className="rounded-xl border border-line bg-ink-2 px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                       >
                         {t.documentsPage.view}
                       </Link>
                       <a
                         href={`/api/statements/${key}`}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-2 px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                       >
                         <NavIcons.download className="h-3.5 w-3.5" />
                         CSV
@@ -174,7 +174,7 @@ export default async function DocumentsPage() {
                     </div>
                     <a
                       href={`/api/files/kyc/${doc.storedName}`}
-                      className="shrink-0 rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
+                      className="shrink-0 rounded-xl border border-line bg-ink-2 px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                     >
                       {t.documentsPage.open}
                     </a>
@@ -217,7 +217,7 @@ export default async function DocumentsPage() {
                   </div>
                   <a
                     href={`/api/files/application/${doc.storedName}`}
-                    className="shrink-0 rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
+                    className="shrink-0 rounded-xl border border-line bg-ink-2 px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                   >
                     {t.documentsPage.open}
                   </a>

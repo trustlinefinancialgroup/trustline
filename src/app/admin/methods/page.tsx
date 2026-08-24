@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
-import { METHOD_CATALOG } from "@/lib/methods";
+import { METHOD_CATALOG, METHOD_COLUMNS } from "@/lib/methods";
+import { methodEtaOverrides } from "@/lib/method-eta";
 import { PaymentIcon } from "@/components/payment-icons";
 import { saveMethodAction } from "@/lib/actions/method-actions";
 
@@ -7,7 +8,8 @@ const inputClass =
   "mt-1 w-full rounded-md border border-line px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 export default async function MethodsPage() {
-  const existing = await db.depositMethod.findMany();
+  const existing = await db.depositMethod.findMany({ select: METHOD_COLUMNS });
+  const etas = await methodEtaOverrides();
   const byKey = new Map(existing.map((m) => [m.key, m]));
 
   return (
@@ -36,7 +38,7 @@ export default async function MethodsPage() {
                 <input
                   name="label"
                   defaultValue={m?.label ?? def.label}
-                  className="rounded-md border border-line px-2 py-1 text-sm font-semibold text-fg"
+                  className="rounded-md border border-line bg-ink-2 px-2 py-1 text-sm font-semibold text-fg"
                 />
                 <span className="ml-auto flex items-center gap-2">
                   {/* Enabled is not the same as visible. A method restricted to
@@ -70,7 +72,7 @@ export default async function MethodsPage() {
                   How long it takes
                   <input
                     name="etaLabel"
-                    defaultValue={m?.etaLabel ?? ""}
+                    defaultValue={etas[def.key] ?? ""}
                     placeholder={def.eta}
                     className={inputClass}
                   />

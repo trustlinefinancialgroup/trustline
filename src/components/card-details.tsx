@@ -69,7 +69,7 @@ export function CardWithReveal({
                   <button
                     type="button"
                     onClick={copyNumber}
-                    className="rounded-full border border-line px-2.5 py-1 text-[11px] font-semibold text-fg-muted transition hover:border-brand-500/40"
+                    className="rounded-full border border-line bg-ink-2 px-2.5 py-1 text-[11px] font-semibold text-fg-muted transition hover:border-brand-500/40"
                   >
                     {copied ? labels.copied : labels.copy}
                   </button>

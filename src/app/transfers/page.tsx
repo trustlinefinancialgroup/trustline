@@ -4,7 +4,8 @@ import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { formatMoney } from "@/lib/bank";
 import { loadPortfolio } from "@/lib/portfolio";
-import { methodDef, methodEta, methodVisibleFor } from "@/lib/methods";
+import { METHOD_COLUMNS, methodDef, methodEta, methodVisibleFor } from "@/lib/methods";
+import { methodEtaOverrides } from "@/lib/method-eta";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
 import { PaymentIcon } from "@/components/payment-icons";
@@ -52,10 +53,12 @@ export default async function TransfersPage({
         ...(tab === "withdraw" ? { forWithdrawal: true } : { forDeposit: true }),
       },
       orderBy: { sortOrder: "asc" },
+      select: METHOD_COLUMNS,
     })
   ).filter((m) => methodVisibleFor(m.accountTypes, user.accountType));
 
   const selected = methodParam ? methods.find((m) => m.key === methodParam) : undefined;
+  const etaOverrides = await methodEtaOverrides();
 
   const tabLabels: Record<Tab, string> = {
     send: t.transfers.tabSend,
@@ -131,7 +134,7 @@ export default async function TransfersPage({
                   <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.chooseMethod}
                   </p>
-                  <MethodGrid methods={methods} tab="deposit" />
+                  <MethodGrid methods={methods} etas={etaOverrides} tab="deposit" />
                   <RequestMethod
                     labels={{
                       prompt: t.bank.methodRequestPrompt,
@@ -146,7 +149,7 @@ export default async function TransfersPage({
                   <SelectedMethod
                     label={selected.label}
                     iconKey={selected.key}
-                    eta={methodEta(selected.key, selected.etaLabel)}
+                    eta={methodEta(selected.key, etaOverrides[selected.key])}
                     tab="deposit"
                     changeLabel={t.bank.chooseMethod}
                   />
@@ -220,14 +223,14 @@ export default async function TransfersPage({
                   <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.chooseMethod}
                   </p>
-                  <MethodGrid methods={methods} tab="withdraw" />
+                  <MethodGrid methods={methods} etas={etaOverrides} tab="withdraw" />
                 </>
               ) : (
                 <>
                   <SelectedMethod
                     label={selected.label}
                     iconKey={selected.key}
-                    eta={methodEta(selected.key, selected.etaLabel)}
+                    eta={methodEta(selected.key, etaOverrides[selected.key])}
                     tab="withdraw"
                     changeLabel={t.bank.chooseMethod}
                   />
@@ -295,23 +298,31 @@ export default async function TransfersPage({
 
 function MethodGrid({
   methods,
+  etas,
   tab,
 }: {
   methods: { key: string; label: string }[];
+  etas: Record<string, string | null>;
   tab: Tab;
 }) {
   return (
-    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+    <div className="mt-6 grid gap-3 sm:grid-cols-2">
       {methods.map((m) => (
         <Link
           key={m.key}
           href={`/transfers?tab=${tab}&method=${m.key}`}
-          className="flex flex-col items-center gap-2 rounded-xl border border-line p-4 text-center transition hover:border-accent-500/50 hover:bg-ink-2"
+          className="flex items-center gap-3.5 rounded-xl border border-line bg-ink-2/50 p-4 transition hover:border-brand-500/50 hover:bg-ink-2"
         >
-          <span className="text-fg-muted">
+          <span className="shrink-0 text-fg-muted">
             <PaymentIcon icon={methodDef(m.key).icon} className="h-7 w-7" />
           </span>
-          <span className="text-[13px] font-semibold text-fg">{m.label}</span>
+          <span className="min-w-0">
+            <span className="block truncate text-[14px] font-medium text-fg">{m.label}</span>
+            {/* How long it takes is what people actually choose a rail on. */}
+            <span className="block truncate text-[12px] text-fg-faint">
+              {methodEta(m.key, etas[m.key])}
+            </span>
+          </span>
         </Link>
       ))}
     </div>

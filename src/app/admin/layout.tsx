@@ -42,7 +42,7 @@ export default async function AdminLayout({
   ];
 
   return (
-    <div className="flex min-h-screen flex-1 flex-col bg-ink-0 text-fg">
+    <div className="scheme-dark flex min-h-screen flex-1 flex-col bg-ink-0 text-fg">
       <header className="border-b border-line-soft">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
           <Logo theme="dark" href="/admin" subtitle="Admin" />

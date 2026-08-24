@@ -121,7 +121,7 @@ export function FileField({
 
   return (
     <div>
-      <div className="mt-1.5 flex items-center gap-3 rounded-lg border border-dashed border-line px-3.5 py-3 transition hover:border-accent-500/50">
+      <div className="mt-1.5 flex items-center gap-3 rounded-lg border border-dashed border-line bg-ink-2 px-3.5 py-3 transition hover:border-accent-500/50">
         <input
           ref={inputRef}
           type="file"

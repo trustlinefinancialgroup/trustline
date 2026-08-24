@@ -92,7 +92,7 @@ export function SupportConsole({
             required
             rows={4}
             placeholder={labels.startPlaceholder}
-            className="mt-5 w-full resize-none rounded-xl border border-line px-4 py-3 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+            className="mt-5 w-full resize-none rounded-xl border border-line bg-ink-2 px-4 py-3 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
           />
           <button
             disabled={pending}

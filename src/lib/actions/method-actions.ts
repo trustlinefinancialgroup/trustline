@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { audit } from "@/lib/audit";
+import { saveMethodEta } from "@/lib/method-eta";
 import { methodDef } from "@/lib/methods";
 import type { FormState } from "./auth-actions";
 
@@ -32,7 +33,6 @@ export async function saveMethodAction(formData: FormData) {
     })(),
     forDeposit: formData.get("forDeposit") === "on",
     forWithdrawal: formData.get("forWithdrawal") === "on",
-    etaLabel: String(formData.get("etaLabel") ?? "").trim() || null,
     routeName: String(formData.get("routeName") ?? "").trim() || null,
     routeIdentifier: String(formData.get("routeIdentifier") ?? "").trim() || null,
     routeInstitution: String(formData.get("routeInstitution") ?? "").trim() || null,
@@ -44,6 +44,8 @@ export async function saveMethodAction(formData: FormData) {
     update: data,
     create: { key, ...data },
   });
+
+  await saveMethodEta(key, String(formData.get("etaLabel") ?? "").trim() || null);
 
   await audit({
     actorId: admin.id,

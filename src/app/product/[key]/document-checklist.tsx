@@ -79,7 +79,7 @@ function DocRow({
         {doc.uploaded && (
           <form action={deleteApplicationDocumentAction}>
             <input type="hidden" name="docId" value={doc.uploaded.id} />
-            <button className="rounded-full border border-line px-3 py-1 text-xs font-semibold text-fg-muted transition hover:border-red-300 hover:text-red-600">
+            <button className="rounded-full border border-line bg-ink-2 px-3 py-1 text-xs font-semibold text-fg-muted transition hover:border-red-300 hover:text-red-600">
               {labels.remove}
             </button>
           </form>

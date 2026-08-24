@@ -205,7 +205,7 @@ export default async function TransactionPage({
             <p className="text-[13px] font-semibold text-fg">{t.txn.proofLabel}</p>
             <a
               href={`/api/files/deposit/${tx.proofStoredName}`}
-              className="mt-3 inline-block rounded-xl border border-line px-4 py-2 text-[13px] font-semibold text-fg transition hover:border-brand-500/40"
+              className="mt-3 inline-block rounded-xl border border-line bg-ink-2 px-4 py-2 text-[13px] font-semibold text-fg transition hover:border-brand-500/40"
             >
               {tx.proofFileName ?? t.documentsPage.open}
             </a>

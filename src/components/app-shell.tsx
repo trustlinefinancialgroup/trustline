@@ -133,7 +133,7 @@ export async function AppShell({
   const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
 
   return (
-    <div className="flex min-h-screen w-full bg-ink-0 text-fg">
+    <div className="scheme-dark flex min-h-screen w-full bg-ink-0 text-fg">
       {/* Desktop sidebar */}
       <aside className="hidden w-[248px] shrink-0 border-r border-line-soft lg:flex lg:flex-col">
         <div className="px-5 py-5">
@@ -248,7 +248,7 @@ export async function PlainShell({
   const locale = await getLocale();
 
   return (
-    <main className="flex min-h-screen flex-1 flex-col bg-ink-0 text-fg">
+    <main className="scheme-dark flex min-h-screen flex-1 flex-col bg-ink-0 text-fg">
       <header className="border-b border-line-soft">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
           <Logo theme="dark" href={backHref} />

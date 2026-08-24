@@ -166,7 +166,7 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
           </dl>
           <Link
             href="/statements"
-            className="mt-4 inline-block rounded-xl border border-line px-4 py-2 text-[13px] font-semibold text-fg transition hover:border-brand-500/40"
+            className="mt-4 inline-block rounded-xl border border-line bg-ink-2 px-4 py-2 text-[13px] font-semibold text-fg transition hover:border-brand-500/40"
           >
             {t.statements.link}
           </Link>

@@ -37,7 +37,7 @@ export function VerifyForm({
             maxLength={6}
             required
             autoFocus
-            className="mt-1.5 w-full rounded-lg border border-line px-4 py-3 text-center font-mono text-2xl tracking-[0.4em] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+            className="mt-1.5 w-full rounded-lg border border-line bg-ink-2 px-4 py-3 text-center font-mono text-2xl tracking-[0.4em] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
           />
         </label>
 

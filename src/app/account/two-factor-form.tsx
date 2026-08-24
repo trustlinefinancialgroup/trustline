@@ -51,7 +51,7 @@ export function TwoFactorForm({
             name="password"
             required
             autoComplete="current-password"
-            className="mt-1.5 w-full rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+            className="mt-1.5 w-full rounded-lg border border-line bg-ink-2 px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
           />
         </label>
 

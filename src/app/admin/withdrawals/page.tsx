@@ -64,7 +64,7 @@ export default async function WithdrawalsQueuePage() {
                     <input
                       name="reason"
                       placeholder="e.g. details didn't match"
-                      className="mt-1 block w-64 rounded-md border border-line px-3 py-2 text-sm"
+                      className="mt-1 block w-64 rounded-md border border-line bg-ink-2 px-3 py-2 text-sm"
                     />
                   </label>
                   <button className="rounded-md border border-red-300 px-4 py-2 text-sm font-bold text-neg hover:bg-neg/10">
