@@ -63,7 +63,7 @@ export async function submitDepositAction(
   const account = await ensureAccount(user.id);
   const reference = newReference("D");
 
-  await db.transaction.create({
+  const created = await db.transaction.create({
     data: {
       accountId: account.id,
       type: "DEPOSIT",
@@ -95,7 +95,9 @@ export async function submitDepositAction(
     reference
   );
 
-  redirect("/dashboard?submitted=1");
+  // The transaction's own page is the receipt — better than a banner on a
+  // dashboard the client then has to search.
+  redirect(`/activity/${created.id}?new=1`);
 }
 
 export async function submitWithdrawalAction(
@@ -136,7 +138,7 @@ export async function submitWithdrawalAction(
   }
 
   const reference = newReference("W");
-  await db.transaction.create({
+  const created = await db.transaction.create({
     data: {
       accountId: account.id,
       type: "WITHDRAWAL",
@@ -157,5 +159,5 @@ export async function submitWithdrawalAction(
     details: `${user.email} requested a ${methodDef(methodKey).label} withdrawal of ${formatMoney(amountCents)} (${reference})`,
   });
 
-  redirect("/dashboard?withdrawSubmitted=1");
+  redirect(`/activity/${created.id}?new=1`);
 }

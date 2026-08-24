@@ -2,7 +2,7 @@ import Link from "next/link";
 import { fill, type Dict } from "@/i18n";
 import { formatMoney } from "@/lib/bank";
 import { NavIcons } from "@/components/icons";
-import { Eyebrow, StatusChip } from "@/components/ui";
+import { StatusChip } from "@/components/ui";
 import type { PortfolioAccount } from "@/lib/portfolio";
 
 /** Masked tail of an account number, e.g. "TL-48291023" -> "···· 1023". */

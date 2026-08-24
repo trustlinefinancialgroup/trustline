@@ -516,6 +516,8 @@ export const fr: Dict = {
     continue: "Continuer",
   },
   dashboard: {
+    inProgress: "En cours",
+    inProgressBody: "En attente de notre équipe. Touchez pour voir où en est l'opération.",
     trendLabel: "Solde sur les 90 derniers jours",
     moneyIn: "Entrées, 90 jours",
     moneyOut: "Sorties, 90 jours",
@@ -667,6 +669,14 @@ export const fr: Dict = {
     },
   },
   txn: {
+    progressTitle: "Suivi",
+    stepSubmitted: "Envoyé",
+    stepReview: "Vérifié par notre équipe",
+    stepDeclined: "Refusé par notre équipe",
+    stepCredited: "Crédité sur votre compte",
+    stepSent: "Envoyé",
+    receiptTitle: "Nous l'avons bien reçu",
+    receiptBody: "Conservez cette page : c'est votre reçu. Nous vous écrirons dès que la situation évolue.",
     detailsTitle: "Détails du compte",
     typeLabel: "Type",
     accountLabel: "Compte",
@@ -678,7 +688,7 @@ export const fr: Dict = {
     noteLabel: "Libellé",
     proofLabel: "Justificatif joint",
     backToActivity: "Toutes les opérations",
-    pendingNote: "Notre équipe doit encore la vérifier. Vous recevrez un e-mail dès que ce sera fait.",
+    pendingNote: "Notre équipe vérifie chaque opération à la main pendant les heures ouvrées. Vous recevrez un e-mail dès que ce sera fait, et cette page sera mise à jour.",
     keepNote: "Conservez la référence si vous devez nous interroger sur cette opération.",
   },
   promo: {

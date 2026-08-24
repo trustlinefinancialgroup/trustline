@@ -141,7 +141,11 @@ export async function sendMoneyAction(_prev: FormState, formData: FormData): Pro
         `Received from ${user.firstName} ${user.lastName}`, formatMoney(recipientBal, recipientUser.locale, recipientUser.currency)
       );
     }
-    redirect("/dashboard?sent=instant");
+    const sent = await db.transaction.findUnique({
+      where: { reference: `${ref}-O` },
+      select: { id: true },
+    });
+    redirect(sent ? `/activity/${sent.id}?new=1` : "/dashboard?sent=instant");
   }
 
   // Not a Trustline account — direct them to the Withdraw flow for external transfers.

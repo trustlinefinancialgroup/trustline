@@ -121,6 +121,9 @@ export const NavIcons: Record<string, (p: IconProps) => React.ReactElement> = {
   download: ({ className }) => (
     <svg {...base} className={className}><path d="M12 4v10M8 10l4 4 4-4" /><path d="M5 19h14" /></svg>
   ),
+  clock: ({ className }) => (
+    <svg {...base} className={className}><circle cx="12" cy="12" r="9" /><path d="M12 7.5V12l3 1.8" /></svg>
+  ),
   vault: ({ className }) => (
     <svg {...base} className={className}><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="12" cy="12" r="3.6" /><path d="M12 8.4V6.8M12 17.2v-1.6M15.6 12h1.6M6.8 12h1.6" /></svg>
   ),

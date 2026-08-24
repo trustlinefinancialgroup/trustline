@@ -514,6 +514,8 @@ export const en = {
     continue: "Continue",
   },
   dashboard: {
+    inProgress: "In progress",
+    inProgressBody: "Waiting on our team. Tap any one to see where it is.",
     trendLabel: "Balance over the last 90 days",
     moneyIn: "Money in, 90 days",
     moneyOut: "Money out, 90 days",
@@ -663,6 +665,14 @@ export const en = {
     },
   },
   txn: {
+    progressTitle: "Progress",
+    stepSubmitted: "Submitted",
+    stepReview: "Checked by our team",
+    stepDeclined: "Declined by our team",
+    stepCredited: "Credited to your account",
+    stepSent: "Sent",
+    receiptTitle: "That's with us",
+    receiptBody: "Keep this page — it is your receipt. We will email you the moment it moves.",
     detailsTitle: "Account details",
     typeLabel: "Type",
     accountLabel: "Account",
@@ -674,7 +684,7 @@ export const en = {
     noteLabel: "Description",
     proofLabel: "Proof you attached",
     backToActivity: "All transactions",
-    pendingNote: "This is waiting for our team to verify it. You will get an email as soon as it is done.",
+    pendingNote: "Our team checks these by hand during business hours. You will get an email as soon as it is done, and this page updates too.",
     keepNote: "Keep the reference if you need to ask us about this transaction.",
   },
   promo: {

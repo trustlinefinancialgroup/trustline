@@ -516,6 +516,8 @@ export const es: Dict = {
     continue: "Continuar",
   },
   dashboard: {
+    inProgress: "En curso",
+    inProgressBody: "Pendiente de nuestro equipo. Toca cualquiera para ver por dónde va.",
     trendLabel: "Saldo de los últimos 90 días",
     moneyIn: "Entradas, 90 días",
     moneyOut: "Salidas, 90 días",
@@ -666,6 +668,14 @@ export const es: Dict = {
     },
   },
   txn: {
+    progressTitle: "Seguimiento",
+    stepSubmitted: "Enviado",
+    stepReview: "Revisado por nuestro equipo",
+    stepDeclined: "Rechazado por nuestro equipo",
+    stepCredited: "Abonado en tu cuenta",
+    stepSent: "Enviado",
+    receiptTitle: "Ya está con nosotros",
+    receiptBody: "Guarda esta página: es tu justificante. Te escribiremos en cuanto haya novedades.",
     detailsTitle: "Detalles de la cuenta",
     typeLabel: "Tipo",
     accountLabel: "Cuenta",
@@ -677,7 +687,7 @@ export const es: Dict = {
     noteLabel: "Concepto",
     proofLabel: "Justificante adjunto",
     backToActivity: "Todos los movimientos",
-    pendingNote: "Nuestro equipo aún tiene que verificarlo. Te enviaremos un correo en cuanto esté hecho.",
+    pendingNote: "Nuestro equipo lo revisa a mano en horario laboral. Recibirás un correo en cuanto esté hecho, y esta página también se actualiza.",
     keepNote: "Guarda la referencia por si necesitas preguntarnos por este movimiento.",
   },
   promo: {

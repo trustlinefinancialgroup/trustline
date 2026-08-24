@@ -6,6 +6,7 @@ import { methodDef } from "@/lib/methods";
 import { productsWithLabels } from "@/lib/product-view";
 import { getDict, getLocale } from "@/i18n/server";
 import { AppShell, Page } from "@/components/app-shell";
+import { StatusTrail, type TrailStep } from "@/components/status-trail";
 import { BackLink, Card, StatusChip, type Tone } from "@/components/ui";
 
 export const metadata = { title: "Transaction — Trustline Financial Group" };
@@ -16,13 +17,20 @@ function statusTone(status: string): Tone {
   return status === "POSTED" ? "ok" : status === "REJECTED" ? "bad" : "pending";
 }
 
-export default async function TransactionPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function TransactionPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ new?: string }>;
+}) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   if (isAdmin(user.role)) redirect("/admin");
   if (user.status !== "ACTIVE") redirect("/login");
 
   const { id } = await params;
+  const { new: justSubmitted } = await searchParams;
   const t = await getDict();
   const locale = await getLocale();
 
@@ -47,6 +55,37 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
   );
 
   const credit = tx.amountCents >= 0;
+
+  // Deposits and withdrawals pass through a review; everything else is booked
+  // the moment it happens, so it gets a two-step trail rather than three.
+  const reviewed = tx.type === "DEPOSIT" || tx.type === "WITHDRAWAL";
+  const trail: TrailStep[] = reviewed
+    ? [
+        { label: t.txn.stepSubmitted, at: stampFmt.format(tx.createdAt), state: "done" },
+        {
+          label: tx.status === "REJECTED" ? t.txn.stepDeclined : t.txn.stepReview,
+          at: tx.status === "PENDING" ? null : stampFmt.format(tx.postedAt ?? tx.createdAt),
+          state:
+            tx.status === "PENDING" ? "current" : tx.status === "REJECTED" ? "failed" : "done",
+        },
+        ...(tx.status === "REJECTED"
+          ? []
+          : [
+              {
+                label: credit ? t.txn.stepCredited : t.txn.stepSent,
+                at: tx.postedAt ? stampFmt.format(tx.postedAt) : null,
+                state: (tx.status === "POSTED" ? "done" : "todo") as TrailStep["state"],
+              },
+            ]),
+      ]
+    : [
+        { label: t.txn.stepSubmitted, at: stampFmt.format(tx.createdAt), state: "done" },
+        {
+          label: credit ? t.txn.stepCredited : t.txn.stepSent,
+          at: tx.postedAt ? stampFmt.format(tx.postedAt) : null,
+          state: tx.status === "POSTED" ? "done" : "current",
+        },
+      ];
   const kindLabel = tx.account.kind === "SAVINGS" ? t.bank.savings : t.bank.checking;
 
   const rows: { label: string; value: string; mono?: boolean }[] = [
@@ -78,6 +117,22 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
       <Page className="max-w-2xl space-y-5">
         <BackLink href="/activity">{t.txn.backToActivity}</BackLink>
 
+        {justSubmitted && (
+          <div className="rise flex items-start gap-3 rounded-2xl border border-pos/25 bg-pos/10 px-4 py-3.5">
+            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pos/20 text-pos">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </span>
+            <div className="min-w-0">
+              <p className="text-[14px] font-semibold text-fg">{t.txn.receiptTitle}</p>
+              <p className="mt-0.5 text-[13px] leading-relaxed text-fg-muted">
+                {t.txn.receiptBody}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* The figure, big, with its state beside it */}
         <Card>
           <p
@@ -98,14 +153,22 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
             </StatusChip>
           </div>
 
-          {tx.status === "PENDING" && (
-            <p className="mt-4 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-[13px] text-amber-300">
-              {t.txn.pendingNote}
-            </p>
-          )}
           {tx.status === "REJECTED" && tx.rejectReason && (
             <p className="mt-4 rounded-xl border border-neg/25 bg-neg/10 px-4 py-3 text-[13px] text-neg">
               {tx.rejectReason}
+            </p>
+          )}
+
+          <div className="mt-6 border-t border-line-soft pt-5">
+            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-faint">
+              {t.txn.progressTitle}
+            </p>
+            <StatusTrail steps={trail} />
+          </div>
+
+          {tx.status === "PENDING" && (
+            <p className="mt-4 rounded-xl bg-ink-2 px-4 py-3 text-[13px] leading-relaxed text-fg-muted">
+              {t.txn.pendingNote}
             </p>
           )}
         </Card>

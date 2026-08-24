@@ -53,7 +53,7 @@ export default async function DashboardPage({
 
   const portfolio = await loadPortfolio(user.id);
 
-  const [transactions, applications, change, bonus, trend] = await Promise.all([
+  const [transactions, applications, change, bonus, trend, pending] = await Promise.all([
     db.transaction.findMany({
       where: { accountId: { in: portfolio.accountIds } },
       orderBy: { createdAt: "desc" },
@@ -63,6 +63,13 @@ export default async function DashboardPage({
     monthChangePercent(portfolio.accountIds, portfolio.totalCents),
     welcomeBonusState(user.id, portfolio.accountIds, user.createdAt),
     balanceTrend(portfolio.accountIds),
+    // Anything the client is waiting on. A pending item buried in a list reads
+    // as nothing happening, which is exactly when people start worrying.
+    db.transaction.findMany({
+      where: { accountId: { in: portfolio.accountIds }, status: "PENDING" },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
   ]);
 
   // Latest application per product key, turned into a card view per product.
@@ -194,6 +201,40 @@ export default async function DashboardPage({
           <QuickAction href="/statements" icon="statement" label={t.statements.link} />
           <QuickAction href="/goals" icon="target" label={t.bank.actionGoals} />
         </div>
+
+        {pending.length > 0 && (
+          <section className="rise" style={{ animationDelay: "120ms" }}>
+            <SectionHead title={t.dashboard.inProgress} subtitle={t.dashboard.inProgressBody} />
+            <div className="elev-2 mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1">
+              {pending.map((tx, i) => (
+                <Link
+                  key={tx.id}
+                  href={`/activity/${tx.id}`}
+                  className={`flex items-center gap-3.5 px-4 py-3.5 transition hover:bg-ink-2 sm:px-5 ${
+                    i > 0 ? "border-t border-line-soft" : ""
+                  }`}
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400/12 text-amber-300">
+                    <NavIcons.clock className="h-[18px] w-[18px]" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[14px] font-medium text-fg">
+                      {tx.note?.trim() ||
+                        (t.bank.types[tx.type as keyof typeof t.bank.types] ?? tx.type)}
+                    </p>
+                    <p className="mt-0.5 truncate text-[12px] text-fg-faint">
+                      {t.txn.stepReview}
+                    </p>
+                  </div>
+                  <p className="display shrink-0 text-[15px] font-semibold text-fg">
+                    {formatMoney(Math.abs(tx.amountCents), locale, portfolio.currency)}
+                  </p>
+                  <NavIcons.chevronRight className="h-4 w-4 shrink-0 text-fg-faint" />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {trend.hasShape && (
           <div className="grid grid-cols-2 gap-4">
