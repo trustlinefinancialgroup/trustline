@@ -149,7 +149,6 @@ export function BankCard({
         // 1cqw = 1% of this card's width, so the face scales as one piece and
         // never depends on the browser's font size.
         containerType: "inline-size",
-        padding: "5.2cqw",
       }}
     >
       {/* decorative arcs */}
@@ -170,100 +169,119 @@ export function BankCard({
         style={{ boxShadow: face.edge }}
       />
 
-      <div className="relative flex h-full flex-col justify-between">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p
-              className="font-semibold uppercase tracking-[0.2em]"
-              style={{ color: face.ink, fontSize: "4.4cqw", lineHeight: 1.2 }}
-            >
-              Trustline
-            </p>
-            <p
-              className="mt-0.5 font-medium uppercase tracking-[0.32em]"
-              style={{ color: face.inkSoft, fontSize: "3.3cqw", lineHeight: 1.2 }}
-            >
-              Financial Group
-            </p>
-          </div>
-          {badge && (
-            <span
-              className="font-semibold uppercase tracking-[0.2em]"
-              style={{ color: face.ink, fontSize: "3.3cqw", lineHeight: 1.2 }}
-            >
-              {badge}
-            </span>
-          )}
-        </div>
+      {/* A card is fixed geometry, not a stack. Each detail is pinned to its
+          own place on the face in percentages of the card, so growing the type
+          can never push the holder's name off the bottom edge — which is
+          exactly what a flex column with justify-between did. */}
 
-        <div className="flex items-center gap-3">
-          {/* chip — flat gold reads as plastic, so it gets a lit top half,
-              a shaded lower half and proper contact pads */}
-          <svg viewBox="0 0 38 29" aria-hidden="true" style={{ width: "10cqw", height: "7.6cqw" }}>
-            <rect width="38" height="29" rx="5" fill={face.chip} />
-            <path d="M0 14.5 H38 V24 a5 5 0 0 1 -5 5 H5 a5 5 0 0 1 -5 -5 Z" fill="#000" opacity="0.14" />
-            <rect x="0.5" y="0.5" width="37" height="28" rx="4.5" fill="none" stroke="#FFF" strokeOpacity="0.5" />
-            <g stroke={face.chipLine} strokeWidth="1.1" fill="none" opacity="0.85">
-              <path d="M0 14.5 H38" />
-              <path d="M13 0 V29" />
-              <path d="M25 0 V29" />
-              <path d="M13 7 H0 M25 7 H38 M13 22 H0 M25 22 H38" />
-            </g>
-          </svg>
-          {/* contactless */}
-          <svg viewBox="0 0 18 22" aria-hidden="true" style={{ width: "4.7cqw", height: "5.8cqw" }}>
-            <path
-              d="M3 7 a9 9 0 0 1 0 8 M8 4 a14 14 0 0 1 0 14"
-              fill="none"
-              stroke={face.inkSoft}
-              strokeWidth="1.6"
-              strokeLinecap="round"
-            />
-          </svg>
+      {/* Brand, and the tier opposite it */}
+      <div
+        className="absolute flex items-start justify-between gap-3"
+        style={{ top: "8.5%", left: "6%", right: "6%" }}
+      >
+        <div className="min-w-0">
+          <p
+            className="font-semibold uppercase tracking-[0.2em]"
+            style={{ color: face.ink, fontSize: "3.9cqw", lineHeight: 1.2 }}
+          >
+            Trustline
+          </p>
+          <p
+            className="mt-0.5 font-medium uppercase tracking-[0.32em]"
+            style={{ color: face.inkSoft, fontSize: "2.9cqw", lineHeight: 1.2 }}
+          >
+            Financial Group
+          </p>
         </div>
-
-        <p
-          className="font-mono tracking-[0.1em]"
-          style={{ color: face.ink, fontSize: "5.6cqw", lineHeight: 1.4, minHeight: "1.4em" }}
-        >
-          {placeholder ? "••••  ••••  ••••  ••••" : formatCardNumber(number, masked)}
-        </p>
-
-        <div className="flex items-end justify-between gap-3">
-          <div className="min-w-0">
-            <p
-              className="truncate font-semibold uppercase tracking-[0.16em]"
-              style={{ color: face.ink, fontSize: "4.2cqw", lineHeight: 1.25 }}
-            >
-              {holder || holderPlaceholder}
-            </p>
-            <p
-              className="mt-0.5 truncate uppercase tracking-[0.16em]"
-              style={{ color: face.inkSoft, fontSize: "3.4cqw", lineHeight: 1.25 }}
-            >
-              {expiry ? `Valid thru ${expiry}` : productName}
-            </p>
-          </div>
-          {value ? (
-            <div className="shrink-0 text-right">
-              {valueLabel && (
-                <p
-                  className="uppercase tracking-[0.16em]"
-                  style={{ color: face.inkSoft, fontSize: "2.8cqw", lineHeight: 1.25 }}
-                >
-                  {valueLabel}
-                </p>
-              )}
-              <p
-                className="font-semibold"
-                style={{ color: face.ink, fontSize: "4.8cqw", lineHeight: 1.25 }}
-              >
-                {value}
-              </p>
-            </div>
-          ) : null}
-        </div>
+        {badge && (
+          <span
+            className="shrink-0 font-semibold uppercase tracking-[0.2em]"
+            style={{ color: face.ink, fontSize: "2.9cqw", lineHeight: 1.2 }}
+          >
+            {badge}
+          </span>
+        )}
       </div>
+
+      {/* Chip and contactless, where they sit on a real card */}
+      <div className="absolute flex items-center gap-3" style={{ top: "34%", left: "6%" }}>
+        {/* flat gold reads as plastic, so the chip gets a lit top half, a
+            shaded lower half and proper contact pads */}
+        <svg viewBox="0 0 38 29" aria-hidden="true" style={{ width: "8.8cqw", height: "6.7cqw" }}>
+          <rect width="38" height="29" rx="5" fill={face.chip} />
+          <path d="M0 14.5 H38 V24 a5 5 0 0 1 -5 5 H5 a5 5 0 0 1 -5 -5 Z" fill="#000" opacity="0.14" />
+          <rect x="0.5" y="0.5" width="37" height="28" rx="4.5" fill="none" stroke="#FFF" strokeOpacity="0.5" />
+          <g stroke={face.chipLine} strokeWidth="1.1" fill="none" opacity="0.85">
+            <path d="M0 14.5 H38" />
+            <path d="M13 0 V29" />
+            <path d="M25 0 V29" />
+            <path d="M13 7 H0 M25 7 H38 M13 22 H0 M25 22 H38" />
+          </g>
+        </svg>
+        <svg viewBox="0 0 18 22" aria-hidden="true" style={{ width: "4.1cqw", height: "5.1cqw" }}>
+          <path
+            d="M3 7 a9 9 0 0 1 0 8 M8 4 a14 14 0 0 1 0 14"
+            fill="none"
+            stroke={face.inkSoft}
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
+      {/* The number */}
+      <p
+        className="absolute truncate font-mono tracking-[0.1em]"
+        style={{
+          top: "58%",
+          left: "6%",
+          right: "6%",
+          color: face.ink,
+          fontSize: "5cqw",
+          lineHeight: 1.3,
+        }}
+      >
+        {placeholder ? "\u2022\u2022\u2022\u2022  \u2022\u2022\u2022\u2022  \u2022\u2022\u2022\u2022  \u2022\u2022\u2022\u2022" : formatCardNumber(number, masked)}
+      </p>
+
+      {/* Holder, and what the card is */}
+      <div className="absolute min-w-0" style={{ bottom: "9%", left: "6%", maxWidth: "58%" }}>
+        <p
+          className="truncate font-semibold uppercase tracking-[0.16em]"
+          style={{ color: face.ink, fontSize: "3.7cqw", lineHeight: 1.25 }}
+        >
+          {holder || holderPlaceholder}
+        </p>
+        <p
+          className="mt-0.5 truncate uppercase tracking-[0.16em]"
+          style={{ color: face.inkSoft, fontSize: "3cqw", lineHeight: 1.25 }}
+        >
+          {expiry ? `Valid thru ${expiry}` : productName}
+        </p>
+      </div>
+
+      {/* The figure, opposite the holder */}
+      {value && (
+        <div
+          className="absolute min-w-0 text-right"
+          style={{ bottom: "9%", right: "6%", maxWidth: "38%" }}
+        >
+          {valueLabel && (
+            <p
+              className="truncate uppercase tracking-[0.16em]"
+              style={{ color: face.inkSoft, fontSize: "2.5cqw", lineHeight: 1.25 }}
+            >
+              {valueLabel}
+            </p>
+          )}
+          <p
+            className="tnum truncate font-semibold"
+            style={{ color: face.ink, fontSize: "4.2cqw", lineHeight: 1.25 }}
+          >
+            {value}
+          </p>
+        </div>
+      )}
 
       {status && (
         <span
