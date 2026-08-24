@@ -373,7 +373,10 @@ export default async function DashboardPage({
               {restProducts.map((v) => (
                 <Link key={v.def.key} href={v.href} className="group block">
                   {v.render === "card" ? (
-                    <div className="overflow-hidden rounded-2xl">
+                    // A card face is 1.586:1 and the tiles beside it are 4:3, so
+                    // it is centred in a box the same height as they are —
+                    // otherwise its label rides 19px above its neighbour's.
+                    <div className="flex aspect-[4/3] items-center">
                       <BankCard
                         theme={v.theme}
                         productName={v.title}
