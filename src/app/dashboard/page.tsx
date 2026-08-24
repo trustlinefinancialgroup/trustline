@@ -12,13 +12,14 @@ import { buildProductView, latestByKey, productsWithLabels } from "@/lib/product
 import { productsFor } from "@/lib/products";
 import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
-import { BankCard } from "@/components/bank-card";
+import { BankCard, CardSwatch } from "@/components/bank-card";
 import { BalanceTrend } from "@/components/balance-trend";
 import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
+import { ProductArt } from "@/components/product-art";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
-import { Eyebrow, QuickAction, SectionHead } from "@/components/ui";
+import { Eyebrow, QuickAction, SectionHead, StatusChip } from "@/components/ui";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -307,17 +308,65 @@ export default async function DashboardPage({
         {/* Product suite for the client's account type */}
         <section>
           <SectionHead title={t.products.yourProducts} subtitle={t.products.productsSubtitle} />
-          {/* On a phone these are full-bleed cards at a card's aspect ratio, so
-              stacking five of them buried the rest of the overview under ~1900px
-              of product art. They scroll sideways instead, the next one peeking
-              to show there is more, and go back to a grid once there is width
-              for one. */}
-          <div className="no-scrollbar -mx-5 mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+
+          {/* Phone: stacked rows. Each product is fully visible at rest — no
+              sideways scrolling, so nothing can shift under a thumb, and the
+              section is ~380px instead of the ~1900px the full-bleed tiles
+              took. The artwork survives as a thumbnail at the same 1.586:1
+              ratio it was cut for. */}
+          <ul className="elev-2 mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1 sm:hidden">
+            {productViews.map((v, i) => (
+              <li key={v.def.key}>
+                <Link
+                  href={v.href}
+                  className={`flex items-center gap-3.5 px-4 py-3 transition active:bg-ink-2 ${
+                    i > 0 ? "border-t border-line-soft" : ""
+                  }`}
+                >
+                  <span
+                    className={`h-[54px] w-[86px] shrink-0 overflow-hidden rounded-lg border border-line bg-ink-2 ${
+                      v.placeholder ? "opacity-60" : ""
+                    }`}
+                  >
+                    {v.render === "card" ? (
+                      <CardSwatch theme={v.theme} />
+                    ) : (
+                      v.art && <ProductArt art={v.art} className="h-full w-full" />
+                    )}
+                  </span>
+
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[14px] font-medium text-fg">{v.title}</span>
+                    {v.value ? (
+                      <span className="tnum mt-0.5 block truncate text-[13px] text-fg-muted">
+                        {v.valueLabel ? `${v.valueLabel}: ` : ""}
+                        {v.value}
+                      </span>
+                    ) : (
+                      <span className="mt-0.5 block truncate text-[13px] text-fg-muted">{v.body}</span>
+                    )}
+                  </span>
+
+                  <span className="flex shrink-0 items-center gap-2">
+                    {v.status ? (
+                      <StatusChip tone={v.status.tone}>{v.status.label}</StatusChip>
+                    ) : (
+                      <span className="text-[13px] font-medium text-brand-400">{v.cta}</span>
+                    )}
+                    <NavIcons.chevronRight className="h-4 w-4 text-fg-faint" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Tablet and up there is room for the full faces, so they get one. */}
+          <div className="mt-5 hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3">
             {productViews.map((v) => (
               <Link
                 key={v.def.key}
                 href={v.href}
-                className="group block w-[78%] shrink-0 snap-start rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 sm:w-auto sm:shrink"
+                className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
               >
                 {v.render === "card" ? (
                   <BankCard

@@ -77,6 +77,24 @@ const STATUS_TONES = {
 } as const;
 
 /** Groups a card number into 4s; masks all but the last four when asked. */
+/**
+ * A card face shrunk to a thumbnail — same gradient, sheen and lit edge as the
+ * full card, with none of the detail that would turn to mush at 88px wide.
+ * Used where a product needs to be recognisable in a list rather than admired.
+ */
+export function CardSwatch({ theme, className = "" }: { theme: CardTheme; className?: string }) {
+  const face = FACES[theme];
+  return (
+    <span
+      aria-hidden="true"
+      className={`block h-full w-full ${className}`}
+      style={{ background: face.background, boxShadow: face.edge }}
+    >
+      <span className="block h-full w-full" style={{ background: face.sheen }} />
+    </span>
+  );
+}
+
 export function formatCardNumber(number?: string | null, masked = false) {
   const digits = (number ?? "").replace(/\D/g, "");
   if (digits.length < 4) return "••••  ••••  ••••  ••••";
