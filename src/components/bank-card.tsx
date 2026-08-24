@@ -175,13 +175,13 @@ export function BankCard({
           <div>
             <p
               className="font-semibold uppercase tracking-[0.2em]"
-              style={{ color: face.ink, fontSize: "3.5cqw", lineHeight: 1.2 }}
+              style={{ color: face.ink, fontSize: "4.4cqw", lineHeight: 1.2 }}
             >
               Trustline
             </p>
             <p
               className="mt-0.5 font-medium uppercase tracking-[0.32em]"
-              style={{ color: face.inkSoft, fontSize: "2.1cqw", lineHeight: 1.2 }}
+              style={{ color: face.inkSoft, fontSize: "3.3cqw", lineHeight: 1.2 }}
             >
               Financial Group
             </p>
@@ -189,7 +189,7 @@ export function BankCard({
           {badge && (
             <span
               className="font-semibold uppercase tracking-[0.2em]"
-              style={{ color: face.ink, fontSize: "2.7cqw", lineHeight: 1.2 }}
+              style={{ color: face.ink, fontSize: "3.3cqw", lineHeight: 1.2 }}
             >
               {badge}
             </span>
@@ -224,7 +224,7 @@ export function BankCard({
 
         <p
           className="font-mono tracking-[0.1em]"
-          style={{ color: face.ink, fontSize: "4.5cqw", lineHeight: 1.4, minHeight: "1.4em" }}
+          style={{ color: face.ink, fontSize: "5.6cqw", lineHeight: 1.4, minHeight: "1.4em" }}
         >
           {placeholder ? "••••  ••••  ••••  ••••" : formatCardNumber(number, masked)}
         </p>
@@ -233,13 +233,13 @@ export function BankCard({
           <div className="min-w-0">
             <p
               className="truncate font-semibold uppercase tracking-[0.16em]"
-              style={{ color: face.ink, fontSize: "2.8cqw", lineHeight: 1.25 }}
+              style={{ color: face.ink, fontSize: "3.6cqw", lineHeight: 1.25 }}
             >
               {holder || holderPlaceholder}
             </p>
             <p
               className="mt-0.5 truncate uppercase tracking-[0.16em]"
-              style={{ color: face.inkSoft, fontSize: "2.4cqw", lineHeight: 1.25 }}
+              style={{ color: face.inkSoft, fontSize: "3.0cqw", lineHeight: 1.25 }}
             >
               {expiry ? `Valid thru ${expiry}` : productName}
             </p>
@@ -249,14 +249,14 @@ export function BankCard({
               {valueLabel && (
                 <p
                   className="uppercase tracking-[0.16em]"
-                  style={{ color: face.inkSoft, fontSize: "2.2cqw", lineHeight: 1.25 }}
+                  style={{ color: face.inkSoft, fontSize: "2.8cqw", lineHeight: 1.25 }}
                 >
                   {valueLabel}
                 </p>
               )}
               <p
                 className="font-semibold"
-                style={{ color: face.ink, fontSize: "3.8cqw", lineHeight: 1.25 }}
+                style={{ color: face.ink, fontSize: "4.8cqw", lineHeight: 1.25 }}
               >
                 {value}
               </p>
