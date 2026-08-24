@@ -1,400 +1,364 @@
-// Illustrated artwork for products that aren't payment cards. Each one is a
-// full-bleed scene on the brand navy, distinguished by a single accent hue, so
-// ten products read as one designed system rather than ten stock photographs.
+// Artwork for the products that aren't payment cards.
+//
+// Ten scenes built from one construction so they read as a set: a near-black
+// ground matched to the app's own surfaces, a single bloom of the product's
+// hue thrown from the upper left, the motif built from translucent planes with
+// a lit top edge and a shadowed underside, and a soft pool of light on the
+// floor beneath it. The light comes from the same place in every scene, which
+// is most of what separates a designed set from ten drawings.
 //
 // The viewBox matches the card aspect ratio (1.586:1) exactly, so a tile and a
-// card face are interchangeable in the grid.
+// card face are interchangeable in a grid.
 
 type ArtProps = { className?: string };
 
-const NAVY_TOP = "#1B3F7A";
-const NAVY_MID = "#0F2A52";
-const NAVY_DEEP = "#08182F";
-const INK = "#E6ECF5";
+const BASE_TOP = "#0E1728";
+const BASE_MID = "#0A1220";
+const BASE_DEEP = "#060B14";
 
-/** Accent hue per motif — the only thing that changes between scenes. */
+/** One hue per motif — the only thing that changes between scenes. */
 const ACCENTS: Record<string, string> = {
-  vault: "#2BB7A6",
-  house: "#3FA96B",
-  contract: "#7C6BE0",
-  shield: "#4F8DF5",
-  deposit: "#2BB7A6",
-  globe: "#5B8DEF",
-  cheque: "#3FA96B",
-  handset: "#8AA0C4",
-  market: "#2BB7A6",
-  storefront: "#7C6BE0",
+  vault: "#35D6A4",
+  house: "#57C77E",
+  contract: "#8B7BF0",
+  shield: "#4C86F5",
+  deposit: "#35C7D6",
+  globe: "#6FA8FF",
+  cheque: "#7FD4A0",
+  handset: "#A8B8D8",
+  market: "#E0B15C",
+  storefront: "#B98BF0",
 };
 
-function Backdrop({ id, accent }: { id: string; accent: string }) {
+/** The ground, the bloom and the horizon — identical in every scene. */
+function Field({ id, accent }: { id: string; accent: string }) {
   return (
     <>
       <defs>
-        <linearGradient id={`${id}-bg`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor={NAVY_TOP} />
-          <stop offset="55%" stopColor={NAVY_MID} />
-          <stop offset="100%" stopColor={NAVY_DEEP} />
+        <linearGradient id={`${id}-base`} x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0%" stopColor={BASE_TOP} />
+          <stop offset="58%" stopColor={BASE_MID} />
+          <stop offset="100%" stopColor={BASE_DEEP} />
         </linearGradient>
-        <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={accent} stopOpacity="0.55" />
+
+        {/* The single light source, thrown from upper left */}
+        <radialGradient id={`${id}-bloom`} cx="28%" cy="18%" r="72%">
+          <stop offset="0%" stopColor={accent} stopOpacity="0.42" />
+          <stop offset="45%" stopColor={accent} stopOpacity="0.10" />
           <stop offset="100%" stopColor={accent} stopOpacity="0" />
         </radialGradient>
+
+        {/* Glass: what every plane in the motif is filled with */}
+        <linearGradient id={`${id}-glass`} x1="0" y1="0" x2="0.6" y2="1">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.16" />
+          <stop offset="55%" stopColor="#FFFFFF" stopOpacity="0.05" />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.02" />
+        </linearGradient>
+
+        <linearGradient id={`${id}-tint`} x1="0" y1="0" x2="0.5" y2="1">
+          <stop offset="0%" stopColor={accent} stopOpacity="0.55" />
+          <stop offset="100%" stopColor={accent} stopOpacity="0.12" />
+        </linearGradient>
+
+        <radialGradient id={`${id}-pool`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={accent} stopOpacity="0.35" />
+          <stop offset="100%" stopColor={accent} stopOpacity="0" />
+        </radialGradient>
+
+        <filter id={`${id}-soft`} x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="10" />
+        </filter>
       </defs>
-      <rect width="400" height="252" fill={`url(#${id}-bg)`} />
-      <circle cx="300" cy="60" r="130" fill={`url(#${id}-glow)`} />
-      <circle cx="70" cy="230" r="110" fill={`url(#${id}-glow)`} opacity="0.5" />
-      {/* horizon */}
-      <path d="M0 196 H400" stroke={INK} strokeOpacity="0.12" />
+
+      <rect width="400" height="252" fill={`url(#${id}-base)`} />
+      <rect width="400" height="252" fill={`url(#${id}-bloom)`} />
+      {/* Horizon: a single hairline keeps the objects standing on something */}
+      <path d="M0 186H400" stroke="#FFFFFF" strokeOpacity="0.05" />
     </>
   );
 }
 
-function Shell({
-  id,
-  accent,
-  className,
-  label,
-  children,
-}: {
-  id: string;
-  accent: string;
-  className?: string;
-  label: string;
-  children: React.ReactNode;
-}) {
+/** The pool of light an object sits in. */
+function Pool({ id, cx = 200, rx = 92 }: { id: string; cx?: number; rx?: number }) {
+  return <ellipse cx={cx} cy="186" rx={rx} ry="13" fill={`url(#${id}-pool)`} opacity="0.9" />;
+}
+
+function Scene({ id, children }: { id: string; children: React.ReactNode }) {
+  const accent = ACCENTS[id] ?? "#4C86F5";
   return (
-    <svg viewBox="0 0 400 252" className={className} role="img" aria-label={label}>
-      <Backdrop id={id} accent={accent} />
+    <>
+      <Field id={id} accent={accent} />
       {children}
+    </>
+  );
+}
+
+/* Shared stroke weights. Lit edges catch the light from upper left; the
+   shadowed ones sit under and to the right. */
+const LIT = { stroke: "#FFFFFF", strokeOpacity: 0.34, strokeWidth: 1.4, fill: "none" } as const;
+const EDGE = { stroke: "#FFFFFF", strokeOpacity: 0.12, strokeWidth: 1, fill: "none" } as const;
+
+function Frame({ className, id, children }: ArtProps & { id: string; children: React.ReactNode }) {
+  return (
+    <svg viewBox="0 0 400 252" className={className} role="presentation" aria-hidden="true">
+      <Scene id={id}>{children}</Scene>
     </svg>
   );
 }
 
-/** Soft shadow the motif sits on, so it reads as an object with weight. */
-function Floor({ cx = "200", rx = "96" }: { cx?: string; rx?: string }) {
-  return <ellipse cx={cx} cy="198" rx={rx} ry="9" fill="#000" opacity="0.22" />;
-}
-
-// ---------------------------------------------------------------- motifs
-
+/* ── Savings: a vault door, opened just enough to show light behind it ── */
 function Vault({ className }: ArtProps) {
-  const a = ACCENTS.vault;
   return (
-    <Shell id="vault" accent={a} className={className} label="Savings">
-      <Floor cx="186" rx="86" />
-      <rect x="112" y="66" width="148" height="132" rx="12" fill="#12294C" />
-      <rect x="112" y="66" width="148" height="132" rx="12" fill="none" stroke={INK} strokeOpacity="0.25" />
-      <rect x="126" y="80" width="120" height="104" rx="8" fill="#0B1E3B" />
-      <circle cx="186" cy="132" r="38" fill="#16345F" stroke={a} strokeOpacity="0.55" />
-      <circle cx="186" cy="132" r="24" fill="none" stroke={INK} strokeOpacity="0.35" />
-      <circle cx="186" cy="132" r="7" fill={a} />
-      {/* handle spokes */}
-      <g stroke={INK} strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round">
-        <path d="M186 100 V112" />
-        <path d="M186 152 V164" />
-        <path d="M154 132 H166" />
-        <path d="M206 132 H218" />
+    <Frame className={className} id="vault">
+      <Pool id="vault" rx={86} />
+      <rect x="128" y="62" width="144" height="124" rx="18" fill="url(#vault-glass)" />
+      <rect x="128" y="62" width="144" height="124" rx="18" {...EDGE} />
+      <path d="M146 62h108" {...LIT} />
+      <circle cx="200" cy="124" r="42" fill="url(#vault-tint)" />
+      <circle cx="200" cy="124" r="42" {...EDGE} />
+      <circle cx="200" cy="124" r="28" {...LIT} strokeOpacity={0.26} />
+      <circle cx="200" cy="124" r="9" fill="#FFFFFF" fillOpacity="0.5" />
+      <g {...LIT}>
+        <path d="M200 96v-14M200 166v-14M172 124h-14M242 124h-14" />
       </g>
-      <rect x="118" y="190" width="136" height="8" rx="4" fill="#0A1F3D" />
-      {/* coins */}
-      <g>
-        <ellipse cx="304" cy="188" rx="30" ry="9" fill={a} opacity="0.9" />
-        <rect x="274" y="170" width="60" height="18" fill={a} opacity="0.9" />
-        <ellipse cx="304" cy="170" rx="30" ry="9" fill={a} />
-        <ellipse cx="304" cy="160" rx="26" ry="8" fill={a} opacity="0.75" />
-        <ellipse cx="304" cy="150" rx="22" ry="7" fill={a} opacity="0.6" />
-      </g>
-    </Shell>
+      <circle cx="200" cy="124" r="52" fill="url(#vault-pool)" filter="url(#vault-soft)" />
+    </Frame>
   );
 }
 
+/* ── Mortgage: a roofline with the lights on ── */
 function House({ className }: ArtProps) {
-  const a = ACCENTS.house;
   return (
-    <Shell id="house" accent={a} className={className} label="Mortgages">
-      <Floor cx="196" rx="120" />
-      {/* distant skyline */}
-      <g fill={INK} opacity="0.07">
-        <rect x="20" y="132" width="34" height="64" />
-        <rect x="60" y="150" width="26" height="46" />
-        <rect x="330" y="140" width="30" height="56" />
+    <Frame className={className} id="house">
+      <Pool id="house" rx={96} />
+      <path d="M200 58l82 58v70H118v-70z" fill="url(#house-glass)" />
+      <path d="M200 58l82 58v70H118v-70z" {...EDGE} />
+      <path d="M108 120L200 54l92 66" {...LIT} strokeWidth={1.8} strokeLinecap="round" />
+      <rect x="176" y="138" width="48" height="48" rx="4" fill="url(#house-tint)" />
+      <rect x="176" y="138" width="48" height="48" rx="4" {...EDGE} />
+      <g {...LIT} strokeOpacity={0.22}>
+        <rect x="138" y="132" width="26" height="26" rx="3" />
+        <rect x="236" y="132" width="26" height="26" rx="3" />
       </g>
-      {/* roof */}
-      <path d="M196 62 L306 140 H86 Z" fill={a} />
-      <path d="M196 62 L306 140 H196 Z" fill="#000" opacity="0.12" />
-      {/* body */}
-      <rect x="112" y="140" width="168" height="56" fill="#12294C" />
-      <rect x="112" y="140" width="168" height="56" fill="none" stroke={INK} strokeOpacity="0.18" />
-      {/* door */}
-      <rect x="182" y="156" width="30" height="40" rx="3" fill="#0A1F3D" />
-      <circle cx="205" cy="177" r="2.5" fill={a} />
-      {/* lit windows */}
-      <rect x="130" y="156" width="34" height="26" rx="3" fill={a} opacity="0.85" />
-      <rect x="228" y="156" width="34" height="26" rx="3" fill={a} opacity="0.85" />
-      <path d="M147 156 V182 M130 169 H164 M245 156 V182 M228 169 H262" stroke="#0F2A52" strokeOpacity="0.6" />
-      {/* chimney */}
-      <rect x="258" y="86" width="18" height="34" fill={a} opacity="0.7" />
-      {/* tree */}
-      <rect x="316" y="168" width="6" height="28" fill="#0A1F3D" />
-      <circle cx="319" cy="160" r="20" fill={a} opacity="0.35" />
-    </Shell>
+      <ellipse cx="200" cy="176" rx="34" ry="22" fill="url(#house-pool)" filter="url(#house-soft)" />
+    </Frame>
   );
 }
 
+/* ── Personal loan: an agreement, signed ── */
 function Contract({ className }: ArtProps) {
-  const a = ACCENTS.contract;
   return (
-    <Shell id="contract" accent={a} className={className} label="Personal loans">
-      <Floor cx="190" rx="100" />
-      <g transform="rotate(-6 190 124)">
-        <rect x="118" y="52" width="144" height="146" rx="8" fill="#F2F5FA" opacity="0.94" />
-        <rect x="118" y="52" width="144" height="146" rx="8" fill="none" stroke="#0A1F3D" strokeOpacity="0.2" />
-        <g stroke="#0F2A52" strokeOpacity="0.35" strokeWidth="5" strokeLinecap="round">
-          <path d="M138 84 H242" />
-          <path d="M138 102 H242" />
-          <path d="M138 120 H214" />
+    <Frame className={className} id="contract">
+      <Pool id="contract" rx={84} />
+      <g transform="rotate(-5 200 122)">
+        <rect x="140" y="52" width="120" height="140" rx="10" fill="url(#contract-glass)" />
+        <rect x="140" y="52" width="120" height="140" rx="10" {...EDGE} />
+        <path d="M150 52h100" {...LIT} />
+        <g stroke="#FFFFFF" strokeOpacity="0.18" strokeWidth="4" strokeLinecap="round">
+          <path d="M160 82h80M160 98h80M160 114h52" />
         </g>
-        <rect x="138" y="140" width="60" height="10" rx="5" fill={a} opacity="0.55" />
-        {/* signature */}
+        {/* the signature */}
         <path
-          d="M140 176 c14 -16 22 6 34 -6 c10 -10 16 10 28 0 c8 -7 14 6 24 -4"
+          d="M160 152c10-12 16 10 26 2s12-16 22-6 14 12 30 2"
           fill="none"
-          stroke={a}
-          strokeWidth="3.5"
+          stroke={ACCENTS.contract}
+          strokeOpacity="0.95"
+          strokeWidth="2.6"
           strokeLinecap="round"
         />
+        <path d="M160 168h80" stroke="#FFFFFF" strokeOpacity="0.14" strokeWidth="2" />
       </g>
-      {/* pen */}
-      <g transform="rotate(28 300 130)">
-        <rect x="292" y="60" width="17" height="104" rx="4" fill={a} />
-        <rect x="292" y="60" width="17" height="104" rx="4" fill="#000" opacity="0.12" />
-        <path d="M292 164 H309 L300.5 186 Z" fill={INK} />
-        <path d="M297 176 H304 L300.5 186 Z" fill="#0A1F3D" />
-      </g>
-    </Shell>
+      <ellipse cx="200" cy="150" rx="52" ry="30" fill="url(#contract-pool)" filter="url(#contract-soft)" />
+    </Frame>
   );
 }
 
+/* ── Insurance: cover, and the tick that means it held ── */
 function Shield({ className }: ArtProps) {
-  const a = ACCENTS.shield;
   return (
-    <Shell id="shield" accent={a} className={className} label="Insurance">
-      <Floor cx="200" rx="80" />
-      {/* rays */}
-      <g stroke={a} strokeOpacity="0.3" strokeWidth="3" strokeLinecap="round">
-        <path d="M104 78 L82 62" />
-        <path d="M296 78 L318 62" />
-        <path d="M96 132 H70" />
-        <path d="M304 132 H330" />
-      </g>
+    <Frame className={className} id="shield">
+      <Pool id="shield" rx={78} />
+      <path d="M200 52l58 24v50c0 38-26 58-58 68-32-10-58-30-58-68V76z" fill="url(#shield-glass)" />
+      <path d="M200 52l58 24v50c0 38-26 58-58 68-32-10-58-30-58-68V76z" {...EDGE} />
+      <path d="M200 52l58 24" {...LIT} strokeWidth={1.8} strokeLinecap="round" />
+      <path d="M200 66l44 18v42c0 29-20 45-44 53-24-8-44-24-44-53V84z" fill="url(#shield-tint)" opacity="0.5" />
       <path
-        d="M200 42 L282 76 V132 c0 46 -34 74 -82 90 c-48 -16 -82 -44 -82 -90 V76 Z"
-        fill="#12294C"
-        stroke={INK}
-        strokeOpacity="0.28"
-      />
-      <path
-        d="M200 42 L282 76 V132 c0 46 -34 74 -82 90 Z"
-        fill="#000"
-        opacity="0.14"
-      />
-      <path
-        d="M200 62 L262 88 V132 c0 36 -26 58 -62 72 c-36 -14 -62 -36 -62 -72 V88 Z"
-        fill={a}
-        opacity="0.18"
-      />
-      <path
-        d="M170 132 l22 24 l42 -50"
+        d="M176 122l17 17 33-37"
         fill="none"
-        stroke={a}
-        strokeWidth="11"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Shell>
-  );
-}
-
-function Deposit({ className }: ArtProps) {
-  const a = ACCENTS.deposit;
-  return (
-    <Shell id="deposit" accent={a} className={className} label="Deposits">
-      <Floor cx="200" rx="104" />
-      {/* falling note */}
-      <g transform="rotate(-12 200 74)">
-        <rect x="152" y="44" width="96" height="58" rx="7" fill={a} opacity="0.92" />
-        <circle cx="200" cy="73" r="15" fill="#0B1E3B" opacity="0.35" />
-        <path d="M164 56 h14 M222 90 h14" stroke="#0B1E3B" strokeOpacity="0.35" strokeWidth="4" strokeLinecap="round" />
-      </g>
-      {/* arrow into the slot */}
-      <path d="M200 112 V140 M186 128 l14 14 l14 -14" fill="none" stroke={INK} strokeOpacity="0.7" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-      {/* counter */}
-      <rect x="96" y="150" width="208" height="48" rx="10" fill="#12294C" stroke={INK} strokeOpacity="0.22" />
-      <rect x="168" y="150" width="64" height="12" rx="6" fill="#08182F" />
-      <rect x="96" y="186" width="208" height="12" rx="6" fill="#0A1F3D" />
-      <g fill={a} opacity="0.55">
-        <rect x="116" y="170" width="30" height="6" rx="3" />
-        <rect x="254" y="170" width="30" height="6" rx="3" />
-      </g>
-    </Shell>
-  );
-}
-
-function Globe({ className }: ArtProps) {
-  const a = ACCENTS.globe;
-  return (
-    <Shell id="globe" accent={a} className={className} label="Foreign drafts">
-      <Floor cx="176" rx="76" />
-      <circle cx="176" cy="122" r="74" fill="#12294C" stroke={INK} strokeOpacity="0.25" />
-      <circle cx="176" cy="122" r="74" fill={a} opacity="0.12" />
-      <g fill="none" stroke={INK} strokeOpacity="0.3">
-        <path d="M102 122 H250" />
-        <path d="M110 88 H242" />
-        <path d="M110 156 H242" />
-        <ellipse cx="176" cy="122" rx="30" ry="74" />
-        <ellipse cx="176" cy="122" rx="58" ry="74" />
-      </g>
-      {/* landmasses */}
-      <g fill={a} opacity="0.55">
-        <path d="M132 96 c16 -8 30 2 38 10 c-10 12 -30 16 -44 8 z" />
-        <path d="M186 138 c20 -10 40 -2 46 10 c-14 12 -40 12 -52 2 z" />
-      </g>
-      {/* transfer arc */}
-      <path d="M126 76 Q246 24 322 96" fill="none" stroke={a} strokeWidth="3" strokeDasharray="7 8" strokeLinecap="round" />
-      <circle cx="126" cy="76" r="7" fill={INK} />
-      <circle cx="322" cy="96" r="9" fill={a} />
-      <circle cx="322" cy="96" r="16" fill="none" stroke={a} strokeOpacity="0.45" />
-    </Shell>
-  );
-}
-
-function Cheque({ className }: ArtProps) {
-  const a = ACCENTS.cheque;
-  return (
-    <Shell id="cheque" accent={a} className={className} label="Interest checking">
-      <Floor cx="196" rx="106" />
-      <rect x="80" y="74" width="232" height="112" rx="10" fill="#F2F5FA" opacity="0.94" />
-      <rect x="80" y="74" width="232" height="112" rx="10" fill="none" stroke="#0A1F3D" strokeOpacity="0.2" />
-      <rect x="80" y="74" width="232" height="20" rx="10" fill={a} opacity="0.35" />
-      <g stroke="#0F2A52" strokeOpacity="0.3" strokeWidth="5" strokeLinecap="round">
-        <path d="M100 116 H206" />
-        <path d="M100 134 H180" />
-        <path d="M100 160 H160" />
-      </g>
-      <rect x="226" y="106" width="66" height="34" rx="6" fill={a} opacity="0.22" />
-      {/* percent badge */}
-      <circle cx="298" cy="170" r="34" fill={a} />
-      <circle cx="298" cy="170" r="34" fill="#000" opacity="0.08" />
-      <g stroke="#0A1F3D" strokeWidth="5" strokeLinecap="round">
-        <path d="M284 184 L312 156" />
-      </g>
-      <circle cx="286" cy="158" r="7" fill="none" stroke="#0A1F3D" strokeWidth="5" />
-      <circle cx="310" cy="182" r="7" fill="none" stroke="#0A1F3D" strokeWidth="5" />
-    </Shell>
-  );
-}
-
-function Handset({ className }: ArtProps) {
-  const a = ACCENTS.handset;
-  return (
-    <Shell id="handset" accent={a} className={className} label="Telephone banking">
-      <Floor cx="200" rx="74" />
-      <rect x="152" y="44" width="96" height="154" rx="16" fill="#12294C" stroke={INK} strokeOpacity="0.25" />
-      <rect x="162" y="60" width="76" height="112" rx="8" fill="#0B1E3B" />
-      <circle cx="200" cy="184" r="8" fill={INK} opacity="0.4" />
-      <rect x="186" y="52" width="28" height="5" rx="2.5" fill={INK} opacity="0.35" />
-      {/* handset glyph on screen */}
-      <path
-        d="M180 96 h16 l8 18 l-11 8 a38 38 0 0 0 17 17 l8 -11 l18 8 v16 a8 8 0 0 1 -8 8 A56 56 0 0 1 172 104 a8 8 0 0 1 8 -8 z"
-        fill={a}
-        opacity="0.9"
-      />
-      {/* signal arcs */}
-      <g fill="none" stroke={a} strokeOpacity="0.6" strokeWidth="4" strokeLinecap="round">
-        <path d="M276 96 a34 34 0 0 1 0 60" />
-        <path d="M296 76 a58 58 0 0 1 0 100" />
-        <path d="M124 96 a34 34 0 0 0 0 60" />
-        <path d="M104 76 a58 58 0 0 0 0 100" />
-      </g>
-    </Shell>
-  );
-}
-
-function Market({ className }: ArtProps) {
-  const a = ACCENTS.market;
-  return (
-    <Shell id="market" accent={a} className={className} label="Money market">
-      <Floor cx="200" rx="112" />
-      <defs>
-        <linearGradient id="market-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={a} stopOpacity="0.5" />
-          <stop offset="100%" stopColor={a} stopOpacity="0.02" />
-        </linearGradient>
-      </defs>
-      {/* grid */}
-      <g stroke={INK} strokeOpacity="0.1">
-        <path d="M72 82 H328 M72 122 H328 M72 162 H328" />
-      </g>
-      {/* area */}
-      <path
-        d="M72 168 L124 142 L172 154 L220 106 L272 122 L328 66 V196 H72 Z"
-        fill="url(#market-fill)"
-      />
-      <path
-        d="M72 168 L124 142 L172 154 L220 106 L272 122 L328 66"
-        fill="none"
-        stroke={a}
+        stroke="#FFFFFF"
+        strokeOpacity="0.9"
         strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <g fill={INK}>
-        <circle cx="124" cy="142" r="5" />
-        <circle cx="220" cy="106" r="5" />
-      </g>
-      <circle cx="328" cy="66" r="8" fill={a} />
-      <circle cx="328" cy="66" r="15" fill="none" stroke={a} strokeOpacity="0.4" />
-      {/* coins */}
-      <g opacity="0.9">
-        <ellipse cx="106" cy="190" rx="26" ry="8" fill={a} />
-        <rect x="80" y="176" width="52" height="14" fill={a} />
-        <ellipse cx="106" cy="176" rx="26" ry="8" fill={a} opacity="0.8" />
-      </g>
-    </Shell>
+      <ellipse cx="200" cy="140" rx="46" ry="34" fill="url(#shield-pool)" filter="url(#shield-soft)" />
+    </Frame>
   );
 }
 
-function Storefront({ className }: ArtProps) {
-  const a = ACCENTS.storefront;
+/* ── Deposits: money arriving ── */
+function Deposit({ className }: ArtProps) {
   return (
-    <Shell id="storefront" accent={a} className={className} label="Small business">
-      <Floor cx="200" rx="118" />
-      {/* building */}
-      <rect x="92" y="94" width="216" height="102" fill="#12294C" stroke={INK} strokeOpacity="0.2" />
-      {/* awning */}
-      <path d="M84 94 H316 L302 62 H98 Z" fill={a} opacity="0.9" />
-      <g fill="#0A1F3D" opacity="0.25">
-        <path d="M124 62 h28 l-8 32 h-28 z" />
-        <path d="M180 62 h28 l-4 32 h-28 z" />
-        <path d="M236 62 h28 l0 32 h-28 z" />
+    <Frame className={className} id="deposit">
+      <Pool id="deposit" rx={90} />
+      <rect x="120" y="132" width="160" height="54" rx="12" fill="url(#deposit-glass)" />
+      <rect x="120" y="132" width="160" height="54" rx="12" {...EDGE} />
+      <path d="M136 132h128" {...LIT} />
+      <rect x="160" y="144" width="80" height="7" rx="3.5" fill="#FFFFFF" fillOpacity="0.22" />
+      <g transform="translate(0 -6)">
+        <rect x="166" y="52" width="68" height="46" rx="8" fill="url(#deposit-tint)" />
+        <rect x="166" y="52" width="68" height="46" rx="8" {...EDGE} />
+        <path d="M176 52h48" {...LIT} />
       </g>
-      {/* window */}
-      <rect x="110" y="112" width="86" height="60" rx="4" fill="#0B1E3B" />
-      <rect x="110" y="112" width="86" height="60" rx="4" fill={a} opacity="0.18" />
-      <path d="M110 142 H196 M153 112 V172" stroke={INK} strokeOpacity="0.2" />
-      {/* door */}
-      <rect x="216" y="112" width="62" height="84" rx="4" fill="#0B1E3B" />
-      <rect x="216" y="112" width="62" height="84" rx="4" fill="none" stroke={INK} strokeOpacity="0.2" />
-      <circle cx="266" cy="156" r="3.5" fill={a} />
-      {/* sign */}
-      <rect x="150" y="34" width="100" height="20" rx="6" fill="#0B1E3B" stroke={a} strokeOpacity="0.6" />
-      <rect x="164" y="42" width="72" height="5" rx="2.5" fill={INK} opacity="0.5" />
-      <rect x="88" y="188" width="224" height="8" rx="4" fill="#0A1F3D" />
-    </Shell>
+      <path
+        d="M200 104v18m0 0l-11-11m11 11l11-11"
+        fill="none"
+        stroke={ACCENTS.deposit}
+        strokeOpacity="0.95"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <ellipse cx="200" cy="150" rx="60" ry="26" fill="url(#deposit-pool)" filter="url(#deposit-soft)" />
+    </Frame>
   );
 }
 
-const MOTIFS: Record<string, (p: ArtProps) => React.ReactElement> = {
+/* ── Foreign drafts: money crossing a border ── */
+function Globe({ className }: ArtProps) {
+  return (
+    <Frame className={className} id="globe">
+      <Pool id="globe" rx={82} />
+      <circle cx="200" cy="118" r="62" fill="url(#globe-glass)" />
+      <circle cx="200" cy="118" r="62" {...EDGE} />
+      <path d="M158 74a62 62 0 0 1 84 0" {...LIT} strokeLinecap="round" />
+      <g stroke="#FFFFFF" strokeOpacity="0.16" strokeWidth="1" fill="none">
+        <path d="M138 118h124M200 56v124" />
+        <ellipse cx="200" cy="118" rx="30" ry="62" />
+        <ellipse cx="200" cy="118" rx="62" ry="26" />
+      </g>
+      {/* the transfer arc */}
+      <path
+        d="M156 142c26-46 62-46 88 0"
+        fill="none"
+        stroke={ACCENTS.globe}
+        strokeOpacity="0.95"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeDasharray="5 7"
+      />
+      <circle cx="156" cy="142" r="5" fill="#FFFFFF" fillOpacity="0.85" />
+      <circle cx="244" cy="142" r="5" fill={ACCENTS.globe} />
+      <circle cx="200" cy="118" r="70" fill="url(#globe-pool)" filter="url(#globe-soft)" opacity="0.5" />
+    </Frame>
+  );
+}
+
+/* ── Interest checking: a balance that earns ── */
+function Cheque({ className }: ArtProps) {
+  return (
+    <Frame className={className} id="cheque">
+      <Pool id="cheque" rx={92} />
+      <rect x="112" y="74" width="176" height="102" rx="12" fill="url(#cheque-glass)" />
+      <rect x="112" y="74" width="176" height="102" rx="12" {...EDGE} />
+      <path d="M128 74h144" {...LIT} />
+      <g stroke="#FFFFFF" strokeOpacity="0.16" strokeWidth="3.5" strokeLinecap="round">
+        <path d="M130 100h68M130 116h44" />
+      </g>
+      <path
+        d="M130 158l32-22 26 16 30-34 32 20"
+        fill="none"
+        stroke={ACCENTS.cheque}
+        strokeOpacity="0.95"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="250" cy="138" r="4.5" fill={ACCENTS.cheque} />
+      <ellipse cx="200" cy="150" rx="60" ry="28" fill="url(#cheque-pool)" filter="url(#cheque-soft)" />
+    </Frame>
+  );
+}
+
+/* ── Telephone banking: a person on the other end ── */
+function Handset({ className }: ArtProps) {
+  return (
+    <Frame className={className} id="handset">
+      <Pool id="handset" rx={74} />
+      <rect x="162" y="52" width="76" height="134" rx="16" fill="url(#handset-glass)" />
+      <rect x="162" y="52" width="76" height="134" rx="16" {...EDGE} />
+      <path d="M176 52h48" {...LIT} />
+      <rect x="174" y="70" width="52" height="86" rx="7" fill="url(#handset-tint)" opacity="0.5" />
+      <circle cx="200" cy="170" r="5" fill="#FFFFFF" fillOpacity="0.4" />
+      <g fill="none" stroke={ACCENTS.handset} strokeLinecap="round">
+        <path d="M256 88a44 44 0 0 1 0 62" strokeOpacity="0.75" strokeWidth="2.4" />
+        <path d="M274 74a68 68 0 0 1 0 90" strokeOpacity="0.4" strokeWidth="2.4" />
+        <path d="M144 88a44 44 0 0 0 0 62" strokeOpacity="0.35" strokeWidth="2.4" />
+      </g>
+      <ellipse cx="200" cy="140" rx="44" ry="34" fill="url(#handset-pool)" filter="url(#handset-soft)" />
+    </Frame>
+  );
+}
+
+/* ── Money market: a rate worth watching ── */
+function Market({ className }: ArtProps) {
+  return (
+    <Frame className={className} id="market">
+      <Pool id="market" rx={96} />
+      <g>
+        {[
+          [132, 140],
+          [166, 116],
+          [200, 128],
+          [234, 92],
+          [268, 68],
+        ].map(([x, y], i) => (
+          <g key={x}>
+            <rect x={x} y={y} width="26" height={186 - y} rx="6" fill="url(#market-glass)" />
+            <rect x={x} y={y} width="26" height={186 - y} rx="6" {...EDGE} />
+            <path d={`M${x + 4} ${y}h18`} {...LIT} strokeOpacity={0.3 - i * 0.02} />
+          </g>
+        ))}
+      </g>
+      <path
+        d="M145 132l34-22 34 12 34-34 34-22"
+        fill="none"
+        stroke={ACCENTS.market}
+        strokeOpacity="0.95"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="281" cy="66" r="5" fill={ACCENTS.market} />
+      <ellipse cx="220" cy="130" rx="70" ry="40" fill="url(#market-pool)" filter="url(#market-soft)" opacity="0.7" />
+    </Frame>
+  );
+}
+
+/* ── Small business: the shop that opens tomorrow ── */
+function Storefront({ className }: ArtProps) {
+  return (
+    <Frame className={className} id="storefront">
+      <Pool id="storefront" rx={98} />
+      <rect x="118" y="98" width="164" height="88" rx="10" fill="url(#storefront-glass)" />
+      <rect x="118" y="98" width="164" height="88" rx="10" {...EDGE} />
+      {/* awning */}
+      <path d="M110 98l14-30h152l14 30z" fill="url(#storefront-tint)" />
+      <path d="M110 98l14-30h152l14 30z" {...EDGE} />
+      <path d="M124 68h152" {...LIT} strokeWidth={1.8} strokeLinecap="round" />
+      <g stroke="#FFFFFF" strokeOpacity="0.14" strokeWidth="1">
+        <path d="M138 98v-30M166 98v-30M194 98v-30M222 98v-30M250 98v-30" />
+      </g>
+      <rect x="180" y="132" width="40" height="54" rx="5" fill="#FFFFFF" fillOpacity="0.10" />
+      <rect x="180" y="132" width="40" height="54" rx="5" {...EDGE} />
+      <rect x="136" y="128" width="30" height="26" rx="4" {...EDGE} />
+      <rect x="234" y="128" width="30" height="26" rx="4" {...EDGE} />
+      <ellipse cx="200" cy="160" rx="70" ry="30" fill="url(#storefront-pool)" filter="url(#storefront-soft)" />
+    </Frame>
+  );
+}
+
+const SCENES: Record<string, (p: ArtProps) => React.ReactElement> = {
   vault: Vault,
   house: House,
   contract: Contract,
@@ -408,6 +372,6 @@ const MOTIFS: Record<string, (p: ArtProps) => React.ReactElement> = {
 };
 
 export function ProductArt({ art, className }: { art: string; className?: string }) {
-  const Motif = MOTIFS[art] ?? MOTIFS.vault;
-  return <Motif className={className} />;
+  const Scene = SCENES[art] ?? Vault;
+  return <Scene className={className} />;
 }

@@ -15,7 +15,7 @@ export default async function ContactPage() {
   const t = await getDict();
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-white text-[#101828]">
       <MarketingHeader />
       <PageHero eyebrow={t.contactPage.eyebrow} title={t.contactPage.title} body={t.contactPage.body} />
 

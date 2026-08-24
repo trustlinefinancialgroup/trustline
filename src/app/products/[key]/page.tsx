@@ -91,7 +91,7 @@ export default async function PublicProductPage({
   }
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-white text-[#101828]">
       <MarketingHeader />
       <PageHero eyebrow={t.productPage.eyebrow} title={item.title} body={item.body} />
 

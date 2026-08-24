@@ -17,7 +17,7 @@ export default async function AboutPage() {
   const t = await getDict();
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-white text-[#101828]">
       <MarketingHeader />
       <PageHero eyebrow={t.about.eyebrow} title={t.about.title} body={t.about.body} />
 

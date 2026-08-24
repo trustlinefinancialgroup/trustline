@@ -28,7 +28,7 @@ export default async function FaqPage() {
   };
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-white text-[#101828]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

@@ -16,7 +16,7 @@ export async function LegalShell({
   const locale = await getLocale();
 
   return (
-    <main className="flex min-h-screen flex-1 flex-col bg-navy-50/40">
+    <main className="flex min-h-screen flex-1 flex-col bg-navy-50/40 text-[#101828]">
       <header className="border-b border-white/10 bg-navy-900">
         <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
           <Logo theme="dark" />

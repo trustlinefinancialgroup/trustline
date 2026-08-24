@@ -22,7 +22,7 @@ export default async function HomePage() {
   const t = await getDict();
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-white text-[#101828]">
       <MarketingHeader />
 
       {/* Hero */}
