@@ -9,7 +9,7 @@ const STATUS_TONES = {
   ok: "bg-emerald-400/95 text-emerald-950",
   pending: "bg-amber-300/95 text-amber-950",
   bad: "bg-red-400/95 text-red-950",
-  muted: "bg-ink-1/25 text-white backdrop-blur-sm",
+  muted: "bg-ink-3/80 text-fg backdrop-blur-sm",
 } as const;
 
 export type ProductTileProps = {
@@ -39,7 +39,7 @@ export function ProductTile({
 }: ProductTileProps) {
   return (
     <div
-      className={`relative aspect-[1.586/1] w-full overflow-hidden rounded-2xl bg-navy-900 shadow-lg shadow-navy-900/20 ${className}`}
+      className={`relative aspect-[1.586/1] w-full overflow-hidden rounded-2xl border border-line bg-ink-1 elev-2 ${className}`}
     >
       {art && (
         <ProductArt
@@ -49,8 +49,12 @@ export function ProductTile({
           }`}
         />
       )}
-      {/* Keeps the figure legible over the busiest part of any illustration. */}
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-navy-950 via-navy-950/70 to-transparent" />
+      {/* A scrim only where something has to stay legible over the artwork. */}
+      <div
+        className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-0 to-transparent ${
+          value || cta ? "h-2/3 via-ink-0/70" : "h-1/3 via-ink-0/25"
+        }`}
+      />
 
       <div className="relative flex h-full flex-col justify-between p-5">
         <div className="flex items-start justify-end">
