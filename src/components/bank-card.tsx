@@ -245,7 +245,7 @@ export function BankCard({
       </p>
 
       {/* Holder, and what the card is */}
-      <div className="absolute min-w-0" style={{ bottom: "9%", left: "6%", maxWidth: "58%" }}>
+      <div className="absolute min-w-0" style={{ bottom: "9%", left: "6%", maxWidth: "50%" }}>
         <p
           className="truncate font-semibold uppercase tracking-[0.16em]"
           style={{ color: face.ink, fontSize: "3.7cqw", lineHeight: 1.25 }}
@@ -264,7 +264,7 @@ export function BankCard({
       {value && (
         <div
           className="absolute min-w-0 text-right"
-          style={{ bottom: "9%", right: "6%", maxWidth: "38%" }}
+          style={{ bottom: "9%", right: "6%", maxWidth: "36%" }}
         >
           {valueLabel && (
             <p
