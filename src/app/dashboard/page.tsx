@@ -307,12 +307,17 @@ export default async function DashboardPage({
         {/* Product suite for the client's account type */}
         <section>
           <SectionHead title={t.products.yourProducts} subtitle={t.products.productsSubtitle} />
-          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* On a phone these are full-bleed cards at a card's aspect ratio, so
+              stacking five of them buried the rest of the overview under ~1900px
+              of product art. They scroll sideways instead, the next one peeking
+              to show there is more, and go back to a grid once there is width
+              for one. */}
+          <div className="no-scrollbar -mx-5 mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3">
             {productViews.map((v) => (
               <Link
                 key={v.def.key}
                 href={v.href}
-                className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                className="group block w-[78%] shrink-0 snap-start rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 sm:w-auto sm:shrink"
               >
                 {v.render === "card" ? (
                   <BankCard
