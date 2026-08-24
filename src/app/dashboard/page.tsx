@@ -16,6 +16,7 @@ import { BankCard } from "@/components/bank-card";
 import { BalanceTrend } from "@/components/balance-trend";
 import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
+import { ProductBanner } from "@/components/product-banner";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
 import { Eyebrow, QuickAction, SectionHead } from "@/components/ui";
@@ -92,14 +93,6 @@ export default async function DashboardPage({
 
   // Savings is a personal product — business clients have no /product/SAVINGS
   // page, so offering them one would land on a 404.
-  // Ranked so the phone layout leads with the product that matters most to
-  // this client: something they hold, then something in flight, then an offer.
-  const productRank = (v: (typeof productViews)[number]) =>
-    v.value ? 0 : v.status ? 1 : 2;
-  const [heroProduct, ...restProducts] = [...productViews].sort(
-    (a, b) => productRank(a) - productRank(b)
-  );
-
   const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
   const dateFmt = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", { dateStyle: "medium" });
@@ -199,7 +192,7 @@ export default async function DashboardPage({
           )}
         </section>
 
-        <div className="no-scrollbar rise -mx-1 flex gap-1 overflow-x-auto px-1 sm:gap-3" style={{ animationDelay: "80ms" }}>
+        <div className="rise grid grid-cols-3 gap-2 sm:flex sm:gap-3" style={{ animationDelay: "80ms" }}>
           <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
           <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
           <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
@@ -316,103 +309,26 @@ export default async function DashboardPage({
         <section>
           <SectionHead title={t.products.yourProducts} subtitle={t.products.productsSubtitle} />
 
-          {/* Phone: one product leads at full width and the rest sit two-up.
-              Stacking five full-bleed tiles ran to ~1900px and buried the page;
-              a flat list of thumbnails fixed the height and threw the artwork
-              away. This keeps the artwork at a size worth looking at and still
-              fits the section in ~560px. Whatever is furthest along leads —
-              an approved product, then one under review, then the first offer. */}
-          <div className="mt-4 sm:hidden">
-            <Link href={heroProduct.href} className="group block">
-              {heroProduct.render === "card" ? (
-                <BankCard
-                  theme={heroProduct.theme}
-                  productName={heroProduct.title}
-                  badge={heroProduct.badge}
-                  holder={heroProduct.holder}
-                  holderPlaceholder={heroProduct.holderPlaceholder}
-                  number={heroProduct.number}
-                  expiry={heroProduct.expiry}
-                  valueLabel={heroProduct.valueLabel}
-                  value={heroProduct.value}
-                  status={heroProduct.status}
-                  placeholder={heroProduct.placeholder}
+          {/* Phone: stacked banners. The artwork fills the right half of each
+              card and bleeds off its edge, so the suite still looks like a
+              bank, while five of them come to ~630px instead of the ~1900px
+              five full tiles took. Nothing scrolls sideways. */}
+          <div className="mt-4 space-y-3 sm:hidden">
+            {productViews.map((v) => (
+              <Link key={v.def.key} href={v.href} className="group block">
+                <ProductBanner
+                  title={v.title}
+                  body={v.body}
+                  art={v.render === "tile" ? v.art : null}
+                  theme={v.render === "card" ? v.theme : null}
+                  valueLabel={v.valueLabel}
+                  value={v.value}
+                  status={v.status}
+                  cta={v.cta}
+                  placeholder={v.placeholder}
                 />
-              ) : (
-                <ProductTile
-                  title={heroProduct.title}
-                  art={heroProduct.art}
-                  valueLabel={heroProduct.valueLabel}
-                  value={heroProduct.value}
-                  status={heroProduct.status}
-                  placeholder={heroProduct.placeholder}
-                  cta={null}
-                />
-              )}
-              <div className="mt-3 flex items-end justify-between gap-3 px-1">
-                <div className="min-w-0">
-                  <p className="truncate text-[15px] font-semibold text-fg">{heroProduct.title}</p>
-                  {heroProduct.value ? (
-                    <p className="tnum mt-0.5 truncate text-[13px] text-fg-muted">
-                      {heroProduct.valueLabel ? `${heroProduct.valueLabel}: ` : ""}
-                      {heroProduct.value}
-                    </p>
-                  ) : (
-                    <p className="mt-0.5 line-clamp-1 text-[13px] text-fg-muted">{heroProduct.body}</p>
-                  )}
-                </div>
-                {!heroProduct.value && (
-                  <span className="shrink-0 text-[13px] font-medium text-brand-400">
-                    {heroProduct.cta}
-                  </span>
-                )}
-              </div>
-            </Link>
-
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              {restProducts.map((v) => (
-                <Link key={v.def.key} href={v.href} className="group block">
-                  {v.render === "card" ? (
-                    // A card face is 1.586:1 and the tiles beside it are 4:3, so
-                    // it is centred in a box the same height as they are —
-                    // otherwise its label rides 19px above its neighbour's.
-                    <div className="flex aspect-[4/3] items-center">
-                      <BankCard
-                        theme={v.theme}
-                        productName={v.title}
-                        badge={v.badge}
-                        holder={v.holder}
-                        holderPlaceholder={v.holderPlaceholder}
-                        number={v.number}
-                        expiry={v.expiry}
-                        valueLabel={v.valueLabel}
-                        value={v.value}
-                        status={v.status}
-                        placeholder={v.placeholder}
-                      />
-                    </div>
-                  ) : (
-                    <ProductTile
-                      title={v.title}
-                      art={v.art}
-                      valueLabel={v.valueLabel}
-                      value={v.value}
-                      status={v.status}
-                      placeholder={v.placeholder}
-                      cta={null}
-                      size="sm"
-                      aspect="aspect-[4/3]"
-                    />
-                  )}
-                  <div className="mt-2 px-0.5">
-                    <p className="truncate text-[13.5px] font-semibold text-fg">{v.title}</p>
-                    <p className="tnum mt-0.5 truncate text-[12px] text-fg-muted">
-                      {v.value ?? v.cta}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+              </Link>
+            ))}
           </div>
 
           {/* Tablet and up there is room for every face at full size. */}

@@ -137,7 +137,9 @@ export function QuickAction({ href, icon, label }: { href: string; icon: string;
   return (
     <Link
       href={href}
-      className="group flex w-[4.25rem] shrink-0 flex-col items-center gap-2 text-center focus:outline-none"
+      // Fills its cell in the phone grid; back to a fixed width in the row
+      // that a wider screen has room for.
+      className="group flex w-full flex-col items-center gap-2 rounded-2xl py-1 text-center focus:outline-none sm:w-[4.25rem] sm:shrink-0 sm:py-0"
     >
       <span className="elev-1 flex h-12 w-12 items-center justify-center rounded-2xl bg-ink-1 transition group-hover:bg-ink-2 group-focus-visible:ring-2 group-focus-visible:ring-brand-500">
         {draw({ className: "h-5 w-5 text-brand-400" })}
