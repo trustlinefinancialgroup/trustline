@@ -83,10 +83,10 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
           <p
             className={`tnum text-3xl font-semibold tracking-tight ${
               tx.status === "REJECTED"
-                ? "text-gray-400 line-through"
+                ? "text-fg-faint line-through"
                 : credit
-                  ? "text-green-700"
-                  : "text-navy-900"
+                  ? "text-pos"
+                  : "text-fg"
             }`}
           >
             {credit ? "+" : ""}
@@ -99,24 +99,24 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
           </div>
 
           {tx.status === "PENDING" && (
-            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] text-amber-800">
+            <p className="mt-4 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-[13px] text-amber-300">
               {t.txn.pendingNote}
             </p>
           )}
           {tx.status === "REJECTED" && tx.rejectReason && (
-            <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-800">
+            <p className="mt-4 rounded-xl border border-neg/25 bg-neg/10 px-4 py-3 text-[13px] text-neg">
               {tx.rejectReason}
             </p>
           )}
         </Card>
 
         <Card>
-          <dl className="divide-y divide-gray-100">
+          <dl className="divide-y divide-line-soft">
             {rows.map((r) => (
               <div key={r.label} className="flex items-baseline justify-between gap-4 py-3 first:pt-0">
-                <dt className="text-sm text-gray-500">{r.label}</dt>
+                <dt className="text-sm text-fg-muted">{r.label}</dt>
                 <dd
-                  className={`break-all text-right text-sm font-semibold text-navy-900 ${
+                  className={`break-all text-right text-sm font-semibold text-fg ${
                     r.mono ? "tnum font-mono" : ""
                   }`}
                 >
@@ -127,11 +127,11 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
           </dl>
 
           {tx.note?.trim() && (
-            <div className="mt-4 rounded-xl bg-navy-50/70 px-4 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+            <div className="mt-4 rounded-xl bg-ink-2 px-4 py-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-muted">
                 {t.txn.noteLabel}
               </p>
-              <p className="mt-1 whitespace-pre-line text-[14px] text-navy-800">{tx.note}</p>
+              <p className="mt-1 whitespace-pre-line text-[14px] text-fg">{tx.note}</p>
             </div>
           )}
         </Card>
@@ -139,17 +139,17 @@ export default async function TransactionPage({ params }: { params: Promise<{ id
         {/* Proof the client attached, if any */}
         {tx.proofStoredName && (
           <Card>
-            <p className="text-[13px] font-semibold text-navy-900">{t.txn.proofLabel}</p>
+            <p className="text-[13px] font-semibold text-fg">{t.txn.proofLabel}</p>
             <a
               href={`/api/files/deposit/${tx.proofStoredName}`}
-              className="mt-3 inline-block rounded-xl border border-gray-200 px-4 py-2 text-[13px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+              className="mt-3 inline-block rounded-xl border border-line px-4 py-2 text-[13px] font-semibold text-fg transition hover:border-brand-500/40"
             >
               {tx.proofFileName ?? t.documentsPage.open}
             </a>
           </Card>
         )}
 
-        <p className="px-1 text-[11px] text-gray-400">{t.txn.keepNote}</p>
+        <p className="px-1 text-[11px] text-fg-faint">{t.txn.keepNote}</p>
       </Page>
     </AppShell>
   );

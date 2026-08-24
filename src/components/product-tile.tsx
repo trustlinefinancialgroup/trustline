@@ -9,7 +9,7 @@ const STATUS_TONES = {
   ok: "bg-emerald-400/95 text-emerald-950",
   pending: "bg-amber-300/95 text-amber-950",
   bad: "bg-red-400/95 text-red-950",
-  muted: "bg-white/25 text-white backdrop-blur-sm",
+  muted: "bg-ink-1/25 text-white backdrop-blur-sm",
 } as const;
 
 export type ProductTileProps = {
@@ -67,14 +67,14 @@ export function ProductTile({
           {value ? (
             <>
               {valueLabel && (
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-navy-200">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-fg-muted">
                   {valueLabel}
                 </p>
               )}
               <p className="mt-1 text-2xl font-semibold tracking-tight text-white">{value}</p>
             </>
           ) : cta ? (
-            <span className="inline-flex rounded-xl bg-white/15 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-sm transition group-hover:bg-accent-500">
+            <span className="inline-flex rounded-xl bg-ink-1/15 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500">
               {cta}
             </span>
           ) : (

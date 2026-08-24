@@ -201,7 +201,7 @@ export default async function ProductPage({
         <BackLink href="/dashboard">{t.products.backToProducts}</BackLink>
 
         {(drawn || paid || opened) && (
-          <p className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+          <p className="mt-4 rounded-xl border border-pos/25 bg-pos/10 px-4 py-3 text-sm font-medium text-pos">
             {drawn ? t.products.drewBanner : paid ? t.products.paidBanner : t.bank.transferredBanner}
           </p>
         )}
@@ -229,7 +229,7 @@ export default async function ProductPage({
                 <>
                   <BankCard {...cardProps} />
                   {view.state !== "REVIEW" && (
-                    <p className="mt-4 rounded-lg bg-navy-50/70 px-3.5 py-2.5 text-sm text-navy-700">
+                    <p className="mt-4 rounded-lg bg-ink-2 px-3.5 py-2.5 text-sm text-fg-muted">
                       {t.products.sampleCard}
                     </p>
                   )}
@@ -251,12 +251,12 @@ export default async function ProductPage({
           </div>
 
           {/* The detail panel */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm">
+          <div className="rounded-2xl border border-line bg-ink-1 p-7 shadow-sm">
             <div className="flex flex-wrap items-center gap-3">
               {view.state === "ACTIVE" && (
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-bold ${
-                    app?.frozen ? "bg-red-100 text-red-700" : "bg-green-100 text-green-800"
+                    app?.frozen ? "bg-neg/12 text-neg" : "bg-pos/12 text-pos"
                   }`}
                 >
                   {app?.frozen ? t.products.frozenBadge : t.products.activeBadge}
@@ -264,18 +264,18 @@ export default async function ProductPage({
               )}
             </div>
             {view.body && (
-              <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{view.body}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">{view.body}</p>
             )}
 
             {/* --- Not opened yet --- */}
             {view.state === "APPLY" && (
               <div className="mt-6">
-                <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
+                <p className="rounded-lg border border-line bg-ink-2 px-4 py-3 text-sm text-fg-muted">
                   {t.products.verifyNote}
                 </p>
                 <Link
                   href={`/apply?type=${def.key}`}
-                  className="mt-5 block rounded-xl bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-400"
                 >
                   {t.products.apply}
                 </Link>
@@ -284,13 +284,13 @@ export default async function ProductPage({
 
             {view.state === "DECLINED" && (
               <div className="mt-6">
-                <p className="rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <p className="rounded-lg border border-red-100 bg-neg/10 px-4 py-3 text-sm text-neg">
                   {t.products.declinedNote}
                   {app?.adminNote ? ` ${t.products.reasonLabel}: ${app.adminNote}` : ""}
                 </p>
                 <Link
                   href={`/apply?type=${def.key}`}
-                  className="mt-5 block rounded-xl bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-400"
                 >
                   {t.products.reapply}
                 </Link>
@@ -299,26 +299,26 @@ export default async function ProductPage({
 
             {view.state === "REVIEW" && app && (
               <div className="mt-6">
-                <p className="rounded-lg border border-amber-100 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                <p className="rounded-lg border border-amber-100 bg-amber-400/10 px-4 py-3 text-sm text-amber-300">
                   {t.products.reviewNote}
                 </p>
-                <dl className="mt-4 divide-y divide-gray-100">
+                <dl className="mt-4 divide-y divide-line-soft">
                   <div className="flex items-center justify-between py-3">
-                    <dt className="text-sm text-gray-500">{t.products.statusLabel}</dt>
-                    <dd className="text-sm font-semibold text-navy-900">{t.products.underReview}</dd>
+                    <dt className="text-sm text-fg-muted">{t.products.statusLabel}</dt>
+                    <dd className="text-sm font-semibold text-fg">{t.products.underReview}</dd>
                   </div>
                   {app.amountCents != null && (
                     <div className="flex items-center justify-between py-3">
-                      <dt className="text-sm text-gray-500">{t.products.requestedAmount}</dt>
-                      <dd className="text-sm font-semibold text-navy-900">
+                      <dt className="text-sm text-fg-muted">{t.products.requestedAmount}</dt>
+                      <dd className="text-sm font-semibold text-fg">
                         {formatMoney(app.amountCents, locale, user.currency)}
                       </dd>
                     </div>
                   )}
                   {app.requestedTier && (
                     <div className="flex items-center justify-between py-3">
-                      <dt className="text-sm text-gray-500">{t.products.requestedTier}</dt>
-                      <dd className="text-sm font-semibold text-navy-900">
+                      <dt className="text-sm text-fg-muted">{t.products.requestedTier}</dt>
+                      <dd className="text-sm font-semibold text-fg">
                         {t.products.tiers[app.requestedTier as keyof typeof t.products.tiers] ??
                           app.requestedTier}
                       </dd>
@@ -331,10 +331,10 @@ export default async function ProductPage({
             {/* --- Savings --- */}
             {def.kind === "savings" && view.state === "CLOSED" && (
               <form action={openSavingsAction} className="mt-6">
-                <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
+                <p className="rounded-lg border border-line bg-ink-2 px-4 py-3 text-sm text-fg-muted">
                   {t.products.openSavingsNote}
                 </p>
-                <button className="mt-5 w-full rounded-xl bg-accent-500 py-3 text-sm font-semibold text-white transition hover:bg-accent-600">
+                <button className="mt-5 w-full rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white transition hover:bg-brand-400">
                   {t.products.openSavingsCta}
                 </button>
               </form>
@@ -342,28 +342,28 @@ export default async function ProductPage({
 
             {def.kind === "savings" && savings && (
               <div className="mt-6">
-                <dl className="divide-y divide-gray-100">
+                <dl className="divide-y divide-line-soft">
                   <div className="flex items-center justify-between py-3">
-                    <dt className="text-sm text-gray-500">{t.products.balanceLabel}</dt>
-                    <dd className="text-sm font-semibold text-navy-900">
+                    <dt className="text-sm text-fg-muted">{t.products.balanceLabel}</dt>
+                    <dd className="text-sm font-semibold text-fg">
                       {formatMoney(savingsBal, locale, savings.currency)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between py-3">
-                    <dt className="text-sm text-gray-500">{t.bank.accountNo}</dt>
-                    <dd className="text-sm font-semibold text-navy-900">{savings.number}</dd>
+                    <dt className="text-sm text-fg-muted">{t.bank.accountNo}</dt>
+                    <dd className="text-sm font-semibold text-fg">{savings.number}</dd>
                   </div>
                 </dl>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link
                     href="/transfer"
-                    className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                    className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
                   >
                     {t.bank.transfer}
                   </Link>
                   <Link
                     href="/goals"
-                    className="rounded-xl border border-gray-200 px-6 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-accent-500/40"
+                    className="rounded-xl border border-line px-6 py-2.5 text-sm font-semibold text-fg transition hover:border-brand-500/40"
                   >
                     {t.bank.goalsLink}
                   </Link>
@@ -374,12 +374,12 @@ export default async function ProductPage({
             {/* --- Deposits --- */}
             {def.kind === "deposit" && (
               <div className="mt-6">
-                <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
+                <p className="rounded-lg border border-line bg-ink-2 px-4 py-3 text-sm text-fg-muted">
                   {t.products.depositIntro}
                 </p>
                 <Link
                   href="/deposit"
-                  className="mt-5 block rounded-xl bg-accent-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-400"
                 >
                   {t.bank.makeDeposit}
                 </Link>
@@ -390,20 +390,20 @@ export default async function ProductPage({
             {app?.status === "APPROVED" && (
               <>
                 {isInstallment && owed > 0 && (
-                  <p className="mt-6 rounded-lg bg-navy-50/70 px-3.5 py-2.5 text-sm text-navy-700">
+                  <p className="mt-6 rounded-lg bg-ink-2 px-3.5 py-2.5 text-sm text-fg-muted">
                     {t.products.disbursedNote}
                   </p>
                 )}
-                <dl className="mt-4 divide-y divide-gray-100">
+                <dl className="mt-4 divide-y divide-line-soft">
                   {terms.map((r) => (
                     <div key={r.label} className="flex items-center justify-between py-3">
-                      <dt className="text-sm text-gray-500">{r.label}</dt>
-                      <dd className="text-sm font-semibold text-navy-900">{r.value}</dd>
+                      <dt className="text-sm text-fg-muted">{r.label}</dt>
+                      <dd className="text-sm font-semibold text-fg">{r.value}</dd>
                     </div>
                   ))}
                 </dl>
                 {isRevolving && (
-                  <p className="mt-3 text-xs leading-relaxed text-gray-500">
+                  <p className="mt-3 text-xs leading-relaxed text-fg-muted">
                     {t.products.owedNote}
                   </p>
                 )}
@@ -421,9 +421,9 @@ export default async function ProductPage({
                 />
 
                 {def.card && (
-                  <div className="mt-6 border-t border-gray-100 pt-6">
+                  <div className="mt-6 border-t border-line-soft pt-6">
                     {app.frozen && (
-                      <p className="mb-3 rounded-lg bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
+                      <p className="mb-3 rounded-lg bg-neg/10 px-3.5 py-2.5 text-sm text-neg">
                         {t.products.frozenNote}
                       </p>
                     )}
@@ -431,7 +431,7 @@ export default async function ProductPage({
                       <input type="hidden" name="appId" value={app.id} />
                       <button
                         className={`w-full rounded-xl py-3 text-sm font-semibold text-white transition ${
-                          app.frozen ? "bg-accent-500 hover:bg-accent-600" : "bg-navy-800 hover:bg-navy-700"
+                          app.frozen ? "bg-brand-500 hover:bg-brand-400" : "bg-brand-500 hover:bg-brand-400"
                         }`}
                       >
                         {app.frozen ? t.products.unfreezeCard : t.products.freezeCard}
@@ -448,29 +448,29 @@ export default async function ProductPage({
         {showDocs && app && (
           <section className="mt-10">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+              <h2 className="text-lg font-semibold tracking-tight text-fg">
                 {t.docs.title}
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-fg-muted">
                 {fill(t.docs.progress, {
                   done: String(docItems.filter((d) => d.uploaded).length),
                   total: String(docItems.length),
                 })}
               </p>
             </div>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">{t.docs.subtitle}</p>
+            <p className="mt-1 max-w-2xl text-sm text-fg-muted">{t.docs.subtitle}</p>
 
             {app.docsRequestedAt && (
-              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+              <div className="mt-4 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3">
                 <p className="text-sm font-semibold text-amber-900">{t.docs.requestedTitle}</p>
                 {app.docsNote && (
-                  <p className="mt-1 text-sm text-amber-800">{app.docsNote}</p>
+                  <p className="mt-1 text-sm text-amber-300">{app.docsNote}</p>
                 )}
               </div>
             )}
 
             {outstanding === 0 && (
-              <p className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+              <p className="mt-4 rounded-xl border border-pos/25 bg-pos/10 px-4 py-3 text-sm font-medium text-pos">
                 {t.docs.allIn}
               </p>
             )}
@@ -498,7 +498,7 @@ export default async function ProductPage({
         {/* Activity on this product */}
         {(active || def.kind === "deposit") && (
           <>
-            <h2 className="mt-10 text-lg font-semibold tracking-tight text-navy-900">
+            <h2 className="mt-10 text-lg font-semibold tracking-tight text-fg">
               {t.products.activity}
             </h2>
             <div className="mt-4">
@@ -518,7 +518,7 @@ export default async function ProductPage({
         )}
 
         {app && (
-          <p className="mt-8 text-right text-xs text-gray-400">
+          <p className="mt-8 text-right text-xs text-fg-faint">
             {fill(t.products.appliedOn, { date: dateFmt.format(app.createdAt) })}
           </p>
         )}

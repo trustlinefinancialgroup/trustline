@@ -36,8 +36,8 @@ export default async function InboxPage({
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-navy-800">Inbox</h1>
-      <p className="mt-1 text-sm text-gray-600">
+      <h1 className="text-xl font-bold text-fg">Inbox</h1>
+      <p className="mt-1 text-sm text-fg-muted">
         Incoming email sent to your company mailboxes. Open a message to read it
         and reply — the reply is sent from that mailbox.
       </p>
@@ -50,8 +50,8 @@ export default async function InboxPage({
             href={`/admin/inbox?box=${tab.key}`}
             className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
               box === tab.key
-                ? "bg-navy-800 text-white"
-                : "bg-white text-navy-800 hover:bg-navy-50"
+                ? "bg-brand-500 text-white"
+                : "bg-ink-1 text-fg hover:bg-ink-2"
             }`}
           >
             {tab.label}
@@ -60,27 +60,27 @@ export default async function InboxPage({
       </div>
 
       {error && (
-        <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+        <div className="mt-6 rounded-2xl border border-neg/25 bg-neg/10 p-6 text-sm text-neg">
           Couldn&apos;t load this mailbox: {error}
         </div>
       )}
 
       {/* Open message + reply */}
       {!error && openMessage && (
-        <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <Link href={`/admin/inbox?box=${box}`} className="text-sm font-semibold text-accent-600 hover:text-accent-700">
+        <div className="mt-6 rounded-2xl border border-line bg-ink-1 p-6 shadow-sm">
+          <Link href={`/admin/inbox?box=${box}`} className="text-sm font-semibold text-brand-400 hover:text-brand-400">
             Back to inbox
           </Link>
-          <h2 className="mt-3 text-lg font-semibold text-navy-900">{openMessage.subject}</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="mt-3 text-lg font-semibold text-fg">{openMessage.subject}</h2>
+          <p className="mt-1 text-sm text-fg-muted">
             From{" "}
-            <strong className="text-navy-800">
+            <strong className="text-fg">
               {openMessage.fromName || openMessage.fromAddress}
             </strong>{" "}
             &lt;{openMessage.fromAddress}&gt;
             {openMessage.date ? ` · ${dateFmt.format(new Date(openMessage.date))}` : ""}
           </p>
-          <div className="mt-4 whitespace-pre-line rounded-xl bg-navy-50/50 p-4 text-[15px] leading-relaxed text-gray-800">
+          <div className="mt-4 whitespace-pre-line rounded-xl bg-ink-2 p-4 text-[15px] leading-relaxed text-gray-800">
             {openMessage.text || "(no text content)"}
           </div>
           <ReplyForm
@@ -93,24 +93,24 @@ export default async function InboxPage({
 
       {/* Message list */}
       {!error && !openMessage && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div className="mt-6 overflow-hidden rounded-2xl border border-line bg-ink-1 shadow-sm">
           {messages.length === 0 ? (
-            <p className="px-6 py-10 text-center text-sm text-gray-500">This mailbox is empty.</p>
+            <p className="px-6 py-10 text-center text-sm text-fg-muted">This mailbox is empty.</p>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-line-soft">
               {messages.map((m) => (
                 <li key={m.uid}>
                   <Link
                     href={`/admin/inbox?box=${box}&uid=${m.uid}`}
-                    className="flex items-center justify-between gap-4 px-5 py-4 hover:bg-navy-50/50"
+                    className="flex items-center justify-between gap-4 px-5 py-4 hover:bg-ink-2"
                   >
                     <div className="min-w-0">
-                      <p className={`truncate text-sm ${m.seen ? "text-gray-700" : "font-bold text-navy-900"}`}>
+                      <p className={`truncate text-sm ${m.seen ? "text-gray-700" : "font-bold text-fg"}`}>
                         {m.fromName || m.fromAddress}
                       </p>
-                      <p className="truncate text-sm text-gray-600">{m.subject}</p>
+                      <p className="truncate text-sm text-fg-muted">{m.subject}</p>
                     </div>
-                    <span className="shrink-0 text-xs text-gray-400">
+                    <span className="shrink-0 text-xs text-fg-faint">
                       {m.date ? dateFmt.format(new Date(m.date)) : ""}
                     </span>
                   </Link>

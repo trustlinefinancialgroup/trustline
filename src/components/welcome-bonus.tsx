@@ -29,20 +29,20 @@ export function WelcomeBonusBanner({
   const showRateProgress = !state.qualifiesForRate;
 
   return (
-    <div className="rounded-2xl border border-accent-100 bg-accent-50/60 px-4 py-3.5 sm:px-5">
+    <div className="rounded-2xl border border-brand-500/25 bg-brand-500/10 px-4 py-3.5 sm:px-5">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-500/10 text-accent-600">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/10 text-brand-400">
           <Icons.gift className="h-[18px] w-[18px]" />
         </span>
 
         <div className="min-w-0 flex-1">
           {/* The title already says what the offer is; a separate badge only
               costs a line on a phone. */}
-          <p className="text-[14px] font-semibold text-navy-900">
+          <p className="text-[14px] font-semibold text-fg">
             {state.credited ? t.promo.creditedTitle : t.promo.title}
           </p>
 
-          <p className="mt-0.5 text-[13px] leading-relaxed text-gray-600">
+          <p className="mt-0.5 text-[13px] leading-relaxed text-fg-muted">
             {state.credited && creditedDate
               ? fill(t.promo.creditedBody, {
                   amount: formatMoney(state.creditedCents, locale, currency),
@@ -55,12 +55,12 @@ export function WelcomeBonusBanner({
           {showRateProgress && (
             <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
               <ProgressBar percent={state.percent} className="min-w-[8rem] flex-1" />
-              <p className="tnum text-[12px] font-medium text-gray-500">
+              <p className="tnum text-[12px] font-medium text-fg-muted">
                 {fill(t.promo.rateProgress, { funded, target })}
               </p>
               <Link
                 href="/transfers?tab=deposit"
-                className="text-[12px] font-semibold text-accent-600 transition hover:text-accent-700"
+                className="text-[12px] font-semibold text-brand-400 transition hover:text-brand-400"
               >
                 {t.promo.fundNow}
               </Link>

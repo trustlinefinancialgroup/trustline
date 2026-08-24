@@ -65,8 +65,8 @@ export default async function ApplyPage({
     >
       <Page className={def.card ? "max-w-3xl" : "max-w-lg"}>
         <BackLink href={`/product/${def.key}`}>{t.bank.back}</BackLink>
-        <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-9 shadow-sm">
-          <p className="rounded-lg border border-navy-100 bg-navy-50/60 px-4 py-3 text-sm text-navy-700">
+        <div className="mt-4 rounded-2xl border border-line bg-ink-1 p-9 shadow-sm">
+          <p className="rounded-lg border border-line bg-ink-2 px-4 py-3 text-sm text-fg-muted">
             {t.products.verifyNote}
           </p>
           <ApplyForm

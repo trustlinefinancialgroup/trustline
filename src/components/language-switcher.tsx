@@ -53,8 +53,8 @@ export function LanguageSwitcher({
 
   const buttonCls =
     variant === "dark"
-      ? "text-white hover:bg-white/10"
-      : "text-navy-800 hover:bg-navy-50";
+      ? "text-white hover:bg-ink-1/10"
+      : "text-fg hover:bg-ink-2";
 
   return (
     <div ref={rootRef} className="relative">
@@ -70,7 +70,7 @@ export function LanguageSwitcher({
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-20 overflow-hidden rounded-xl border border-gray-200 bg-white py-1 shadow-xl shadow-navy-900/10">
+        <div className="absolute right-0 top-full z-50 mt-2 w-20 overflow-hidden rounded-xl border border-line bg-ink-1 py-1 shadow-xl shadow-navy-900/10">
           {LOCALES.map((l) => (
             <button
               key={l}
@@ -79,12 +79,12 @@ export function LanguageSwitcher({
                 setOpen(false);
                 if (l !== current) startTransition(() => setLocaleAction(l));
               }}
-              className={`flex w-full items-center justify-between px-3.5 py-2 text-[13px] font-bold tracking-wide transition hover:bg-navy-50 ${
-                l === current ? "text-accent-600" : "text-navy-800"
+              className={`flex w-full items-center justify-between px-3.5 py-2 text-[13px] font-bold tracking-wide transition hover:bg-ink-2 ${
+                l === current ? "text-brand-400" : "text-fg"
               }`}
             >
               {l.toUpperCase()}
-              {l === current && <span className="text-accent-600">✓</span>}
+              {l === current && <span className="text-brand-400">✓</span>}
             </button>
           ))}
         </div>

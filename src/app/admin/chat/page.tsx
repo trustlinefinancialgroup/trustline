@@ -19,37 +19,37 @@ export default async function AdminChatPage({
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-navy-800">Live chat</h1>
-      <p className="mt-1 text-sm text-gray-600">
+      <h1 className="text-xl font-bold text-fg">Live chat</h1>
+      <p className="mt-1 text-sm text-fg-muted">
         Visitor conversations. Open one to read the details they shared and reply
         in real time.
       </p>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         {/* Conversation list */}
-        <div className="max-h-[70vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div className="max-h-[70vh] overflow-y-auto rounded-2xl border border-line bg-ink-1 shadow-sm">
           {conversations.length === 0 ? (
-            <p className="px-5 py-10 text-center text-sm text-gray-500">No conversations yet.</p>
+            <p className="px-5 py-10 text-center text-sm text-fg-muted">No conversations yet.</p>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-line-soft">
               {conversations.map((conv) => (
                 <li key={conv.id}>
                   <Link
                     href={`/admin/chat?c=${conv.id}`}
-                    className={`block px-5 py-4 transition hover:bg-navy-50/50 ${
-                      selected?.id === conv.id ? "bg-navy-50" : ""
+                    className={`block px-5 py-4 transition hover:bg-ink-2 ${
+                      selected?.id === conv.id ? "bg-ink-2" : ""
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <p className="truncate text-sm font-semibold text-navy-900">{conv.name}</p>
+                      <p className="truncate text-sm font-semibold text-fg">{conv.name}</p>
                       {conv.unreadForAdmin && (
-                        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-accent-500" />
+                        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-brand-500" />
                       )}
                     </div>
-                    <p className="truncate text-xs text-gray-500">
+                    <p className="truncate text-xs text-fg-muted">
                       {conv.messages[0]?.body ?? ""}
                     </p>
-                    <p className="mt-0.5 text-[11px] text-gray-400">
+                    <p className="mt-0.5 text-[11px] text-fg-faint">
                       {conv.email ?? (conv.cardLast4 ? `card •••• ${conv.cardLast4}` : conv.phone ?? "")}
                     </p>
                   </Link>
@@ -62,10 +62,10 @@ export default async function AdminChatPage({
         {/* Console */}
         <div className="lg:col-span-2">
           {selected ? (
-            <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-100 px-5 py-4">
-                <p className="font-semibold text-navy-900">{selected.name}</p>
-                <p className="text-xs text-gray-500">
+            <div className="rounded-2xl border border-line bg-ink-1 shadow-sm">
+              <div className="border-b border-line-soft px-5 py-4">
+                <p className="font-semibold text-fg">{selected.name}</p>
+                <p className="text-xs text-fg-muted">
                   {[
                     selected.email,
                     selected.phone,
@@ -78,7 +78,7 @@ export default async function AdminChatPage({
               <AdminChatConsole conversationId={selected.id} />
             </div>
           ) : (
-            <div className="flex h-full min-h-[16rem] items-center justify-center rounded-2xl border border-dashed border-navy-200 bg-white p-10 text-center text-sm text-gray-500">
+            <div className="flex h-full min-h-[16rem] items-center justify-center rounded-2xl border border-dashed border-line bg-ink-1 p-10 text-center text-sm text-fg-muted">
               Select a conversation to read and reply.
             </div>
           )}

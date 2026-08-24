@@ -67,20 +67,20 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
         <BackLink href="/accounts">{t.accountsPage.title}</BackLink>
 
         {/* This account's own balance card, chart and actions */}
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-5 shadow-lg shadow-navy-900/20 sm:p-7">
-          <Eyebrow className="text-navy-300">{t.bank.availableBalance}</Eyebrow>
-          <p className="tnum mt-1.5 text-[2rem] font-semibold leading-none tracking-tight text-white sm:text-[2.5rem]">
+        <section className="rise">
+          <Eyebrow>{t.bank.availableBalance}</Eyebrow>
+          <p className="display mt-2 text-[40px] font-semibold leading-none text-fg sm:text-[52px]">
             {formatMoney(account.balanceCents, locale, account.currency)}
           </p>
           {account.pendingDepositCents > 0 && (
-            <p className="tnum mt-3 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-navy-100">
+            <p className="tnum mt-3 inline-block rounded-full bg-ink-1/10 px-3 py-1 text-xs font-medium text-fg">
               {fill(t.accountsPage.pendingIn, {
                 amount: formatMoney(account.pendingDepositCents, locale, account.currency),
               })}
             </p>
           )}
           {account.pendingWithdrawalCents > 0 && (
-            <p className="tnum mt-2 text-[12px] text-navy-300">
+            <p className="tnum mt-2 text-[12px] text-fg-faint">
               {fill(t.accountsPage.heldForWithdrawal, {
                 amount: formatMoney(account.pendingWithdrawalCents, locale, account.currency),
               })}
@@ -93,34 +93,34 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
             </div>
           )}
 
-          <div className="no-scrollbar mt-5 flex gap-1 overflow-x-auto border-t border-white/10 pt-5 sm:gap-3">
-            <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} tone="dark" />
-            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} tone="dark" />
-            <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} tone="dark" />
+          <div className="no-scrollbar mt-6 flex gap-1 overflow-x-auto sm:gap-3">
+            <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
+            <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
+            <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
             {portfolio.savings && (
-              <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} tone="dark" />
+              <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
             )}
-            <QuickAction href="/statements" icon="statement" label={t.statements.link} tone="dark" />
+            <QuickAction href="/statements" icon="statement" label={t.statements.link} />
           </div>
-        </div>
+        </section>
 
         {trend.hasShape && (
           <div className="grid grid-cols-2 gap-4">
             <Card padded={false} className="p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
+                <span className="h-2 w-2 rounded-full bg-pos/100" aria-hidden="true" />
                 {t.dashboard.moneyIn}
               </p>
-              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-navy-900">
+              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
                 {formatMoney(trend.inCents, locale, account.currency)}
               </p>
             </Card>
             <Card padded={false} className="p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
-                <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+              <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
+                <span className="h-2 w-2 rounded-full bg-neg/100" aria-hidden="true" />
                 {t.dashboard.moneyOut}
               </p>
-              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-navy-900">
+              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
                 {formatMoney(trend.outCents, locale, account.currency)}
               </p>
             </Card>
@@ -150,12 +150,12 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
 
         <Card>
           <SectionHead title={t.txn.detailsTitle} />
-          <dl className="mt-4 divide-y divide-gray-100">
+          <dl className="mt-4 divide-y divide-line-soft">
             {details.map((d) => (
               <div key={d.label} className="flex items-baseline justify-between gap-4 py-3">
-                <dt className="text-sm text-gray-500">{d.label}</dt>
+                <dt className="text-sm text-fg-muted">{d.label}</dt>
                 <dd
-                  className={`text-right text-sm font-semibold text-navy-900 ${
+                  className={`text-right text-sm font-semibold text-fg ${
                     d.mono ? "tnum font-mono" : ""
                   }`}
                 >
@@ -166,7 +166,7 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
           </dl>
           <Link
             href="/statements"
-            className="mt-4 inline-block rounded-xl border border-gray-200 px-4 py-2 text-[13px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+            className="mt-4 inline-block rounded-xl border border-line px-4 py-2 text-[13px] font-semibold text-fg transition hover:border-brand-500/40"
           >
             {t.statements.link}
           </Link>

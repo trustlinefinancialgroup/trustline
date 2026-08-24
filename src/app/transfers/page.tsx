@@ -78,14 +78,14 @@ export default async function TransfersPage({
     >
       <Page className="max-w-3xl space-y-5">
         {/* Available balance */}
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200/80 bg-white px-5 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-ink-1 px-5 py-4">
           <div>
-            <Eyebrow className="text-gray-500">{t.bank.available}</Eyebrow>
-            <p className="tnum mt-1 text-2xl font-semibold tracking-tight text-navy-900">
+            <Eyebrow className="text-fg-muted">{t.bank.available}</Eyebrow>
+            <p className="tnum mt-1 text-2xl font-semibold tracking-tight text-fg">
               {formatMoney(available, locale, portfolio.currency)}
             </p>
           </div>
-          <p className="tnum font-mono text-[12px] text-gray-400">{portfolio.primary.number}</p>
+          <p className="tnum font-mono text-[12px] text-fg-faint">{portfolio.primary.number}</p>
         </div>
 
         <Tabs
@@ -101,8 +101,8 @@ export default async function TransfersPage({
           {/* ---- Send to another Trustline client ---- */}
           {tab === "send" && (
             <>
-              <h2 className="text-lg font-semibold tracking-tight text-navy-900">{t.send.title}</h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{t.send.body}</p>
+              <h2 className="text-lg font-semibold tracking-tight text-fg">{t.send.title}</h2>
+              <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">{t.send.body}</p>
               {securityWordMissing ? (
                 <SecurityWordPrompt t={t} />
               ) : (
@@ -123,12 +123,12 @@ export default async function TransfersPage({
           {/* ---- Deposit ---- */}
           {tab === "deposit" && (
             <>
-              <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+              <h2 className="text-lg font-semibold tracking-tight text-fg">
                 {t.bank.depositTitle}
               </h2>
               {!selected ? (
                 <>
-                  <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
+                  <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.chooseMethod}
                   </p>
                   <MethodGrid methods={methods} tab="deposit" />
@@ -149,38 +149,38 @@ export default async function TransfersPage({
                     selected.routeIdentifier ||
                     selected.routeInstitution ||
                     selected.routeInstructions) && (
-                    <div className="mt-4 rounded-xl border border-accent-100 bg-accent-50/60 p-4 text-sm">
-                      <p className="font-semibold text-navy-900">{t.bank.depositRoute}</p>
-                      <p className="mt-1 text-gray-600">{t.bank.depositRouteHint}</p>
-                      <dl className="mt-3 space-y-1.5 text-navy-800">
+                    <div className="mt-4 rounded-xl border border-brand-500/25 bg-brand-500/10 p-4 text-sm">
+                      <p className="font-semibold text-fg">{t.bank.depositRoute}</p>
+                      <p className="mt-1 text-fg-muted">{t.bank.depositRouteHint}</p>
+                      <dl className="mt-3 space-y-1.5 text-fg">
                         {selected.routeName && (
                           <div className="flex justify-between gap-4">
-                            <dt className="text-gray-500">{t.bank.routeName}</dt>
+                            <dt className="text-fg-muted">{t.bank.routeName}</dt>
                             <dd className="font-semibold">{selected.routeName}</dd>
                           </div>
                         )}
                         {selected.routeIdentifier && (
                           <div className="flex justify-between gap-4">
-                            <dt className="text-gray-500">{t.bank.routeIdentifier}</dt>
+                            <dt className="text-fg-muted">{t.bank.routeIdentifier}</dt>
                             <dd className="tnum font-semibold">{selected.routeIdentifier}</dd>
                           </div>
                         )}
                         {selected.routeInstitution && (
                           <div className="flex justify-between gap-4">
-                            <dt className="text-gray-500">{t.bank.routeInstitution}</dt>
+                            <dt className="text-fg-muted">{t.bank.routeInstitution}</dt>
                             <dd className="font-semibold">{selected.routeInstitution}</dd>
                           </div>
                         )}
                       </dl>
                       {selected.routeInstructions && (
-                        <p className="mt-3 whitespace-pre-line text-gray-600">
+                        <p className="mt-3 whitespace-pre-line text-fg-muted">
                           {selected.routeInstructions}
                         </p>
                       )}
                     </div>
                   )}
 
-                  <p className="mt-6 text-[15px] leading-relaxed text-gray-600">
+                  <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.depositBody}
                   </p>
                   <DepositForm
@@ -206,12 +206,12 @@ export default async function TransfersPage({
           {/* ---- Withdraw ---- */}
           {tab === "withdraw" && (
             <>
-              <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+              <h2 className="text-lg font-semibold tracking-tight text-fg">
                 {t.bank.withdrawTitle}
               </h2>
               {!selected ? (
                 <>
-                  <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
+                  <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.chooseMethod}
                   </p>
                   <MethodGrid methods={methods} tab="withdraw" />
@@ -219,7 +219,7 @@ export default async function TransfersPage({
               ) : (
                 <>
                   <SelectedMethod label={selected.label} iconKey={selected.key} tab="withdraw" changeLabel={t.bank.chooseMethod} />
-                  <p className="mt-6 text-[15px] leading-relaxed text-gray-600">
+                  <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">
                     {t.bank.withdrawBody}
                   </p>
                   {securityWordMissing ? (
@@ -245,22 +245,22 @@ export default async function TransfersPage({
           {/* ---- Between own accounts ---- */}
           {tab === "between" && portfolio.savings && (
             <>
-              <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+              <h2 className="text-lg font-semibold tracking-tight text-fg">
                 {t.bank.transferTitle}
               </h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
+              <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">
                 {t.bank.transferBody}
               </p>
               <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-xl bg-navy-50/70 p-4">
-                  <p className="text-gray-500">{t.bank.checking}</p>
-                  <p className="tnum mt-1 text-lg font-semibold text-navy-900">
+                <div className="rounded-xl bg-ink-2 p-4">
+                  <p className="text-fg-muted">{t.bank.checking}</p>
+                  <p className="tnum mt-1 text-lg font-semibold text-fg">
                     {formatMoney(portfolio.primary.balanceCents, locale, portfolio.currency)}
                   </p>
                 </div>
-                <div className="rounded-xl bg-navy-50/70 p-4">
-                  <p className="text-gray-500">{t.bank.savings}</p>
-                  <p className="tnum mt-1 text-lg font-semibold text-navy-900">
+                <div className="rounded-xl bg-ink-2 p-4">
+                  <p className="text-fg-muted">{t.bank.savings}</p>
+                  <p className="tnum mt-1 text-lg font-semibold text-fg">
                     {formatMoney(portfolio.savings.balanceCents, locale, portfolio.currency)}
                   </p>
                 </div>
@@ -294,12 +294,12 @@ function MethodGrid({
         <Link
           key={m.key}
           href={`/transfers?tab=${tab}&method=${m.key}`}
-          className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 p-4 text-center transition hover:border-accent-500/50 hover:bg-navy-50/50"
+          className="flex flex-col items-center gap-2 rounded-xl border border-line p-4 text-center transition hover:border-accent-500/50 hover:bg-ink-2"
         >
-          <span className="text-navy-700">
+          <span className="text-fg-muted">
             <PaymentIcon icon={methodDef(m.key).icon} className="h-7 w-7" />
           </span>
-          <span className="text-[13px] font-semibold text-navy-800">{m.label}</span>
+          <span className="text-[13px] font-semibold text-fg">{m.label}</span>
         </Link>
       ))}
     </div>
@@ -318,14 +318,14 @@ function SelectedMethod({
   changeLabel: string;
 }) {
   return (
-    <div className="mt-4 flex items-center gap-3 rounded-xl bg-navy-50/70 p-4">
-      <span className="text-navy-700">
+    <div className="mt-4 flex items-center gap-3 rounded-xl bg-ink-2 p-4">
+      <span className="text-fg-muted">
         <PaymentIcon icon={methodDef(iconKey).icon} className="h-7 w-7" />
       </span>
-      <span className="font-semibold text-navy-900">{label}</span>
+      <span className="font-semibold text-fg">{label}</span>
       <Link
         href={`/transfers?tab=${tab}`}
-        className="ml-auto text-xs font-semibold text-accent-600 hover:text-accent-700"
+        className="ml-auto text-xs font-semibold text-brand-400 hover:text-brand-400"
       >
         {changeLabel}
       </Link>
@@ -335,11 +335,11 @@ function SelectedMethod({
 
 function SecurityWordPrompt({ t }: { t: { bank: { securityWordMissing: string; goToAccount: string } } }) {
   return (
-    <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
+    <div className="mt-6 rounded-xl border border-amber-400/25 bg-amber-400/10 p-5 text-sm text-amber-300">
       {t.bank.securityWordMissing}
       <Link
         href="/account/security"
-        className="mt-3 inline-block rounded-xl bg-navy-800 px-5 py-2 text-xs font-bold text-white transition hover:bg-navy-700"
+        className="mt-3 inline-block rounded-xl bg-brand-500 px-5 py-2 text-xs font-bold text-white transition hover:bg-brand-400"
       >
         {t.bank.goToAccount}
       </Link>

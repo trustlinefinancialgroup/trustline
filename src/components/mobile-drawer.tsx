@@ -40,7 +40,7 @@ export function MobileDrawer({
         type="button"
         onClick={() => setOpen(true)}
         aria-label={openLabel}
-        className="rounded-lg p-2 text-navy-100 transition hover:bg-white/10 lg:hidden"
+        className="rounded-xl p-2 text-fg-muted transition hover:bg-ink-2 lg:hidden"
       >
         <NavIcons.menu className="h-5 w-5" />
       </button>
@@ -51,15 +51,15 @@ export function MobileDrawer({
             type="button"
             aria-label={closeLabel}
             onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-navy-950/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
-          <div className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-navy-900 shadow-2xl">
+          <div className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col border-r border-line bg-ink-0 shadow-2xl">
             <div className="flex items-center justify-end px-3 py-3">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label={closeLabel}
-                className="rounded-lg p-2 text-navy-200 transition hover:bg-white/10"
+                className="rounded-xl p-2 text-fg-muted transition hover:bg-ink-2"
               >
                 <NavIcons.close className="h-5 w-5" />
               </button>

@@ -33,23 +33,23 @@ export default async function StatementsPage() {
       <Page className="max-w-2xl">
 
         {periods.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-navy-200 bg-white p-10 text-center text-sm text-gray-500">
+          <p className="rounded-2xl border border-dashed border-line bg-ink-1 p-10 text-center text-sm text-fg-muted">
             {t.statements.none}
           </p>
         ) : (
-          <ul className="divide-y divide-gray-100 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <ul className="divide-y divide-line-soft overflow-hidden rounded-2xl border border-line bg-ink-1 shadow-sm">
             {periods.map((p) => {
               const key = formatPeriod(p);
               return (
                 <li key={key}>
                   <Link
                     href={`/statements/${key}`}
-                    className="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-navy-50/60"
+                    className="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-ink-2"
                   >
-                    <span className="font-semibold text-navy-900">
+                    <span className="font-semibold text-fg">
                       {monthFmt.format(new Date(Date.UTC(p.year, p.month - 1, 1)))}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600">
+                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-400">
                       {t.statements.view}
                       <NavIcons.chevronRight className="h-4 w-4" />
                     </span>

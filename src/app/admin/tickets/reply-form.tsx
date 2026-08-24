@@ -17,21 +17,21 @@ export function AdminTicketReply({
   );
 
   return (
-    <form action={action} className="mt-6 border-t border-gray-100 pt-5">
+    <form action={action} className="mt-6 border-t border-line-soft pt-5">
       <input type="hidden" name="ticketId" value={ticketId} />
 
       {state?.error && (
-        <p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
+        <p className="mb-3 rounded-lg border border-neg/25 bg-neg/10 px-3.5 py-2.5 text-sm text-neg">
           {state.error}
         </p>
       )}
       {state?.ok && (
-        <p className="mb-3 rounded-lg border border-green-200 bg-green-50 px-3.5 py-2.5 text-sm text-green-700">
+        <p className="mb-3 rounded-lg border border-pos/25 bg-pos/10 px-3.5 py-2.5 text-sm text-pos">
           {state.ok}
         </p>
       )}
 
-      <label className="block text-[13px] font-semibold text-navy-800" htmlFor="admin-reply">
+      <label className="block text-[13px] font-semibold text-fg" htmlFor="admin-reply">
         Reply to the client
       </label>
       <textarea
@@ -40,18 +40,18 @@ export function AdminTicketReply({
         required
         rows={5}
         maxLength={4000}
-        className="mt-1.5 w-full resize-y rounded-lg border border-gray-300 px-3.5 py-2.5 text-[15px] text-navy-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+        className="mt-1.5 w-full resize-y rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
       />
 
       <div className="mt-3 flex flex-wrap items-center gap-3">
-        <label className="text-[13px] text-gray-600" htmlFor="admin-reply-status">
+        <label className="text-[13px] text-fg-muted" htmlFor="admin-reply-status">
           Set status
         </label>
         <select
           id="admin-reply-status"
           name="status"
           defaultValue={currentStatus === "RESOLVED" ? "RESOLVED" : "AWAITING_CLIENT"}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[13px] text-navy-900"
+          className="rounded-lg border border-line px-3 py-2 text-[13px] text-fg"
         >
           <option value="AWAITING_CLIENT">Awaiting client</option>
           <option value="OPEN">Open</option>
@@ -60,7 +60,7 @@ export function AdminTicketReply({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
+          className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400 disabled:opacity-60"
         >
           {pending ? "Sending…" : "Send reply"}
         </button>

@@ -79,7 +79,7 @@ export function MessageList({
   return (
     <div ref={scrollRef} className={`space-y-3 overflow-y-auto ${className}`}>
       {messages.length === 0 && (
-        <p className="py-8 text-center text-sm text-gray-500">{labels.empty}</p>
+        <p className="py-8 text-center text-sm text-fg-muted">{labels.empty}</p>
       )}
       {messages.map((m, i) => {
         const mine = m.sender === "VISITOR";
@@ -87,8 +87,8 @@ export function MessageList({
           <div key={`${m.at}-${i}`} className={mine ? "flex justify-end" : "flex justify-start"}>
             <div className={`max-w-[82%] ${mine ? "text-right" : "text-left"}`}>
               {!mine && (
-                <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-accent-600">
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent-500 text-[8px] text-white">
+                <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-brand-400">
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-brand-500 text-[8px] text-white">
                     T
                   </span>
                   {labels.agent}
@@ -97,20 +97,20 @@ export function MessageList({
               <div
                 className={`inline-block rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
                   mine
-                    ? "rounded-br-sm bg-accent-500 text-white"
-                    : "rounded-bl-sm border border-gray-200 bg-white text-navy-900"
+                    ? "rounded-br-sm bg-brand-500 text-white"
+                    : "rounded-bl-sm border border-line bg-ink-1 text-fg"
                 }`}
               >
                 <p className="whitespace-pre-line text-left">{m.body}</p>
               </div>
-              <p className="mt-1 text-[10px] text-gray-400">{timeOf(m.at, locale)}</p>
+              <p className="mt-1 text-[10px] text-fg-faint">{timeOf(m.at, locale)}</p>
             </div>
           </div>
         );
       })}
 
       {awaitingReply && (
-        <p className="flex items-center justify-center gap-2 pt-1 text-[11px] text-gray-500">
+        <p className="flex items-center justify-center gap-2 pt-1 text-[11px] text-fg-muted">
           <span className="flex gap-1">
             <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]" />
             <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
@@ -150,7 +150,7 @@ export function Composer({
         e.preventDefault();
         submit();
       }}
-      className="flex items-end gap-2 border-t border-gray-100 bg-white p-3"
+      className="flex items-end gap-2 border-t border-line-soft bg-ink-1 p-3"
     >
       <textarea
         ref={ref}
@@ -165,13 +165,13 @@ export function Composer({
           }
         }}
         placeholder={labels.placeholder}
-        className="max-h-28 flex-1 resize-none rounded-2xl border border-gray-300 px-4 py-2.5 text-sm text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+        className="max-h-28 flex-1 resize-none rounded-2xl border border-line px-4 py-2.5 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
       />
       <button
         type="submit"
         disabled={!value.trim()}
         aria-label={labels.send}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-500 text-white transition hover:bg-accent-600 disabled:opacity-40"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white transition hover:bg-brand-400 disabled:opacity-40"
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />

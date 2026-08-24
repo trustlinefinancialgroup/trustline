@@ -46,10 +46,10 @@ function Tile({ icon, label }: { icon: string; label: string }) {
   const draw = glyph(icon);
   return (
     <div className="flex w-[3.9rem] shrink-0 flex-col items-center gap-1.5 text-center sm:w-[4.5rem]">
-      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-white ring-1 ring-inset ring-white/10">
+      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink-1/[0.06] text-white ring-1 ring-inset ring-white/10">
         {draw({ className: "h-5 w-5" })}
       </span>
-      <span className="w-full truncate text-[11px] font-medium text-navy-300">{label}</span>
+      <span className="w-full truncate text-[11px] font-medium text-fg-faint">{label}</span>
     </div>
   );
 }
@@ -65,7 +65,7 @@ export default function DarkPreview() {
           <span
             key={label}
             className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
-              active ? "bg-accent-500/15 text-white" : "text-navy-300"
+              active ? "bg-brand-500/15 text-white" : "text-fg-faint"
             }`}
           >
             {glyph(icon)({
@@ -87,7 +87,7 @@ export default function DarkPreview() {
 
         <main className="mx-auto w-full max-w-6xl space-y-6 px-4 py-6 sm:px-6">
           <div className="rounded-2xl border border-white/[0.07] bg-[#0b1424] p-5 shadow-xl shadow-black/40 sm:p-7">
-            <p className="text-[13px] text-navy-300">Good evening, Preview</p>
+            <p className="text-[13px] text-fg-faint">Good evening, Preview</p>
             <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-400">
               {t.dashboard.totalBalance}
             </p>
@@ -124,7 +124,7 @@ export default function DarkPreview() {
                 key={label as string}
                 className="rounded-2xl border border-white/[0.07] bg-[#0b1424] p-4 sm:p-5"
               >
-                <p className="flex items-center gap-2 text-[12px] font-medium text-navy-300">
+                <p className="flex items-center gap-2 text-[12px] font-medium text-fg-faint">
                   <span className={`h-2 w-2 rounded-full ${dot}`} aria-hidden="true" />
                   {label as string}
                 </p>
@@ -153,9 +153,9 @@ export default function DarkPreview() {
                       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-400">
                         {kind as string}
                       </p>
-                      <p className="tnum mt-1 font-mono text-[12px] text-navy-500">{num as string}</p>
+                      <p className="tnum mt-1 font-mono text-[12px] text-fg-faint">{num as string}</p>
                     </div>
-                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/[0.06] text-navy-200">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink-1/[0.06] text-fg-muted">
                       {NavIcons.wallet({ className: "h-[18px] w-[18px]" })}
                     </span>
                   </div>

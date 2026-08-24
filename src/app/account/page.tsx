@@ -76,36 +76,36 @@ export default async function AccountPage() {
     <div className="space-y-6">
       <Card>
         <SectionHead title={t.account.detailsTitle} />
-        <dl className="mt-4 divide-y divide-gray-100">
+        <dl className="mt-4 divide-y divide-line-soft">
           {details.map((d) => (
             <div key={d.label} className="flex items-baseline justify-between gap-4 py-3">
-              <dt className="text-sm text-gray-500">{d.label}</dt>
-              <dd className="break-all text-right text-sm font-semibold text-navy-900">
+              <dt className="text-sm text-fg-muted">{d.label}</dt>
+              <dd className="break-all text-right text-sm font-semibold text-fg">
                 {d.value}
               </dd>
             </div>
           ))}
         </dl>
 
-        <h3 className="mt-7 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+        <h3 className="mt-7 text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-muted">
           {t.account.accountsTitle}
         </h3>
-        <dl className="mt-3 divide-y divide-gray-100">
+        <dl className="mt-3 divide-y divide-line-soft">
           <div className="flex items-baseline justify-between gap-4 py-3">
-            <dt className="text-sm text-gray-500">{t.account.checkingLabel}</dt>
-            <dd className="tnum font-mono text-sm font-semibold text-navy-900">
+            <dt className="text-sm text-fg-muted">{t.account.checkingLabel}</dt>
+            <dd className="tnum font-mono text-sm font-semibold text-fg">
               {checking?.number ?? t.account.notYet}
             </dd>
           </div>
           <div className="flex items-baseline justify-between gap-4 py-3">
-            <dt className="text-sm text-gray-500">{t.account.savingsLabel}</dt>
-            <dd className="tnum font-mono text-sm font-semibold text-navy-900">
+            <dt className="text-sm text-fg-muted">{t.account.savingsLabel}</dt>
+            <dd className="tnum font-mono text-sm font-semibold text-fg">
               {savings?.number ?? t.account.noSavings}
             </dd>
           </div>
         </dl>
 
-        <p className="mt-5 rounded-lg bg-navy-50/70 px-3.5 py-2.5 text-xs leading-relaxed text-navy-700">
+        <p className="mt-5 rounded-lg bg-ink-2 px-3.5 py-2.5 text-xs leading-relaxed text-fg-muted">
           {t.account.detailsNote}
         </p>
       </Card>
@@ -117,19 +117,19 @@ export default async function AccountPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="group rounded-2xl border border-gray-200/80 bg-white p-5 transition hover:border-accent-500/40 hover:shadow-md"
+              className="group rounded-2xl border border-line bg-ink-1 p-5 transition hover:border-brand-500/40 hover:shadow-md"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                 <Icon className="h-[18px] w-[18px]" />
               </span>
-              <p className="mt-3 text-sm font-semibold text-navy-900">{link.title}</p>
-              <p className="mt-1 text-[13px] leading-relaxed text-gray-500">{link.body}</p>
+              <p className="mt-3 text-sm font-semibold text-fg">{link.title}</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-fg-muted">{link.body}</p>
             </Link>
           );
         })}
       </div>
 
-      <p className="text-center text-[11px] text-gray-400">
+      <p className="text-center text-[11px] text-fg-faint">
         {t.common.brand} · {t.settingsLinks.version}
       </p>
     </div>

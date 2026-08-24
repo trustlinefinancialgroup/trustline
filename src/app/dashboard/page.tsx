@@ -118,7 +118,7 @@ export default async function DashboardPage({
         {banners.map((text) => (
           <p
             key={text}
-            className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800"
+            className="rounded-xl border border-pos/25 bg-pos/10 px-4 py-3 text-sm font-medium text-pos"
           >
             {text}
           </p>
@@ -134,11 +134,11 @@ export default async function DashboardPage({
           />
         )}
 
-        {/* Portfolio hero */}
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-4 shadow-lg shadow-navy-900/20 sm:p-6">
+        {/* Balance — the one thing on the page allowed to be loud */}
+        <section className="rise">
           <div>
             <div className="min-w-0">
-              <p className="text-[13px] text-navy-300">
+              <p className="text-[15px] text-fg-muted">
                 <Greeting
                   morning={fill(t.dashboard.greetingMorning, { name: user.firstName })}
                   afternoon={fill(t.dashboard.greetingAfternoon, { name: user.firstName })}
@@ -146,17 +146,15 @@ export default async function DashboardPage({
                   fallback={fill(t.dashboard.welcomeBack, { name: user.firstName })}
                 />
               </p>
-              <Eyebrow className="mt-2.5 text-navy-300">{t.dashboard.totalBalance}</Eyebrow>
-              <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <p className="tnum text-[2rem] font-semibold leading-none tracking-tight text-white sm:text-[2.5rem]">
+              <Eyebrow className="mt-4">{t.dashboard.totalBalance}</Eyebrow>
+              <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <p className="display text-[40px] font-semibold leading-none text-fg sm:text-[52px]">
                   {formatMoney(portfolio.totalCents, locale, portfolio.currency)}
                 </p>
                 {change !== null && (
                   <span
-                    className={`tnum inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold ${
-                      change >= 0
-                        ? "bg-emerald-400/15 text-emerald-300"
-                        : "bg-red-400/15 text-red-300"
+                    className={`tnum inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[12px] font-semibold ${
+                      change >= 0 ? "bg-pos/12 text-pos" : "bg-neg/12 text-neg"
                     }`}
                   >
                     {change >= 0 ? "+" : ""}
@@ -165,7 +163,7 @@ export default async function DashboardPage({
                 )}
               </div>
               {portfolio.totalPendingDepositCents > 0 && (
-                <p className="tnum mt-3 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-navy-100">
+                <p className="tnum mt-3 inline-block rounded-lg bg-ink-2 px-3 py-1 text-xs font-medium text-fg-muted">
                   {fill(t.bank.pendingNote, {
                     amount: formatMoney(
                       portfolio.totalPendingDepositCents,
@@ -180,14 +178,13 @@ export default async function DashboardPage({
           </div>
 
           {trend.hasShape && (
-            <div className="mt-3">
+            <div className="-mx-1 mt-3">
               <BalanceTrend data={trendData} label={t.dashboard.trendLabel} />
             </div>
           )}
+        </section>
 
-        </div>
-
-        <div className="no-scrollbar -mx-1 flex gap-1 overflow-x-auto px-1 sm:gap-3">
+        <div className="no-scrollbar rise -mx-1 flex gap-1 overflow-x-auto px-1 sm:gap-3" style={{ animationDelay: "80ms" }}>
           <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
           <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
           <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
@@ -200,21 +197,21 @@ export default async function DashboardPage({
 
         {trend.hasShape && (
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-gray-200/80 bg-white p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+            <div className="rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
+              <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
+                <span className="h-2 w-2 rounded-full bg-pos/100" aria-hidden="true" />
                 {t.dashboard.moneyIn}
               </p>
-              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-navy-900">
+              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
                 {formatMoney(trend.inCents, locale, portfolio.currency)}
               </p>
             </div>
-            <div className="rounded-2xl border border-gray-200/80 bg-white p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
-                <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+            <div className="rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
+              <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
+                <span className="h-2 w-2 rounded-full bg-neg/100" aria-hidden="true" />
                 {t.dashboard.moneyOut}
               </p>
-              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-navy-900">
+              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
                 {formatMoney(trend.outCents, locale, portfolio.currency)}
               </p>
             </div>
@@ -241,13 +238,13 @@ export default async function DashboardPage({
             {!portfolio.savings && savingsOffered && (
               <Link
                 href="/product/SAVINGS"
-                className="group flex min-h-[9.5rem] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 transition hover:border-accent-500/50 hover:bg-white"
+                className="group flex min-h-[9.5rem] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed border-line bg-ink-1/60 p-5 transition hover:border-accent-500/50 hover:bg-ink-1"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-50 text-accent-600">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500/12 text-brand-400">
                   <NavIcons.plus className="h-[18px] w-[18px]" />
                 </span>
-                <p className="text-sm font-semibold text-navy-900">{t.bank.openSavings}</p>
-                <p className="text-[13px] leading-relaxed text-gray-500">
+                <p className="text-sm font-semibold text-fg">{t.bank.openSavings}</p>
+                <p className="text-[13px] leading-relaxed text-fg-muted">
                   {t.accountsPage.openSavingsBody}
                 </p>
               </Link>
@@ -273,7 +270,7 @@ export default async function DashboardPage({
               <Link
                 key={v.def.key}
                 href={v.href}
-                className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
+                className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
               >
                 {v.render === "card" ? (
                   <BankCard
@@ -305,9 +302,9 @@ export default async function DashboardPage({
                   />
                 )}
                 <div className="mt-3 flex items-center gap-2 px-1">
-                  <p className="text-sm font-semibold text-navy-900">{v.title}</p>
+                  <p className="text-sm font-semibold text-fg">{v.title}</p>
                   {!v.value && (
-                    <span className="rounded-full bg-accent-50 px-2.5 py-0.5 text-[11px] font-semibold text-accent-700 transition group-hover:bg-accent-500 group-hover:text-white">
+                    <span className="rounded-full bg-brand-500/12 px-2.5 py-0.5 text-[11px] font-semibold text-brand-400 transition group-hover:bg-brand-500 group-hover:text-white">
                       {v.cta}
                     </span>
                   )}
@@ -335,8 +332,8 @@ export default async function DashboardPage({
           </div>
         </section>
 
-        <p className="flex items-center justify-end gap-2 text-right text-xs text-gray-400">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 text-[9px] font-bold text-gray-500">
+        <p className="flex items-center justify-end gap-2 text-right text-xs text-fg-faint">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-line text-[9px] font-bold text-fg-muted">
             FDIC
           </span>
           {t.bank.fdic}

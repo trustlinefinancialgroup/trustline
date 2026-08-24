@@ -17,8 +17,8 @@ export default async function MessagesPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-navy-800">Messages &amp; notifications</h1>
-      <p className="mt-1 text-sm text-gray-600">
+      <h1 className="text-xl font-bold text-fg">Messages &amp; notifications</h1>
+      <p className="mt-1 text-sm text-fg-muted">
         Send an email and/or an in-app notification to one client, everyone, or a
         specific group. Write in plain text — we wrap it in the Trustline branded
         template automatically.
@@ -31,12 +31,12 @@ export default async function MessagesPage() {
         }))}
       />
 
-      <h2 className="mt-12 text-sm font-bold uppercase tracking-wide text-gray-500">
+      <h2 className="mt-12 text-sm font-bold uppercase tracking-wide text-fg-muted">
         Recently sent
       </h2>
-      <div className="mt-3 overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-ink-1 shadow-sm">
         <table className="w-full text-left text-sm">
-          <thead className="bg-navy-50 text-xs uppercase tracking-wide text-navy-700">
+          <thead className="bg-ink-2 text-xs uppercase tracking-wide text-fg-muted">
             <tr>
               <th className="px-4 py-3">When</th>
               <th className="px-4 py-3">By</th>
@@ -46,16 +46,16 @@ export default async function MessagesPage() {
           <tbody>
             {recent.map((e) => (
               <tr key={e.id} className="border-t border-navy-50">
-                <td className="whitespace-nowrap px-4 py-3 text-gray-600">
+                <td className="whitespace-nowrap px-4 py-3 text-fg-muted">
                   {e.createdAt.toLocaleString()}
                 </td>
                 <td className="px-4 py-3 text-gray-700">{e.actorLabel}</td>
-                <td className="px-4 py-3 text-gray-600">{e.details}</td>
+                <td className="px-4 py-3 text-fg-muted">{e.details}</td>
               </tr>
             ))}
             {recent.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={3} className="px-4 py-8 text-center text-fg-muted">
                   Nothing sent yet.
                 </td>
               </tr>

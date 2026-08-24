@@ -86,14 +86,14 @@ export default async function SecurityPage() {
       {/* At-a-glance security posture */}
       <Card>
         <SectionHead title={t.account.securityStatusTitle} />
-        <dl className="mt-4 divide-y divide-gray-100">
+        <dl className="mt-4 divide-y divide-line-soft">
           {security.map((s) => (
             <div key={s.label} className="flex items-baseline justify-between gap-4 py-3">
-              <dt className="text-sm text-gray-500">{s.label}</dt>
-              <dd className="flex items-center gap-2 text-right text-sm font-semibold text-navy-900">
+              <dt className="text-sm text-fg-muted">{s.label}</dt>
+              <dd className="flex items-center gap-2 text-right text-sm font-semibold text-fg">
                 <span
                   className={`h-2 w-2 shrink-0 rounded-full ${
-                    s.good ? "bg-green-500" : "bg-amber-400"
+                    s.good ? "bg-pos/100" : "bg-amber-400"
                   }`}
                   aria-hidden="true"
                 />
@@ -108,27 +108,27 @@ export default async function SecurityPage() {
       <Card>
         <SectionHead title={t.securityPageApp.devicesTitle} subtitle={t.securityPageApp.devicesBody} />
         {sessions.length === 0 ? (
-          <p className="mt-4 rounded-xl bg-navy-50/70 px-4 py-3 text-[13px] text-navy-700">
+          <p className="mt-4 rounded-xl bg-ink-2 px-4 py-3 text-[13px] text-fg-muted">
             {t.securityPageApp.devicesNone}
           </p>
         ) : (
-          <ul className="mt-4 divide-y divide-gray-100">
+          <ul className="mt-4 divide-y divide-line-soft">
             {sessions.map((s) => {
               const current = s.id === session?.sid;
               return (
                 <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3.5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                       <NavIcons.device className="h-[18px] w-[18px]" />
                     </span>
                     <div className="min-w-0">
-                      <p className="flex items-center gap-2 text-sm font-semibold text-navy-900">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-fg">
                         {s.label}
                         {current && (
                           <StatusChip tone="ok">{t.securityPageApp.thisDevice}</StatusChip>
                         )}
                       </p>
-                      <p className="tnum mt-0.5 text-[12px] text-gray-500">
+                      <p className="tnum mt-0.5 text-[12px] text-fg-muted">
                         {fill(t.securityPageApp.lastActive, { when: stampFmt.format(s.lastSeenAt) })}
                       </p>
                     </div>
@@ -138,7 +138,7 @@ export default async function SecurityPage() {
                       <input type="hidden" name="sessionId" value={s.id} />
                       <button
                         type="submit"
-                        className="rounded-xl border border-gray-200 px-4 py-2 text-[12px] font-semibold text-navy-800 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+                        className="rounded-xl border border-line px-4 py-2 text-[12px] font-semibold text-fg transition hover:border-red-300 hover:bg-neg/10 hover:text-neg"
                       >
                         {t.securityPageApp.endSession}
                       </button>
@@ -149,7 +149,7 @@ export default async function SecurityPage() {
             })}
           </ul>
         )}
-        <p className="mt-3 text-[11px] text-gray-400">{t.securityPageApp.devicesNote}</p>
+        <p className="mt-3 text-[11px] text-fg-faint">{t.securityPageApp.devicesNote}</p>
       </Card>
 
       {/* Password, security word, two-factor */}
@@ -193,11 +193,11 @@ export default async function SecurityPage() {
       {/* Account history, derived from the audit log */}
       <section>
         <SectionHead title={t.account.historyTitle} subtitle={t.account.historyBody} />
-        <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+        <div className="mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1">
           {timeline.length === 0 ? (
-            <p className="px-6 py-10 text-center text-sm text-gray-500">{t.account.historyEmpty}</p>
+            <p className="px-6 py-10 text-center text-sm text-fg-muted">{t.account.historyEmpty}</p>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-line-soft">
               {timeline.map((e) => (
                 <li
                   key={e.id}
@@ -205,21 +205,21 @@ export default async function SecurityPage() {
                 >
                   <div className="flex items-center gap-3">
                     <span
-                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500"
+                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"
                       aria-hidden="true"
                     />
-                    <span className="text-sm font-medium text-navy-900">
+                    <span className="text-sm font-medium text-fg">
                       {t.account.events[e.action] ?? e.action}
                     </span>
                     <span
                       className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                        e.byAdmin ? "bg-navy-100 text-navy-700" : "bg-gray-100 text-gray-600"
+                        e.byAdmin ? "bg-ink-3 text-fg-muted" : "bg-ink-2 text-fg-muted"
                       }`}
                     >
                       {e.byAdmin ? t.account.byTeam : t.account.byYou}
                     </span>
                   </div>
-                  <time className="tnum text-xs text-gray-500">{stampFmt.format(e.at)}</time>
+                  <time className="tnum text-xs text-fg-muted">{stampFmt.format(e.at)}</time>
                 </li>
               ))}
             </ul>

@@ -64,7 +64,7 @@ export default async function AccountsPage() {
                   href={`/accounts/${account.id}`}
                   showFullNumber
                 />
-                <p className="px-1 text-[11px] text-gray-400">
+                <p className="px-1 text-[11px] text-fg-faint">
                   {t.accountsPage.opened} {dateFmt.format(account.createdAt)}
                 </p>
               </div>
@@ -73,13 +73,13 @@ export default async function AccountsPage() {
             {!portfolio.savings && savingsOffered && (
               <Link
                 href="/product/SAVINGS"
-                className="group flex min-h-[9.5rem] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 transition hover:border-accent-500/50 hover:bg-white"
+                className="group flex min-h-[9.5rem] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed border-line bg-ink-1/60 p-5 transition hover:border-accent-500/50 hover:bg-ink-1"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-50 text-accent-600">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500/12 text-brand-400">
                   <NavIcons.plus className="h-[18px] w-[18px]" />
                 </span>
-                <p className="text-sm font-semibold text-navy-900">{t.bank.openSavings}</p>
-                <p className="text-[13px] leading-relaxed text-gray-500">
+                <p className="text-sm font-semibold text-fg">{t.bank.openSavings}</p>
+                <p className="text-[13px] leading-relaxed text-fg-muted">
                   {t.accountsPage.openSavingsBody}
                 </p>
               </Link>
@@ -102,28 +102,28 @@ export default async function AccountsPage() {
                   <Link
                     key={app.id}
                     href={`/cards?card=${app.id}`}
-                    className="group block rounded-2xl border border-gray-200/80 bg-white p-5 transition hover:border-accent-500/40 hover:shadow-md"
+                    className="group block rounded-2xl border border-line bg-ink-1 p-5 transition hover:border-brand-500/40 hover:shadow-md"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <Eyebrow className="text-gray-500">
+                        <Eyebrow className="text-fg-muted">
                           {titles.get(def.key) ?? def.key}
                         </Eyebrow>
                         {app.cardNumber && (
-                          <p className="tnum mt-1 font-mono text-[12px] text-gray-400">
+                          <p className="tnum mt-1 font-mono text-[12px] text-fg-faint">
                             ···· {app.cardNumber.slice(-4)}
                           </p>
                         )}
                       </div>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                         <Icons.card className="h-[18px] w-[18px]" />
                       </span>
                     </div>
-                    <p className="tnum mt-4 text-2xl font-semibold tracking-tight text-navy-900">
+                    <p className="tnum mt-4 text-2xl font-semibold tracking-tight text-fg">
                       {formatMoney(app.outstandingCents ?? 0, locale, user.currency)}
                     </p>
                     {available !== null && (
-                      <p className="tnum mt-1 text-[12px] text-gray-500">
+                      <p className="tnum mt-1 text-[12px] text-fg-muted">
                         {t.products.availableCredit}:{" "}
                         {formatMoney(available, locale, user.currency)}
                       </p>
@@ -155,21 +155,21 @@ export default async function AccountsPage() {
                 <Link
                   key={app.id}
                   href={`/product/${def.key}`}
-                  className="group block rounded-2xl border border-gray-200/80 bg-white p-5 transition hover:border-accent-500/40 hover:shadow-md"
+                  className="group block rounded-2xl border border-line bg-ink-1 p-5 transition hover:border-brand-500/40 hover:shadow-md"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <Eyebrow className="text-gray-500">
+                    <Eyebrow className="text-fg-muted">
                       {titles.get(def.key) ?? def.key}
                     </Eyebrow>
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                       <Icons.lending className="h-[18px] w-[18px]" />
                     </span>
                   </div>
-                  <p className="tnum mt-4 text-2xl font-semibold tracking-tight text-navy-900">
+                  <p className="tnum mt-4 text-2xl font-semibold tracking-tight text-fg">
                     {formatMoney(app.outstandingCents ?? 0, locale, user.currency)}
                   </p>
                   {app.interestRate && (
-                    <p className="tnum mt-1 text-[12px] text-gray-500">{app.interestRate}</p>
+                    <p className="tnum mt-1 text-[12px] text-fg-muted">{app.interestRate}</p>
                   )}
                 </Link>
               ))}

@@ -23,7 +23,7 @@ export default async function LoginPage() {
             <h2 className="text-3xl font-semibold leading-snug tracking-tight text-white">
               {t.auth.loginPanelTitle}
             </h2>
-            <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-navy-200">
+            <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-fg-muted">
               {t.auth.loginPanelBody}
             </p>
           </div>
@@ -39,10 +39,10 @@ export default async function LoginPage() {
           <div className="mb-10 lg:hidden">
             <Logo theme="light" />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-navy-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-fg">
             {t.auth.loginTitle}
           </h1>
-          <p className="mt-2 text-[15px] text-gray-600">{t.auth.loginSubtitle}</p>
+          <p className="mt-2 text-[15px] text-fg-muted">{t.auth.loginSubtitle}</p>
           <LoginForm
             labels={{
               email: t.auth.email,
@@ -54,14 +54,14 @@ export default async function LoginPage() {
           <p className="mt-4 text-center text-sm">
             <Link
               href="/forgot-password"
-              className="font-semibold text-accent-600 hover:text-accent-700"
+              className="font-semibold text-brand-400 hover:text-brand-400"
             >
               {t.reset.forgotLink}
             </Link>
           </p>
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-fg-muted">
             {t.auth.newTo}{" "}
-            <Link href="/signup" className="font-semibold text-accent-600 hover:text-accent-700">
+            <Link href="/signup" className="font-semibold text-brand-400 hover:text-brand-400">
               {t.common.openAccount}
             </Link>
           </p>

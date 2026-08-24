@@ -73,7 +73,7 @@ export default async function LoansPage() {
         lendingProducts.length > 0 ? (
           <Link
             href={`/product/${lendingProducts[0].key}`}
-            className="hidden rounded-xl bg-accent-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-accent-600 sm:inline-flex"
+            className="hidden rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-brand-400 sm:inline-flex"
           >
             {t.products.apply}
           </Link>
@@ -92,15 +92,15 @@ export default async function LoansPage() {
                     <Link
                       key={d.key}
                       href={`/product/${d.key}`}
-                      className="group rounded-2xl border border-gray-200/80 bg-white p-5 transition hover:border-accent-500/40 hover:shadow-md"
+                      className="group rounded-2xl border border-line bg-ink-1 p-5 transition hover:border-brand-500/40 hover:shadow-md"
                     >
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-50 text-navy-600">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-2 text-fg-muted">
                         <Icons.lending className="h-5 w-5" />
                       </span>
-                      <p className="mt-3 text-sm font-semibold text-navy-900">
+                      <p className="mt-3 text-sm font-semibold text-fg">
                         {titles.get(d.key) ?? d.key}
                       </p>
-                      <span className="mt-2 inline-block rounded-full bg-accent-50 px-2.5 py-0.5 text-[11px] font-semibold text-accent-700 transition group-hover:bg-accent-500 group-hover:text-white">
+                      <span className="mt-2 inline-block rounded-full bg-brand-500/12 px-2.5 py-0.5 text-[11px] font-semibold text-brand-400 transition group-hover:bg-brand-500 group-hover:text-white">
                         {t.products.apply}
                       </span>
                     </Link>
@@ -131,17 +131,17 @@ export default async function LoansPage() {
                   <Card key={app.id}>
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <Eyebrow className="text-gray-500">
+                        <Eyebrow className="text-fg-muted">
                           {titles.get(def.key) ?? def.key}
                         </Eyebrow>
-                        <p className="tnum mt-1.5 text-2xl font-semibold tracking-tight text-navy-900">
+                        <p className="tnum mt-1.5 text-2xl font-semibold tracking-tight text-fg">
                           {formatMoney(owed, locale, user.currency)}
                         </p>
-                        <p className="mt-0.5 text-[12px] text-gray-500">
+                        <p className="mt-0.5 text-[12px] text-fg-muted">
                           {revolving ? t.loansPage.drawn : t.loansPage.balanceOwed}
                         </p>
                       </div>
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-2 text-fg-muted">
                         <Icons.lending className="h-5 w-5" />
                       </span>
                     </div>
@@ -150,7 +150,7 @@ export default async function LoansPage() {
                     {progress !== null && (
                       <div className="mt-4">
                         <ProgressBar percent={progress} tone="ok" />
-                        <p className="tnum mt-2 text-[12px] text-gray-500">
+                        <p className="tnum mt-2 text-[12px] text-fg-muted">
                           {fill(t.loansPage.paidOf, {
                             percent: String(Math.round(progress)),
                             total: formatMoney(principal, locale, user.currency),
@@ -159,21 +159,21 @@ export default async function LoansPage() {
                       </div>
                     )}
 
-                    <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-gray-100 pt-4 text-[13px]">
+                    <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-line-soft pt-4 text-[13px]">
                       {app.interestRate && (
                         <div>
-                          <dt className="text-gray-500">{t.products.interestRateLabel}</dt>
-                          <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                          <dt className="text-fg-muted">{t.products.interestRateLabel}</dt>
+                          <dd className="tnum mt-0.5 font-semibold text-fg">
                             {app.interestRate}
                           </dd>
                         </div>
                       )}
                       {app.dueDate && (
                         <div>
-                          <dt className="text-gray-500">{t.products.dueDateLabel}</dt>
+                          <dt className="text-fg-muted">{t.products.dueDateLabel}</dt>
                           <dd
                             className={`tnum mt-0.5 font-semibold ${
-                              overdue ? "text-red-600" : "text-navy-900"
+                              overdue ? "text-red-600" : "text-fg"
                             }`}
                           >
                             {dateFmt.format(app.dueDate)}
@@ -182,24 +182,24 @@ export default async function LoansPage() {
                       )}
                       {monthly !== null && (
                         <div>
-                          <dt className="text-gray-500">{t.loansPage.monthlyPayment}</dt>
-                          <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                          <dt className="text-fg-muted">{t.loansPage.monthlyPayment}</dt>
+                          <dd className="tnum mt-0.5 font-semibold text-fg">
                             {formatMoney(monthly, locale, user.currency)}
                           </dd>
                         </div>
                       )}
                       {app.termMonths && (
                         <div>
-                          <dt className="text-gray-500">{t.loansPage.term}</dt>
-                          <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                          <dt className="text-fg-muted">{t.loansPage.term}</dt>
+                          <dd className="tnum mt-0.5 font-semibold text-fg">
                             {fill(t.loansPage.months, { count: String(app.termMonths) })}
                           </dd>
                         </div>
                       )}
                       {available !== null && (
                         <div>
-                          <dt className="text-gray-500">{t.products.availableCredit}</dt>
-                          <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                          <dt className="text-fg-muted">{t.products.availableCredit}</dt>
+                          <dd className="tnum mt-0.5 font-semibold text-fg">
                             {formatMoney(available, locale, user.currency)}
                           </dd>
                         </div>
@@ -207,7 +207,7 @@ export default async function LoansPage() {
                     </dl>
 
                     {overdue && (
-                      <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-[13px] font-medium text-red-800">
+                      <p className="mt-4 rounded-xl border border-neg/25 bg-neg/10 px-4 py-2.5 text-[13px] font-medium text-neg">
                         {t.loansPage.overdue}
                       </p>
                     )}
@@ -215,7 +215,7 @@ export default async function LoansPage() {
                     <div className="mt-5 flex flex-wrap gap-2">
                       <Link
                         href={`/product/${def.key}`}
-                        className="rounded-xl bg-navy-800 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-navy-700"
+                        className="rounded-xl bg-brand-500 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand-400"
                       >
                         {t.loansPage.manage}
                       </Link>
@@ -231,20 +231,20 @@ export default async function LoansPage() {
         {lendingApplications.length > 0 && (
           <section>
             <SectionHead title={t.loansPage.applications} />
-            <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+            <div className="mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1">
               {lendingApplications.map((a, i) => (
                 <Link
                   key={a.id}
                   href={`/product/${a.productKey}`}
-                  className={`flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-navy-50/50 ${
-                    i > 0 ? "border-t border-gray-100" : ""
+                  className={`flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-ink-2 ${
+                    i > 0 ? "border-t border-line-soft" : ""
                   }`}
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-[14px] font-semibold text-navy-900">
+                    <p className="truncate text-[14px] font-semibold text-fg">
                       {titles.get(a.productKey) ?? a.productKey}
                     </p>
-                    <p className="tnum mt-0.5 text-[12px] text-gray-500">
+                    <p className="tnum mt-0.5 text-[12px] text-fg-muted">
                       {dateFmt.format(a.createdAt)}
                       {a.termMonths
                         ? ` · ${fill(t.loansPage.months, { count: String(a.termMonths) })}`
@@ -253,7 +253,7 @@ export default async function LoansPage() {
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
                     {(a.approvedAmountCents ?? a.amountCents) !== null && (
-                      <span className="tnum text-[14px] font-semibold text-navy-900">
+                      <span className="tnum text-[14px] font-semibold text-fg">
                         {formatMoney(
                           a.approvedAmountCents ?? a.amountCents ?? 0,
                           locale,

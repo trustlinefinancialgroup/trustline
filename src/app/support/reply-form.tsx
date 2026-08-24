@@ -17,7 +17,7 @@ export function TicketReplyForm({
     <form action={action} className="mt-5 space-y-3">
       <input type="hidden" name="ticketId" value={ticketId} />
       {state?.error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
+        <p className="rounded-lg border border-neg/25 bg-neg/10 px-3.5 py-2.5 text-sm text-neg">
           {state.error}
         </p>
       )}
@@ -27,12 +27,12 @@ export function TicketReplyForm({
         rows={4}
         maxLength={4000}
         placeholder={labels.placeholder}
-        className="w-full resize-y rounded-lg border border-gray-300 px-3.5 py-2.5 text-[15px] text-navy-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+        className="w-full resize-y rounded-lg border border-line px-3.5 py-2.5 text-[15px] text-fg transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
       />
       <button
         type="submit"
         disabled={pending}
-        className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
+        className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400 disabled:opacity-60"
       >
         {pending ? labels.sending : labels.send}
       </button>

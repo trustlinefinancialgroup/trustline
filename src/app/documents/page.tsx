@@ -93,7 +93,7 @@ export default async function DocumentsPage() {
               href="/statements"
               linkLabel={t.dashboard.viewAll}
             />
-            <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+            <div className="mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1">
               {periods.slice(0, 12).map((p, i) => {
                 const key = formatPeriod(p);
                 const label = monthFmt.format(new Date(Date.UTC(p.year, p.month - 1, 1)));
@@ -101,28 +101,28 @@ export default async function DocumentsPage() {
                   <div
                     key={key}
                     className={`flex flex-wrap items-center justify-between gap-3 px-5 py-4 ${
-                      i > 0 ? "border-t border-gray-100" : ""
+                      i > 0 ? "border-t border-line-soft" : ""
                     }`}
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                         <Icons.statement className="h-[18px] w-[18px]" />
                       </span>
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-navy-900">{label}</p>
-                        <p className="text-[12px] text-gray-500">{t.documentsPage.kindStatement}</p>
+                        <p className="truncate text-sm font-semibold text-fg">{label}</p>
+                        <p className="text-[12px] text-fg-muted">{t.documentsPage.kindStatement}</p>
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
                       <Link
                         href={`/statements/${key}`}
-                        className="rounded-xl border border-gray-200 px-4 py-1.5 text-[12px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+                        className="rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                       >
                         {t.documentsPage.view}
                       </Link>
                       <a
                         href={`/api/statements/${key}`}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 px-4 py-1.5 text-[12px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                       >
                         <NavIcons.download className="h-3.5 w-3.5" />
                         CSV
@@ -144,29 +144,29 @@ export default async function DocumentsPage() {
               subtitle={t.documentsPage.identityBody}
             />
             {identityPurged ? (
-              <p className="mt-4 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-[13px] leading-relaxed text-gray-600">
+              <p className="mt-4 rounded-2xl border border-line bg-ink-1 px-5 py-4 text-[13px] leading-relaxed text-fg-muted">
                 {t.documentsPage.identityDeleted}
               </p>
             ) : (
-              <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+              <div className="mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1">
                 {identity.map((doc, i) => (
                   <div
                     key={doc.id}
                     className={`flex flex-wrap items-center justify-between gap-3 px-5 py-4 ${
-                      i > 0 ? "border-t border-gray-100" : ""
+                      i > 0 ? "border-t border-line-soft" : ""
                     }`}
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                         <Icons.shield className="h-[18px] w-[18px]" />
                       </span>
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-navy-900">
+                        <p className="truncate text-sm font-semibold text-fg">
                           {t.onboarding.docTypes[
                             doc.docType as keyof typeof t.onboarding.docTypes
                           ] ?? doc.docType}
                         </p>
-                        <p className="tnum truncate text-[12px] text-gray-500">
+                        <p className="tnum truncate text-[12px] text-fg-muted">
                           {sideLabel[doc.side] ?? doc.side} · {dateFmt.format(doc.uploadedAt)} ·{" "}
                           {fileSize(doc.sizeBytes)}
                         </p>
@@ -174,7 +174,7 @@ export default async function DocumentsPage() {
                     </div>
                     <a
                       href={`/api/files/kyc/${doc.storedName}`}
-                      className="shrink-0 rounded-xl border border-gray-200 px-4 py-1.5 text-[12px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+                      className="shrink-0 rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                     >
                       {t.documentsPage.open}
                     </a>
@@ -182,7 +182,7 @@ export default async function DocumentsPage() {
                 ))}
               </div>
             )}
-            <p className="mt-2 px-1 text-[11px] text-gray-400">{t.documentsPage.identityNote}</p>
+            <p className="mt-2 px-1 text-[11px] text-fg-faint">{t.documentsPage.identityNote}</p>
           </section>
         )}
 
@@ -193,23 +193,23 @@ export default async function DocumentsPage() {
               title={t.documentsPage.uploads}
               subtitle={t.documentsPage.uploadsBody}
             />
-            <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+            <div className="mt-4 overflow-hidden rounded-2xl border border-line bg-ink-1">
               {uploads.map((doc, i) => (
                 <div
                   key={doc.id}
                   className={`flex flex-wrap items-center justify-between gap-3 px-5 py-4 ${
-                    i > 0 ? "border-t border-gray-100" : ""
+                    i > 0 ? "border-t border-line-soft" : ""
                   }`}
                 >
                   <div className="flex min-w-0 items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                       <NavIcons.list className="h-[18px] w-[18px]" />
                     </span>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-navy-900">
+                      <p className="truncate text-sm font-semibold text-fg">
                         {t.docs.names[doc.docKey as keyof typeof t.docs.names] ?? doc.fileName}
                       </p>
-                      <p className="tnum truncate text-[12px] text-gray-500">
+                      <p className="tnum truncate text-[12px] text-fg-muted">
                         {titles.get(doc.application.productKey) ?? doc.application.productKey} ·{" "}
                         {dateFmt.format(doc.uploadedAt)} · {fileSize(doc.sizeBytes)}
                       </p>
@@ -217,7 +217,7 @@ export default async function DocumentsPage() {
                   </div>
                   <a
                     href={`/api/files/application/${doc.storedName}`}
-                    className="shrink-0 rounded-xl border border-gray-200 px-4 py-1.5 text-[12px] font-semibold text-navy-800 transition hover:border-accent-500/40"
+                    className="shrink-0 rounded-xl border border-line px-4 py-1.5 text-[12px] font-semibold text-fg transition hover:border-brand-500/40"
                   >
                     {t.documentsPage.open}
                   </a>
@@ -235,13 +235,13 @@ export default async function DocumentsPage() {
               <Link
                 key={a.href}
                 href={a.href}
-                className="flex items-center gap-3 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 transition hover:border-accent-500/40 hover:shadow-sm"
+                className="flex items-center gap-3 rounded-2xl border border-line bg-ink-1 px-5 py-4 transition hover:border-brand-500/40 hover:shadow-sm"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-navy-600">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-2 text-fg-muted">
                   <Icons.shield className="h-[18px] w-[18px]" />
                 </span>
-                <span className="text-sm font-semibold text-navy-900">{a.label}</span>
-                <NavIcons.chevronRight className="ml-auto h-4 w-4 text-gray-300" />
+                <span className="text-sm font-semibold text-fg">{a.label}</span>
+                <NavIcons.chevronRight className="ml-auto h-4 w-4 text-fg-faint" />
               </Link>
             ))}
           </div>

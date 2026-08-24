@@ -70,19 +70,19 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
                   key={m.id}
                   className={`rounded-xl border px-4 py-3.5 ${
                     fromTeam
-                      ? "border-accent-100 bg-accent-50/50"
-                      : "border-gray-200/80 bg-white"
+                      ? "border-brand-500/25 bg-brand-500/12/50"
+                      : "border-line bg-ink-1"
                   }`}
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <p className="text-[13px] font-semibold text-navy-900">
+                    <p className="text-[13px] font-semibold text-fg">
                       {fromTeam ? t.tickets.teamName : t.support.you}
                     </p>
-                    <time className="tnum text-[11px] text-gray-500">
+                    <time className="tnum text-[11px] text-fg-muted">
                       {stampFmt.format(m.createdAt)}
                     </time>
                   </div>
-                  <p className="mt-1.5 whitespace-pre-line text-[14px] leading-relaxed text-gray-700">
+                  <p className="mt-1.5 whitespace-pre-line text-[14px] leading-relaxed text-fg-muted">
                     {m.body}
                   </p>
                 </li>
@@ -91,7 +91,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
           </ul>
 
           {ticket.status === "RESOLVED" ? (
-            <p className="mt-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-[13px] text-green-800">
+            <p className="mt-5 rounded-xl border border-pos/25 bg-pos/10 px-4 py-3 text-[13px] text-pos">
               {t.tickets.resolvedNote}
             </p>
           ) : null}
@@ -111,7 +111,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
               <input type="hidden" name="ticketId" value={ticket.id} />
               <button
                 type="submit"
-                className="text-[13px] font-semibold text-gray-500 underline-offset-2 transition hover:text-navy-800 hover:underline"
+                className="text-[13px] font-semibold text-fg-muted underline-offset-2 transition hover:text-fg hover:underline"
               >
                 {t.tickets.markResolved}
               </button>

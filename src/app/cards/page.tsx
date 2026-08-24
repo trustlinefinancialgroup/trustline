@@ -70,7 +70,7 @@ export default async function CardsPage({
               cardProduct ? (
                 <Link
                   href={`/product/${cardProduct.key}`}
-                  className="rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                  className="rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
                 >
                   {t.products.apply}
                 </Link>
@@ -114,8 +114,8 @@ export default async function CardsPage({
                 href={`/cards?card=${c.id}`}
                 className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-semibold transition ${
                   c.id === app.id
-                    ? "border-navy-800 bg-navy-800 text-white"
-                    : "border-gray-200 bg-white text-navy-800 hover:border-accent-500/40"
+                    ? "border-navy-800 bg-brand-500 text-white"
+                    : "border-line bg-ink-1 text-fg hover:border-brand-500/40"
                 }`}
               >
                 {labels.get(d.key)?.title ?? d.key}
@@ -168,8 +168,8 @@ export default async function CardsPage({
                   type="submit"
                   className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition ${
                     app.frozen
-                      ? "bg-accent-500 text-white hover:bg-accent-600"
-                      : "border border-gray-200 bg-white text-navy-800 hover:border-accent-500/40"
+                      ? "bg-brand-500 text-white hover:bg-brand-400"
+                      : "border border-line bg-ink-1 text-fg hover:border-brand-500/40"
                   }`}
                 >
                   <NavIcons.snowflake className="h-4 w-4" />
@@ -180,7 +180,7 @@ export default async function CardsPage({
             </div>
 
             {app.frozen && (
-              <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-800">
+              <p className="rounded-xl border border-neg/25 bg-neg/10 px-4 py-3 text-[13px] text-neg">
                 {t.products.frozenNote}
               </p>
             )}
@@ -189,23 +189,23 @@ export default async function CardsPage({
           {/* Balance, limits and controls */}
           <div className="space-y-5">
             <Card>
-              <Eyebrow className="text-gray-500">{t.products.outstandingLabel}</Eyebrow>
-              <p className="tnum mt-1.5 text-3xl font-semibold tracking-tight text-navy-900">
+              <Eyebrow className="text-fg-muted">{t.products.outstandingLabel}</Eyebrow>
+              <p className="tnum mt-1.5 text-3xl font-semibold tracking-tight text-fg">
                 {formatMoney(app.outstandingCents ?? 0, locale, user.currency)}
               </p>
 
               {available !== null && (
                 <>
                   <div className="mt-4 flex items-center justify-between text-[13px]">
-                    <span className="text-gray-500">{t.products.availableCredit}</span>
-                    <span className="tnum font-semibold text-navy-900">
+                    <span className="text-fg-muted">{t.products.availableCredit}</span>
+                    <span className="tnum font-semibold text-fg">
                       {formatMoney(available, locale, user.currency)}
                     </span>
                   </div>
                   {usedPercent !== null && (
                     <div className="mt-2">
                       <ProgressBar percent={usedPercent} tone={usedPercent > 80 ? "pending" : "info"} />
-                      <p className="tnum mt-2 text-[12px] text-gray-500">
+                      <p className="tnum mt-2 text-[12px] text-fg-muted">
                         {formatMoney(app.approvedAmountCents ?? 0, locale, user.currency)}{" "}
                         {t.products.creditLimitLabel.toLowerCase()}
                       </p>
@@ -214,39 +214,39 @@ export default async function CardsPage({
                 </>
               )}
 
-              <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-gray-100 pt-5 text-[13px]">
+              <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-line-soft pt-5 text-[13px]">
                 {app.interestRate && (
                   <div>
-                    <dt className="text-gray-500">{t.products.interestRateLabel}</dt>
-                    <dd className="tnum mt-0.5 font-semibold text-navy-900">{app.interestRate}</dd>
+                    <dt className="text-fg-muted">{t.products.interestRateLabel}</dt>
+                    <dd className="tnum mt-0.5 font-semibold text-fg">{app.interestRate}</dd>
                   </div>
                 )}
                 {app.dueDate && (
                   <div>
-                    <dt className="text-gray-500">{t.products.dueDateLabel}</dt>
-                    <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                    <dt className="text-fg-muted">{t.products.dueDateLabel}</dt>
+                    <dd className="tnum mt-0.5 font-semibold text-fg">
                       {dateFmt.format(app.dueDate)}
                     </dd>
                   </div>
                 )}
                 <div>
-                  <dt className="text-gray-500">{t.cardsPage.dailyLimit}</dt>
-                  <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                  <dt className="text-fg-muted">{t.cardsPage.dailyLimit}</dt>
+                  <dd className="tnum mt-0.5 font-semibold text-fg">
                     {app.dailyLimitCents !== null && app.dailyLimitCents !== undefined
                       ? formatMoney(app.dailyLimitCents, locale, user.currency)
                       : t.cardsPage.noLimit}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500">{t.cardsPage.monthlyLimit}</dt>
-                  <dd className="tnum mt-0.5 font-semibold text-navy-900">
+                  <dt className="text-fg-muted">{t.cardsPage.monthlyLimit}</dt>
+                  <dd className="tnum mt-0.5 font-semibold text-fg">
                     {app.monthlyLimitCents !== null && app.monthlyLimitCents !== undefined
                       ? formatMoney(app.monthlyLimitCents, locale, user.currency)
                       : t.cardsPage.noLimit}
                   </dd>
                 </div>
               </dl>
-              <p className="mt-3 text-[11px] text-gray-400">{t.cardsPage.limitsNote}</p>
+              <p className="mt-3 text-[11px] text-fg-faint">{t.cardsPage.limitsNote}</p>
             </Card>
 
             {/* Client-controlled switches */}
@@ -319,21 +319,21 @@ function ControlRow({
   return (
     <form
       action={updateCardControlAction}
-      className="flex items-center justify-between gap-4 rounded-xl border border-gray-200/80 px-4 py-3"
+      className="flex items-center justify-between gap-4 rounded-xl border border-line px-4 py-3"
     >
       <input type="hidden" name="appId" value={appId} />
       <input type="hidden" name="control" value={control} />
       <div className="min-w-0">
-        <p className="text-[13px] font-semibold text-navy-900">{label}</p>
-        <p className="mt-0.5 text-[12px] text-gray-500">{hint}</p>
+        <p className="text-[13px] font-semibold text-fg">{label}</p>
+        <p className="mt-0.5 text-[12px] text-fg-muted">{hint}</p>
       </div>
       <button
         type="submit"
         aria-pressed={on}
         className={`shrink-0 rounded-xl px-4 py-1.5 text-[12px] font-bold uppercase tracking-wide transition ${
           on
-            ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 hover:bg-emerald-100"
-            : "bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-500/15 hover:bg-gray-200"
+            ? "bg-pos/10 text-pos ring-1 ring-inset ring-emerald-600/20 hover:bg-emerald-100"
+            : "bg-ink-2 text-fg-muted ring-1 ring-inset ring-gray-500/15 hover:bg-ink-3"
         }`}
       >
         {on ? onLabel : offLabel}

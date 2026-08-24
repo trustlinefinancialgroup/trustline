@@ -22,7 +22,7 @@ export type ChatLabels = ThreadLabels & {
 };
 
 const field =
-  "mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20";
+  "mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 const OPEN_KEY = "tl_chat_open";
 const SEEN_KEY = "tl_chat_seen";
@@ -109,17 +109,17 @@ export function ChatWidget({
       {open && (
         <div
           className="mb-3 flex h-[min(32rem,calc(100vh-7rem))] w-[23rem] max-w-[calc(100vw-2.5rem)] flex-col
-                     overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-navy-900/25
+                     overflow-hidden rounded-2xl border border-line bg-ink-1 shadow-2xl shadow-navy-900/25
                      motion-safe:animate-[chatIn_180ms_ease-out]"
         >
           <div className="flex items-start justify-between gap-3 bg-gradient-to-br from-navy-800 to-navy-950 px-5 py-4">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-sm font-bold text-white">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-1/15 text-sm font-bold text-white">
                 T
               </span>
               <div>
                 <p className="text-sm font-semibold text-white">{labels.title}</p>
-                <p className="flex items-center gap-1.5 text-xs text-navy-200">
+                <p className="flex items-center gap-1.5 text-xs text-fg-muted">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -131,7 +131,7 @@ export function ChatWidget({
             <button
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="rounded-full p-1 text-navy-300 transition hover:bg-white/10 hover:text-white"
+              className="rounded-full p-1 text-fg-faint transition hover:bg-ink-1/10 hover:text-white"
             >
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M6 6l12 12M18 6L6 18" />
@@ -145,40 +145,40 @@ export function ChatWidget({
                 messages={messages}
                 labels={labels}
                 locale={locale}
-                className="flex-1 bg-navy-50/40 p-4"
+                className="flex-1 bg-ink-2/40 p-4"
               />
               <Composer labels={labels} onSend={handleSend} autoFocus />
             </>
           ) : (
             <form onSubmit={handleStart} className="flex-1 space-y-3 overflow-y-auto p-5">
-              <p className="text-[13px] leading-relaxed text-gray-600">{labels.subtitle}</p>
-              <label className="block text-[13px] font-semibold text-navy-800">
+              <p className="text-[13px] leading-relaxed text-fg-muted">{labels.subtitle}</p>
+              <label className="block text-[13px] font-semibold text-fg">
                 {labels.name}
                 <input name="name" required defaultValue={prefill?.name} className={field} />
               </label>
-              <label className="block text-[13px] font-semibold text-navy-800">
+              <label className="block text-[13px] font-semibold text-fg">
                 {labels.phone}
                 <input name="phone" type="tel" className={field} />
               </label>
               <div className="grid grid-cols-2 gap-2">
-                <label className="block text-[13px] font-semibold text-navy-800">
+                <label className="block text-[13px] font-semibold text-fg">
                   {labels.email}
                   <input name="email" type="email" defaultValue={prefill?.email} className={field} />
                 </label>
-                <label className="block text-[13px] font-semibold text-navy-800">
+                <label className="block text-[13px] font-semibold text-fg">
                   {labels.cardLast4}
                   <input name="cardLast4" inputMode="numeric" maxLength={4} className={field} />
                 </label>
               </div>
-              <p className="text-xs text-gray-500">{labels.contactHint}</p>
-              <label className="block text-[13px] font-semibold text-navy-800">
+              <p className="text-xs text-fg-muted">{labels.contactHint}</p>
+              <label className="block text-[13px] font-semibold text-fg">
                 {labels.message}
                 <textarea name="message" required rows={3} className={field} />
               </label>
               {error && <p className="text-xs text-red-600">{error}</p>}
               <button
                 disabled={pending}
-                className="w-full rounded-xl bg-accent-500 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:opacity-60"
+                className="w-full rounded-xl bg-brand-500 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400 disabled:opacity-60"
               >
                 {pending ? labels.starting : labels.start}
               </button>
@@ -189,14 +189,14 @@ export function ChatWidget({
 
       <div className="flex items-center gap-3">
         {!open && unread === 0 && (
-          <span className="hidden rounded-xl bg-white px-3.5 py-2 text-[13px] font-semibold text-navy-800 shadow-lg shadow-navy-900/10 sm:block">
+          <span className="hidden rounded-xl bg-ink-1 px-3.5 py-2 text-[13px] font-semibold text-fg shadow-lg shadow-navy-900/10 sm:block">
             {labels.launcherPrompt}
           </span>
         )}
         <button
           onClick={() => setOpen((v) => !v)}
           aria-label={labels.open}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-accent-500 text-white shadow-lg shadow-accent-700/30 transition hover:bg-accent-600 hover:shadow-xl"
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand-500 text-white shadow-lg shadow-accent-700/30 transition hover:bg-brand-400 hover:shadow-xl"
         >
           {open ? (
             <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -208,7 +208,7 @@ export function ChatWidget({
             </svg>
           )}
           {!open && unread > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[11px] font-bold text-white ring-2 ring-white">
+            <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-neg/100 px-1 text-[11px] font-bold text-white ring-2 ring-white">
               {unread}
             </span>
           )}

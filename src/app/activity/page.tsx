@@ -17,7 +17,7 @@ const TYPES = ["DEPOSIT", "WITHDRAWAL", "TRANSFER", "SEND", "LOAN", "CREDIT", "P
 const STATUSES = ["PENDING", "POSTED", "REJECTED"];
 
 const selectClass =
-  "mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20";
+  "mt-1 w-full rounded-lg border border-line bg-ink-1 px-3 py-2 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25";
 
 export default async function ActivityPage({
   searchParams,
@@ -112,33 +112,33 @@ export default async function ActivityPage({
       subtitle={t.activity.subtitle}
     >
       <Page className="max-w-4xl">
-        <form className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+        <form className="rounded-2xl border border-line bg-ink-1 p-4 shadow-sm sm:p-5">
           {/* Search stays out in the open — it is what someone reaches for when
               hunting one payment. */}
-          <label className="block text-[13px] font-semibold text-navy-800">
+          <label className="block text-[13px] font-semibold text-fg">
             <span className="sr-only">{t.activity.searchLabel}</span>
             <input
               type="search"
               name="q"
               defaultValue={search}
               placeholder={t.activity.searchPlaceholder}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-navy-900 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+              className="w-full rounded-lg border border-line bg-ink-1 px-3.5 py-2.5 text-sm text-fg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25"
             />
           </label>
 
           <details className="group mt-3" open={activeFilters > 0}>
-            <summary className="flex cursor-pointer list-none items-center gap-2 text-[13px] font-semibold text-navy-800 marker:content-none">
-              <NavIcons.chevronRight className="h-4 w-4 text-gray-400 transition group-open:rotate-90" />
+            <summary className="flex cursor-pointer list-none items-center gap-2 text-[13px] font-semibold text-fg marker:content-none">
+              <NavIcons.chevronRight className="h-4 w-4 text-fg-faint transition group-open:rotate-90" />
               {t.activity.filtersLabel}
               {activeFilters > 0 && (
-                <span className="tnum rounded-full bg-accent-500 px-2 py-0.5 text-[11px] font-bold text-white">
+                <span className="tnum rounded-full bg-brand-500 px-2 py-0.5 text-[11px] font-bold text-white">
                   {activeFilters}
                 </span>
               )}
             </summary>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            <label className="text-[13px] font-semibold text-navy-800">
+            <label className="text-[13px] font-semibold text-fg">
               {t.activity.accountLabel}
               <select name="account" defaultValue={accountId ?? ""} className={selectClass}>
                 <option value="">{t.activity.allAccounts}</option>
@@ -149,7 +149,7 @@ export default async function ActivityPage({
                 ))}
               </select>
             </label>
-            <label className="text-[13px] font-semibold text-navy-800">
+            <label className="text-[13px] font-semibold text-fg">
               {t.activity.typeLabel}
               <select name="type" defaultValue={type ?? ""} className={selectClass}>
                 <option value="">{t.activity.allTypes}</option>
@@ -160,7 +160,7 @@ export default async function ActivityPage({
                 ))}
               </select>
             </label>
-            <label className="text-[13px] font-semibold text-navy-800">
+            <label className="text-[13px] font-semibold text-fg">
               {t.activity.statusLabel}
               <select name="status" defaultValue={status ?? ""} className={selectClass}>
                 <option value="">{t.activity.allStatuses}</option>
@@ -171,22 +171,22 @@ export default async function ActivityPage({
                 ))}
               </select>
             </label>
-            <label className="text-[13px] font-semibold text-navy-800">
+            <label className="text-[13px] font-semibold text-fg">
               {t.activity.fromLabel}
               <input type="date" name="from" defaultValue={q.from ?? ""} className={selectClass} />
             </label>
-            <label className="text-[13px] font-semibold text-navy-800">
+            <label className="text-[13px] font-semibold text-fg">
               {t.activity.toLabel}
               <input type="date" name="to" defaultValue={q.to ?? ""} className={selectClass} />
             </label>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <button className="rounded-xl bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600">
+            <button className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400">
               {t.activity.apply}
             </button>
             <Link
               href="/activity"
-              className="text-sm font-semibold text-gray-500 transition hover:text-navy-800"
+              className="text-sm font-semibold text-fg-muted transition hover:text-fg"
             >
               {t.activity.clear}
             </Link>
@@ -205,7 +205,7 @@ export default async function ActivityPage({
         </div>
 
         {total > 0 && (
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-gray-500">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-fg-muted">
             <p>
               {fill(t.activity.showing, {
                 from: String((page - 1) * PAGE_SIZE + 1),
@@ -217,7 +217,7 @@ export default async function ActivityPage({
               {page > 1 && (
                 <Link
                   href={params({ page: String(page - 1) })}
-                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 font-semibold text-navy-800 transition hover:border-accent-500/40"
+                  className="rounded-xl border border-line bg-ink-1 px-4 py-2 font-semibold text-fg transition hover:border-brand-500/40"
                 >
                   {t.activity.prev}
                 </Link>
@@ -225,7 +225,7 @@ export default async function ActivityPage({
               {page < pages && (
                 <Link
                   href={params({ page: String(page + 1) })}
-                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 font-semibold text-navy-800 transition hover:border-accent-500/40"
+                  className="rounded-xl border border-line bg-ink-1 px-4 py-2 font-semibold text-fg transition hover:border-brand-500/40"
                 >
                   {t.activity.next}
                 </Link>

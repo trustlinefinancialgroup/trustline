@@ -13,9 +13,9 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  OPEN: "bg-amber-50 text-amber-700 ring-amber-600/15",
-  AWAITING_CLIENT: "bg-accent-50 text-accent-700 ring-accent-600/15",
-  RESOLVED: "bg-emerald-50 text-emerald-700 ring-emerald-600/15",
+  OPEN: "bg-amber-400/10 text-amber-300 ring-amber-600/15",
+  AWAITING_CLIENT: "bg-brand-500/12 text-brand-400 ring-accent-600/15",
+  RESOLVED: "bg-pos/10 text-pos ring-emerald-600/15",
 };
 
 export default async function AdminTicketsPage({
@@ -57,8 +57,8 @@ export default async function AdminTicketsPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-navy-900">Support tickets</h1>
-      <p className="mt-1 text-sm text-gray-500">
+      <h1 className="text-2xl font-semibold tracking-tight text-fg">Support tickets</h1>
+      <p className="mt-1 text-sm text-fg-muted">
         Requests raised by clients from their account. Every reply is emailed to them as a
         notification.
       </p>
@@ -70,8 +70,8 @@ export default async function AdminTicketsPage({
             href={s ? `/admin/tickets?status=${s}` : "/admin/tickets"}
             className={`rounded-xl border px-4 py-1.5 text-[13px] font-semibold transition ${
               statusFilter === s || (!statusFilter && !s)
-                ? "border-navy-800 bg-navy-800 text-white"
-                : "border-gray-200 bg-white text-navy-800 hover:border-accent-500/40"
+                ? "border-navy-800 bg-brand-500 text-white"
+                : "border-line bg-ink-1 text-fg hover:border-brand-500/40"
             }`}
           >
             {s ? STATUS_LABELS[s] : "All"}
@@ -81,9 +81,9 @@ export default async function AdminTicketsPage({
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,320px)_1fr]">
         {/* Queue */}
-        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-line bg-ink-1">
           {tickets.length === 0 ? (
-            <p className="px-5 py-10 text-center text-sm text-gray-500">No tickets.</p>
+            <p className="px-5 py-10 text-center text-sm text-fg-muted">No tickets.</p>
           ) : (
             tickets.map((ticket, i) => (
               <Link
@@ -91,22 +91,22 @@ export default async function AdminTicketsPage({
                 href={`/admin/tickets?ticket=${ticket.id}${
                   statusFilter ? `&status=${statusFilter}` : ""
                 }`}
-                className={`block px-4 py-3.5 transition hover:bg-navy-50/60 ${
-                  i > 0 ? "border-t border-gray-100" : ""
-                } ${selected?.id === ticket.id ? "bg-navy-50" : ""}`}
+                className={`block px-4 py-3.5 transition hover:bg-ink-2 ${
+                  i > 0 ? "border-t border-line-soft" : ""
+                } ${selected?.id === ticket.id ? "bg-ink-2" : ""}`}
               >
                 <div className="flex items-center gap-2">
                   {ticket.unreadForAdmin && (
-                    <span className="h-2 w-2 shrink-0 rounded-full bg-accent-500" aria-hidden="true" />
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-brand-500" aria-hidden="true" />
                   )}
-                  <p className="truncate text-[13px] font-semibold text-navy-900">
+                  <p className="truncate text-[13px] font-semibold text-fg">
                     {ticket.subject}
                   </p>
                 </div>
-                <p className="mt-0.5 truncate text-[12px] text-gray-500">
+                <p className="mt-0.5 truncate text-[12px] text-fg-muted">
                   {ticket.user.firstName} {ticket.user.lastName} · {ticket.category}
                 </p>
-                <p className="mt-1 text-[11px] tabular-nums text-gray-400">
+                <p className="mt-1 text-[11px] tabular-nums text-fg-faint">
                   {ticket.reference} · {stampFmt.format(ticket.lastMessageAt)}
                 </p>
               </Link>
@@ -117,21 +117,21 @@ export default async function AdminTicketsPage({
         {/* Thread */}
         <div>
           {!selected ? (
-            <div className="rounded-2xl border border-dashed border-gray-300 bg-white/60 px-6 py-16 text-center text-sm text-gray-500">
+            <div className="rounded-2xl border border-dashed border-line bg-ink-1/60 px-6 py-16 text-center text-sm text-fg-muted">
               Select a ticket to read it.
             </div>
           ) : (
-            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+            <div className="rounded-2xl border border-line bg-ink-1 p-6">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+                  <h2 className="text-lg font-semibold tracking-tight text-fg">
                     {selected.subject}
                   </h2>
-                  <p className="mt-1 text-[13px] text-gray-500">
+                  <p className="mt-1 text-[13px] text-fg-muted">
                     {selected.user.firstName} {selected.user.lastName} · {selected.user.email} ·{" "}
                     {selected.user.accountType}
                   </p>
-                  <p className="mt-0.5 text-[12px] tabular-nums text-gray-400">
+                  <p className="mt-0.5 text-[12px] tabular-nums text-fg-faint">
                     {selected.reference} · {selected.category} · opened{" "}
                     {stampFmt.format(selected.createdAt)}
                   </p>
@@ -153,13 +153,13 @@ export default async function AdminTicketsPage({
                       key={m.id}
                       className={`rounded-xl border px-4 py-3 ${
                         fromTeam
-                          ? "border-accent-100 bg-accent-50/50"
-                          : "border-gray-200 bg-gray-50/60"
+                          ? "border-brand-500/25 bg-brand-500/12/50"
+                          : "border-line bg-ink-2"
                       }`}
                     >
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <p className="text-[12px] font-semibold text-navy-900">{m.authorLabel}</p>
-                        <time className="text-[11px] tabular-nums text-gray-500">
+                        <p className="text-[12px] font-semibold text-fg">{m.authorLabel}</p>
+                        <time className="text-[11px] tabular-nums text-fg-muted">
                           {stampFmt.format(m.createdAt)}
                         </time>
                       </div>

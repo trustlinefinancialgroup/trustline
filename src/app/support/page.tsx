@@ -99,33 +99,33 @@ export default async function SupportPage({
                   action={
                     <Link
                       href="/support?tab=new"
-                      className="rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-600"
+                      className="rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
                     >
                       {t.tickets.newTicket}
                     </Link>
                   }
                 />
               ) : (
-                <div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-white">
+                <div className="overflow-hidden rounded-2xl border border-line bg-ink-1">
                   {tickets.map((ticket, i) => (
                     <Link
                       key={ticket.id}
                       href={`/support/${ticket.id}`}
-                      className={`flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-navy-50/50 ${
-                        i > 0 ? "border-t border-gray-100" : ""
+                      className={`flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-ink-2 ${
+                        i > 0 ? "border-t border-line-soft" : ""
                       }`}
                     >
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 truncate text-sm font-semibold text-navy-900">
+                        <p className="flex items-center gap-2 truncate text-sm font-semibold text-fg">
                           {ticket.unreadForClient && (
                             <span
-                              className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500"
+                              className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"
                               aria-hidden="true"
                             />
                           )}
                           {ticket.subject}
                         </p>
-                        <p className="tnum mt-0.5 truncate text-[12px] text-gray-500">
+                        <p className="tnum mt-0.5 truncate text-[12px] text-fg-muted">
                           {ticket.reference} ·{" "}
                           {t.tickets.categories[
                             ticket.category as keyof typeof t.tickets.categories
@@ -138,7 +138,7 @@ export default async function SupportPage({
                           {t.tickets.statuses[ticket.status as keyof typeof t.tickets.statuses] ??
                             ticket.status}
                         </StatusChip>
-                        <NavIcons.chevronRight className="h-4 w-4 text-gray-300" />
+                        <NavIcons.chevronRight className="h-4 w-4 text-fg-faint" />
                       </div>
                     </Link>
                   ))}
@@ -165,42 +165,42 @@ export default async function SupportPage({
 
           <aside className="space-y-4">
             <Card padded={false} className="p-5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-50 text-accent-600">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-500/12 text-brand-400">
                 <Icons.shield className="h-4 w-4" />
               </span>
-              <p className="mt-3 text-[13px] font-semibold text-navy-900">
+              <p className="mt-3 text-[13px] font-semibold text-fg">
                 {t.support.safetyTitle}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-gray-600">{t.support.safetyBody}</p>
+              <p className="mt-1 text-xs leading-relaxed text-fg-muted">{t.support.safetyBody}</p>
             </Card>
 
             <Card padded={false} className="p-5">
-              <p className="text-[13px] font-semibold text-navy-900">{t.support.otherTitle}</p>
+              <p className="text-[13px] font-semibold text-fg">{t.support.otherTitle}</p>
               <ul className="mt-3 space-y-2 text-sm">
                 <li>
                   <a
                     href="mailto:support@trustlinefinancialgroup.com"
-                    className="break-words font-medium text-accent-600 hover:text-accent-700"
+                    className="break-words font-medium text-brand-400 hover:text-brand-400"
                   >
                     support@trustlinefinancialgroup.com
                   </a>
                 </li>
                 <li>
-                  <Link href="/faq" className="font-medium text-navy-800 hover:text-accent-600">
+                  <Link href="/faq" className="font-medium text-fg hover:text-brand-400">
                     {t.nav.faq}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/security" className="font-medium text-navy-800 hover:text-accent-600">
+                  <Link href="/security" className="font-medium text-fg hover:text-brand-400">
                     {t.nav.security}
                   </Link>
                 </li>
               </ul>
             </Card>
 
-            <div className="rounded-2xl border border-gray-200 bg-navy-50/60 p-5">
-              <p className="text-[13px] font-semibold text-navy-900">{t.support.hoursTitle}</p>
-              <p className="mt-1 text-xs leading-relaxed text-gray-600">{t.support.hoursBody}</p>
+            <div className="rounded-2xl border border-line bg-ink-2 p-5">
+              <p className="text-[13px] font-semibold text-fg">{t.support.hoursTitle}</p>
+              <p className="mt-1 text-xs leading-relaxed text-fg-muted">{t.support.hoursBody}</p>
             </div>
           </aside>
         </div>

@@ -30,8 +30,8 @@ export function Logo({
   subtitle?: string;
   href?: string | null;
 }) {
-  const nameColor = theme === "dark" ? "text-white" : "text-navy-900";
-  const subColor = theme === "dark" ? "text-navy-300" : "text-gray-500";
+  const nameColor = theme === "dark" ? "text-white" : "text-fg";
+  const subColor = theme === "dark" ? "text-fg-faint" : "text-fg-muted";
 
   const content = (
     <span className="flex items-center gap-2.5">
