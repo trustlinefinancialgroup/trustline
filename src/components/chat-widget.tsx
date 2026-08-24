@@ -114,7 +114,7 @@ export function ChatWidget({
         >
           <div className="flex items-start justify-between gap-3 bg-gradient-to-br from-navy-800 to-navy-950 px-5 py-4">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-1/15 text-sm font-bold text-white">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-2 text-sm font-bold text-white">
                 T
               </span>
               <div>
@@ -131,7 +131,7 @@ export function ChatWidget({
             <button
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="rounded-full p-1 text-fg-faint transition hover:bg-ink-1/10 hover:text-white"
+              className="rounded-full p-1 text-fg-faint transition hover:bg-ink-2 hover:text-white"
             >
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M6 6l12 12M18 6L6 18" />

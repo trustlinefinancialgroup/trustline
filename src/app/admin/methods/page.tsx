@@ -49,7 +49,7 @@ export default async function MethodsPage() {
                   )}
                   <span
                     className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-                      m?.enabled ? "bg-pos/12 text-pos" : "bg-gray-200 text-fg-muted"
+                      m?.enabled ? "bg-pos/12 text-pos" : "bg-ink-3 text-fg-muted"
                     }`}
                   >
                     {m?.enabled ? "Enabled" : "Off"}

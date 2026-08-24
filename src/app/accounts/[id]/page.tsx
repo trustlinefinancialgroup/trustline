@@ -73,7 +73,7 @@ export default async function AccountPage({ params }: { params: Promise<{ id: st
             {formatMoney(account.balanceCents, locale, account.currency)}
           </p>
           {account.pendingDepositCents > 0 && (
-            <p className="tnum mt-3 inline-block rounded-full bg-ink-1/10 px-3 py-1 text-xs font-medium text-fg">
+            <p className="tnum mt-3 inline-block rounded-full bg-ink-2 px-3 py-1 text-xs font-medium text-fg">
               {fill(t.accountsPage.pendingIn, {
                 amount: formatMoney(account.pendingDepositCents, locale, account.currency),
               })}

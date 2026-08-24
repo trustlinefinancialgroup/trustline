@@ -18,7 +18,7 @@ const statusStyles: Record<string, string> = {
   ACTIVE: "bg-pos/12 text-pos",
   PENDING: "bg-amber-400/12 text-amber-300",
   BLOCKED: "bg-neg/12 text-neg",
-  REJECTED: "bg-gray-200 text-fg-muted",
+  REJECTED: "bg-ink-3 text-fg-muted",
 };
 
 export default async function ClientsPage() {

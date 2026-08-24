@@ -33,7 +33,7 @@ export default async function OnboardingPage() {
           <div className="flex items-center gap-3">
             <LanguageSwitcher current={locale} variant="dark" />
             <form action={logoutAction}>
-              <button className="rounded-xl px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-ink-1/10">
+              <button className="rounded-xl px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-ink-2">
                 {t.common.signOut}
               </button>
             </form>

@@ -47,7 +47,7 @@ export default async function WithdrawalsQueuePage() {
 
               <div className="mt-3 rounded-xl bg-ink-2 p-4 text-sm">
                 <p className="font-semibold text-fg-muted">Client&apos;s payout details</p>
-                <p className="mt-1 whitespace-pre-line text-gray-700">{tx.counterparty}</p>
+                <p className="mt-1 whitespace-pre-line text-fg-muted">{tx.counterparty}</p>
               </div>
 
               <div className="mt-4 flex flex-wrap items-end gap-3 border-t border-navy-50 pt-4">

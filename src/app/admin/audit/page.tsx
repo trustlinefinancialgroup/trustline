@@ -30,7 +30,7 @@ export default async function AuditLogPage() {
                 <td className="whitespace-nowrap px-4 py-3 text-fg-muted">
                   {e.createdAt.toLocaleString()}
                 </td>
-                <td className="px-4 py-3 text-gray-700">{e.actorLabel}</td>
+                <td className="px-4 py-3 text-fg-muted">{e.actorLabel}</td>
                 <td className="px-4 py-3">
                   <span className="rounded bg-ink-2 px-2 py-1 text-xs font-bold text-fg-muted">
                     {e.action}

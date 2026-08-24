@@ -74,7 +74,7 @@ export function ProductTile({
               <p className="mt-1 text-2xl font-semibold tracking-tight text-white">{value}</p>
             </>
           ) : cta ? (
-            <span className="inline-flex rounded-xl bg-ink-1/15 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500">
+            <span className="inline-flex rounded-xl bg-ink-2 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500">
               {cta}
             </span>
           ) : (

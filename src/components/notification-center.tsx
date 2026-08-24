@@ -72,7 +72,7 @@ export function NotificationCenter({
         type="button"
         onClick={togglePanel}
         aria-label={labels.title}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-ink-1/10"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-ink-2"
       >
         <BellIcon className="h-[19px] w-[19px]" />
         {unread.length > 0 && (

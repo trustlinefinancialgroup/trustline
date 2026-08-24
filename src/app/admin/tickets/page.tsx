@@ -163,7 +163,7 @@ export default async function AdminTicketsPage({
                           {stampFmt.format(m.createdAt)}
                         </time>
                       </div>
-                      <p className="mt-1.5 whitespace-pre-line text-[14px] leading-relaxed text-gray-700">
+                      <p className="mt-1.5 whitespace-pre-line text-[14px] leading-relaxed text-fg-muted">
                         {m.body}
                       </p>
                     </li>

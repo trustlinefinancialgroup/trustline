@@ -49,7 +49,7 @@ export default async function MessagesPage() {
                 <td className="whitespace-nowrap px-4 py-3 text-fg-muted">
                   {e.createdAt.toLocaleString()}
                 </td>
-                <td className="px-4 py-3 text-gray-700">{e.actorLabel}</td>
+                <td className="px-4 py-3 text-fg-muted">{e.actorLabel}</td>
                 <td className="px-4 py-3 text-fg-muted">{e.details}</td>
               </tr>
             ))}

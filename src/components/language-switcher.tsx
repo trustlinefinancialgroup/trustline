@@ -53,7 +53,7 @@ export function LanguageSwitcher({
 
   const buttonCls =
     variant === "dark"
-      ? "text-white hover:bg-ink-1/10"
+      ? "text-white hover:bg-ink-2"
       : "text-fg hover:bg-ink-2";
 
   return (

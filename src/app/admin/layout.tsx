@@ -42,20 +42,20 @@ export default async function AdminLayout({
   ];
 
   return (
-    <div className="flex min-h-screen flex-1 flex-col bg-ink-2">
-      <header className="border-b border-white/10 bg-navy-900">
+    <div className="flex min-h-screen flex-1 flex-col bg-ink-0 text-fg">
+      <header className="border-b border-line-soft">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
           <Logo theme="dark" href="/admin" subtitle="Admin" />
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-fg-faint sm:block">{user.email}</span>
             <Link
               href="/account"
-              className="rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:bg-ink-1/10"
+              className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition hover:bg-ink-2 hover:text-fg"
             >
               Account
             </Link>
             <form action={logoutAction}>
-              <button className="rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:bg-ink-1/10">
+              <button className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition hover:bg-ink-2 hover:text-fg">
                 Sign out
               </button>
             </form>
@@ -69,7 +69,7 @@ export default async function AdminLayout({
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between rounded-lg px-3.5 py-2.5 text-sm font-semibold text-fg transition hover:bg-ink-1 hover:shadow-sm"
+              className="flex items-center justify-between rounded-xl px-3.5 py-2.5 text-[14px] font-medium text-fg-muted transition hover:bg-ink-1 hover:text-fg"
             >
               {item.label}
               {item.badge ? (

@@ -83,7 +83,7 @@ export default async function ApplicationsPage() {
                 docsRequestedAt={app.docsRequestedAt}
               />
               {app.purpose && (
-                <p className="mt-3 rounded-xl bg-ink-2 p-3 text-sm text-gray-700">{app.purpose}</p>
+                <p className="mt-3 rounded-xl bg-ink-2 p-3 text-sm text-fg-muted">{app.purpose}</p>
               )}
 
               <div className="mt-4 flex flex-wrap items-end gap-3 border-t border-navy-50 pt-4">

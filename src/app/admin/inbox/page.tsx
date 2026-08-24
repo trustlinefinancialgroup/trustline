@@ -105,7 +105,7 @@ export default async function InboxPage({
                     className="flex items-center justify-between gap-4 px-5 py-4 hover:bg-ink-2"
                   >
                     <div className="min-w-0">
-                      <p className={`truncate text-sm ${m.seen ? "text-gray-700" : "font-bold text-fg"}`}>
+                      <p className={`truncate text-sm ${m.seen ? "text-fg-muted" : "font-bold text-fg"}`}>
                         {m.fromName || m.fromAddress}
                       </p>
                       <p className="truncate text-sm text-fg-muted">{m.subject}</p>
