@@ -46,16 +46,25 @@ export function LogoMark({ className = "h-8 w-8" }: { className?: string }) {
 }
 
 export function Logo({
-  theme = "dark",
+  onDark = false,
   subtitle,
   href = "/",
 }: {
-  theme?: "dark" | "light";
+  /**
+   * Set only where the logo sits on a genuinely dark surface — the marketing
+   * header and footer, and the legal pages. Everything else takes its colour
+   * from the tokens, so it follows the page instead of assuming one.
+   *
+   * This used to be theme="dark" and meant the same thing, which read as "the
+   * dark logo" and left the wordmark painted white on white when the app went
+   * light.
+   */
+  onDark?: boolean;
   subtitle?: string;
   href?: string | null;
 }) {
-  const nameColor = theme === "dark" ? "text-white" : "text-fg";
-  const subColor = theme === "dark" ? "text-fg-faint" : "text-fg-muted";
+  const nameColor = onDark ? "text-white" : "text-fg";
+  const subColor = onDark ? "text-navy-300" : "text-fg-muted";
 
   const content = (
     <span className="flex items-center gap-2.5">

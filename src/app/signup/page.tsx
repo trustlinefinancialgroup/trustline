@@ -18,7 +18,7 @@ export default async function SignupPage() {
         <Image src="/images/team-laptop.jpg" alt="" fill className="object-cover opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-900/70 to-navy-900/40" />
         <div className="relative flex h-full flex-col justify-between p-12">
-          <Logo theme="dark" />
+          <Logo />
           <div>
             <h2 className="text-3xl font-semibold leading-snug tracking-tight text-white">
               {t.auth.signupPanelTitle1}
@@ -35,11 +35,11 @@ export default async function SignupPage() {
       {/* Form side */}
       <div className="relative flex flex-1 items-center justify-center px-6 py-12">
         <div className="absolute right-6 top-6">
-          <LanguageSwitcher current={locale} variant="dark" />
+          <LanguageSwitcher current={locale} variant="light" />
         </div>
         <div className="w-full max-w-md">
           <div className="mb-10 lg:hidden">
-            <Logo theme="dark" />
+            <Logo />
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-fg">
             {t.auth.signupTitle}
