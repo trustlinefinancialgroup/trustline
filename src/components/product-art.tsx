@@ -61,7 +61,7 @@ export function ProductArt({ art, className }: { art: string; className?: string
   return (
     <span
       aria-hidden="true"
-      className={`flex items-center justify-center ${className ?? ""}`}
+      className={`flex items-start justify-end ${className ?? ""}`}
       style={{
         // A container so the icon sizes to the tile's own width (cqw) rather
         // than to a definite pixel value — the tile is 335px in a banner and
@@ -69,12 +69,16 @@ export function ProductArt({ art, className }: { art: string; className?: string
         containerType: "inline-size",
         color: tile.glow,
         background:
-          `radial-gradient(90% 90% at 72% 18%, ${tile.glow}2e 0%, transparent 55%),` +
+          `radial-gradient(80% 80% at 78% 22%, ${tile.glow}33 0%, transparent 55%),` +
           "linear-gradient(150deg,#173763 0%,#0a1f3d 48%,#061530 100%)",
       }}
     >
-      {/* The wrapper carries the size in cqw; the icon fills it. */}
-      <span className="block opacity-95 [&>svg]:h-full [&>svg]:w-full" style={{ width: "34cqw", height: "34cqw" }}>
+      {/* Held to the top-right so the title and one-line body, which the
+          banner lays over the bottom-left, never cross the icon. */}
+      <span
+        className="block opacity-95 [&>svg]:h-full [&>svg]:w-full"
+        style={{ width: "30cqw", height: "30cqw", margin: "7cqw 8cqw" }}
+      >
         {draw({ className: "h-full w-full" })}
       </span>
     </span>
