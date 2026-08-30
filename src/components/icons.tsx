@@ -72,6 +72,12 @@ export const Icons: Record<string, (p: IconProps) => React.ReactElement> = {
   renovation: ({ className }) => (
     <svg {...base} className={className}><path d="M3 10.5 12 3.5l9 7" /><path d="M5.5 9.4V20h13V9.4" /><path d="M9.5 20v-5h5v5" /></svg>
   ),
+  heart: ({ className }) => (
+    <svg {...base} className={className}><path d="M12 20s-7-4.35-9.2-8.5C1.3 8.6 2.6 5.5 5.6 5.1c1.9-.25 3.3.8 4.4 2.2 1.1-1.4 2.5-2.45 4.4-2.2 3 .4 4.3 3.5 2.8 6.4C19 15.65 12 20 12 20Z" /></svg>
+  ),
+  bulb: ({ className }) => (
+    <svg {...base} className={className}><path d="M9 18h6M10 21h4" /><path d="M12 3a6 6 0 0 0-3.8 10.6c.5.4.8 1 .8 1.6v.3h6v-.3c0-.6.3-1.2.8-1.6A6 6 0 0 0 12 3Z" /></svg>
+  ),
   gift: ({ className }) => (
     <svg {...base} className={className}><rect x="4" y="9" width="16" height="11" rx="1" /><path d="M4 13h16M12 9v11" /><path d="M12 9C10 9 8 8 8 6.5A2 2 0 0 1 12 6a2 2 0 0 1 4 .5C16 8 14 9 12 9z" /></svg>
   ),

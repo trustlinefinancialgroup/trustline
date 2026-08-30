@@ -83,15 +83,17 @@ export function ServiceCard({
   const drawCta = ctaIcon ? Icons[ctaIcon] ?? NavIcons[ctaIcon] : null;
 
   return (
-    <div className="elev-1 flex flex-col rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
-      <div className="flex items-start gap-3">
+    <div className="elev-1 flex flex-col rounded-2xl border border-line bg-ink-1 p-3.5 sm:p-4">
+      {/* Chip and title stack on a narrow half-width card, sit inline once
+          there is room. */}
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-start sm:gap-3">
         <span
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${a.chip} ${a.icon}`}
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${a.chip} ${a.icon}`}
         >
-          {drawIcon({ className: "h-[22px] w-[22px]" })}
+          {drawIcon({ className: "h-[21px] w-[21px]" })}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold leading-tight text-fg">{title}</p>
+          <p className="text-[14.5px] font-semibold leading-tight text-fg">{title}</p>
           {status && (
             <span
               className={`mt-1.5 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ${PILL[status.tone]}`}
@@ -103,13 +105,17 @@ export function ServiceCard({
         </div>
       </div>
 
-      <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-fg-muted">{note}</p>
+      {/* min-h so the two cards in a row keep their buttons on one line even
+          when one note wraps to two lines and the other to one. */}
+      <p className="mt-2.5 line-clamp-2 min-h-[2.4em] text-[12.5px] leading-snug text-fg-muted">
+        {note}
+      </p>
 
       <Link
         href={href}
-        className={`mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13.5px] font-semibold shadow-sm transition ${a.btn} ${a.btnText}`}
+        className={`mt-3 inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold shadow-sm transition ${a.btn} ${a.btnText}`}
       >
-        {drawCta?.({ className: "h-[17px] w-[17px]" })}
+        {drawCta?.({ className: "h-4 w-4" })}
         {cta}
       </Link>
     </div>

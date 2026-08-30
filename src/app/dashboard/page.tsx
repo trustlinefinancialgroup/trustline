@@ -16,7 +16,7 @@ import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
 import { BalanceHero } from "@/components/balance-hero";
 import { Greeting } from "@/components/greeting";
-import { NavIcons } from "@/components/icons";
+import { Icons, NavIcons } from "@/components/icons";
 import { ProductBanner } from "@/components/product-banner";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
@@ -143,12 +143,40 @@ export default async function DashboardPage({
   const openStatuses = new Set(["SUBMITTED", "APPROVED"]);
   const isOpen = (keys: string[]) =>
     applications.some((a) => keys.includes(a.productKey) && openStatuses.has(a.status));
+  const loanKeys = ["PERSONAL_LOAN", "AUTO_LOAN", "STUDENT_LOAN", "MORTGAGE", "HOME_IMPROVEMENT", "HOME_EQUITY"];
   const serviceStatus = {
-    loan: isOpen(["PERSONAL_LOAN", "AUTO_LOAN", "STUDENT_LOAN", "MORTGAGE", "HOME_IMPROVEMENT", "HOME_EQUITY"]),
+    loan: isOpen(loanKeys),
     grant: isOpen(["GRANT"]),
     tax: isOpen(["TAX_REFUND"]),
     card: applications.some((a) => a.productKey === "CREDIT_CARD" && a.status === "APPROVED"),
   };
+
+  // A concrete line per service card the way Clayton's do — the requested loan
+  // amount when one is open, the card's last four when one is held — falling
+  // back to the generic description otherwise.
+  const openLoan = applications.find(
+    (a) => loanKeys.includes(a.productKey) && openStatuses.has(a.status) && a.amountCents
+  );
+  const loanNote = openLoan?.amountCents
+    ? fill(t.services.amountNote, { amount: formatMoney(openLoan.amountCents, locale, portfolio.currency) })
+    : t.services.loansNote;
+  const heldCard = applications.find((a) => a.productKey === "CREDIT_CARD" && a.cardNumber);
+  const cardNote = heldCard?.cardNumber
+    ? fill(t.services.cardNote, { last4: heldCard.cardNumber.slice(-4) })
+    : t.services.cardsNote;
+
+  // Insight figures. "Kept" is the share of money in that was not spent — a
+  // real, honest health signal, unlike a balance-to-limit ratio we do not have.
+  const netCents = trend.inCents - trend.outCents;
+  const keptPct =
+    trend.inCents > 0
+      ? Math.max(0, Math.min(100, Math.round((netCents / trend.inCents) * 100)))
+      : 0;
+
+  // A real milestone: has a deposit ever posted? Drives the one achievement.
+  const hasFirstDeposit = transactions.some(
+    (tx) => tx.type === "DEPOSIT" && tx.status === "POSTED"
+  );
 
   const heroAccountLabel = portfolio.primary
     ? `${t.bank.checking} \u00b7 \u00b7\u00b7\u00b7\u00b7 ${portfolio.primary.number.slice(-4)}`
@@ -220,7 +248,7 @@ export default async function DashboardPage({
             href="/loans"
             linkLabel={t.services.viewAll}
           />
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4">
             <ServiceCard
               accent="blue"
               icon="lending"
@@ -228,7 +256,7 @@ export default async function DashboardPage({
               status={
                 serviceStatus.loan ? { label: t.services.pending, tone: "pending" } : { label: t.services.available, tone: "muted" }
               }
-              note={t.services.loansNote}
+              note={loanNote}
               cta={serviceStatus.loan ? t.services.view : t.services.apply}
               ctaIcon={serviceStatus.loan ? undefined : "plus"}
               href="/loans"
@@ -262,7 +290,7 @@ export default async function DashboardPage({
               status={
                 serviceStatus.card ? { label: t.services.active, tone: "ok" } : { label: t.services.available, tone: "muted" }
               }
-              note={t.services.cardsNote}
+              note={cardNote}
               cta={t.services.manage}
               href="/cards"
             />
@@ -346,39 +374,89 @@ export default async function DashboardPage({
         {trend.hasShape && (
           <section>
             <SectionHead title={t.dashboard.insights} subtitle={t.dashboard.last90} />
-            <div className="elev-1 mt-4 grid grid-cols-2 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-ink-1 sm:grid-cols-3 sm:divide-y-0">
-              <div className="p-4 sm:p-5">
-                <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
-                  <span className="h-2 w-2 rounded-full bg-pos" aria-hidden="true" />
-                  {t.dashboard.moneyIn}
-                </p>
-                <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
-                  {formatMoney(trend.inCents, locale, portfolio.currency)}
-                </p>
+
+            {/* Account health \u2014 a share bar of money kept versus money spent,
+                so "healthy" is a real figure, not a badge. */}
+            <div className="elev-1 mt-4 rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-600">
+                    <Icons.heart className="h-[20px] w-[20px]" />
+                  </span>
+                  <div>
+                    <p className="text-[14px] font-semibold text-fg">{t.dashboard.accountHealth}</p>
+                    <p className="text-[13px] font-semibold text-emerald-600">
+                      {netCents >= 0 ? t.dashboard.healthy : t.dashboard.watch}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-[11px] font-medium text-fg-faint">{t.dashboard.keptRatio}</p>
+                  <p className="tnum text-lg font-semibold text-fg">{keptPct}%</p>
+                </div>
               </div>
-              <div className="p-4 sm:p-5">
-                <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
-                  <span className="h-2 w-2 rounded-full bg-neg" aria-hidden="true" />
-                  {t.dashboard.moneyOut}
-                </p>
-                <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
-                  {formatMoney(trend.outCents, locale, portfolio.currency)}
-                </p>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink-3">
+                <div
+                  className="h-full rounded-full bg-emerald-500"
+                  style={{ width: `${keptPct}%` }}
+                />
               </div>
-              {/* Net spans the row on a phone, where there are only two
-                  columns, because it is the figure the other two are for. */}
-              <div className="col-span-2 border-t border-line p-4 sm:col-span-1 sm:border-t-0 sm:p-5">
-                <p className="text-[12px] font-medium text-fg-muted">{t.dashboard.net}</p>
+            </div>
+
+            {/* This period \u2014 money in and out as tinted arrow tiles, with the
+                net they produce below. */}
+            <div className="elev-1 mt-4 rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/12 text-emerald-600">
+                    <NavIcons.arrowDown className="h-[18px] w-[18px]" />
+                  </span>
+                  <p className="mt-2 text-[12px] font-medium text-fg-muted">{t.dashboard.income}</p>
+                  <p className="tnum mt-0.5 text-lg font-semibold text-fg">
+                    {formatMoney(trend.inCents, locale, portfolio.currency)}
+                  </p>
+                </div>
+                <div>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rose-500/12 text-rose-600">
+                    <NavIcons.arrowUp className="h-[18px] w-[18px]" />
+                  </span>
+                  <p className="mt-2 text-[12px] font-medium text-fg-muted">{t.dashboard.expenses}</p>
+                  <p className="tnum mt-0.5 text-lg font-semibold text-fg">
+                    {formatMoney(trend.outCents, locale, portfolio.currency)}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center justify-between border-t border-line-soft pt-3">
+                <p className="text-[13px] font-medium text-fg-muted">{t.dashboard.net}</p>
                 <p
-                  className={`tnum mt-1.5 text-xl font-semibold tracking-tight ${
-                    trend.inCents - trend.outCents >= 0 ? "text-pos" : "text-neg"
-                  }`}
+                  className={`tnum text-[15px] font-semibold ${netCents >= 0 ? "text-pos" : "text-neg"}`}
                 >
-                  {trend.inCents - trend.outCents >= 0 ? "+" : "\u2212"}
-                  {formatMoney(Math.abs(trend.inCents - trend.outCents), locale, portfolio.currency)}
+                  {netCents >= 0 ? "+" : "\u2212"}
+                  {formatMoney(Math.abs(netCents), locale, portfolio.currency)}
                 </p>
               </div>
             </div>
+
+            {/* A single quiet tip, the way Clayton's carries one. */}
+            <Link
+              href="/goals"
+              className="mt-4 flex items-center gap-3 rounded-2xl border border-line bg-[linear-gradient(120deg,#eef4ff_0%,#f6f0fb_100%)] p-4 transition hover:border-brand-500/30"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/12 text-brand-500">
+                <Icons.bulb className="h-[20px] w-[20px]" />
+              </span>
+              <span className="min-w-0">
+                <span className="flex items-center gap-2">
+                  <span className="text-[13.5px] font-semibold text-fg">{t.dashboard.tipTitle}</span>
+                  <span className="rounded-full bg-gold-400/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold">
+                    {t.dashboard.tip}
+                  </span>
+                </span>
+                <span className="mt-0.5 block text-[12.5px] leading-snug text-fg-muted">
+                  {t.dashboard.tipBody}
+                </span>
+              </span>
+            </Link>
           </section>
         )}
 
@@ -534,6 +612,59 @@ export default async function DashboardPage({
               currency={portfolio.currency}
               emptyText={t.bank.none}
             />
+          </div>
+        </section>
+
+        {/* Achievements — one real milestone, not invented gamification. */}
+        {hasFirstDeposit && (
+          <section>
+            <SectionHead title={t.dashboard.achievements} />
+            <div className="elev-1 mt-4 flex items-center gap-3.5 rounded-2xl border border-line bg-[linear-gradient(120deg,#fbf3df_0%,#f6f0fb_100%)] p-4 sm:p-5">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gold-400/25 text-gold">
+                <Icons.review className="h-[22px] w-[22px]" />
+              </span>
+              <div>
+                <p className="text-[14px] font-semibold text-fg">{t.dashboard.firstDeposit}</p>
+                <p className="mt-0.5 text-[13px] leading-snug text-fg-muted">
+                  {t.dashboard.firstDepositBody}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Need help — the same reassurance Clayton closes on, routed to the
+            support tools we actually have. */}
+        <section>
+          <SectionHead title={t.dashboard.needHelp} />
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4">
+            <Link
+              href="/support"
+              className="elev-1 rounded-2xl border border-line bg-ink-1 p-4 text-center transition hover:border-brand-500/30 sm:p-5"
+            >
+              <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/12 text-brand-500">
+                <NavIcons.chat className="h-[22px] w-[22px]" />
+              </span>
+              <p className="mt-2.5 text-[14px] font-semibold text-fg">{t.dashboard.liveChat}</p>
+              <p className="mt-0.5 text-[12px] leading-snug text-fg-muted">{t.dashboard.liveChatBody}</p>
+            </Link>
+            <Link
+              href="/support"
+              className="elev-1 rounded-2xl border border-line bg-ink-1 p-4 text-center transition hover:border-brand-500/30 sm:p-5"
+            >
+              <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-600">
+                <Icons.draft className="h-[22px] w-[22px]" />
+              </span>
+              <p className="mt-2.5 text-[14px] font-semibold text-fg">{t.dashboard.emailSupport}</p>
+              <p className="mt-0.5 text-[12px] leading-snug text-fg-muted">{t.dashboard.emailSupportBody}</p>
+            </Link>
+          </div>
+          <div className="elev-1 mt-3 flex items-center justify-center gap-6 rounded-2xl border border-line bg-[linear-gradient(120deg,#f6f9ff_0%,#f3f6fc_100%)] px-4 py-3.5 text-center">
+            <span className="flex items-center gap-2 text-[12.5px] font-semibold text-fg">
+              <NavIcons.clock className="h-4 w-4 text-brand-500" />
+              {t.dashboard.support247}
+            </span>
+            <span className="text-[12.5px] text-fg-muted">{t.dashboard.support247Body}</span>
           </div>
         </section>
 
