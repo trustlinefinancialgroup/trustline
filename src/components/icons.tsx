@@ -63,6 +63,15 @@ export const Icons: Record<string, (p: IconProps) => React.ReactElement> = {
   business: ({ className }) => (
     <svg {...base} className={className}><path d="M4 8h16l-1 12H5z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" /></svg>
   ),
+  car: ({ className }) => (
+    <svg {...base} className={className}><path d="M4 16v-3.2l1.8-4.3A2 2 0 0 1 7.6 7h8.8a2 2 0 0 1 1.8 1.5L20 12.8V16" /><path d="M2.5 16h19" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="16.5" cy="18" r="1.6" /><path d="M5 12.8h14" /></svg>
+  ),
+  student: ({ className }) => (
+    <svg {...base} className={className}><path d="M12 4 2.5 8.6 12 13.2l9.5-4.6z" /><path d="M6.5 10.8v4.4c0 1.6 2.5 2.9 5.5 2.9s5.5-1.3 5.5-2.9v-4.4" /><path d="M21.5 8.6v5.2" /></svg>
+  ),
+  renovation: ({ className }) => (
+    <svg {...base} className={className}><path d="M3 10.5 12 3.5l9 7" /><path d="M5.5 9.4V20h13V9.4" /><path d="M9.5 20v-5h5v5" /></svg>
+  ),
   gift: ({ className }) => (
     <svg {...base} className={className}><rect x="4" y="9" width="16" height="11" rx="1" /><path d="M4 13h16M12 9v11" /><path d="M12 9C10 9 8 8 8 6.5A2 2 0 0 1 12 6a2 2 0 0 1 4 .5C16 8 14 9 12 9z" /></svg>
   ),
