@@ -14,20 +14,18 @@ import Link from "next/link";
 export function LogoMark({ className = "h-8 w-8" }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 40" className={className} aria-hidden="true">
-      <defs>
-        <linearGradient id="tl-shield" x1="0" y1="0" x2="0.4" y2="1">
-          <stop stopColor="#1d4bb0" />
-          <stop offset="0.55" stopColor="#12407b" />
-          <stop offset="1" stopColor="#0a2164" />
-        </linearGradient>
-      </defs>
+      {/* Deliberately no <defs>. Two of these render on a page and a shared
+          gradient id resolves to whichever is first in the document — which
+          was the hidden one, leaving the shield unpainted. Flat fills instead. */}
 
       {/* Shield: square shoulders, sides falling to a point — the seal's
           silhouette, which is what makes it recognisable at tab size. */}
       <path
         d="M4.5 3.5 H35.5 V21.6 C35.5 28.8 28.9 34.1 20 37.2 C11.1 34.1 4.5 28.8 4.5 21.6 Z"
-        fill="url(#tl-shield)"
+        fill="#12407b"
       />
+      {/* The light falls from the upper left, as it does on the seal. */}
+      <path d="M4.5 3.5 H35.5 V13.2 H4.5 Z" fill="#1d4bb0" fillOpacity="0.55" />
       {/* The seal's inner keyline, held at a weight that survives downscaling */}
       <path
         d="M7.4 6.4 H32.6 V21.4 C32.6 26.9 27.4 31.2 20 34.0 C12.6 31.2 7.4 26.9 7.4 21.4 Z"
