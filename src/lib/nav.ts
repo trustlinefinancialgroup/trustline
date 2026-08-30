@@ -43,6 +43,32 @@ export function primaryNav(t: Dict): NavItem[] {
   ];
 }
 
+/**
+ * The sidebar in labelled groups. Eleven flat entries read as a list to be
+ * scanned; four short groups read as a place with rooms in it, and it gives
+ * new services somewhere obvious to land.
+ *
+ * The tab bar and the drawer still come from primaryNav, so a route cannot
+ * appear in one and be missing from another.
+ */
+export type NavGroup = { key: string; label: string; items: NavItem[] };
+
+export function navGroups(t: Dict): NavGroup[] {
+  const byKey = Object.fromEntries(primaryNav(t).map((i) => [i.key, i])) as Record<NavKey, NavItem>;
+  const pick = (...keys: NavKey[]) => keys.map((k) => byKey[k]).filter(Boolean);
+
+  return [
+    { key: "main", label: t.appnav.groupMain, items: pick("dashboard", "accounts", "activity") },
+    { key: "money", label: t.appnav.groupMoney, items: pick("transfers", "payments") },
+    { key: "services", label: t.appnav.groupServices, items: pick("cards", "loans") },
+    {
+      key: "account",
+      label: t.appnav.groupAccount,
+      items: [...pick("documents", "security", "support"), ...secondaryNav(t)],
+    },
+  ];
+}
+
 /** Sits below the divider in the sidebar — settings and sign-out live there. */
 export function secondaryNav(t: Dict): NavItem[] {
   return [{ key: "account", href: "/account", icon: "gear", label: t.appnav.settings }];

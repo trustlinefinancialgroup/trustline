@@ -2,7 +2,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { logoutAction } from "@/lib/actions/auth-actions";
 import { getDict, getLocale } from "@/i18n/server";
-import { primaryNav, secondaryNav, type NavItem, type NavKey } from "@/lib/nav";
+import { navGroups, primaryNav, type NavGroup, type NavItem, type NavKey } from "@/lib/nav";
 import { Icons, NavIcons } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { LanguageChoices, LanguageSwitcher } from "@/components/language-switcher";
@@ -50,27 +50,29 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
 
 /** The nav column — shared verbatim by the desktop sidebar and the drawer. */
 function NavColumn({
-  primary,
-  secondary,
+  groups,
   active,
   signOutLabel,
 }: {
-  primary: NavItem[];
-  secondary: NavItem[];
+  groups: NavGroup[];
   active: NavKey;
   signOutLabel: string;
 }) {
   return (
     <div className="flex h-full flex-col">
-      <nav className="flex flex-1 flex-col gap-0.5 px-3">
-        {primary.map((item) => (
-          <NavLink key={item.key} item={item} active={item.key === active} />
+      <nav className="flex flex-1 flex-col gap-5 px-3">
+        {groups.map((group) => (
+          <div key={group.key} className="space-y-0.5">
+            <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-fg-faint">
+              {group.label}
+            </p>
+            {group.items.map((item) => (
+              <NavLink key={item.key} item={item} active={item.key === active} />
+            ))}
+          </div>
         ))}
       </nav>
-      <div className="mt-4 space-y-0.5 border-t border-line-soft px-3 pt-4">
-        {secondary.map((item) => (
-          <NavLink key={item.key} item={item} active={item.key === active} />
-        ))}
+      <div className="mt-4 border-t border-line-soft px-3 pt-4">
         <form action={logoutAction}>
           <button
             type="submit"
@@ -107,8 +109,8 @@ export async function AppShell({
 }) {
   const t = await getDict();
   const locale = await getLocale();
+  const groups = navGroups(t);
   const primary = primaryNav(t);
-  const secondary = secondaryNav(t);
   const tabs = primary.filter((i) => i.onTabBar);
 
   const notifications = await db.notification.findMany({
@@ -141,8 +143,7 @@ export async function AppShell({
         </div>
         <div className="flex-1 overflow-y-auto py-4">
           <NavColumn
-            primary={primary}
-            secondary={secondary}
+            groups={groups}
             active={active}
             signOutLabel={t.common.signOut}
           />
@@ -159,9 +160,8 @@ export async function AppShell({
               </div>
               <div className="mt-4">
                 <NavColumn
-                  primary={primary}
-                  secondary={secondary}
-                  active={active}
+                  groups={groups}
+                      active={active}
                   signOutLabel={t.common.signOut}
                 />
               </div>
