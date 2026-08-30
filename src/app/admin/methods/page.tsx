@@ -45,7 +45,7 @@ export default async function MethodsPage() {
                       one account type is invisible to everyone else, which is
                       the usual reason a client reports "missing" methods. */}
                   {m?.enabled && m.accountTypes !== "ALL" && (
-                    <span className="rounded-full bg-amber-400/12 px-2.5 py-0.5 text-[11px] font-bold text-amber-300">
+                    <span className="rounded-full bg-amber-400/12 px-2.5 py-0.5 text-[11px] font-bold text-amber-700">
                       {m.accountTypes === "PERSONAL" ? "Personal only" : "Business only"}
                     </span>
                   )}

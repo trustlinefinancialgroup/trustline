@@ -29,7 +29,7 @@ html {
 }
 
 body {
-  background: #060b14;
+  background: #f1f5fb;
   color: #101828;
   font-feature-settings: "cv02", "cv03", "cv04";
   -webkit-font-smoothing: antialiased;
@@ -65,21 +65,26 @@ body {
 }
 
 /* ── Design tokens ─────────────────────────────────────────────────────────
-   A dark, layered surface set built on the brand navy, plus the type scale,
-   elevation and motion the app draws from. Values live here so a surface
-   changes in one place rather than in forty components. */
+   The light, layered surface set off the company's flyer: white cards on a
+   pale blue-grey ground, navy type, the flyer's royal blue for action. Values
+   live here so a surface changes in one place rather than in forty
+   components — which is what let the whole app move from dark to light.
+
+   Every pair below is checked against WCAG AA. The green, red and gold are
+   deliberately darker than their dark-theme counterparts: #34d399 on white is
+   1.92:1 and unreadable, where #047857 is 5.48:1. */
 @theme {
-  --color-ink-0: #070d1a; /* page ground */
-  --color-ink-1: #0d1626; /* raised card */
-  --color-ink-2: #131f33; /* card on card, inputs */
-  --color-ink-3: #1b2942; /* hover, pressed */
+  --color-ink-0: #f1f5fb; /* page ground */
+  --color-ink-1: #ffffff; /* raised card */
+  --color-ink-2: #f5f8fd; /* card on card, inputs */
+  --color-ink-3: #e6edf8; /* hover, pressed */
 
-  --color-line: #1d2b45; /* hairline border */
-  --color-line-soft: #16223a;
+  --color-line: #d5dfee; /* hairline border */
+  --color-line-soft: #e6ecf6;
 
-  --color-fg: #f4f7fc; /* primary text */
-  --color-fg-muted: #93a7c9; /* secondary text */
-  --color-fg-faint: #61759a; /* captions, disabled */
+  --color-fg: #0a1f3d; /* primary text — the flyer's navy, 16.45:1 on a card */
+  --color-fg-muted: #4a6183; /* secondary text, 6.31:1 */
+  --color-fg-faint: #6b7f9f; /* captions, disabled, 4.07:1 */
 
   /* The blues off the company's own flyer: the royal blue of its headline
      and the navy of its call-to-action band, rather than the lighter blue
@@ -87,29 +92,31 @@ body {
      They are also the readable ones. White on the old #4c86f5 was 3.48:1 —
      under AA — and hovering to the old #7aa6f8 dropped it to 2.43:1. On
      brand-500 white is 6.48:1, and hover now goes darker, to 9.70:1. */
-  --color-brand-400: #6ea2f6; /* links and icons on dark: 7.04:1 */
+  --color-brand-400: #0b45a8; /* links and icons: 8.64:1 on a card */
   --color-brand-500: #1657c9; /* primary fill, white on it: 6.48:1 */
   --color-brand-600: #0b3f96; /* pressed and hover, white on it: 9.70:1 */
 
-  /* The gold off the flyer's badge and the chip on the card faces. Carries
-     rewards and bonuses, so a gift never wears the same blue as a balance. */
-  --color-gold: #e4c56b;
-  --color-pos: #34d399;
-  --color-neg: #f87171;
+  /* The gold off the flyer's badge, darkened to hold its own as type on
+     white — the chip gold itself is 1.68:1 there. */
+  --color-gold: #8a6410; /* 5.37:1 */
+  --color-pos: #047857; /* 5.48:1 */
+  --color-neg: #b91c1c; /* 6.47:1 */
 }
 
-/* Elevation: a lit top edge plus a long soft drop, which is what separates a
-   surface that reads as material from a rectangle with a shadow on it. */
+/* Elevation. On a dark ground this was a lit top edge over a heavy drop; on a
+   light one that reads as grime, so it is the opposite — a hairline that
+   defines the card's edge over a soft, wide, blue-tinted shadow. The tint
+   matters: a neutral grey shadow on a blue-grey ground looks dirty. */
 .elev-1 {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 1px 2px rgba(0, 0, 0, 0.4);
+    0 0 0 1px rgba(10, 31, 61, 0.05),
+    0 1px 2px rgba(10, 31, 61, 0.06);
 }
 .elev-2 {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    0 24px 48px -24px rgba(0, 0, 0, 0.9),
-    0 2px 8px rgba(0, 0, 0, 0.35);
+    0 0 0 1px rgba(10, 31, 61, 0.05),
+    0 12px 28px -12px rgba(10, 31, 61, 0.16),
+    0 2px 6px rgba(10, 31, 61, 0.05);
 }
 
 /* Display figures: tight tracking is what makes a large number look set
@@ -141,17 +148,15 @@ body {
   }
 }
 
-/* Native controls follow the page. Without this a <select> drops open white on
-   a dark form, and date pickers and scrollbars do the same. Scoped to the app;
-   the marketing site stays light. */
+/* Native controls follow the page: scrollbars, date pickers and the inside of
+   a <select> are painted by the browser, not by us. */
 .scheme-dark {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
-/* Native controls in the app. A <select>'s dropdown is painted by the browser
-   from the element's own background-color, so a transparent control drops open
-   white however dark the page is. Belt and braces alongside the utility class
-   each field carries. */
+/* A <select>'s dropdown is painted from the element's own background-color, so
+   a transparent control ignores the surface it sits on. Belt and braces
+   alongside the utility class each field carries. */
 .scheme-dark select,
 .scheme-dark option,
 .scheme-dark optgroup {
@@ -159,11 +164,11 @@ body {
   color: var(--color-fg);
 }
 
-/* Date and time controls come with a black-on-black calendar icon. */
+/* The calendar icon is dark by default, which is right on a light field —
+   it only needs holding back so it does not compete with the value. */
 .scheme-dark input[type="date"]::-webkit-calendar-picker-indicator,
 .scheme-dark input[type="time"]::-webkit-calendar-picker-indicator,
 .scheme-dark input[type="month"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
   opacity: 0.55;
 }
 

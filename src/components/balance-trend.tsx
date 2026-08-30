@@ -22,11 +22,12 @@ const W = 600; // viewBox units; the SVG scales to its container
 const H = 72;
 const PAD_Y = 10;
 
-/** Same greens and reds the figures use, so a rise reads the same everywhere. */
-const UP = "#34d399";
-const DOWN = "#f87171";
+/** Same greens and reds the figures use, so a rise reads the same everywhere.
+ *  Darker than the dark-theme pair, because #34d399 on white is 1.92:1. */
+const UP = "#047857";
+const DOWN = "#b91c1c";
 /** Flat, or too few points to have a direction. */
-const FLAT = "#5b8def";
+const FLAT = "#1657c9";
 
 export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: string }) {
   const gradientId = useId();
@@ -71,7 +72,7 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
 
       {/* Read-out floats over the plot's top-right rather than taking a row */}
       {active && (
-        <div className="pointer-events-none absolute right-0 top-0 z-10 flex items-center gap-2 rounded-lg bg-navy-950/80 px-2 py-1 text-[11px] backdrop-blur-sm">
+        <div className="pointer-events-none absolute right-0 top-0 z-10 flex items-center gap-2 rounded-lg bg-navy-900/90 px-2 py-1 text-[11px] backdrop-blur-sm">
           <span className="tnum text-navy-300">{active.date}</span>
           <span className="tnum font-semibold text-white">{active.value}</span>
         </div>
@@ -123,7 +124,7 @@ export function BalanceTrend({ data, label }: { data: TrendDatum[]; label: strin
               cy={geom.y(active.v)}
               r="5"
               fill={hue}
-              stroke="#061530"
+              stroke="#ffffff"
               strokeWidth="2"
               vectorEffect="non-scaling-stroke"
             />

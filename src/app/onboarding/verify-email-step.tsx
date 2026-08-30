@@ -35,7 +35,7 @@ export function VerifyEmailStep({
         </p>
       )}
       {state?.error && (
-        <p className="mx-auto mt-4 max-w-md rounded-lg border border-amber-400/25 bg-amber-400/10 px-4 py-2.5 text-sm text-amber-300">
+        <p className="mx-auto mt-4 max-w-md rounded-lg border border-amber-400/25 bg-amber-400/10 px-4 py-2.5 text-sm text-amber-700">
           {state.error}
         </p>
       )}

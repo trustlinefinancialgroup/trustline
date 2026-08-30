@@ -216,7 +216,7 @@ export default async function DashboardPage({
                     i > 0 ? "border-t border-line-soft" : ""
                   }`}
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400/12 text-amber-300">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400/12 text-amber-700">
                     <NavIcons.clock className="h-[18px] w-[18px]" />
                   </span>
                   <div className="min-w-0 flex-1">

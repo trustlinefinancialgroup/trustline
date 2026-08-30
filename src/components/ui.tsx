@@ -86,7 +86,7 @@ const TONE_DOT: Record<Tone, string> = {
 
 const TONE_CHIP: Record<Tone, string> = {
   ok: "bg-pos/12 text-pos",
-  pending: "bg-amber-400/12 text-amber-300",
+  pending: "bg-amber-400/12 text-amber-700",
   bad: "bg-neg/12 text-neg",
   muted: "bg-ink-3 text-fg-muted",
   info: "bg-brand-500/12 text-brand-400",

@@ -60,10 +60,12 @@ export function ProductTile({
           }`}
         />
       )}
-      {/* A scrim only where something has to stay legible over the artwork. */}
+      {/* A scrim only where something has to stay legible over the artwork.
+          Explicitly dark, not the page ground: the artwork is rendered on
+          near-black, so this has to stay dark even though the page is not. */}
       <div
-        className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-0 to-transparent ${
-          value || cta ? "h-2/3 via-ink-0/70" : "h-1/3 via-ink-0/25"
+        className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#070d1a] to-transparent ${
+          value || cta ? "h-2/3 via-[#070d1a]/70" : "h-1/3 via-[#070d1a]/25"
         }`}
       />
 

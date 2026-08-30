@@ -5,7 +5,7 @@ import { NavIcons } from "@/components/icons";
 // Shared ledger table — used on the dashboard and on every product page.
 
 const statusStyles: Record<string, string> = {
-  PENDING: "bg-amber-400/12 text-amber-300",
+  PENDING: "bg-amber-400/12 text-amber-700",
   POSTED: "bg-pos/12 text-pos",
   REJECTED: "bg-neg/12 text-neg",
 };

@@ -299,7 +299,7 @@ export default async function ProductPage({
 
             {view.state === "REVIEW" && app && (
               <div className="mt-6">
-                <p className="rounded-lg border border-amber-100 bg-amber-400/10 px-4 py-3 text-sm text-amber-300">
+                <p className="rounded-lg border border-amber-100 bg-amber-400/10 px-4 py-3 text-sm text-amber-700">
                   {t.products.reviewNote}
                 </p>
                 <dl className="mt-4 divide-y divide-line-soft">
@@ -464,7 +464,7 @@ export default async function ProductPage({
               <div className="mt-4 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3">
                 <p className="text-sm font-semibold text-amber-900">{t.docs.requestedTitle}</p>
                 {app.docsNote && (
-                  <p className="mt-1 text-sm text-amber-300">{app.docsNote}</p>
+                  <p className="mt-1 text-sm text-amber-700">{app.docsNote}</p>
                 )}
               </div>
             )}
