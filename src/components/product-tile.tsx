@@ -7,7 +7,7 @@ import { ProductArt } from "./product-art";
 
 const STATUS_TONES = {
   ok: "bg-emerald-400/95 text-emerald-950",
-  pending: "bg-amber-300/95 text-amber-950",
+  pending: "bg-[#3b82f6] text-white",
   bad: "bg-red-400/95 text-red-950",
   muted: "bg-ink-3/80 text-fg backdrop-blur-sm",
 } as const;
@@ -100,7 +100,7 @@ export function ProductTile({
             </>
           ) : cta ? (
             <span
-              className={`inline-flex rounded-xl bg-ink-2 font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500 ${
+              className={`inline-flex rounded-xl bg-white font-semibold text-navy-900 shadow-sm transition group-hover:bg-[#3b82f6] group-hover:text-white ${
                 sm ? "px-3 py-1.5 text-[12px]" : "px-4 py-2 text-[13px]"
               }`}
             >

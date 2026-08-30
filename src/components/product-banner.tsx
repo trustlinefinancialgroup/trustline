@@ -12,7 +12,7 @@ import type { CardTheme } from "@/lib/products";
 
 const STATUS_TONES = {
   ok: "bg-emerald-400/95 text-emerald-950",
-  pending: "bg-amber-300/95 text-amber-950",
+  pending: "bg-[#3b82f6] text-white",
   bad: "bg-red-400/95 text-red-950",
   muted: "bg-ink-3/80 text-fg backdrop-blur-sm",
 } as const;
@@ -125,7 +125,7 @@ export function ProductBanner({
           )}
 
           {!value && cta && (
-            <span className="mt-2.5 inline-flex rounded-xl bg-ink-2/90 px-3.5 py-1.5 text-[12.5px] font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500">
+            <span className="mt-2.5 inline-flex rounded-xl bg-white px-4 py-2 text-[12.5px] font-semibold text-navy-900 shadow-sm transition group-hover:bg-[#3b82f6] group-hover:text-white">
               {cta}
             </span>
           )}

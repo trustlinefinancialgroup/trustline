@@ -180,7 +180,7 @@ export function BalanceHero({
             <span
               className={`flex h-12 w-12 items-center justify-center rounded-2xl transition ${
                 a.primary
-                  ? "bg-gold-400 text-navy-900 shadow-[0_6px_16px_-6px_rgba(224,177,92,0.8)] group-hover:bg-gold-300"
+                  ? "bg-[#3b82f6] text-white shadow-[0_6px_16px_-6px_rgba(59,130,246,0.9)] group-hover:bg-[#2f6fed]"
                   : "bg-white/10 text-white group-hover:bg-white/20"
               }`}
             >

@@ -97,6 +97,12 @@ export default async function DashboardPage({
   // page, so offering them one would land on a 404.
   const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
+  // The four original products keep their full-size faces and stacked position;
+  // everything added since sits below them in a coloured two-up grid.
+  const HERO_KEYS = ["CREDIT_CARD", "SAVINGS", "PERSONAL_LOAN", "MORTGAGE"];
+  const heroProducts = productViews.filter((v) => HERO_KEYS.includes(v.def.key));
+  const restProducts = productViews.filter((v) => !HERO_KEYS.includes(v.def.key));
+
   const dateFmt = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", { dateStyle: "medium" });
   const shortDate = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", {
     month: "short",
@@ -127,7 +133,7 @@ export default async function DashboardPage({
     initial: (payee.name.trim()[0] ?? "?").toUpperCase(),
   }));
 
-  // Six, a clean 3x2 on a phone. Deposit is the one in gold — the action that
+  // Six, a clean 3x2 on a phone. Deposit is the one in blue — the action that
   // starts everything else.
   const heroActions = [
     { href: "/transfers?tab=deposit", icon: "plus", label: t.bank.actionDeposit, primary: true },
@@ -508,12 +514,11 @@ export default async function DashboardPage({
         <section>
           <SectionHead title={t.products.yourProducts} subtitle={t.products.productsSubtitle} />
 
-          {/* Phone: stacked banners. The artwork fills the right half of each
-              card and bleeds off its edge, so the suite still looks like a
-              bank, while five of them come to ~630px instead of the ~1900px
-              five full tiles took. Nothing scrolls sideways. */}
+          {/* Phone: the four original products keep their full-size faces,
+              stacked. Everything added since sits below in a coloured two-up
+              grid, so the suite is not a dozen full-bleed cards deep. */}
           <div className="mt-4 space-y-3 sm:hidden">
-            {productViews.map((v) => (
+            {heroProducts.map((v) => (
               <Link key={v.def.key} href={v.href} className="group block">
                 <ProductBanner
                   title={v.title}
@@ -533,6 +538,32 @@ export default async function DashboardPage({
                 />
               </Link>
             ))}
+
+            {restProducts.length > 0 && (
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                {restProducts.map((v) => (
+                  <Link key={v.def.key} href={v.href} className="group block">
+                    <ProductTile
+                      title={v.title}
+                      art={v.render === "tile" ? v.art : null}
+                      valueLabel={v.valueLabel}
+                      value={v.value}
+                      status={v.status}
+                      placeholder={v.placeholder}
+                      cta={null}
+                      size="sm"
+                      aspect="aspect-[5/4]"
+                    />
+                    <div className="mt-2 px-0.5">
+                      <p className="truncate text-[13.5px] font-semibold text-fg">{v.title}</p>
+                      <p className="tnum mt-0.5 truncate text-[12px] text-fg-muted">
+                        {v.value ?? v.cta}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Tablet and up there is room for every face at full size. */}
