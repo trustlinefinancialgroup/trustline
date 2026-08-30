@@ -60,7 +60,7 @@ const ACCENT: Record<
 
 const PILL: Record<Tone, string> = {
   ok: "bg-emerald-500/12 text-emerald-700",
-  pending: "bg-amber-400/15 text-amber-700",
+  pending: "bg-blue-500/15 text-blue-700",
   muted: "bg-ink-3 text-fg-muted",
 };
 
