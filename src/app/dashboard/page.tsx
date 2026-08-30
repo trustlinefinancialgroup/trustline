@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getSessionUser, isAdmin } from "@/lib/auth";
 import { formatMoney } from "@/lib/bank";
 import { loadPortfolio, monthChangePercent } from "@/lib/portfolio";
+import { listPayees } from "@/lib/payees";
 import { balanceTrend } from "@/lib/trend";
 import { showWelcomeBonus, welcomeBonusState } from "@/lib/promo";
 import { getDict, getLocale } from "@/i18n/server";
@@ -20,7 +21,7 @@ import { NavIcons } from "@/components/icons";
 import { ProductBanner } from "@/components/product-banner";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
-import { Eyebrow, QuickAction, SectionHead } from "@/components/ui";
+import { SectionHead } from "@/components/ui";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -116,6 +117,15 @@ export default async function DashboardPage({
     applied && t.bank.appliedBanner,
     sent && (sent === "instant" ? t.bank.sentInstantBanner : t.bank.sentPendingBanner),
   ].filter(Boolean) as string[];
+
+  // The people already paid, most recent first — the same list the payments
+  // screen keeps, surfaced here so a repeat payment is one tap rather than
+  // four. Guarded inside listPayees, so a missing table shows nothing.
+  const beneficiaries = (await listPayees(user.id)).slice(0, 8).map((payee) => ({
+    id: payee.id,
+    name: payee.nickname ?? payee.name,
+    initial: (payee.name.trim()[0] ?? "?").toUpperCase(),
+  }));
 
   // Depositing is the action that starts everything else, so it is the one
   // that gets the gold. Everything else is peer-level.
@@ -228,27 +238,83 @@ export default async function DashboardPage({
           </section>
         )}
 
+        {/* Who you pay, then how the money moved. Both were a tap away
+            before — a client should not have to go looking for either. */}
+        {beneficiaries.length > 0 && (
+          <section>
+            <SectionHead
+              title={t.dashboard.sendAgain}
+              subtitle={t.dashboard.beneficiaries}
+              href="/payments?tab=payees"
+              linkLabel={t.dashboard.viewAll}
+            />
+            <div className="no-scrollbar -mx-5 mt-4 flex gap-3 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+              {beneficiaries.map((b) => (
+                <Link
+                  key={b.id}
+                  href={`/payments?payee=${b.id}`}
+                  className="group flex w-[4.75rem] shrink-0 flex-col items-center gap-2 text-center"
+                >
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full border border-line bg-ink-1 text-[15px] font-semibold text-brand-500 transition group-hover:border-brand-500/50">
+                    {b.initial}
+                  </span>
+                  <span className="w-full truncate text-[11.5px] font-medium text-fg-muted transition group-hover:text-fg">
+                    {b.name}
+                  </span>
+                </Link>
+              ))}
+              <Link
+                href="/payments?tab=payees"
+                className="group flex w-[4.75rem] shrink-0 flex-col items-center gap-2 text-center"
+              >
+                <span className="flex h-14 w-14 items-center justify-center rounded-full border border-dashed border-line text-fg-faint transition group-hover:border-brand-500/50 group-hover:text-brand-500">
+                  <NavIcons.plus className="h-5 w-5" />
+                </span>
+                <span className="w-full truncate text-[11.5px] font-medium text-fg-muted transition group-hover:text-fg">
+                  {t.dashboard.addNew}
+                </span>
+              </Link>
+            </div>
+          </section>
+        )}
+
         {trend.hasShape && (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
-                <span className="h-2 w-2 rounded-full bg-pos/100" aria-hidden="true" />
-                {t.dashboard.moneyIn}
-              </p>
-              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
-                {formatMoney(trend.inCents, locale, portfolio.currency)}
-              </p>
+          <section>
+            <SectionHead title={t.dashboard.insights} subtitle={t.dashboard.last90} />
+            <div className="elev-1 mt-4 grid grid-cols-2 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-ink-1 sm:grid-cols-3 sm:divide-y-0">
+              <div className="p-4 sm:p-5">
+                <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
+                  <span className="h-2 w-2 rounded-full bg-pos" aria-hidden="true" />
+                  {t.dashboard.moneyIn}
+                </p>
+                <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
+                  {formatMoney(trend.inCents, locale, portfolio.currency)}
+                </p>
+              </div>
+              <div className="p-4 sm:p-5">
+                <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
+                  <span className="h-2 w-2 rounded-full bg-neg" aria-hidden="true" />
+                  {t.dashboard.moneyOut}
+                </p>
+                <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
+                  {formatMoney(trend.outCents, locale, portfolio.currency)}
+                </p>
+              </div>
+              {/* Net spans the row on a phone, where there are only two
+                  columns, because it is the figure the other two are for. */}
+              <div className="col-span-2 border-t border-line p-4 sm:col-span-1 sm:border-t-0 sm:p-5">
+                <p className="text-[12px] font-medium text-fg-muted">{t.dashboard.net}</p>
+                <p
+                  className={`tnum mt-1.5 text-xl font-semibold tracking-tight ${
+                    trend.inCents - trend.outCents >= 0 ? "text-pos" : "text-neg"
+                  }`}
+                >
+                  {trend.inCents - trend.outCents >= 0 ? "+" : "\u2212"}
+                  {formatMoney(Math.abs(trend.inCents - trend.outCents), locale, portfolio.currency)}
+                </p>
+              </div>
             </div>
-            <div className="rounded-2xl border border-line bg-ink-1 p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
-                <span className="h-2 w-2 rounded-full bg-neg/100" aria-hidden="true" />
-                {t.dashboard.moneyOut}
-              </p>
-              <p className="tnum mt-1.5 text-xl font-semibold tracking-tight text-fg">
-                {formatMoney(trend.outCents, locale, portfolio.currency)}
-              </p>
-            </div>
-          </div>
+          </section>
         )}
 
         {/* Accounts */}
