@@ -101,7 +101,7 @@ export function BalanceHero({
     <section
       className={`rise overflow-hidden bg-[linear-gradient(158deg,#12407b_0%,#0a1f3d_46%,#061530_100%)] ${
         bleed
-          ? "rounded-b-[28px]"
+          ? ""
           : "rounded-3xl shadow-[0_18px_40px_-18px_rgba(6,21,48,0.55)]"
       }`}
     >

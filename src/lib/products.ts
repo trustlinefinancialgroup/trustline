@@ -196,7 +196,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     amount: true,
     term: true,
     credit: "installment",
-    art: "contract",
+    art: "auto",
     icon: "lending",
     terms: TERMS.AUTO_LOAN,
     fields: [
@@ -226,7 +226,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     amount: true,
     term: true,
     credit: "installment",
-    art: "contract",
+    art: "student",
     icon: "lending",
     terms: TERMS.STUDENT_LOAN,
     fields: [
@@ -253,7 +253,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     amount: true,
     term: true,
     credit: "installment",
-    art: "house",
+    art: "renovation",
     icon: "mortgage",
     terms: TERMS.HOME_IMPROVEMENT,
     fields: [
@@ -274,7 +274,7 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     amount: true,
     term: true,
     credit: "installment",
-    art: "house",
+    art: "equity",
     icon: "mortgage",
     terms: TERMS.HOME_EQUITY,
     fields: [

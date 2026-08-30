@@ -14,7 +14,6 @@ import { productsFor } from "@/lib/products";
 import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
-import { BalanceTrend } from "@/components/balance-trend";
 import { BalanceHero } from "@/components/balance-hero";
 import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
@@ -127,16 +126,14 @@ export default async function DashboardPage({
     initial: (payee.name.trim()[0] ?? "?").toUpperCase(),
   }));
 
-  // Depositing is the action that starts everything else, so it is the one
-  // that gets the gold. Everything else is peer-level.
+  // Six, a clean 3x2 on a phone. Deposit is the one in gold — the action that
+  // starts everything else.
   const heroActions = [
     { href: "/transfers?tab=deposit", icon: "plus", label: t.bank.actionDeposit, primary: true },
     { href: "/transfers?tab=send", icon: "send", label: t.bank.actionSend },
     { href: "/transfers?tab=withdraw", icon: "bank", label: t.bank.withdraw },
     { href: "/payments", icon: "bill", label: t.payments.tabPay },
-    ...(portfolio.savings
-      ? [{ href: "/transfers?tab=between", icon: "swap", label: t.bank.transfer }]
-      : []),
+    { href: "/goals", icon: "target", label: t.bank.actionGoals },
     { href: "/statements", icon: "statement", label: t.statements.link },
   ];
 
