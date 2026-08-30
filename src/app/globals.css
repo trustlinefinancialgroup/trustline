@@ -98,6 +98,12 @@ body {
 
   /* The gold off the flyer's badge, darkened to hold its own as type on
      white — the chip gold itself is 1.68:1 there. */
+  /* The flyer's gold. The single token above is the one that has to pass
+     contrast as text on white; these are for fills on navy, where the
+     relationship is the other way round. */
+  --color-gold-300: #f0d089;
+  --color-gold-400: #e0b15c;
+  --color-gold-500: #c9a227;
   --color-gold: #8a6410; /* 5.37:1 */
   --color-pos: #047857; /* 5.48:1 */
   --color-neg: #b91c1c; /* 6.47:1 */

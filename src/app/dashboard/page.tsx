@@ -14,6 +14,7 @@ import { AppShell, Page } from "@/components/app-shell";
 import { AccountCard } from "@/components/account-card";
 import { BankCard } from "@/components/bank-card";
 import { BalanceTrend } from "@/components/balance-trend";
+import { BalanceHero } from "@/components/balance-hero";
 import { Greeting } from "@/components/greeting";
 import { NavIcons } from "@/components/icons";
 import { ProductBanner } from "@/components/product-banner";
@@ -116,6 +117,23 @@ export default async function DashboardPage({
     sent && (sent === "instant" ? t.bank.sentInstantBanner : t.bank.sentPendingBanner),
   ].filter(Boolean) as string[];
 
+  // Depositing is the action that starts everything else, so it is the one
+  // that gets the gold. Everything else is peer-level.
+  const heroActions = [
+    { href: "/transfers?tab=deposit", icon: "plus", label: t.bank.actionDeposit, primary: true },
+    { href: "/transfers?tab=send", icon: "send", label: t.bank.actionSend },
+    { href: "/transfers?tab=withdraw", icon: "bank", label: t.bank.withdraw },
+    { href: "/payments", icon: "bill", label: t.payments.tabPay },
+    ...(portfolio.savings
+      ? [{ href: "/transfers?tab=between", icon: "swap", label: t.bank.transfer }]
+      : []),
+    { href: "/statements", icon: "statement", label: t.statements.link },
+  ];
+
+  const heroAccountLabel = portfolio.primary
+    ? `${t.bank.checking} \u00b7 \u00b7\u00b7\u00b7\u00b7 ${portfolio.primary.number.slice(-4)}`
+    : t.dashboard.totalBalance;
+
   return (
     <AppShell
       user={user}
@@ -142,67 +160,39 @@ export default async function DashboardPage({
           />
         )}
 
-        {/* Balance — the one thing on the page allowed to be loud */}
-        <section className="rise">
-          <div>
-            <div className="min-w-0">
-              <p className="text-[15px] text-fg-muted">
-                <Greeting
-                  morning={fill(t.dashboard.greetingMorning, { name: user.firstName })}
-                  afternoon={fill(t.dashboard.greetingAfternoon, { name: user.firstName })}
-                  evening={fill(t.dashboard.greetingEvening, { name: user.firstName })}
-                  fallback={fill(t.dashboard.welcomeBack, { name: user.firstName })}
-                />
-              </p>
-              <Eyebrow className="mt-4">{t.dashboard.totalBalance}</Eyebrow>
-              <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <p className="display text-[40px] font-semibold leading-none text-fg sm:text-[52px]">
-                  {formatMoney(portfolio.totalCents, locale, portfolio.currency)}
-                </p>
-                {change !== null && (
-                  <span
-                    className={`tnum inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[12px] font-semibold ${
-                      change >= 0 ? "bg-pos/12 text-pos" : "bg-neg/12 text-neg"
-                    }`}
-                  >
-                    {change >= 0 ? "+" : ""}
-                    {change.toFixed(1)}% {t.dashboard.thisMonth}
-                  </span>
-                )}
-              </div>
-              {portfolio.totalPendingDepositCents > 0 && (
-                <p className="tnum mt-3 inline-block rounded-lg bg-ink-2 px-3 py-1 text-xs font-medium text-fg-muted">
-                  {fill(t.bank.pendingNote, {
-                    amount: formatMoney(
-                      portfolio.totalPendingDepositCents,
-                      locale,
-                      portfolio.currency
-                    ),
-                  })}
-                </p>
-              )}
-            </div>
-
-          </div>
-
-          {trend.hasShape && (
-            <div className="-mx-1 mt-3">
-              <BalanceTrend data={trendData} label={t.dashboard.trendLabel} />
-            </div>
-          )}
-        </section>
-
-        <div className="rise grid grid-cols-3 gap-2 sm:flex sm:gap-3" style={{ animationDelay: "80ms" }}>
-          <QuickAction href="/transfers?tab=deposit" icon="plus" label={t.bank.actionDeposit} />
-          <QuickAction href="/transfers?tab=send" icon="send" label={t.bank.actionSend} />
-          <QuickAction href="/transfers?tab=withdraw" icon="bank" label={t.bank.withdraw} />
-          <QuickAction href="/payments" icon="bill" label={t.payments.tabPay} />
-          {portfolio.savings && (
-            <QuickAction href="/transfers?tab=between" icon="swap" label={t.bank.transfer} />
-          )}
-          <QuickAction href="/statements" icon="statement" label={t.statements.link} />
-          <QuickAction href="/goals" icon="target" label={t.bank.actionGoals} />
-        </div>
+        {/* Balance, its trend, and the things a client came here to do — one
+            navy block, the way the flyer leads. It was loose text on the page
+            ground, which is not how the most important figure should read. */}
+        <BalanceHero
+          greeting={
+            <Greeting
+              morning={fill(t.dashboard.greetingMorning, { name: user.firstName })}
+              afternoon={fill(t.dashboard.greetingAfternoon, { name: user.firstName })}
+              evening={fill(t.dashboard.greetingEvening, { name: user.firstName })}
+              fallback={fill(t.dashboard.welcomeBack, { name: user.firstName })}
+            />
+          }
+          accountLabel={heroAccountLabel}
+          balance={formatMoney(portfolio.totalCents, locale, portfolio.currency)}
+          changePercent={change}
+          changeLabel={t.dashboard.thisMonth}
+          pendingNote={
+            portfolio.totalPendingDepositCents > 0
+              ? fill(t.bank.pendingNote, {
+                  amount: formatMoney(
+                    portfolio.totalPendingDepositCents,
+                    locale,
+                    portfolio.currency
+                  ),
+                })
+              : null
+          }
+          trend={trend.hasShape ? trendData : []}
+          trendLabel={t.dashboard.trendLabel}
+          hideLabel={t.dashboard.hideBalance}
+          showLabel={t.dashboard.showBalance}
+          actions={heroActions}
+        />
 
         {pending.length > 0 && (
           <section className="rise" style={{ animationDelay: "120ms" }}>

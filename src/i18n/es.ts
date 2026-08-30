@@ -532,6 +532,8 @@ export const es: Dict = {
     welcomeBack: "Bienvenido de nuevo, {name}",
     overview: "Resumen",
     totalBalance: "Saldo total de la cartera",
+    hideBalance: "Ocultar el saldo",
+    showBalance: "Mostrar el saldo",
     thisMonth: "este mes",
     yourAccounts: "Tus cuentas",
     viewAll: "Ver todo",

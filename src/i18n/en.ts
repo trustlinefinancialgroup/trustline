@@ -530,6 +530,8 @@ export const en = {
     welcomeBack: "Welcome back, {name}",
     overview: "Overview",
     totalBalance: "Total portfolio balance",
+    hideBalance: "Hide balance",
+    showBalance: "Show balance",
     thisMonth: "this month",
     yourAccounts: "Your accounts",
     viewAll: "View all",
