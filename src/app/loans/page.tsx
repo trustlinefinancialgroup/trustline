@@ -13,6 +13,8 @@ import {
 } from "@/lib/lending";
 import { productsWithLabels } from "@/lib/product-view";
 import { productsFor } from "@/lib/products";
+import { formatMoneyWhole } from "@/lib/bank";
+import { LoanCalculator, type CalculatorProduct } from "./loan-calculator";
 import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { AppShell, Page } from "@/components/app-shell";
@@ -59,6 +61,72 @@ export default async function LoansPage() {
   // What this client could actually borrow — cards live on their own page.
   const lendingProducts = productsFor(user.accountType).filter((d) => d.credit && !d.card);
 
+  // Only products with published terms can be modelled, so the calculator and
+  // the rate cards are always quoting the same numbers.
+  const calculatorProducts: CalculatorProduct[] = lendingProducts
+    .filter((d) => d.terms)
+    .map((d) => ({
+      key: d.key,
+      title: titles.get(d.key) ?? d.key,
+      aprFrom: d.terms!.aprFrom,
+      minCents: d.terms!.minCents,
+      maxCents: d.terms!.maxCents,
+      minTermMonths: d.terms!.minTermMonths,
+      maxTermMonths: d.terms!.maxTermMonths,
+    }));
+
+  const calculatorLabels = {
+    title: t.loansPage.calculatorTitle,
+    lede: t.loansPage.calculatorLede,
+    product: t.loansPage.calculatorProduct,
+    amount: t.loansPage.calculatorAmount,
+    rate: t.loansPage.calculatorRate,
+    term: t.loansPage.calculatorTerm,
+    months: t.loansPage.calculatorMonths,
+    monthly: t.loansPage.calculatorMonthly,
+    totalInterest: t.loansPage.calculatorTotalInterest,
+    totalPayable: t.loansPage.calculatorTotalPayable,
+    outOfRange: t.loansPage.calculatorOutOfRange,
+    apply: t.products.apply,
+    disclaimer: t.products.ratesNote,
+  };
+
+  /** The published terms strip that sits on every loan card. */
+  const currency = user.currency;
+  function termsStrip(key: string) {
+    const def = lendingProducts.find((d) => d.key === key);
+    if (!def?.terms) return null;
+    const money = (c: number) => formatMoneyWhole(c, locale, currency);
+    return (
+      <span className="mt-4 grid grid-cols-3 gap-2 border-t border-line-soft pt-3.5">
+        <span className="block">
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
+            {t.loansPage.rateLabel}
+          </span>
+          <span className="tnum mt-0.5 block text-[13px] font-semibold text-gold">
+            {def.terms.aprFrom}%
+          </span>
+        </span>
+        <span className="block">
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
+            {t.loansPage.amountLabel}
+          </span>
+          <span className="tnum mt-0.5 block text-[13px] font-semibold text-fg">
+            {money(def.terms.maxCents)}
+          </span>
+        </span>
+        <span className="block">
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
+            {t.loansPage.termLabel}
+          </span>
+          <span className="tnum mt-0.5 block text-[13px] font-semibold text-fg">
+            {Math.round(def.terms.minTermMonths / 12)}–{Math.round(def.terms.maxTermMonths / 12)}y
+          </span>
+        </span>
+      </span>
+    );
+  }
+
   const lendingApplications = applications.filter((a) => {
     const title = titles.get(a.productKey);
     return title && holdings.loans.every((l) => l.app.id !== a.id);
@@ -100,6 +168,10 @@ export default async function LoansPage() {
                         <span className="mt-1.5 flex-1 text-[13px] leading-relaxed text-fg-muted">
                           {blurbs.get(d.key)}
                         </span>
+                        {/* What it actually costs, on the card — a client
+                            should not have to open an application to find out
+                            the rate. */}
+                        {termsStrip(d.key)}
                         <span className="mt-4 inline-flex w-fit items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-600">
                           {t.products.apply}
                         </span>
@@ -225,6 +297,18 @@ export default async function LoansPage() {
                 );
               })}
             </div>
+          </section>
+        )}
+
+        {/* What a loan costs, before applying for one */}
+        {calculatorProducts.length > 0 && (
+          <section>
+            <LoanCalculator
+              products={calculatorProducts}
+              labels={calculatorLabels}
+              locale={locale}
+              currency={user.currency}
+            />
           </section>
         )}
 

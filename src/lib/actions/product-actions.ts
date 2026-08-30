@@ -12,11 +12,13 @@ import {
   balanceCents,
   transferBetween,
   formatMoney,
+  formatMoneyWhole,
   newReference,
   pendingWithdrawalCents,
 } from "@/lib/bank";
 import { productDef, fieldsFor, isCardTier } from "@/lib/products";
-import { getDict } from "@/i18n/server";
+import { getDict, getLocale } from "@/i18n/server";
+import { fill } from "@/i18n";
 import type { FormState } from "./auth-actions";
 
 const MAX_AMOUNT_CENTS = 100_000_000;
@@ -89,6 +91,7 @@ export async function submitApplicationAction(
   const t = await getDict();
   const user = await requireClient();
 
+  const locale = await getLocale();
   const productKey = String(formData.get("productKey") ?? "").trim();
   const def = productDef(user.accountType, productKey);
   if (!def || def.kind !== "apply") return { error: t.products.applyError };
@@ -107,6 +110,17 @@ export async function submitApplicationAction(
     if (!raw || !Number.isFinite(cents) || cents <= 0 || cents > MAX_AMOUNT_CENTS) {
       return { error: t.bank.amountInvalid };
     }
+    // Against the product's published range. Without this the only floor was
+    // "more than zero", so a 26-cent mortgage could reach the review queue
+    // looking like a real application.
+    if (def.terms && (cents < def.terms.minCents || cents > def.terms.maxCents)) {
+      return {
+        error: fill(t.products.amountOutOfRange, {
+          min: formatMoneyWhole(def.terms.minCents, locale, user.currency),
+          max: formatMoneyWhole(def.terms.maxCents, locale, user.currency),
+        }),
+      };
+    }
     amountCents = cents;
   }
 
@@ -116,6 +130,17 @@ export async function submitApplicationAction(
   const termRaw = Number(formData.get("termMonths"));
   const termMonths =
     def.term && Number.isFinite(termRaw) && termRaw > 0 && termRaw <= 480 ? Math.round(termRaw) : null;
+  // A term outside what the product offers is the same class of mistake.
+  if (termMonths !== null && def.terms) {
+    if (termMonths < def.terms.minTermMonths || termMonths > def.terms.maxTermMonths) {
+      return {
+        error: fill(t.products.termOutOfRange, {
+          min: String(def.terms.minTermMonths),
+          max: String(def.terms.maxTermMonths),
+        }),
+      };
+    }
+  }
 
   // The product's own questions, validated against its field definitions.
   const details: Record<string, string | number> = {};
