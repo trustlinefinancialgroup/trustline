@@ -275,7 +275,7 @@ export default async function ProductPage({
                 </p>
                 <Link
                   href={`/apply?type=${def.key}`}
-                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-400"
+                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-600"
                 >
                   {t.products.apply}
                 </Link>
@@ -290,7 +290,7 @@ export default async function ProductPage({
                 </p>
                 <Link
                   href={`/apply?type=${def.key}`}
-                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-400"
+                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-600"
                 >
                   {t.products.reapply}
                 </Link>
@@ -334,7 +334,7 @@ export default async function ProductPage({
                 <p className="rounded-lg border border-line bg-ink-2 px-4 py-3 text-sm text-fg-muted">
                   {t.products.openSavingsNote}
                 </p>
-                <button className="mt-5 w-full rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white transition hover:bg-brand-400">
+                <button className="mt-5 w-full rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white transition hover:bg-brand-600">
                   {t.products.openSavingsCta}
                 </button>
               </form>
@@ -357,7 +357,7 @@ export default async function ProductPage({
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link
                     href="/transfer"
-                    className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
+                    className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600"
                   >
                     {t.bank.transfer}
                   </Link>
@@ -379,7 +379,7 @@ export default async function ProductPage({
                 </p>
                 <Link
                   href="/deposit"
-                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-400"
+                  className="mt-5 block rounded-xl bg-brand-500 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-600"
                 >
                   {t.bank.makeDeposit}
                 </Link>
@@ -431,7 +431,7 @@ export default async function ProductPage({
                       <input type="hidden" name="appId" value={app.id} />
                       <button
                         className={`w-full rounded-xl py-3 text-sm font-semibold text-white transition ${
-                          app.frozen ? "bg-brand-500 hover:bg-brand-400" : "bg-brand-500 hover:bg-brand-400"
+                          app.frozen ? "bg-brand-500 hover:bg-brand-600" : "bg-brand-500 hover:bg-brand-600"
                         }`}
                       >
                         {app.frozen ? t.products.unfreezeCard : t.products.freezeCard}

@@ -32,9 +32,9 @@ export function WelcomeBonusBanner({
     // Gold rather than brand blue: this is a reward, not a balance, and the
     // blue panel made it read as just another figure. The hue is the one
     // already on the card chip and the Gold tier.
-    <div className="rounded-2xl border border-gift/30 bg-gift/10 px-4 py-3.5 sm:px-5">
+    <div className="rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3.5 sm:px-5">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gift/15 text-gift">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold">
           <Icons.gift className="h-[18px] w-[18px]" />
         </span>
 
@@ -63,7 +63,7 @@ export function WelcomeBonusBanner({
               </p>
               <Link
                 href="/transfers?tab=deposit"
-                className="text-[12px] font-semibold text-gift transition hover:text-fg"
+                className="text-[12px] font-semibold text-gold transition hover:text-fg"
               >
                 {t.promo.fundNow}
               </Link>

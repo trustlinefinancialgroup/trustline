@@ -383,7 +383,7 @@ function SecurityWordPrompt({ t }: { t: { bank: { securityWordMissing: string; g
       {t.bank.securityWordMissing}
       <Link
         href="/account/security"
-        className="mt-3 inline-block rounded-xl bg-brand-500 px-5 py-2 text-xs font-bold text-white transition hover:bg-brand-400"
+        className="mt-3 inline-block rounded-xl bg-brand-500 px-5 py-2 text-xs font-bold text-white transition hover:bg-brand-600"
       >
         {t.bank.goToAccount}
       </Link>

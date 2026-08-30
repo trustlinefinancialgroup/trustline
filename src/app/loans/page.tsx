@@ -100,7 +100,7 @@ export default async function LoansPage() {
                         <span className="mt-1.5 flex-1 text-[13px] leading-relaxed text-fg-muted">
                           {blurbs.get(d.key)}
                         </span>
-                        <span className="mt-4 inline-flex w-fit items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-400">
+                        <span className="mt-4 inline-flex w-fit items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-600">
                           {t.products.apply}
                         </span>
                       </span>
@@ -216,7 +216,7 @@ export default async function LoansPage() {
                     <div className="mt-5 flex flex-wrap gap-2">
                       <Link
                         href={`/product/${def.key}`}
-                        className="rounded-xl bg-brand-500 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand-400"
+                        className="rounded-xl bg-brand-500 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand-600"
                       >
                         {t.loansPage.manage}
                       </Link>

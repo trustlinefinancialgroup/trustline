@@ -171,7 +171,7 @@ export function Composer({
         type="submit"
         disabled={!value.trim()}
         aria-label={labels.send}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white transition hover:bg-brand-400 disabled:opacity-40"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white transition hover:bg-brand-600 disabled:opacity-40"
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />

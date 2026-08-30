@@ -96,7 +96,7 @@ export function SupportConsole({
           />
           <button
             disabled={pending}
-            className="mt-4 self-start rounded-xl bg-brand-500 px-8 py-3 text-sm font-semibold text-white transition hover:bg-brand-400 disabled:opacity-60"
+            className="mt-4 self-start rounded-xl bg-brand-500 px-8 py-3 text-sm font-semibold text-white transition hover:bg-brand-600 disabled:opacity-60"
           >
             {pending ? labels.starting : labels.startButton}
           </button>

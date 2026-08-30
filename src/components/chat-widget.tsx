@@ -178,7 +178,7 @@ export function ChatWidget({
               {error && <p className="text-xs text-red-600">{error}</p>}
               <button
                 disabled={pending}
-                className="w-full rounded-xl bg-brand-500 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400 disabled:opacity-60"
+                className="w-full rounded-xl bg-brand-500 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600 disabled:opacity-60"
               >
                 {pending ? labels.starting : labels.start}
               </button>
@@ -196,7 +196,7 @@ export function ChatWidget({
         <button
           onClick={() => setOpen((v) => !v)}
           aria-label={labels.open}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand-500 text-white shadow-lg shadow-accent-700/30 transition hover:bg-brand-400 hover:shadow-xl"
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand-500 text-white shadow-lg shadow-accent-700/30 transition hover:bg-brand-600 hover:shadow-xl"
         >
           {open ? (
             <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">

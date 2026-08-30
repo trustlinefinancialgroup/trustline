@@ -108,7 +108,7 @@ export default async function MethodsPage() {
                   <input type="checkbox" name="forWithdrawal" defaultChecked={m?.forWithdrawal ?? true} className="h-4 w-4" />
                   Withdrawals
                 </label>
-                <button className="ml-auto rounded-xl bg-brand-500 px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-400">
+                <button className="ml-auto rounded-xl bg-brand-500 px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-600">
                   Save
                 </button>
               </div>

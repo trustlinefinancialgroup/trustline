@@ -81,13 +81,19 @@ body {
   --color-fg-muted: #93a7c9; /* secondary text */
   --color-fg-faint: #61759a; /* captions, disabled */
 
-  --color-brand-400: #7aa6f8;
-  --color-brand-500: #4c86f5;
-  --color-brand-600: #2f6fed;
+  /* The blues off the company's own flyer: the royal blue of its headline
+     and the navy of its call-to-action band, rather than the lighter blue
+     that stood in for them.
+     They are also the readable ones. White on the old #4c86f5 was 3.48:1 —
+     under AA — and hovering to the old #7aa6f8 dropped it to 2.43:1. On
+     brand-500 white is 6.48:1, and hover now goes darker, to 9.70:1. */
+  --color-brand-400: #6ea2f6; /* links and icons on dark: 7.04:1 */
+  --color-brand-500: #1657c9; /* primary fill, white on it: 6.48:1 */
+  --color-brand-600: #0b3f96; /* pressed and hover, white on it: 9.70:1 */
 
-  /* Rewards and bonuses — the chip gold from the card faces, so a gift
-     never wears the same blue as a balance. */
-  --color-gift: #e4c56b;
+  /* The gold off the flyer's badge and the chip on the card faces. Carries
+     rewards and bonuses, so a gift never wears the same blue as a balance. */
+  --color-gold: #e4c56b;
   --color-pos: #34d399;
   --color-neg: #f87171;
 }

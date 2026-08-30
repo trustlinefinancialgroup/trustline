@@ -43,7 +43,7 @@ export function VerifyEmailStep({
       <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
         <button
           onClick={() => router.refresh()}
-          className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
+          className="rounded-xl bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600"
         >
           {refreshLabel}
         </button>
