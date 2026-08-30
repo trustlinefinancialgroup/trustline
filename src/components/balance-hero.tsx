@@ -128,9 +128,9 @@ export function BalanceHero({
             className="shrink-0 rounded-xl p-2 text-navy-300 transition hover:bg-white/10 hover:text-white"
           >
             {hidden ? (
-              <Icons.eyeOff className="h-[18px] w-[18px]" />
+              <NavIcons.eyeOff className="h-[18px] w-[18px]" />
             ) : (
-              <Icons.eye className="h-[18px] w-[18px]" />
+              <NavIcons.eye className="h-[18px] w-[18px]" />
             )}
           </button>
         </div>
