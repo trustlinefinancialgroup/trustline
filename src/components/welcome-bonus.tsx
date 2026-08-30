@@ -29,13 +29,13 @@ export function WelcomeBonusBanner({
   const showRateProgress = !state.qualifiesForRate;
 
   return (
-    // Gold rather than brand blue: this is a reward, not a balance, and the
-    // blue panel made it read as just another figure. The hue is the one
-    // already on the card chip and the Gold tier.
-    <div className="rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3.5 sm:px-5">
+    // A reward, not a balance. The old bg-gold/10 was a dark olive at 10% — a
+    // muddy wash with the icon lost in it. This reads as a gift: a warm panel
+    // and a solid gold chip, the same gold as the Deposit action.
+    <div className="rounded-2xl border border-gold-400/45 bg-[linear-gradient(120deg,#fbf3df_0%,#fdfaf2_60%)] px-4 py-3.5 shadow-[0_8px_24px_-14px_rgba(201,162,39,0.6)] sm:px-5">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold">
-          <Icons.gift className="h-[18px] w-[18px]" />
+        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold-400 text-navy-900 shadow-[0_4px_12px_-4px_rgba(201,162,39,0.9)]">
+          <Icons.gift className="h-[19px] w-[19px]" />
         </span>
 
         <div className="min-w-0 flex-1">

@@ -145,35 +145,11 @@ export default async function DashboardPage({
     : t.dashboard.totalBalance;
 
   return (
-    <AppShell
-      user={user}
-      active="dashboard"
-      title={t.dashboard.overview}
-    >
-      <Page className="space-y-6">
-        {banners.map((text) => (
-          <p
-            key={text}
-            className="rounded-xl border border-pos/25 bg-pos/10 px-4 py-3 text-sm font-medium text-pos"
-          >
-            {text}
-          </p>
-        ))}
-
-        {showWelcomeBonus(bonus) && !bonus.credited && (
-          <WelcomeBonusBanner
-            state={bonus}
-            t={t}
-            locale={locale}
-            currency={portfolio.currency}
-            creditedDate={null}
-          />
-        )}
-
-        {/* Balance, its trend, and the things a client came here to do — one
-            navy block, the way the flyer leads. It was loose text on the page
-            ground, which is not how the most important figure should read. */}
-        <BalanceHero
+    <AppShell user={user} active="dashboard" title={t.dashboard.overview} bleed>
+      {/* The immersive top: balance, trend and actions in one gradient that
+          runs to the screen edges and up behind the floating header. */}
+      <BalanceHero
+        bleed
           greeting={
             <Greeting
               morning={fill(t.dashboard.greetingMorning, { name: user.firstName })}
@@ -203,6 +179,26 @@ export default async function DashboardPage({
           showLabel={t.dashboard.showBalance}
           actions={heroActions}
         />
+
+      <Page className="space-y-6 pt-6">
+        {banners.map((text) => (
+          <p
+            key={text}
+            className="rounded-xl border border-pos/25 bg-pos/10 px-4 py-3 text-sm font-medium text-pos"
+          >
+            {text}
+          </p>
+        ))}
+
+        {showWelcomeBonus(bonus) && !bonus.credited && (
+          <WelcomeBonusBanner
+            state={bonus}
+            t={t}
+            locale={locale}
+            currency={portfolio.currency}
+            creditedDate={null}
+          />
+        )}
 
         {pending.length > 0 && (
           <section className="rise" style={{ animationDelay: "120ms" }}>

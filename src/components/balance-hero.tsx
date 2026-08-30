@@ -73,6 +73,7 @@ export function BalanceHero({
   actions,
   hideLabel,
   showLabel,
+  bleed = false,
 }: {
   greeting: React.ReactNode;
   /** "Checking · ···· 5789" — which account the figure belongs to. */
@@ -86,12 +87,33 @@ export function BalanceHero({
   actions: HeroAction[];
   hideLabel: string;
   showLabel: string;
+  /**
+   * Full-bleed: runs to the screen edges and up behind the floating header,
+   * rounded only at the bottom — the immersive top of the overview. Off, it is
+   * a rounded card with a shadow, for anywhere it appears inside normal
+   * padding.
+   */
+  bleed?: boolean;
 }) {
   const hidden = useSyncExternalStore(subscribe, readHidden, () => false);
 
   return (
-    <section className="rise overflow-hidden rounded-3xl bg-[linear-gradient(158deg,#12407b_0%,#0a1f3d_46%,#061530_100%)] shadow-[0_18px_40px_-18px_rgba(6,21,48,0.55)]">
-      <div className="px-5 pt-5 sm:px-7 sm:pt-6">
+    <section
+      className={`rise overflow-hidden bg-[linear-gradient(158deg,#12407b_0%,#0a1f3d_46%,#061530_100%)] ${
+        bleed
+          ? "rounded-b-[28px]"
+          : "rounded-3xl shadow-[0_18px_40px_-18px_rgba(6,21,48,0.55)]"
+      }`}
+    >
+      {/* In bleed mode the header floats over this, so the greeting starts
+          below it: the header's 4rem plus the device's own top inset. */}
+      <div
+        className={
+          bleed
+            ? "px-5 pt-[calc(env(safe-area-inset-top)+4.25rem)] sm:px-7"
+            : "px-5 pt-5 sm:px-7 sm:pt-6"
+        }
+      >
         <p className="text-[13px] font-medium text-navy-300">{greeting}</p>
 
         <div className="mt-4 flex items-start justify-between gap-4">

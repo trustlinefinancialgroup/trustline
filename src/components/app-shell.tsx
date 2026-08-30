@@ -98,6 +98,7 @@ export async function AppShell({
   title,
   subtitle,
   actions,
+  bleed = false,
   children,
 }: {
   user: ShellUser;
@@ -105,6 +106,13 @@ export async function AppShell({
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   actions?: React.ReactNode;
+  /**
+   * The dashboard's immersive top: the page's own first section is a gradient
+   * that runs to the screen edges and up behind the header, so the header
+   * floats transparent over it rather than sitting in a white bar above it.
+   * The title is dropped in this mode — the section carries its own greeting.
+   */
+  bleed?: boolean;
   children: React.ReactNode;
 }) {
   const t = await getDict();
@@ -150,11 +158,20 @@ export async function AppShell({
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-40 border-b border-line-soft bg-ink-0/85 backdrop-blur-xl">
+      {/* relative so the bleed header, which is absolute, is bounded to this
+          content column rather than spanning over the desktop sidebar. */}
+      <div className="relative flex min-w-0 flex-1 flex-col">
+        {/* Header. In bleed mode it floats transparent over the page's gradient
+            top section instead of sitting in its own white bar. */}
+        <header
+          className={
+            bleed
+              ? "absolute inset-x-0 top-0 z-40"
+              : "sticky top-0 z-40 border-b border-line-soft bg-ink-0/85 backdrop-blur-xl"
+          }
+        >
           <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
-            <MobileDrawer openLabel={t.appnav.openMenu} closeLabel={t.appnav.closeMenu}>
+            <MobileDrawer openLabel={t.appnav.openMenu} closeLabel={t.appnav.closeMenu} onDark={bleed}>
               <div className="px-2 pb-2">
                 <Logo href="/dashboard" />
               </div>
@@ -174,11 +191,17 @@ export async function AppShell({
             </MobileDrawer>
 
             <div className="min-w-0 flex-1">
-              <h1 className="truncate text-[15px] font-semibold tracking-tight text-fg sm:text-base">
-                {title}
-              </h1>
-              {subtitle && (
-                <p className="truncate text-xs text-fg-faint sm:text-[13px]">{subtitle}</p>
+              {/* In bleed mode the gradient section carries its own greeting,
+                  so the header title would be a duplicate. */}
+              {!bleed && (
+                <>
+                  <h1 className="truncate text-[15px] font-semibold tracking-tight text-fg sm:text-base">
+                    {title}
+                  </h1>
+                  {subtitle && (
+                    <p className="truncate text-xs text-fg-faint sm:text-[13px]">{subtitle}</p>
+                  )}
+                </>
               )}
             </div>
 
@@ -186,15 +209,20 @@ export async function AppShell({
               {actions}
               <NotificationCenter
                 items={notifItems}
+                onDark={bleed}
                 labels={{ title: t.notif.title, empty: t.notif.empty, dismiss: t.notif.dismiss }}
               />
               <span className="hidden sm:block">
-                <LanguageSwitcher current={locale} variant="light" />
+                <LanguageSwitcher current={locale} variant={bleed ? "dark" : "light"} />
               </span>
               <Link
                 href="/account"
                 title={`${user.firstName} ${user.lastName}`}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-500/15 text-[12px] font-semibold text-brand-400 transition hover:bg-brand-500/25"
+                className={`flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-semibold transition ${
+                  bleed
+                    ? "bg-white/15 text-white hover:bg-white/25"
+                    : "bg-brand-500/15 text-brand-500 hover:bg-brand-500/25"
+                }`}
               >
                 {initials}
               </Link>
