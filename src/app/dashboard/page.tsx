@@ -21,7 +21,7 @@ import { ProductBanner } from "@/components/product-banner";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
 import { SectionHead } from "@/components/ui";
-import { ServiceCard } from "@/components/service-card";
+import { ServiceCard, type ServiceAccent } from "@/components/service-card";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -97,11 +97,34 @@ export default async function DashboardPage({
   // page, so offering them one would land on a 404.
   const savingsOffered = productsFor(user.accountType).some((d) => d.key === "SAVINGS");
 
-  // The four original products keep their full-size faces and stacked position;
-  // everything added since sits below them in a coloured two-up grid.
-  const HERO_KEYS = ["CREDIT_CARD", "SAVINGS", "PERSONAL_LOAN", "MORTGAGE"];
+  // The two showcase products — the card and the mortgage — keep their
+  // full-size faces. Everything else sits below in a clean two-up grid of the
+  // same white service-card style, each with its own accent.
+  const HERO_KEYS = ["CREDIT_CARD", "MORTGAGE"];
   const heroProducts = productViews.filter((v) => HERO_KEYS.includes(v.def.key));
   const restProducts = productViews.filter((v) => !HERO_KEYS.includes(v.def.key));
+
+  // Icon and accent per product, so the grid reads as a set of distinct,
+  // coloured services rather than dark muted tiles.
+  const PRODUCT_STYLE: Record<string, { icon: string; accent: ServiceAccent }> = {
+    SAVINGS: { icon: "savings", accent: "green" },
+    PERSONAL_LOAN: { icon: "lending", accent: "blue" },
+    AUTO_LOAN: { icon: "car", accent: "cyan" },
+    STUDENT_LOAN: { icon: "student", accent: "violet" },
+    HOME_IMPROVEMENT: { icon: "renovation", accent: "amber" },
+    HOME_EQUITY: { icon: "buildings", accent: "green" },
+    PERSONAL_INSURANCE: { icon: "insurance", accent: "blue" },
+    DEPOSITS: { icon: "deposit", accent: "cyan" },
+    FOREIGN_DRAFTS: { icon: "globe", accent: "blue" },
+    INTEREST_CHECKING: { icon: "checking", accent: "green" },
+    TELE_BANKING: { icon: "phone", accent: "violet" },
+    MONEY_MARKET: { icon: "money", accent: "amber" },
+    SMALL_BUSINESS: { icon: "business", accent: "violet" },
+  };
+  const productStyle = (key: string) => PRODUCT_STYLE[key] ?? { icon: "review", accent: "blue" as ServiceAccent };
+  // Product status → the pill tones the service card knows.
+  const pillTone = (tone?: string): "ok" | "pending" | "muted" =>
+    tone === "ok" ? "ok" : tone === "pending" ? "pending" : "muted";
 
   const dateFmt = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", { dateStyle: "medium" });
   const shortDate = new Intl.DateTimeFormat(INTL_LOCALES[locale] ?? "en-US", {
@@ -541,27 +564,25 @@ export default async function DashboardPage({
 
             {restProducts.length > 0 && (
               <div className="grid grid-cols-2 gap-3 pt-1">
-                {restProducts.map((v) => (
-                  <Link key={v.def.key} href={v.href} className="group block">
-                    <ProductTile
+                {restProducts.map((v) => {
+                  const s = productStyle(v.def.key);
+                  return (
+                    <ServiceCard
+                      key={v.def.key}
+                      accent={s.accent}
+                      icon={s.icon}
                       title={v.title}
-                      art={v.render === "tile" ? v.art : null}
-                      valueLabel={v.valueLabel}
-                      value={v.value}
-                      status={v.status}
-                      placeholder={v.placeholder}
-                      cta={null}
-                      size="sm"
-                      aspect="aspect-[5/4]"
+                      status={
+                        v.status
+                          ? { label: v.status.label, tone: pillTone(v.status.tone) }
+                          : { label: t.services.available, tone: "muted" }
+                      }
+                      note={v.value ? `${v.valueLabel ? `${v.valueLabel}: ` : ""}${v.value}` : v.body}
+                      cta={v.cta}
+                      href={v.href}
                     />
-                    <div className="mt-2 px-0.5">
-                      <p className="truncate text-[13.5px] font-semibold text-fg">{v.title}</p>
-                      <p className="tnum mt-0.5 truncate text-[12px] text-fg-muted">
-                        {v.value ?? v.cta}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

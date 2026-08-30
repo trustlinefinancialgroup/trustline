@@ -12,7 +12,7 @@ import { Icons, NavIcons } from "@/components/icons";
  * element on the page to pick its own colour.
  */
 
-export type ServiceAccent = "blue" | "green" | "violet" | "amber" | "red";
+export type ServiceAccent = "blue" | "green" | "violet" | "amber" | "red" | "cyan";
 
 type Tone = "ok" | "pending" | "muted";
 
@@ -48,6 +48,12 @@ const ACCENT: Record<
     chip: "bg-rose-500/12",
     icon: "text-rose-600",
     btn: "bg-rose-600 hover:bg-rose-700",
+    btnText: "text-white",
+  },
+  cyan: {
+    chip: "bg-cyan-500/12",
+    icon: "text-cyan-600",
+    btn: "bg-cyan-600 hover:bg-cyan-700",
     btnText: "text-white",
   },
 };
