@@ -13,6 +13,8 @@ export type NavKey =
   | "payments"
   | "cards"
   | "loans"
+  | "grants"
+  | "taxRefund"
   | "documents"
   | "security"
   | "support"
@@ -37,6 +39,8 @@ export function primaryNav(t: Dict): NavItem[] {
     { key: "payments", href: "/payments", icon: "bill", label: t.appnav.payments },
     { key: "cards", href: "/cards", icon: "card", label: t.appnav.cards },
     { key: "loans", href: "/loans", icon: "lending", label: t.appnav.loans },
+    { key: "grants", href: "/grants", icon: "gift", label: t.appnav.grants },
+    { key: "taxRefund", href: "/tax-refund", icon: "receipt", label: t.appnav.taxRefund },
     { key: "documents", href: "/documents", icon: "statement", label: t.appnav.documents },
     { key: "security", href: "/account/security", icon: "shield", label: t.appnav.security },
     { key: "support", href: "/support", icon: "chat", label: t.appnav.support },
@@ -60,7 +64,7 @@ export function navGroups(t: Dict): NavGroup[] {
   return [
     { key: "main", label: t.appnav.groupMain, items: pick("dashboard", "accounts", "activity") },
     { key: "money", label: t.appnav.groupMoney, items: pick("transfers", "payments") },
-    { key: "services", label: t.appnav.groupServices, items: pick("cards", "loans") },
+    { key: "services", label: t.appnav.groupServices, items: pick("cards", "loans", "grants", "taxRefund") },
     {
       key: "account",
       label: t.appnav.groupAccount,

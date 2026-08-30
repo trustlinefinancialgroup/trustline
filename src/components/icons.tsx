@@ -160,6 +160,9 @@ export const NavIcons: Record<string, (p: IconProps) => React.ReactElement> = {
   bill: ({ className }) => (
     <svg {...base} className={className}><path d="M6 3h12v17l-2.5-1.5L13 20l-2.5-1.5L8 20l-2-1.5z" /><path d="M9.5 8h5M9.5 12h5" /></svg>
   ),
+  receipt: ({ className }) => (
+    <svg {...base} className={className}><path d="M5 3.5h14v17l-2.3-1.4-2.35 1.4L12 20.6l-2.35 1.3L7.3 20.6 5 20.5z" /><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4" /></svg>
+  ),
   ticket: ({ className }) => (
     <svg {...base} className={className}><path d="M4 9V7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a2.5 2.5 0 0 0 0 5v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a2.5 2.5 0 0 0 0-5z" /><path d="M13 6v3M13 13v5" /></svg>
   ),

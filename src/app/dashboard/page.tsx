@@ -21,6 +21,7 @@ import { ProductBanner } from "@/components/product-banner";
 import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
 import { SectionHead } from "@/components/ui";
+import { ServiceCard } from "@/components/service-card";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -137,6 +138,18 @@ export default async function DashboardPage({
     { href: "/statements", icon: "statement", label: t.statements.link },
   ];
 
+  // Whether each service already has something open, so its card reads "Pending"
+  // / "Active" rather than always inviting a fresh application.
+  const openStatuses = new Set(["SUBMITTED", "APPROVED"]);
+  const isOpen = (keys: string[]) =>
+    applications.some((a) => keys.includes(a.productKey) && openStatuses.has(a.status));
+  const serviceStatus = {
+    loan: isOpen(["PERSONAL_LOAN", "AUTO_LOAN", "STUDENT_LOAN", "MORTGAGE", "HOME_IMPROVEMENT", "HOME_EQUITY"]),
+    grant: isOpen(["GRANT"]),
+    tax: isOpen(["TAX_REFUND"]),
+    card: applications.some((a) => a.productKey === "CREDIT_CARD" && a.status === "APPROVED"),
+  };
+
   const heroAccountLabel = portfolio.primary
     ? `${t.bank.checking} \u00b7 \u00b7\u00b7\u00b7\u00b7 ${portfolio.primary.number.slice(-4)}`
     : t.dashboard.totalBalance;
@@ -196,6 +209,65 @@ export default async function DashboardPage({
             creditedDate={null}
           />
         )}
+
+        {/* Financial services — the four things beyond an account: borrowing,
+            grants, refunds and cards. Each owns an accent so the row reads as
+            distinct services, not a wall of navy. */}
+        <section>
+          <SectionHead
+            title={t.services.title}
+            subtitle={t.services.subtitle}
+            href="/loans"
+            linkLabel={t.services.viewAll}
+          />
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <ServiceCard
+              accent="blue"
+              icon="lending"
+              title={t.services.loansTitle}
+              status={
+                serviceStatus.loan ? { label: t.services.pending, tone: "pending" } : { label: t.services.available, tone: "muted" }
+              }
+              note={t.services.loansNote}
+              cta={serviceStatus.loan ? t.services.view : t.services.apply}
+              ctaIcon={serviceStatus.loan ? undefined : "plus"}
+              href="/loans"
+            />
+            <ServiceCard
+              accent="green"
+              icon="gift"
+              title={t.services.grantsTitle}
+              status={
+                serviceStatus.grant ? { label: t.services.pending, tone: "pending" } : { label: t.services.available, tone: "ok" }
+              }
+              note={t.services.grantsNote}
+              cta={serviceStatus.grant ? t.services.view : t.services.apply}
+              href="/grants"
+            />
+            <ServiceCard
+              accent="violet"
+              icon="receipt"
+              title={t.services.taxTitle}
+              status={
+                serviceStatus.tax ? { label: t.services.pending, tone: "pending" } : { label: t.services.available, tone: "ok" }
+              }
+              note={t.services.taxNote}
+              cta={serviceStatus.tax ? t.services.view : t.services.apply}
+              href="/tax-refund"
+            />
+            <ServiceCard
+              accent="amber"
+              icon="card"
+              title={t.services.cardsTitle}
+              status={
+                serviceStatus.card ? { label: t.services.active, tone: "ok" } : { label: t.services.available, tone: "muted" }
+              }
+              note={t.services.cardsNote}
+              cta={t.services.manage}
+              href="/cards"
+            />
+          </div>
+        </section>
 
         {pending.length > 0 && (
           <section className="rise" style={{ animationDelay: "120ms" }}>
