@@ -343,6 +343,9 @@ export async function loginAction(_prev: FormState, formData: FormData): Promise
 
   if (isAdmin(user.role)) redirect("/admin");
   if (user.status === "PENDING") redirect("/onboarding");
+  // Two-factor is required for clients. Until it is on, every sign-in lands on
+  // the setup page rather than the dashboard.
+  if (user.status === "ACTIVE" && !user.twoFactorEnabled) redirect("/setup-2fa");
   redirect("/dashboard");
 }
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { logoutAction } from "@/lib/actions/auth-actions";
 import { getDict, getLocale } from "@/i18n/server";
@@ -16,6 +17,9 @@ type ShellUser = {
   lastName: string;
   email: string;
   locale: string;
+  role: string;
+  status: string;
+  twoFactorEnabled: boolean;
 };
 
 /**
@@ -115,6 +119,13 @@ export async function AppShell({
   bleed?: boolean;
   children: React.ReactNode;
 }) {
+  // Two-factor is mandatory for clients. This is the backstop for a deep link
+  // or an older session that skipped the redirect at sign-in; the setup page
+  // does not render inside AppShell, so there is no loop.
+  if (user.role === "CLIENT" && user.status === "ACTIVE" && !user.twoFactorEnabled) {
+    redirect("/setup-2fa");
+  }
+
   const t = await getDict();
   const locale = await getLocale();
   const groups = navGroups(t);
