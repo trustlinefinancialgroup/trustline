@@ -617,6 +617,7 @@ export const de: Dict = {
     noActivity: "Auf dieser Karte gibt es noch keine Umsätze.",
   },
   loansPage: {
+    yearsShort: " Jahre",
     aprFrom: "eff. Zins ab",
     maxLine: "max",
     calculatorTitle: "Was würde das kosten?",

@@ -617,6 +617,7 @@ export const fr: Dict = {
     noActivity: "Aucune opération sur cette carte pour le moment.",
   },
   loansPage: {
+    yearsShort: " ans",
     aprFrom: "TAEG dès",
     maxLine: "max",
     calculatorTitle: "Combien cela coûterait-il ?",

@@ -287,33 +287,35 @@ export default async function ProductPage({
                     ceiling and the term before opening an application, not a
                     bare Apply button. */}
                 {def.terms && (
-                  <dl className="grid grid-cols-3 gap-3 rounded-2xl border border-line bg-ink-2 p-5">
+                  // Rate as the hero, the ceiling and term stacked beside it —
+                  // each figure on its own line so nothing can collide the way
+                  // a rigid three-column strip did ("$150,0002–10y").
+                  <div className="flex items-center justify-between gap-4 rounded-2xl border border-line bg-ink-2 p-5">
                     <div>
-                      <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
-                        {t.loansPage.rateLabel}
-                      </dt>
-                      <dd className="tnum mt-1 text-[17px] font-semibold text-gold">
+                      <p className="tnum text-[32px] font-bold leading-none text-gold">
                         {def.terms.aprFrom}%
-                      </dd>
+                      </p>
+                      <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
+                        {t.loansPage.aprFrom}
+                      </p>
                     </div>
-                    <div>
-                      <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
-                        {t.loansPage.amountLabel}
-                      </dt>
-                      <dd className="tnum mt-1 text-[17px] font-semibold text-fg">
-                        {formatMoneyWhole(def.terms.maxCents, locale, user.currency)}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
-                        {t.loansPage.termLabel}
-                      </dt>
-                      <dd className="tnum mt-1 text-[17px] font-semibold text-fg">
-                        {Math.round(def.terms.minTermMonths / 12)}–
-                        {Math.round(def.terms.maxTermMonths / 12)}y
-                      </dd>
-                    </div>
-                  </dl>
+                    <dl className="space-y-1.5 text-right text-[13px]">
+                      <div className="flex items-baseline justify-end gap-2">
+                        <dt className="text-fg-muted">{t.loansPage.amountLabel}</dt>
+                        <dd className="tnum font-semibold text-fg">
+                          {formatMoneyWhole(def.terms.maxCents, locale, user.currency)}
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline justify-end gap-2">
+                        <dt className="text-fg-muted">{t.loansPage.termLabel}</dt>
+                        <dd className="tnum font-semibold text-fg">
+                          {Math.round(def.terms.minTermMonths / 12)}–
+                          {Math.round(def.terms.maxTermMonths / 12)}
+                          {t.loansPage.yearsShort}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
                 )}
 
                 {/* What you'll be asked for, so nobody starts an application

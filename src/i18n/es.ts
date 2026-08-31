@@ -617,6 +617,7 @@ export const es: Dict = {
     noActivity: "Todavía no hay movimientos en esta tarjeta.",
   },
   loansPage: {
+    yearsShort: " años",
     aprFrom: "TAE desde",
     maxLine: "máx",
     calculatorTitle: "¿Cuánto costaría?",

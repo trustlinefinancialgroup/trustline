@@ -614,6 +614,7 @@ export const en = {
     noActivity: "Nothing on this card yet.",
   },
   loansPage: {
+    yearsShort: " years",
     aprFrom: "APR from",
     maxLine: "max",
     calculatorTitle: "What would it cost?",
