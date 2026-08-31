@@ -250,15 +250,19 @@ export default async function ProductPage({
               )
             ) : (
               view.render === "tile" && (
-                <ProductTile
-                  title={view.title}
-                  art={view.art}
-                  valueLabel={view.valueLabel}
-                  value={view.value}
-                  status={view.status}
-                  placeholder={view.placeholder}
-                  cta={null}
-                />
+                // A modest hero, not a half-screen panel — capped and centred
+                // on a phone so the page leads with the terms, not a picture.
+                <div className="mx-auto max-w-[260px] lg:max-w-none">
+                  <ProductTile
+                    title={view.title}
+                    art={view.art}
+                    valueLabel={view.valueLabel}
+                    value={view.value}
+                    status={view.status}
+                    placeholder={view.placeholder}
+                    cta={null}
+                  />
+                </div>
               )
             )}
           </div>
