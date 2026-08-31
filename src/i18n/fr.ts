@@ -1365,6 +1365,7 @@ export const fr: Dict = {
     taxYearRequired: "Choisissez une année fiscale.",
   },
   setup2fa: {
+    scamNote: "Les piratages de comptes et les arnaques frappent les autres banques chaque jour. Cette étape supplémentaire les tient à l'écart de votre compte, même si quelqu'un avait votre mot de passe.",
     panelTitle: "Une étape vers plus de sécurité.",
     panelBody: "La vérification en deux étapes ajoute un contrôle à la connexion : votre mot de passe seul ne suffit jamais pour accéder à votre argent.",
     title: "Sécurisez votre compte",

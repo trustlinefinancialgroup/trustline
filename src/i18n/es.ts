@@ -1363,6 +1363,7 @@ export const es: Dict = {
     taxYearRequired: "Elija un año fiscal.",
   },
   setup2fa: {
+    scamNote: "Los robos de cuentas y las estafas afectan a otros bancos cada día. Este paso adicional es como los mantenemos fuera de su cuenta, incluso si alguien tuviera su contraseña.",
     panelTitle: "Un paso hacia una banca más segura.",
     panelBody: "La verificación en dos pasos añade un control al iniciar sesión, para que su contraseña por sí sola nunca baste para acceder a su dinero.",
     title: "Proteja su cuenta",

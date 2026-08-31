@@ -36,6 +36,12 @@ export default async function SetupTwoFactorPage() {
       <h1 className="mt-5 text-[26px] font-semibold tracking-tight text-fg">{t.setup2fa.title}</h1>
       <p className="mt-2 text-[15px] leading-relaxed text-fg-muted">{t.setup2fa.subtitle}</p>
 
+      {/* Why it matters — the reassurance that this guards against the account
+          takeovers and scams that hit other banks. */}
+      <p className="mt-5 rounded-xl border border-pos/25 bg-pos/8 px-4 py-3 text-[13px] leading-relaxed text-fg">
+        {t.setup2fa.scamNote}
+      </p>
+
       <ul className="mt-6 space-y-3">
         {points.map((p) => (
           <li key={p} className="flex items-start gap-3 text-[14px] text-fg">

@@ -1365,6 +1365,7 @@ export const de: Dict = {
     taxYearRequired: "Wählen Sie ein Steuerjahr.",
   },
   setup2fa: {
+    scamNote: "Kontoübernahmen und Betrug treffen andere Banken täglich. Dieser eine zusätzliche Schritt hält sie aus Ihrem Konto fern — selbst wenn jemand Ihr Passwort hätte.",
     panelTitle: "Ein Schritt zu sichererem Banking.",
     panelBody: "Die Zwei-Faktor-Prüfung fügt bei der Anmeldung eine zweite Kontrolle hinzu, sodass Ihr Passwort allein nie ausreicht, um an Ihr Geld zu gelangen.",
     title: "Konto absichern",

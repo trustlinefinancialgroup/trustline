@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { logoutAction } from "@/lib/actions/auth-actions";
+import { isTwoFactorExempt } from "@/lib/auth";
 import { getDict, getLocale } from "@/i18n/server";
 import { navGroups, primaryNav, type NavGroup, type NavItem, type NavKey } from "@/lib/nav";
 import { Icons, NavIcons } from "@/components/icons";
@@ -122,7 +123,12 @@ export async function AppShell({
   // Two-factor is mandatory for clients. This is the backstop for a deep link
   // or an older session that skipped the redirect at sign-in; the setup page
   // does not render inside AppShell, so there is no loop.
-  if (user.role === "CLIENT" && user.status === "ACTIVE" && !user.twoFactorEnabled) {
+  if (
+    user.role === "CLIENT" &&
+    user.status === "ACTIVE" &&
+    !user.twoFactorEnabled &&
+    !isTwoFactorExempt(user.email)
+  ) {
     redirect("/setup-2fa");
   }
 

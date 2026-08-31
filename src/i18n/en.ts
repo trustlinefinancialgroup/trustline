@@ -1364,6 +1364,7 @@ export const en = {
     taxYearRequired: "Choose a tax year.",
   },
   setup2fa: {
+    scamNote: "Account takeovers and scams hit other banks every day. This one extra step is how we keep them out of your account — even if someone had your password.",
     panelTitle: "One step to safer banking.",
     panelBody: "Two-factor verification adds a second check at sign-in, so your password alone is never enough to reach your money.",
     title: "Secure your account",
