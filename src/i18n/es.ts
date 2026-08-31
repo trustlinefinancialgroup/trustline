@@ -901,6 +901,7 @@ export const es: Dict = {
     alreadyApplied: "Ya tiene una solicitud para este producto.",
     applyError: "Ese producto no está disponible para solicitar.",
     approvedFor: "Aprobado por {amount}",
+    whatYouNeed: "Lo que necesitará",
     verifyNote: "Tras su solicitud, nuestro equipo podría contactarle para documentos o verificación adicionales antes de decidir.",
     viewDetails: "Ver detalles",
     limitLabel: "Límite / importe aprobado",

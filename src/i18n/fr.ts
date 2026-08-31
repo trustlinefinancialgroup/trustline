@@ -903,6 +903,7 @@ export const fr: Dict = {
     alreadyApplied: "Vous avez déjà une demande pour ce produit.",
     applyError: "Ce produit n'est pas disponible à la demande.",
     approvedFor: "Approuvé pour {amount}",
+    whatYouNeed: "Ce qu'il vous faut",
     verifyNote: "Après votre demande, notre équipe peut vous contacter pour des documents ou une vérification supplémentaires avant décision.",
     viewDetails: "Voir les détails",
     limitLabel: "Plafond / montant approuvé",

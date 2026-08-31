@@ -50,6 +50,12 @@ export default async function ApplyPage({
       ];
     })
   );
+  // A shared "About you" question is dropped when the product already asks it
+  // (home improvement asks housing status, and so do the shared fields) — no
+  // client should answer the same question twice.
+  const productFieldNames = new Set((def.fields ?? []).map((f) => f.name));
+  const sharedFields = SHARED_FIELDS.filter((f) => !productFieldNames.has(f.name));
+
   // The currency prefix for money inputs, taken from the client's currency.
   const currencySymbol = formatMoney(0, locale, user.currency).replace(/[\d.,\s]/g, "");
 
@@ -86,7 +92,7 @@ export default async function ApplyPage({
             showTiers={!!def.card}
             holderName={`${user.firstName} ${user.lastName}`.trim()}
             currencySymbol={currencySymbol}
-            sharedFields={SHARED_FIELDS}
+            sharedFields={sharedFields}
             productFields={def.fields ?? []}
             labels={{
               amount: t.products.amountLabel,

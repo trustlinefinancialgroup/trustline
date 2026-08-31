@@ -903,6 +903,7 @@ export const de: Dict = {
     alreadyApplied: "Sie haben bereits einen Antrag für dieses Produkt.",
     applyError: "Dieses Produkt ist nicht beantragbar.",
     approvedFor: "Genehmigt über {amount}",
+    whatYouNeed: "Was Sie brauchen",
     verifyNote: "Nach Ihrem Antrag kann unser Team Sie vor einer Entscheidung für zusätzliche Unterlagen oder eine Verifizierung kontaktieren.",
     viewDetails: "Details ansehen",
     limitLabel: "Genehmigtes Limit / Betrag",

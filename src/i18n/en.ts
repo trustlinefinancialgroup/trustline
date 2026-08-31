@@ -898,6 +898,7 @@ export const en = {
     alreadyApplied: "You already have an application for this product.",
     applyError: "That product isn't available to apply for.",
     approvedFor: "Approved for {amount}",
+    whatYouNeed: "What you'll need",
     verifyNote: "After you apply, our team may contact you for extra documents or verification before a decision.",
     viewDetails: "View details",
     limitLabel: "Approved limit / amount",
