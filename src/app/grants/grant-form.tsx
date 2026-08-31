@@ -5,13 +5,22 @@ import { applyGrantAction } from "@/lib/actions/service-actions";
 import type { FormState } from "@/lib/actions/auth-actions";
 import { fieldClass, labelClass } from "@/components/ui";
 
+type Option = { value: string; label: string };
+
 type Labels = {
   program: string;
   programHint: string;
-  programs: { value: string; label: string }[];
+  programs: Option[];
   amount: string;
+  amountPlaceholder: string;
+  employment: string;
+  employments: Option[];
+  householdIncome: string;
+  incomes: Option[];
+  dependents: string;
   reason: string;
   reasonHint: string;
+  choose: string;
   submit: string;
   submitting: string;
 };
@@ -25,7 +34,7 @@ export function GrantForm({ labels }: { labels: Labels }) {
         {labels.program}
         <select name="program" defaultValue="" required className={fieldClass}>
           <option value="" disabled>
-            —
+            {labels.choose}
           </option>
           {labels.programs.map((p) => (
             <option key={p.value} value={p.label}>
@@ -45,9 +54,40 @@ export function GrantForm({ labels }: { labels: Labels }) {
           step="0.01"
           min="0.01"
           required
-          placeholder="0.00"
+          placeholder={labels.amountPlaceholder}
           className={fieldClass}
         />
+      </label>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <label className={labelClass}>
+          {labels.employment}
+          <select name="employment" defaultValue="" className={fieldClass}>
+            <option value="">{labels.choose}</option>
+            {labels.employments.map((e) => (
+              <option key={e.value} value={e.label}>
+                {e.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className={labelClass}>
+          {labels.householdIncome}
+          <select name="householdIncome" defaultValue="" className={fieldClass}>
+            <option value="">{labels.choose}</option>
+            {labels.incomes.map((i) => (
+              <option key={i.value} value={i.label}>
+                {i.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <label className={labelClass}>
+        {labels.dependents}
+        <input name="dependents" type="number" min="0" max="20" className={fieldClass} />
       </label>
 
       <label className={labelClass}>

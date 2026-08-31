@@ -169,15 +169,14 @@ export async function AppShell({
         </div>
       </aside>
 
-      {/* relative so the bleed header, which is absolute, is bounded to this
-          content column rather than spanning over the desktop sidebar. */}
       <div className="relative flex min-w-0 flex-1 flex-col">
-        {/* Header. In bleed mode it floats transparent over the page's gradient
-            top section instead of sitting in its own white bar. */}
+        {/* Header. Sticky on every page so it never scrolls away. In bleed mode
+            it is a solid navy bar that sits continuously on top of the hero
+            gradient; otherwise a light bar. Either way it stays pinned. */}
         <header
           className={
             bleed
-              ? "absolute inset-x-0 top-0 z-40"
+              ? "sticky top-0 z-40 border-b border-white/10 bg-[#0b2350]/90 backdrop-blur-xl"
               : "sticky top-0 z-40 border-b border-line-soft bg-ink-0/85 backdrop-blur-xl"
           }
         >

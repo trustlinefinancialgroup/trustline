@@ -69,13 +69,16 @@ export async function applyGrantAction(_prev: FormState, formData: FormData): Pr
   const t = await getDict();
   return submitService("GRANT", formData, (fd) => {
     const program = String(fd.get("program") ?? "").trim();
+    const employment = String(fd.get("employment") ?? "").trim();
+    const householdIncome = String(fd.get("householdIncome") ?? "").trim();
+    const dependents = String(fd.get("dependents") ?? "").trim();
     const reason = String(fd.get("reason") ?? "").trim().slice(0, 1000);
     const amountCents = parseAmount(fd);
     if (!program) return { details: {}, purpose: "", amountCents: null, error: t.services.programRequired };
     if (!amountCents) return { details: {}, purpose: "", amountCents: null, error: t.bank.amountInvalid };
     if (!reason) return { details: {}, purpose: "", amountCents: null, error: t.services.reasonRequired };
     return {
-      details: { program, reason },
+      details: { program, employment, householdIncome, dependents, reason },
       purpose: `${program} — ${reason}`,
       amountCents,
     };
@@ -87,16 +90,14 @@ export async function applyTaxRefundAction(_prev: FormState, formData: FormData)
   const t = await getDict();
   return submitService("TAX_REFUND", formData, (fd) => {
     const taxYear = String(fd.get("taxYear") ?? "").trim();
-    const filingStatus = String(fd.get("filingStatus") ?? "").trim();
-    const amountCents = parseAmount(fd, "expectedRefund");
+    const note = String(fd.get("note") ?? "").trim().slice(0, 600);
     if (!taxYear) return { details: {}, purpose: "", amountCents: null, error: t.services.taxYearRequired };
-    if (!amountCents) return { details: {}, purpose: "", amountCents: null, error: t.bank.amountInvalid };
-    // Deliberately no SSN or ID.me password: identity is verified through
-    // ID.me's own secure sign-in, never by collecting the credential here.
+    // A request for an account manager to file — never SSN or an ID.me
+    // password. Identity is confirmed through ID.me's own secure sign-in.
     return {
-      details: { taxYear, filingStatus, identityVerification: "ID.me — pending secure verification" },
-      purpose: `Tax year ${taxYear}${filingStatus ? ` · ${filingStatus}` : ""}`,
-      amountCents,
+      details: { taxYear, note, filedBy: "account-manager-assisted" },
+      purpose: `Tax refund filing request — tax year ${taxYear}${note ? ` · ${note}` : ""}`,
+      amountCents: null,
     };
   });
 }

@@ -22,6 +22,7 @@ import { ProductTile } from "@/components/product-tile";
 import { TransactionList } from "@/components/transaction-list";
 import { SectionHead } from "@/components/ui";
 import { ServiceCard, type ServiceAccent } from "@/components/service-card";
+import { EmailSupport } from "@/components/email-support";
 import { WelcomeBonusBanner } from "@/components/welcome-bonus";
 
 export const metadata = { title: "Dashboard — Trustline Financial Group" };
@@ -700,16 +701,16 @@ export default async function DashboardPage({
               <p className="mt-2.5 text-[14px] font-semibold text-fg">{t.dashboard.liveChat}</p>
               <p className="mt-0.5 text-[12px] leading-snug text-fg-muted">{t.dashboard.liveChatBody}</p>
             </Link>
-            <Link
-              href="/support"
-              className="elev-1 rounded-2xl border border-line bg-ink-1 p-4 text-center transition hover:border-brand-500/30 sm:p-5"
-            >
-              <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-600">
-                <Icons.draft className="h-[22px] w-[22px]" />
-              </span>
-              <p className="mt-2.5 text-[14px] font-semibold text-fg">{t.dashboard.emailSupport}</p>
-              <p className="mt-0.5 text-[12px] leading-snug text-fg-muted">{t.dashboard.emailSupportBody}</p>
-            </Link>
+            <EmailSupport
+              title={t.dashboard.emailSupport}
+              body={t.dashboard.emailSupportBody}
+              chooseTitle={t.dashboard.emailChoose}
+              supportLabel={t.dashboard.emailSupportTeam}
+              managerLabel={t.dashboard.emailManager}
+              supportEmail="support@trustlinefinancialgroup.com"
+              managerEmail="accountmanager@trustlinefinancialgroup.com"
+              subject={t.dashboard.emailSubject}
+            />
           </div>
           <div className="elev-1 mt-3 flex items-center justify-center gap-6 rounded-2xl border border-line bg-[linear-gradient(120deg,#f6f9ff_0%,#f3f6fc_100%)] px-4 py-3.5 text-center">
             <span className="flex items-center gap-2 text-[12.5px] font-semibold text-fg">

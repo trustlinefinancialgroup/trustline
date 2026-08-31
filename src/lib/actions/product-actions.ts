@@ -12,12 +12,11 @@ import {
   balanceCents,
   transferBetween,
   formatMoney,
-  formatMoneyWhole,
   newReference,
   pendingWithdrawalCents,
 } from "@/lib/bank";
 import { productDef, fieldsFor, isCardTier } from "@/lib/products";
-import { getDict, getLocale } from "@/i18n/server";
+import { getDict } from "@/i18n/server";
 import { fill } from "@/i18n";
 import type { FormState } from "./auth-actions";
 
@@ -91,7 +90,6 @@ export async function submitApplicationAction(
   const t = await getDict();
   const user = await requireClient();
 
-  const locale = await getLocale();
   const productKey = String(formData.get("productKey") ?? "").trim();
   const def = productDef(user.accountType, productKey);
   if (!def || def.kind !== "apply") return { error: t.products.applyError };
@@ -110,17 +108,9 @@ export async function submitApplicationAction(
     if (!raw || !Number.isFinite(cents) || cents <= 0 || cents > MAX_AMOUNT_CENTS) {
       return { error: t.bank.amountInvalid };
     }
-    // Against the product's published range. Without this the only floor was
-    // "more than zero", so a 26-cent mortgage could reach the review queue
-    // looking like a real application.
-    if (def.terms && (cents < def.terms.minCents || cents > def.terms.maxCents)) {
-      return {
-        error: fill(t.products.amountOutOfRange, {
-          min: formatMoneyWhole(def.terms.minCents, locale, user.currency),
-          max: formatMoneyWhole(def.terms.maxCents, locale, user.currency),
-        }),
-      };
-    }
+    // No coded minimum on the requested amount — the field shows a typical
+    // ask as an editable placeholder, and the team decides on review. Only the
+    // absolute sanity ceiling (checked above) applies.
     amountCents = cents;
   }
 

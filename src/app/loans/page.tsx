@@ -22,7 +22,6 @@ import { Icons } from "@/components/icons";
 import { ProductArt } from "@/components/product-art";
 import {
   Card,
-  EmptyState,
   Eyebrow,
   ProgressBar,
   SectionHead,
@@ -140,49 +139,7 @@ export default async function LoansPage() {
       subtitle={t.loansPage.subtitle}
     >
       <Page className="space-y-8">
-        {holdings.loans.length === 0 ? (
-          <section>
-            <EmptyState title={t.loansPage.empty} body={t.loansPage.emptyBody} />
-            {lendingProducts.length > 0 && (
-              <>
-                <SectionHead className="mt-9" title={t.loansPage.available} />
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  {lendingProducts.map((d, i) => (
-                    <Link
-                      key={d.key}
-                      href={`/product/${d.key}`}
-                      className="rise elev-2 group flex flex-col overflow-hidden rounded-2xl border border-line bg-ink-1 transition hover:border-brand-500/40"
-                      style={{ animationDelay: `${60 + i * 60}ms` }}
-                    >
-                      {/* The product's own illustration already existed and was
-                          never shown on this page. */}
-                      {d.art && (
-                        <span className="block border-b border-line-soft">
-                          <ProductArt art={d.art} className="block w-full" />
-                        </span>
-                      )}
-                      <span className="flex flex-1 flex-col p-5">
-                        <span className="text-[15px] font-semibold text-fg">
-                          {titles.get(d.key) ?? d.key}
-                        </span>
-                        <span className="mt-1.5 flex-1 text-[13px] leading-relaxed text-fg-muted">
-                          {blurbs.get(d.key)}
-                        </span>
-                        {/* What it actually costs, on the card — a client
-                            should not have to open an application to find out
-                            the rate. */}
-                        {termsStrip(d.key)}
-                        <span className="mt-4 inline-flex w-fit items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-600">
-                          {t.products.apply}
-                        </span>
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )}
-          </section>
-        ) : (
+        {holdings.loans.length > 0 && (
           <section>
             <SectionHead title={t.loansPage.activeLoans} />
             <div className="mt-4 grid gap-4 lg:grid-cols-2">
@@ -296,6 +253,54 @@ export default async function LoansPage() {
                   </Card>
                 );
               })}
+            </div>
+          </section>
+        )}
+
+        {/* Choose a loan — always shown, so a client can borrow again even with
+            a loan already running. Each card leads straight to its application,
+            with the rate, ceiling and term on the face. */}
+        {lendingProducts.length > 0 && (
+          <section>
+            <SectionHead
+              title={t.loansPage.available}
+              subtitle={t.loansPage.availableLede}
+            />
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {lendingProducts.map((d, i) => (
+                <Link
+                  key={d.key}
+                  href={`/apply?type=${d.key}`}
+                  className="rise elev-2 group flex flex-col overflow-hidden rounded-2xl border border-line bg-ink-1 transition hover:border-brand-500/40"
+                  style={{ animationDelay: `${60 + i * 60}ms` }}
+                >
+                  {d.art && (
+                    <span className="block border-b border-line-soft">
+                      <ProductArt art={d.art} className="block w-full" />
+                    </span>
+                  )}
+                  <span className="flex flex-1 flex-col p-5">
+                    <span className="text-[15px] font-semibold text-fg">
+                      {titles.get(d.key) ?? d.key}
+                    </span>
+                    <span className="mt-1.5 flex-1 text-[13px] leading-relaxed text-fg-muted">
+                      {blurbs.get(d.key)}
+                    </span>
+                    {termsStrip(d.key)}
+                    <span className="mt-4 flex items-center justify-between">
+                      <span className="inline-flex items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-600">
+                        {t.products.apply}
+                      </span>
+                      <Link
+                        href={`/product/${d.key}`}
+                        className="text-[13px] font-medium text-brand-500 transition hover:text-brand-600"
+                      >
+                        {t.loansPage.learnMore}
+                      </Link>
+                    </span>
+                  </span>
+                </Link>
+              ))}
             </div>
           </section>
         )}

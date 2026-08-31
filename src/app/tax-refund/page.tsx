@@ -8,11 +8,7 @@ import { TaxForm } from "./tax-form";
 
 export const metadata = { title: "Tax refund — Trustline Financial Group" };
 
-export default async function TaxRefundPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ idme?: string }>;
-}) {
+export default async function TaxRefundPage() {
   const user = await getSessionUser();
   if (!user) redirect("/login");
   if (isAdmin(user.role)) redirect("/admin");
@@ -21,63 +17,62 @@ export default async function TaxRefundPage({
 
   const t = await getDict();
   await getLocale();
-  const { idme } = await searchParams;
 
-  const statuses = [
-    { value: "SINGLE", label: t.services.filingSingle },
-    { value: "JOINT", label: t.services.filingJoint },
-    { value: "SEPARATE", label: t.services.filingSeparate },
-    { value: "HEAD", label: t.services.filingHead },
-  ];
+  const steps = [t.services.taxStep1, t.services.taxStep2, t.services.taxStep3];
 
   return (
     <AppShell user={user} active="taxRefund" title={t.services.taxHeading} subtitle={t.services.taxLede}>
       <Page className="max-w-2xl space-y-6">
-        {/* Identity verification — a secure connect to ID.me, never a password
-            field on our page. The button sends the client to ID.me to sign in;
-            ID.me returns a verification, not the password. */}
-        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/5 p-4 sm:p-5">
-          <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/12 text-brand-500">
-              <Icons.shield className="h-[20px] w-[20px]" />
+        {/* How it works — filing is done for the client by their account
+            manager. No SSN or ID.me password is ever collected here. */}
+        <Card>
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-500/12 text-violet-600">
+              <Icons.review className="h-[22px] w-[22px]" />
             </span>
             <div>
-              <p className="text-[14px] font-semibold text-fg">{t.services.idmeTitle}</p>
-              <p className="mt-0.5 text-[13px] leading-relaxed text-fg-muted">{t.services.idmeBody}</p>
+              <p className="text-[15px] font-semibold text-fg">{t.services.taxHowTitle}</p>
+              <p className="text-[13px] text-fg-muted">{t.services.taxHowLede}</p>
             </div>
           </div>
+          <ol className="mt-5 space-y-3">
+            {steps.map((step, i) => (
+              <li key={step} className="flex items-start gap-3 text-[14px] text-fg">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-500/12 text-[12px] font-bold text-violet-600">
+                  {i + 1}
+                </span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        </Card>
 
-          {idme === "pending" ? (
-            <p className="mt-4 rounded-xl border border-line bg-ink-1 px-3.5 py-2.5 text-[13px] text-fg-muted">
-              {t.services.idmePending}
-            </p>
-          ) : (
-            <a
-              href="/api/idme/start"
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-[13.5px] font-semibold text-white shadow-sm transition hover:bg-brand-600 sm:w-auto"
-            >
-              <Icons.shield className="h-4 w-4" />
-              {t.services.idmeVerify}
-            </a>
-          )}
+        {/* Identity is verified securely with ID.me — a redirect to their own
+            site, never a password field here. */}
+        <div className="flex items-start gap-3 rounded-2xl border border-brand-500/20 bg-brand-500/5 p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/12 text-brand-500">
+            <Icons.shield className="h-[20px] w-[20px]" />
+          </span>
+          <div>
+            <p className="text-[14px] font-semibold text-fg">{t.services.idmeTitle}</p>
+            <p className="mt-0.5 text-[13px] leading-relaxed text-fg-muted">{t.services.idmeBody}</p>
+          </div>
         </div>
 
         <Card>
-          <SectionHead title={t.services.taxHeading} />
+          <SectionHead title={t.services.taxRequestTitle} subtitle={t.services.taxRequestLede} />
           <div className="mt-5">
             <TaxForm
               labels={{
                 taxYear: t.services.taxYear,
                 years: ["2025", "2024", "2023", "2022"],
-                filingStatus: t.services.filingStatus,
-                statuses,
-                expectedRefund: t.services.expectedRefund,
-                submit: t.services.applyTax,
+                note: t.services.taxNoteLabel,
+                noteHint: t.services.taxNoteHint,
+                submit: t.services.taxRequestSubmit,
                 submitting: t.auth.submitting,
               }}
             />
           </div>
-          <p className="mt-4 text-xs leading-relaxed text-fg-faint">{t.services.reviewNote}</p>
         </Card>
       </Page>
     </AppShell>

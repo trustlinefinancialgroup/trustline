@@ -53,6 +53,14 @@ export default async function ApplyPage({
   // The currency prefix for money inputs, taken from the client's currency.
   const currencySymbol = formatMoney(0, locale, user.currency).replace(/[\d.,\s]/g, "");
 
+  // A typical ask, shown as an editable placeholder in the amount field. It is
+  // NOT a minimum — nothing in code enforces it; it just saves most people
+  // typing, and they can change it to anything.
+  const amountPlaceholder =
+    def.amount && def.terms?.typicalCents
+      ? formatMoneyWhole(def.terms.typicalCents, locale, user.currency).replace(/[^\d.,]/g, "")
+      : "";
+
   // Applications belong to whichever hub the product itself lives in.
   const activeNav = def.card ? "cards" : def.credit ? "loans" : "accounts";
 
@@ -73,6 +81,7 @@ export default async function ApplyPage({
             productKey={type!}
             productName={label?.title ?? type!}
             showAmount={!!def.amount}
+            amountPlaceholder={amountPlaceholder}
             showTerm={!!def.term}
             showTiers={!!def.card}
             holderName={`${user.firstName} ${user.lastName}`.trim()}

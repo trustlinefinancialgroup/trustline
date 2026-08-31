@@ -105,15 +105,9 @@ export function BalanceHero({
           : "rounded-3xl shadow-[0_18px_40px_-18px_rgba(6,21,48,0.55)]"
       }`}
     >
-      {/* In bleed mode the header floats over this, so the greeting starts
-          below it: the header's 4rem plus the device's own top inset. */}
-      <div
-        className={
-          bleed
-            ? "px-5 pt-[calc(env(safe-area-inset-top)+4.25rem)] sm:px-7"
-            : "px-5 pt-5 sm:px-7 sm:pt-6"
-        }
-      >
+      {/* The sticky header now sits in-flow above this, so the greeting just
+          gets normal top spacing rather than clearing a floating bar. */}
+      <div className={bleed ? "px-5 pt-6 sm:px-7" : "px-5 pt-5 sm:px-7 sm:pt-6"}>
         <p className="text-[13px] font-medium text-navy-300">{greeting}</p>
 
         <div className="mt-4 flex items-start justify-between gap-4">

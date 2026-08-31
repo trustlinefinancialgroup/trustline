@@ -142,6 +142,7 @@ export function ApplyForm({
   productKey,
   productName,
   showAmount,
+  amountPlaceholder,
   showTerm,
   showTiers,
   holderName,
@@ -153,6 +154,7 @@ export function ApplyForm({
   productKey: string;
   productName: string;
   showAmount: boolean;
+  amountPlaceholder?: string;
   showTerm: boolean;
   showTiers: boolean;
   holderName: string;
@@ -248,7 +250,7 @@ export function ApplyForm({
                     step="0.01"
                     min="0.01"
                     required
-                    placeholder="0.00"
+                    placeholder={amountPlaceholder || "0.00"}
                     className={`${inputClass} pl-8`}
                   />
                 </div>

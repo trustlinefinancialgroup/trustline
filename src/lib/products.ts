@@ -90,6 +90,8 @@ export type LendingTerms = {
   aprFrom: number;
   minCents: number;
   maxCents: number;
+  /** A typical ask, shown as an editable placeholder — never enforced. */
+  typicalCents: number;
   minTermMonths: number;
   maxTermMonths: number;
 };
@@ -121,13 +123,13 @@ export const SHARED_FIELDS: FieldDef[] = [
  * application guard all quote the same numbers. Adjusting a rate is one edit.
  */
 const TERMS = {
-  PERSONAL_LOAN: { aprFrom: 5.99, minCents: 500_000, maxCents: 5_000_000, minTermMonths: 24, maxTermMonths: 84 },
-  MORTGAGE: { aprFrom: 3.25, minCents: 5_000_000, maxCents: 100_000_000, minTermMonths: 180, maxTermMonths: 360 },
-  AUTO_LOAN: { aprFrom: 2.99, minCents: 300_000, maxCents: 10_000_000, minTermMonths: 36, maxTermMonths: 84 },
-  STUDENT_LOAN: { aprFrom: 3.75, minCents: 100_000, maxCents: 20_000_000, minTermMonths: 60, maxTermMonths: 240 },
-  HOME_EQUITY: { aprFrom: 4.5, minCents: 1_000_000, maxCents: 50_000_000, minTermMonths: 60, maxTermMonths: 360 },
-  HOME_IMPROVEMENT: { aprFrom: 4.99, minCents: 500_000, maxCents: 15_000_000, minTermMonths: 24, maxTermMonths: 120 },
-  BUSINESS_LOAN: { aprFrom: 4.25, minCents: 1_000_000, maxCents: 500_000_000, minTermMonths: 12, maxTermMonths: 300 },
+  PERSONAL_LOAN: { aprFrom: 5.99, minCents: 500_000, maxCents: 5_000_000, typicalCents: 1000000, minTermMonths: 24, maxTermMonths: 84 },
+  MORTGAGE: { aprFrom: 3.25, minCents: 5_000_000, maxCents: 100_000_000, typicalCents: 25000000, minTermMonths: 180, maxTermMonths: 360 },
+  AUTO_LOAN: { aprFrom: 2.99, minCents: 300_000, maxCents: 10_000_000, typicalCents: 2500000, minTermMonths: 36, maxTermMonths: 84 },
+  STUDENT_LOAN: { aprFrom: 3.75, minCents: 100_000, maxCents: 20_000_000, typicalCents: 1500000, minTermMonths: 60, maxTermMonths: 240 },
+  HOME_EQUITY: { aprFrom: 4.5, minCents: 1_000_000, maxCents: 50_000_000, typicalCents: 5000000, minTermMonths: 60, maxTermMonths: 360 },
+  HOME_IMPROVEMENT: { aprFrom: 4.99, minCents: 500_000, maxCents: 15_000_000, typicalCents: 2000000, minTermMonths: 24, maxTermMonths: 120 },
+  BUSINESS_LOAN: { aprFrom: 4.25, minCents: 1_000_000, maxCents: 500_000_000, typicalCents: 5000000, minTermMonths: 12, maxTermMonths: 300 },
 } as const;
 
 export const PERSONAL_PRODUCTS: ProductDef[] = [
@@ -149,7 +151,25 @@ export const PERSONAL_PRODUCTS: ProductDef[] = [
     art: "contract",
     icon: "lending",
     terms: TERMS.PERSONAL_LOAN,
-    fields: [{ name: "purpose", kind: "textarea" }],
+    fields: [
+      {
+        name: "loanPurpose",
+        kind: "select",
+        required: true,
+        options: [
+          "DEBT_CONSOLIDATION",
+          "HOME_IMPROVEMENT",
+          "MAJOR_PURCHASE",
+          "MEDICAL",
+          "VEHICLE",
+          "WEDDING",
+          "TRAVEL",
+          "EDUCATION",
+          "OTHER",
+        ],
+      },
+      { name: "purpose", kind: "textarea" },
+    ],
     docs: [
       ...IDENTITY_DOCS,
       ...INCOME_DOCS,
