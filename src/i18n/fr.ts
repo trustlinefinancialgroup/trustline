@@ -617,6 +617,8 @@ export const fr: Dict = {
     noActivity: "Aucune opération sur cette carte pour le moment.",
   },
   loansPage: {
+    aprFrom: "TAEG dès",
+    maxLine: "max",
     calculatorTitle: "Combien cela coûterait-il ?",
     calculatorLede: "Faites varier la durée pour voir comment la mensualité et le coût total s’opposent.",
     calculatorProduct: "Prêt",

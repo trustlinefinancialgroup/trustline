@@ -19,7 +19,6 @@ import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import { AppShell, Page } from "@/components/app-shell";
 import { Icons } from "@/components/icons";
-import { ProductArt } from "@/components/product-art";
 import {
   Card,
   Eyebrow,
@@ -29,6 +28,17 @@ import {
 } from "@/components/ui";
 
 export const metadata = { title: "Loans — Trustline Financial Group" };
+
+/** One consistent icon + tint per loan, so the grid reads as one set. */
+const LOAN_STYLE: Record<string, { icon: string; chip: string; ink: string }> = {
+  PERSONAL_LOAN: { icon: "lending", chip: "bg-brand-500/12", ink: "text-brand-500" },
+  MORTGAGE: { icon: "mortgage", chip: "bg-emerald-500/12", ink: "text-emerald-600" },
+  AUTO_LOAN: { icon: "car", chip: "bg-cyan-500/12", ink: "text-cyan-600" },
+  STUDENT_LOAN: { icon: "student", chip: "bg-violet-500/12", ink: "text-violet-600" },
+  HOME_IMPROVEMENT: { icon: "renovation", chip: "bg-gold-400/20", ink: "text-gold" },
+  HOME_EQUITY: { icon: "buildings", chip: "bg-emerald-500/12", ink: "text-emerald-600" },
+  BUSINESS_LOAN: { icon: "business", chip: "bg-violet-500/12", ink: "text-violet-600" },
+};
 
 export default async function LoansPage() {
   const user = await getSessionUser();
@@ -90,41 +100,8 @@ export default async function LoansPage() {
     disclaimer: t.products.ratesNote,
   };
 
-  /** The published terms strip that sits on every loan card. */
+  // Currency used by the loan cards below.
   const currency = user.currency;
-  function termsStrip(key: string) {
-    const def = lendingProducts.find((d) => d.key === key);
-    if (!def?.terms) return null;
-    const money = (c: number) => formatMoneyWhole(c, locale, currency);
-    return (
-      <span className="mt-4 grid grid-cols-3 gap-2 border-t border-line-soft pt-3.5">
-        <span className="block">
-          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
-            {t.loansPage.rateLabel}
-          </span>
-          <span className="tnum mt-0.5 block text-[13px] font-semibold text-gold">
-            {def.terms.aprFrom}%
-          </span>
-        </span>
-        <span className="block">
-          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
-            {t.loansPage.amountLabel}
-          </span>
-          <span className="tnum mt-0.5 block text-[13px] font-semibold text-fg">
-            {money(def.terms.maxCents)}
-          </span>
-        </span>
-        <span className="block">
-          <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-fg-faint">
-            {t.loansPage.termLabel}
-          </span>
-          <span className="tnum mt-0.5 block text-[13px] font-semibold text-fg">
-            {Math.round(def.terms.minTermMonths / 12)}–{Math.round(def.terms.maxTermMonths / 12)}y
-          </span>
-        </span>
-      </span>
-    );
-  }
 
   const lendingApplications = applications.filter((a) => {
     const title = titles.get(a.productKey);
@@ -266,41 +243,73 @@ export default async function LoansPage() {
               title={t.loansPage.available}
               subtitle={t.loansPage.availableLede}
             />
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {lendingProducts.map((d, i) => (
-                <Link
-                  key={d.key}
-                  href={`/apply?type=${d.key}`}
-                  className="rise elev-2 group flex flex-col overflow-hidden rounded-2xl border border-line bg-ink-1 transition hover:border-brand-500/40"
-                  style={{ animationDelay: `${60 + i * 60}ms` }}
-                >
-                  {d.art && (
-                    <span className="block border-b border-line-soft">
-                      <ProductArt art={d.art} className="block w-full" />
-                    </span>
-                  )}
-                  <span className="flex flex-1 flex-col p-5">
-                    <span className="text-[15px] font-semibold text-fg">
-                      {titles.get(d.key) ?? d.key}
-                    </span>
-                    <span className="mt-1.5 flex-1 text-[13px] leading-relaxed text-fg-muted">
-                      {blurbs.get(d.key)}
-                    </span>
-                    {termsStrip(d.key)}
-                    <span className="mt-4 flex items-center justify-between">
-                      <span className="inline-flex items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition group-hover:bg-brand-600">
-                        {t.products.apply}
+            {/* Compact, rate-forward cards. One consistent icon chip per loan
+                instead of mismatched artwork, the rate as the hero figure, and
+                short enough that several fit on a screen to compare. */}
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {lendingProducts.map((d, i) => {
+                const style = LOAN_STYLE[d.key] ?? { icon: "lending", chip: "bg-brand-500/12", ink: "text-brand-500" };
+                const draw = Icons[style.icon] ?? Icons.lending;
+                const money = (c: number) => formatMoneyWhole(c, locale, currency);
+                return (
+                  <div
+                    key={d.key}
+                    className="rise elev-1 flex flex-col rounded-2xl border border-line bg-ink-1 p-4 sm:p-5"
+                    style={{ animationDelay: `${60 + i * 50}ms` }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${style.chip} ${style.ink}`}>
+                        {draw({ className: "h-[22px] w-[22px]" })}
                       </span>
-                      <Link
-                        href={`/product/${d.key}`}
-                        className="text-[13px] font-medium text-brand-500 transition hover:text-brand-600"
-                      >
-                        {t.loansPage.learnMore}
-                      </Link>
-                    </span>
-                  </span>
-                </Link>
-              ))}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[15px] font-semibold leading-tight text-fg">
+                          {titles.get(d.key) ?? d.key}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-[12.5px] leading-snug text-fg-muted">
+                          {blurbs.get(d.key)}
+                        </p>
+                      </div>
+                      {d.terms && (
+                        <div className="shrink-0 text-right">
+                          <p className="tnum text-[20px] font-bold leading-none text-gold">
+                            {d.terms.aprFrom}%
+                          </p>
+                          <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-faint">
+                            {t.loansPage.aprFrom}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {d.terms && (
+                      <div className="mt-4 flex items-center justify-between gap-3 border-t border-line-soft pt-3.5">
+                        <p className="tnum text-[12px] text-fg-muted">
+                          <span className="font-semibold text-fg">{money(d.terms.maxCents)}</span>{" "}
+                          {t.loansPage.maxLine}
+                          {" · "}
+                          <span className="font-semibold text-fg">
+                            {Math.round(d.terms.minTermMonths / 12)}–{Math.round(d.terms.maxTermMonths / 12)}y
+                          </span>
+                        </p>
+                        <div className="flex shrink-0 items-center gap-3">
+                          <Link
+                            href={`/product/${d.key}`}
+                            className="text-[13px] font-medium text-brand-500 transition hover:text-brand-600"
+                          >
+                            {t.loansPage.learnMore}
+                          </Link>
+                          <Link
+                            href={`/apply?type=${d.key}`}
+                            className="inline-flex items-center rounded-xl bg-brand-500 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-brand-600"
+                          >
+                            {t.products.apply}
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
