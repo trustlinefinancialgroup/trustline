@@ -1045,6 +1045,7 @@ export const es: Dict = {
     depositIntro: "Ingresa fondos con cualquiera de los métodos habilitados por nuestro equipo.",
     appliedOn: "Solicitado el {date}",
     requestedAmount: "Importe solicitado",
+    amountTooHigh: "Supera el máximo de este producto ({max}). Reduzca el importe o consúltenos por una financiación mayor.",
     amountOutOfRange: "Este producto presta entre {min} y {max}. Introduzca un importe dentro de ese rango.",
     termOutOfRange: "Este producto va de {min} a {max} meses. Elija un plazo dentro de ese rango.",
     rateFrom: "Desde el {rate} % TAE",

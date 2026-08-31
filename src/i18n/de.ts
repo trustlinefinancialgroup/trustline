@@ -1047,6 +1047,7 @@ export const de: Dict = {
     depositIntro: "Zahlen Sie über eine der von unserem Team freigeschalteten Methoden ein.",
     appliedOn: "Beantragt am {date}",
     requestedAmount: "Beantragter Betrag",
+    amountTooHigh: "Das übersteigt das Maximum für dieses Produkt ({max}). Verringern Sie den Betrag oder fragen Sie uns nach einer höheren Fazilität.",
     amountOutOfRange: "Dieses Produkt vergibt zwischen {min} und {max}. Bitte geben Sie einen Betrag in diesem Rahmen ein.",
     termOutOfRange: "Dieses Produkt läuft von {min} bis {max} Monaten. Bitte wählen Sie eine Laufzeit in diesem Rahmen.",
     rateFrom: "Ab {rate} % effektiv",

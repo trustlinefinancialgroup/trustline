@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
 import { audit } from "@/lib/audit";
 import {
+  formatMoneyWhole,
   ensureAccount,
   ensureAccountOfKind,
   getSavings,
@@ -16,7 +17,7 @@ import {
   pendingWithdrawalCents,
 } from "@/lib/bank";
 import { productDef, fieldsFor, isCardTier } from "@/lib/products";
-import { getDict } from "@/i18n/server";
+import { getDict, getLocale } from "@/i18n/server";
 import { fill } from "@/i18n";
 import type { FormState } from "./auth-actions";
 
@@ -88,6 +89,7 @@ export async function submitApplicationAction(
   formData: FormData
 ): Promise<FormState> {
   const t = await getDict();
+  const locale = await getLocale();
   const user = await requireClient();
 
   const productKey = String(formData.get("productKey") ?? "").trim();
@@ -108,9 +110,17 @@ export async function submitApplicationAction(
     if (!raw || !Number.isFinite(cents) || cents <= 0 || cents > MAX_AMOUNT_CENTS) {
       return { error: t.bank.amountInvalid };
     }
-    // No coded minimum on the requested amount — the field shows a typical
-    // ask as an editable placeholder, and the team decides on review. Only the
-    // absolute sanity ceiling (checked above) applies.
+    // No coded minimum — the field shows a typical ask as an editable
+    // placeholder and the team decides low amounts on review. The published
+    // maximum is still enforced, so nobody applies for far above a product's
+    // advertised ceiling.
+    if (def.terms && cents > def.terms.maxCents) {
+      return {
+        error: fill(t.products.amountTooHigh, {
+          max: formatMoneyWhole(def.terms.maxCents, locale, user.currency),
+        }),
+      };
+    }
     amountCents = cents;
   }
 

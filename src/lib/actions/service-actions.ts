@@ -77,9 +77,16 @@ export async function applyGrantAction(_prev: FormState, formData: FormData): Pr
     if (!program) return { details: {}, purpose: "", amountCents: null, error: t.services.programRequired };
     if (!amountCents) return { details: {}, purpose: "", amountCents: null, error: t.bank.amountInvalid };
     if (!reason) return { details: {}, purpose: "", amountCents: null, error: t.services.reasonRequired };
+    // purpose is what the admin card shows for a non-catalogue product, so it
+    // carries the affordability answers the approver needs.
+    const parts = [program];
+    if (employment) parts.push(`Employment: ${employment}`);
+    if (householdIncome) parts.push(`Household income: ${householdIncome}`);
+    if (dependents) parts.push(`Dependents: ${dependents}`);
+    parts.push(reason);
     return {
       details: { program, employment, householdIncome, dependents, reason },
-      purpose: `${program} — ${reason}`,
+      purpose: parts.join(" · "),
       amountCents,
     };
   });

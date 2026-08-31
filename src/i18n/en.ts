@@ -1042,6 +1042,7 @@ export const en = {
     depositIntro: "Fund your account using any of the methods our team has enabled.",
     appliedOn: "Applied {date}",
     requestedAmount: "Requested amount",
+    amountTooHigh: "That's more than the maximum for this product ({max}). Lower the amount or ask us about a larger facility.",
     amountOutOfRange: "This product lends between {min} and {max}. Please enter an amount in that range.",
     termOutOfRange: "This product runs from {min} to {max} months. Please choose a term in that range.",
     rateFrom: "From {rate}% APR",
